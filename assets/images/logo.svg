@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <rect width="300" height="300" fill="#0d0d0d" rx="20"/>
+  <g transform="translate(150, 130)">
+    <!-- Bombilla -->
+    <path d="M 15 -45 L 48 -105 L 34 -109 L 3 -45 Z" fill="#ffffff" />
+    <path d="M 40 -115 L 58 -100 L 52 -95 L 34 -110 Z" fill="#ffffff" />
+    
+    <!-- Mate Virola (Rim) -->
+    <rect x="-65" y="-45" width="130" height="15" rx="4" fill="#ffffff" stroke="#0d0d0d" stroke-width="2"/>
+    
+    <!-- Mate Cup Body -->
+    <path d="M -60 -30 C -85 10, -75 65, -45 85 C -25 98, 25 98, 45 85 C 75 65, 85 10, 60 -30 Z" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Rim Side Grips -->
+    <circle cx="-64" cy="-5" r="4.5" fill="#ffffff"/>
+    <circle cx="64" cy="-5" r="4.5" fill="#ffffff"/>
+  </g>
+  
+  <!-- Text MATES RIO -->
+  <text x="150" y="245" font-family="'Outfit', 'Montserrat', sans-serif" font-size="28" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="6">MATES RIO</text>
+  <text x="150" y="270" font-family="'Montserrat', sans-serif" font-size="9" font-weight="600" fill="#c59b27" text-anchor="middle" letter-spacing="3">TRADICIÓN &amp; ESTILO</text>
+</svg>
