@@ -759,8 +759,8 @@
       </div>
 
       <!-- Newsletter Bar -->
-      <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-lg); padding: 24px 32px; margin-bottom: 36px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
-        <div>
+      <div class="newsletter-box">
+        <div class="newsletter-text">
           <h4 style="font-family: var(--font-heading); font-size: 1.15rem; color: #fff; margin-bottom: 4px;">
             <i class="far fa-envelope-open" style="color: var(--accent-gold); margin-right: 8px;"></i> Sumate al Club Matero de Río
           </h4>
@@ -769,15 +769,15 @@
           </p>
         </div>
 
-        <form id="newsletter-form" style="display: flex; gap: 10px; max-width: 440px; width: 100%;">
+        <form id="newsletter-form" class="newsletter-form">
           <input
             type="email"
             id="newsletter-email"
             required
             placeholder="Ingresá tu correo electrónico..."
-            style="flex: 1; height: 44px; border-radius: var(--radius-full); border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); color: #fff; padding: 0 18px; font-size: 0.85rem;"
+            class="newsletter-input"
           />
-          <button type="submit" class="btn btn-primary" style="padding: 0 20px; font-size: 0.82rem;">
+          <button type="submit" class="btn btn-primary newsletter-submit-btn">
             Suscribirme
           </button>
         </form>
@@ -953,7 +953,7 @@
        MODAL: WEB CHECKOUT
        ========================================================================== -->
   <div class="modal-overlay" id="checkout-modal">
-    <div class="modal-box" style="padding: 32px;">
+    <div class="modal-box modal-box-padded">
       <button class="modal-close-icon" onclick="closeWebCheckout()" aria-label="Cerrar">
         <i class="fas fa-times"></i>
       </button>
@@ -974,7 +974,7 @@
           <input type="text" id="checkout-name" required class="form-input" placeholder="Ej: Santiago Pérez" />
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="form-grid-2col">
           <div class="form-group">
             <label class="form-label">Teléfono / WhatsApp *</label>
             <input type="tel" id="checkout-phone" required class="form-input" placeholder="Ej: 11 3456 7890" />
@@ -991,7 +991,7 @@
           <input type="text" id="checkout-address" required class="form-input" placeholder="Ej: Av. Santa Fe 2345, Piso 4 B" />
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div class="form-grid-2col">
           <div class="form-group">
             <label class="form-label">Ciudad / Localidad *</label>
             <input type="text" id="checkout-city" required class="form-input" placeholder="Ej: CABA / Rosario" />
@@ -1043,7 +1043,7 @@
        MODAL: ORDER SUCCESS RECEIPT
        ========================================================================== -->
   <div class="modal-overlay" id="order-success-modal">
-    <div class="modal-box" style="padding: 36px; text-align: center;">
+    <div class="modal-box modal-box-padded text-center">
       <button class="modal-close-icon" onclick="closeOrderSuccess()" aria-label="Cerrar">
         <i class="fas fa-times"></i>
       </button>
@@ -1162,7 +1162,7 @@
             <input type="email" id="reg-email" required class="form-input" placeholder="tuemail@ejemplo.com" />
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-grid-2col">
             <div class="form-group">
               <label class="form-label">Contraseña *</label>
               <div class="input-with-eye">
@@ -1203,7 +1203,7 @@
        MODAL: USER PROFILE & MIS PEDIDOS
        ========================================================================== -->
   <div class="modal-overlay" id="profile-modal">
-    <div class="modal-box" style="padding: 32px;">
+    <div class="modal-box modal-box-padded">
       <button class="modal-close-icon" onclick="closeProfileModal()" aria-label="Cerrar perfil">
         <i class="fas fa-times"></i>
       </button>

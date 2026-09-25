@@ -1,0 +1,15 @@
+{
+  "name": "mates-rio",
+  "version": "1.0.0",
+  "description": "Tienda web oficial de Mates Río",
+  "main": "index.html",
+  "scripts": {
+    "dev": "serve -l 5005",
+    "start": "serve -l 5005"
+  },
+  "keywords": [
+    "mates",
+    "ecommerce"
+  ],
+  "author": "Mates Río"
+}

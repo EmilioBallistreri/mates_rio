@@ -33,6 +33,7 @@ const state = {
 
 // Constant Config
 const CONFIG = {
+  siteUrl: "http://localhost:5005",
   freeShippingThreshold: 60000,
   shippingCost: 5500,
   transferDiscountRate: 0.10, // 10% OFF
