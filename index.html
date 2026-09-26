@@ -38,11 +38,11 @@
   <aside class="announcement-bar">
     <div class="container announcement-inner">
       <div class="announcement-center-msg">
-        <span><i class="far fa-credit-card"></i> <b>3 Cuotas sin interés</b> en toda la tienda</span>
+        <span class="announcement-item"><i class="far fa-credit-card"></i> <b>3 Cuotas sin interés</b></span>
         <span class="announcement-sep">•</span>
-        <span><i class="fas fa-bolt"></i> <b>10% OFF</b> por Transferencia</span>
-        <span class="announcement-sep">•</span>
-        <span><i class="fas fa-truck"></i> <b>Envío Gratis</b> superando $ 60.000</span>
+        <span class="announcement-item"><i class="fas fa-bolt"></i> <b>10% OFF</b> Transferencia</span>
+        <span class="announcement-sep announcement-sep-desktop">•</span>
+        <span class="announcement-item announcement-item-desktop"><i class="fas fa-truck"></i> <b>Envío Gratis</b> +$ 60.000</span>
       </div>
 
       <div class="announcement-links">
@@ -230,6 +230,12 @@
     </div>
 
     <ul class="mobile-nav-list">
+      <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
+        <a href="javascript:void(0)" onclick="handleMobileAuthClick()">
+          <span><i class="fas fa-user-circle" style="width: 22px; color: var(--accent-leather);"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
       <li class="mobile-nav-item">
         <a href="#inicio" onclick="closeMobileDrawer()">
           <span><i class="fas fa-home" style="width: 22px; color: var(--accent-gold);"></i> Inicio</span>

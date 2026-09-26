@@ -372,6 +372,8 @@ function updateStudioSimulation() {
   const tech = (typeof TECHNIQUES !== 'undefined' && TECHNIQUES[studioState.technique]) ? TECHNIQUES[studioState.technique] : { name: 'Grabado Láser HD' };
   if (summaryTechName) summaryTechName.textContent = tech.name;
   if (summaryFinalPrice) summaryFinalPrice.textContent = formatARS(mate.price);
+  const mobileBarPrice = document.getElementById('mobile-bar-price');
+  if (mobileBarPrice) mobileBarPrice.textContent = formatARS(mate.price);
 
   // 2. Labels on Mockup
   const simTechLabel = document.getElementById('sim-technique-label');

@@ -206,7 +206,11 @@ function setCategoryFilter(categoryId) {
   // Update pills UI
   document.querySelectorAll('.filter-pill').forEach(pill => {
     const pillCat = pill.getAttribute('data-category');
-    pill.classList.toggle('active', pillCat === categoryId);
+    const isActive = pillCat === categoryId;
+    pill.classList.toggle('active', isActive);
+    if (isActive && typeof pill.scrollIntoView === 'function') {
+      pill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
   });
 
   renderProducts();
@@ -1162,9 +1166,12 @@ function updateAuthUI() {
   const userBtnText = document.getElementById('user-btn-name');
   const userBtn = document.getElementById('user-account-btn');
   const userDropdown = document.getElementById('user-dropdown-menu');
+  const mobileAuthText = document.getElementById('mobile-nav-auth-text');
 
   if (state.currentUser) {
-    if (userBtnText) userBtnText.textContent = state.currentUser.name.split(' ')[0];
+    const firstName = state.currentUser.name.split(' ')[0];
+    if (userBtnText) userBtnText.textContent = firstName;
+    if (mobileAuthText) mobileAuthText.textContent = `Hola, ${firstName} (Mi Perfil)`;
     if (userBtn) {
       userBtn.onclick = (e) => {
         e.stopPropagation();
@@ -1175,12 +1182,22 @@ function updateAuthUI() {
     }
   } else {
     if (userBtnText) userBtnText.textContent = "Ingresar";
+    if (mobileAuthText) mobileAuthText.textContent = "Mi Cuenta / Ingresar";
     if (userBtn) {
       userBtn.onclick = () => openAuthModal('login');
       userBtn.title = "Iniciar sesión o Registrarse";
       userBtn.style.borderColor = 'var(--border-light)';
     }
     if (userDropdown) userDropdown.classList.remove('active');
+  }
+}
+
+function handleMobileAuthClick() {
+  closeMobileDrawer();
+  if (state.currentUser) {
+    openProfileModal();
+  } else {
+    openAuthModal('login');
   }
 }
 
@@ -1502,10 +1519,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 10. Close dropdowns on document click
+  // 10. Close dropdowns and popups on document click
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.user-btn-wrap')) {
       closeUserDropdown();
+    }
+    if (!e.target.closest('.floating-whatsapp-container')) {
+      document.getElementById('whatsapp-chat-popup')?.classList.remove('active');
     }
   });
 

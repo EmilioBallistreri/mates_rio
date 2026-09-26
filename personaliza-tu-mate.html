@@ -35,11 +35,11 @@
   <aside class="announcement-bar">
     <div class="container announcement-inner">
       <div class="announcement-center-msg">
-        <span><i class="fas fa-magic"></i> <b>Taller de Grabado Oficial Mates Río</b></span>
-        <span class="announcement-sep">•</span>
-        <span><i class="fas fa-bolt"></i> <b>Grabado en Virola BONIFICADO</b> en compras web</span>
-        <span class="announcement-sep">•</span>
-        <span><i class="fas fa-truck"></i> Despacho en <b>24/48 hs hábiles</b></span>
+        <span class="announcement-item"><i class="fas fa-magic"></i> <b>Taller de Grabado Oficial Mates Río</b></span>
+        <span class="announcement-sep announcement-sep-desktop">•</span>
+        <span class="announcement-item announcement-item-desktop"><i class="fas fa-bolt"></i> <b>Grabado en Virola BONIFICADO</b></span>
+        <span class="announcement-sep announcement-sep-desktop">•</span>
+        <span class="announcement-item announcement-item-desktop"><i class="fas fa-truck"></i> Despacho en <b>24/48 hs hábiles</b></span>
       </div>
 
       <div class="announcement-links">
@@ -78,8 +78,14 @@
 
       <!-- 3. Right Zone: Back to Store & Cart Trigger -->
       <div class="header-right">
+        <!-- Desktop Back to Store -->
         <a href="index.html" class="btn btn-outline-dark btn-header-back" title="Explorar otros productos">
           <i class="fas fa-arrow-left"></i> <span>Volver a la Tienda</span>
+        </a>
+
+        <!-- Mobile Back to Store Icon -->
+        <a href="index.html" class="btn-header-back-mobile" title="Volver a la Tienda" aria-label="Volver a la Tienda">
+          <i class="fas fa-arrow-left"></i>
         </a>
 
         <!-- Shopping Cart Trigger Button -->
@@ -560,6 +566,17 @@
         </section>
 
       </div>
+    </div>
+
+    <!-- Mobile Sticky Bottom Action Bar -->
+    <div class="mobile-sticky-action-bar" id="mobile-sticky-bar">
+      <div class="mobile-sticky-info">
+        <span class="mobile-sticky-label">Total Personalizado</span>
+        <span class="mobile-sticky-price" id="mobile-bar-price">$ 46.500</span>
+      </div>
+      <button type="button" class="btn btn-primary btn-mobile-finish" onclick="openCompletionModal()">
+        <span>Finalizar</span> <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
   </main>
 
