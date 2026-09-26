@@ -16,10 +16,10 @@
   <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
 
-  <!-- Google Fonts: Montserrat & Outfit -->
+  <!-- Google Fonts: Montserrat, Outfit, Cinzel, Dancing Script, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Dancing+Script:wght@600;700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
 
   <!-- Font Awesome Icons 6.5.1 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -155,6 +155,13 @@
             </a>
           </li>
 
+          <li class="nav-item-custom">
+            <a href="personaliza-tu-mate.html" class="nav-link nav-link-custom">
+              <i class="fas fa-magic" style="color: var(--accent-gold); margin-right: 4px;"></i> Personalizá tu Mate
+              <span class="nav-badge-pill pill-gold">VIROLA</span>
+            </a>
+          </li>
+
           <li>
             <a href="#guia-curado" class="nav-link">Tips Materos</a>
           </li>
@@ -245,6 +252,12 @@
         <a href="#catalogo" onclick="setCategoryFilter('mates'); closeMobileDrawer()">
           <span><i class="fas fa-mug-hot" style="width: 22px; color: var(--accent-leather);"></i> Mates Imperiales</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="personaliza-tu-mate.html">
+          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Personalizá tu Mate</span>
+          <span class="nav-badge-pill pill-gold">VIROLA</span>
         </a>
       </li>
       <li class="mobile-nav-item">
@@ -538,9 +551,44 @@
     </section>
 
     <!-- ==========================================================================
+         SHOWCASE PROMO: PERSONALIZÁ TU MATE (ACCESO AL ESTUDIO DEDICADO)
+         ========================================================================== -->
+    <section class="customize-banner-section" id="personaliza-tu-mate" aria-label="Taller de Personalización">
+      <div class="container">
+        <div class="customize-promo-card">
+          <div class="promo-text-side">
+            <span class="section-tag"><i class="fas fa-magic"></i> Taller de Grabado Oficial</span>
+            <h2 class="promo-title">Personalizá tu Mate en Vivo</h2>
+            <p class="promo-desc">
+              Ingresá a nuestro sitio interactivo: elegí tu modelo, la terminación del metal y grabá tus nombres, fechas, escudos o tu propio logo <b>exclusivamente en la virola</b> con vista previa en tiempo real.
+            </p>
+            <div class="promo-perks">
+              <span class="promo-perk-item"><i class="fas fa-check-circle"></i> Grabado Láser Bonificado ($0)</span>
+              <span class="promo-perk-item"><i class="fas fa-check-circle"></i> Vista previa interactiva en vivo</span>
+              <span class="promo-perk-item"><i class="fas fa-check-circle"></i> Despacho rápido en 24/48 hs</span>
+            </div>
+            <div class="promo-actions">
+              <a href="personaliza-tu-mate.html" class="btn btn-primary btn-enter-studio">
+                <i class="fas fa-magic"></i> Ir a Personalizá tu Mate <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+          <div class="promo-preview-side">
+            <div class="promo-virola-visual">
+              <img src="assets/images/prod_mate_imperial.jpg" alt="Mate Imperial Personalizado" class="promo-mate-img" />
+              <div class="promo-virola-badge">
+                <i class="fas fa-ring"></i> Grabado exclusivo en la Virola
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
          HOW TO CURE YOUR MATE (INTERACTIVE VALUE-ADD TABS)
          ========================================================================== -->
-    <section class="cure-guide-section">
+    <section class="cure-guide-section" id="guia-curado">
       <div class="container">
         <div class="section-header">
           <span class="section-tag">Tips Materos de Mates Río</span>
@@ -854,96 +902,129 @@
   <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
 
   <aside class="cart-drawer" id="cart-drawer" aria-label="Carrito de Compras">
+    <!-- 1. Cart Header -->
     <div class="cart-header">
-      <h3 class="cart-header-title">
-        <i class="fas fa-shopping-bag"></i> Mi Carrito <span id="cart-count-title" style="font-size: 0.95rem; color: var(--text-muted);">(0)</span>
-      </h3>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <button onclick="clearCart()" title="Vaciar Carrito" style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600; text-decoration: underline;">
-          Vaciar
-        </button>
-        <button class="cart-close-btn" onclick="closeCartDrawer()" aria-label="Cerrar carrito">
-          <i class="fas fa-times"></i>
-        </button>
+      <div class="cart-header-title-group">
+        <div class="cart-header-icon-box">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <div>
+          <h3 class="cart-header-title">Mi Carrito</h3>
+          <span class="cart-items-counter-sub" id="cart-count-title">(0 productos)</span>
+        </div>
       </div>
+      <button class="cart-close-btn" onclick="closeCartDrawer()" aria-label="Cerrar carrito" title="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
-    <!-- Free Shipping Progress Meter -->
+    <!-- 2. Newly Added Product Alert Banner -->
+    <div class="cart-added-banner" id="cart-added-banner">
+      <i class="fas fa-check-circle"></i>
+      <span id="cart-added-banner-text">¡Producto agregado con éxito!</span>
+    </div>
+
+    <!-- 3. Free Shipping Progress Meter -->
     <div class="free-shipping-meter">
       <div class="meter-text" id="free-shipping-text">
-        ¡Calculando envío gratis...!
+        <i class="fas fa-truck-fast"></i> ¡Sumá más productos para tener <b>ENVÍO GRATIS</b>!
       </div>
       <div class="meter-bar-track">
         <div class="meter-bar-fill" id="free-shipping-bar"></div>
       </div>
     </div>
 
-    <!-- Items List -->
+    <!-- 4. Items List -->
     <div class="cart-items-list" id="cart-items-container">
-      <!-- Populated via JS -->
+      <!-- Populated dynamically via JS -->
     </div>
 
-    <!-- Cart Footer & Checkout -->
-    <div class="cart-footer">
-      <!-- Active Coupon Chip Container -->
-      <div id="active-coupon-container"></div>
-
-      <!-- Coupon Code Box -->
-      <div class="cart-coupon-box">
-        <input
-          type="text"
-          id="cart-coupon-input"
-          class="coupon-input"
-          placeholder="CUPÓN DE DESCUENTO (EJ: MATERIO10)"
-        />
-        <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
+    <!-- 5. Cart Footer & Checkout -->
+    <div class="cart-footer" id="cart-footer">
+      <!-- Collapsible Tools: Cupón & Envío -->
+      <div class="cart-tools-bar">
+        <button type="button" class="cart-tool-btn" id="btn-toggle-coupon" onclick="toggleCartTool('coupon')">
+          <i class="fas fa-tag"></i> <span>Cupón de descuento</span>
+          <i class="fas fa-chevron-down tool-arrow" id="arrow-coupon"></i>
+        </button>
+        <button type="button" class="cart-tool-btn" id="btn-toggle-shipping" onclick="toggleCartTool('shipping')">
+          <i class="fas fa-map-marker-alt"></i> <span>Calcular envío</span>
+          <i class="fas fa-chevron-down tool-arrow" id="arrow-shipping"></i>
+        </button>
       </div>
 
-      <!-- Shipping Calculator in Cart -->
-      <details class="cart-shipping-calc-box">
-        <summary>
-          <span><i class="fas fa-truck" style="color: var(--accent-gold); margin-right: 6px;"></i> Calcular costo de envío</span>
-          <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
-        </summary>
+      <!-- Collapsible Coupon Box -->
+      <div class="cart-tool-collapse" id="collapse-coupon">
+        <div id="active-coupon-container"></div>
+        <div class="cart-coupon-box">
+          <input
+            type="text"
+            id="cart-coupon-input"
+            class="coupon-input"
+            placeholder="CÓDIGO (EJ: MATERIO10)"
+          />
+          <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
+        </div>
+      </div>
+
+      <!-- Collapsible Shipping Box -->
+      <div class="cart-tool-collapse" id="collapse-shipping">
         <div class="shipping-calc-input-row">
           <input type="text" id="cart-cp-input" class="shipping-calc-input" placeholder="Tu Código Postal (ej: 1425)" />
-          <button class="btn btn-outline-dark" onclick="calculateShippingCP()" style="padding: 0 14px; font-size: 0.76rem; height: 36px;">
+          <button class="btn btn-outline-dark shipping-calc-btn" onclick="calculateShippingCP()">
             Calcular
           </button>
         </div>
         <div id="cart-cp-result"></div>
-      </details>
-
-      <div class="cart-totals-row">
-        <span>Subtotal</span>
-        <span id="cart-subtotal">$ 0</span>
       </div>
 
-      <div class="cart-totals-row" id="cart-discount-row" style="display: none; color: #27ae60; font-weight: 600;">
-        <span>Descuento cupón</span>
-        <span id="cart-discount-amount">-$ 0</span>
+      <!-- Summary Breakdown Card -->
+      <div class="cart-summary-card">
+        <div class="cart-totals-row">
+          <span class="row-label">Subtotal</span>
+          <span class="row-val" id="cart-subtotal">$ 0</span>
+        </div>
+
+        <div class="cart-totals-row" id="cart-discount-row" style="display: none;">
+          <span class="row-label discount-label"><i class="fas fa-tag"></i> Descuento cupón</span>
+          <span class="row-val discount-val" id="cart-discount-amount">-$ 0</span>
+        </div>
+
+        <div class="cart-totals-row">
+          <span class="row-label">Envío</span>
+          <span class="row-val" id="cart-shipping-amount">A calcular</span>
+        </div>
+
+        <div class="cart-totals-row total-final">
+          <div class="total-label-wrap">
+            <span class="row-label-total">Total estimado</span>
+            <small class="transfer-savings-hint"><i class="fas fa-bolt"></i> 10% OFF pagando por Transferencia</small>
+          </div>
+          <span class="row-val-total" id="cart-total">$ 0</span>
+        </div>
       </div>
 
-      <div class="cart-totals-row">
-        <span>Costo de envío</span>
-        <span id="cart-shipping-amount">$ 0</span>
-      </div>
-
-      <div class="cart-totals-row total-final">
-        <span>Total a Pagar</span>
-        <span id="cart-total">$ 0</span>
-      </div>
-
-      <!-- Action Buttons -->
+      <!-- Clear Hierarchy Checkout Actions -->
       <div class="cart-checkout-actions">
-        <!-- WhatsApp Order Checkout (High Conversion) -->
-        <button class="btn btn-whatsapp" onclick="checkoutWhatsApp()" style="width: 100%;">
-          <i class="fab fa-whatsapp"></i> Finalizar Pedido por WhatsApp
+        <!-- Primary Action: Web Checkout (High Contrast) -->
+        <button class="btn btn-primary btn-checkout-main" onclick="openWebCheckout()">
+          <i class="fas fa-credit-card"></i> Iniciar Compra Online
         </button>
 
-        <!-- Web Checkout Form Modal Trigger -->
-        <button class="btn btn-primary" onclick="openWebCheckout()" style="width: 100%;">
-          <i class="fas fa-credit-card"></i> Finalizar Compra en la Web
+        <!-- Secondary Action: WhatsApp Order (Elegant Clean Style) -->
+        <button class="btn btn-whatsapp-secondary" onclick="checkoutWhatsApp()" title="Atención y pedido por WhatsApp">
+          <i class="fab fa-whatsapp"></i> O pedir y pagar por WhatsApp
+        </button>
+      </div>
+
+      <!-- Trust & Safe Shopping Footer Notice -->
+      <div class="cart-footer-security-row">
+        <span><i class="fas fa-shield-alt"></i> Compra Segura</span>
+        <span>•</span>
+        <span><i class="fas fa-truck"></i> Envíos a todo el país</span>
+        <span>•</span>
+        <button onclick="confirmClearCart()" class="cart-clear-link" title="Vaciar todos los productos">
+          Vaciar carrito
         </button>
       </div>
     </div>
@@ -1279,7 +1360,11 @@
             </button>
           </div>
 
-          <button class="btn btn-whatsapp" onclick="consultProductWhatsApp()" style="margin-top: 10px; width: 100%;">
+          <button id="qv-btn-personalize" class="btn btn-outline-dark" onclick="if (currentQuickViewProduct) { goToPersonalizarMate(currentQuickViewProduct.id); closeQuickView(); }" style="margin-top: 8px; width: 100%; display: none;">
+            <i class="fas fa-magic"></i> Personalizar Virola de este Mate
+          </button>
+
+          <button class="btn btn-whatsapp" onclick="consultProductWhatsApp()" style="margin-top: 8px; width: 100%;">
             <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
           </button>
         </div>
