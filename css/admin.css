@@ -1442,3 +1442,68 @@ html, body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   12. EMBEDDED ADMIN VIEW (WHEN HOSTED INSIDE INDEX.HTML)
+   ========================================================================== */
+.admin-embedded-view {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  background-color: var(--admin-bg-main);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-embedded-view.active {
+  display: block;
+}
+
+.admin-embedded-close-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #17110c;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-bottom: 2px solid var(--admin-gold);
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+}
+
+.admin-embedded-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--admin-gold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.btn-close-admin-embedded {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-close-admin-embedded:hover {
+  background: var(--admin-gold);
+  color: #17110c;
+  border-color: var(--admin-gold);
+}

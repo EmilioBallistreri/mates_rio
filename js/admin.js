@@ -25,13 +25,15 @@ const ADMIN_CREDENTIALS = [
 let currentAdminUser = null;
 let currentActiveSection = 'dashboard';
 
-// Currency Formatter
-function formatARS(amount) {
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    maximumFractionDigits: 0
-  }).format(amount).replace('ARS', '$');
+// Currency Formatter (safe check)
+if (typeof formatARS !== 'function') {
+  window.formatARS = function(amount) {
+    return new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'ARS',
+      maximumFractionDigits: 0
+    }).format(amount).replace('ARS', '$');
+  };
 }
 
 // ==========================================================================
@@ -48,7 +50,60 @@ document.addEventListener('DOMContentLoaded', () => {
 // Check if an admin session already exists
 function checkAdminSession() {
   const session = sessionStorage.getItem('mates_rio_admin_session') || localStorage.getItem('mates_rio_admin_session');
-  
+  let hasValidAdmin = false;
+
+  if (session) {
+    try {
+      const user = JSON.parse(session);
+      if (user && (user.role === 'admin' || user.role === 'Super Administrador' || user.role === 'Taller & Depósito')) {
+        loginAdminSuccess(user, false);
+        hasValidAdmin = true;
+      }
+    } catch (e) {
+      console.error('Session parse error:', e);
+    }
+  }
+
+  const isEmbedded = !!document.getElementById('admin-embedded-view');
+
+  if (!hasValidAdmin) {
+    if (!isEmbedded) {
+      showSecurityGate();
+    }
+  }
+
+  // Check secret URL hash: index.html#admin
+  if (window.location.hash === '#admin') {
+    openAdminEmbeddedView();
+  }
+}
+
+function showSecurityGate() {
+  const gate = document.getElementById('admin-gate-screen');
+  const app = document.getElementById('admin-app-wrapper');
+  if (gate) gate.style.display = 'flex';
+  if (app) app.style.display = 'none';
+}
+
+function hideSecurityGate() {
+  const gate = document.getElementById('admin-gate-screen');
+  const app = document.getElementById('admin-app-wrapper');
+  if (gate) gate.style.display = 'none';
+  if (app) app.style.display = 'flex';
+}
+
+// Open Hidden Embedded Admin View inside index.html
+function openAdminEmbeddedView() {
+  const embedded = document.getElementById('admin-embedded-view');
+  if (!embedded) {
+    window.location.href = 'admin.html';
+    return;
+  }
+
+  embedded.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  const session = sessionStorage.getItem('mates_rio_admin_session') || localStorage.getItem('mates_rio_admin_session');
   if (session) {
     try {
       const user = JSON.parse(session);
@@ -56,24 +111,50 @@ function checkAdminSession() {
         loginAdminSuccess(user, false);
         return;
       }
-    } catch (e) {
-      console.error('Session parse error:', e);
-    }
+    } catch (e) {}
   }
 
-  // Not authenticated as admin -> show gate
   showSecurityGate();
 }
 
-function showSecurityGate() {
-  document.getElementById('admin-gate-screen').style.display = 'flex';
-  document.getElementById('admin-app-wrapper').style.display = 'none';
+// Close Hidden Embedded Admin View
+function closeAdminEmbeddedView() {
+  const embedded = document.getElementById('admin-embedded-view');
+  if (embedded) {
+    embedded.classList.remove('active');
+    document.body.style.overflow = '';
+    if (window.location.hash === '#admin') {
+      history.replaceState(null, null, ' ');
+    }
+  }
 }
 
-function hideSecurityGate() {
-  document.getElementById('admin-gate-screen').style.display = 'none';
-  document.getElementById('admin-app-wrapper').style.display = 'flex';
+// Secret click trigger (e.g. 3 rapid clicks on footer copyright or logo)
+let secretClickCount = 0;
+let secretClickTimer = null;
+
+function handleSecretAdminTrigger() {
+  secretClickCount++;
+  clearTimeout(secretClickTimer);
+
+  if (secretClickCount >= 3) {
+    secretClickCount = 0;
+    openAdminEmbeddedView();
+    showAdminToast('Portal Secreto Activado: Abriendo Panel Admin', 'fa-key');
+  } else {
+    secretClickTimer = setTimeout(() => {
+      secretClickCount = 0;
+    }, 1500);
+  }
 }
+
+// Secret Keyboard Shortcut: Ctrl + Shift + A
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+    e.preventDefault();
+    openAdminEmbeddedView();
+  }
+});
 
 // Handle login attempt
 function handleAdminLogin(e) {
