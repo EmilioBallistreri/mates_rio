@@ -14,8 +14,20 @@ const ADMIN_CREDENTIALS = [
     role: "Super Administrador"
   },
   {
+    email: "admin@matesrio.com",
+    password: "admin",
+    name: "Administrador General",
+    role: "Super Administrador"
+  },
+  {
     email: "taller@matesrio.com",
     password: "taller123",
+    name: "Encargado de Taller",
+    role: "Taller & Depósito"
+  },
+  {
+    email: "taller@matesrio.com",
+    password: "admin",
     name: "Encargado de Taller",
     role: "Taller & Depósito"
   }
@@ -25,13 +37,25 @@ const ADMIN_CREDENTIALS = [
 let currentAdminUser = null;
 let currentActiveSection = 'dashboard';
 
-// Currency Formatter
-function formatARS(amount) {
-  return new Intl.NumberFormat('es-AR', {
-    style: 'currency',
-    currency: 'ARS',
-    maximumFractionDigits: 0
-  }).format(amount).replace('ARS', '$');
+// Currency Formatter (safe check)
+if (typeof formatARS !== 'function') {
+  window.formatARS = function(amount) {
+    return new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'ARS',
+      maximumFractionDigits: 0
+    }).format(amount).replace('ARS', '$');
+  };
+}
+
+// Accent-insensitive normalization helper
+function cleanStr(s) {
+  return (s || '')
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
 }
 
 // ==========================================================================
@@ -48,7 +72,76 @@ document.addEventListener('DOMContentLoaded', () => {
 // Check if an admin session already exists
 function checkAdminSession() {
   const session = sessionStorage.getItem('mates_rio_admin_session') || localStorage.getItem('mates_rio_admin_session');
-  
+  let hasValidAdmin = false;
+
+  if (session) {
+    try {
+      const user = JSON.parse(session);
+      if (user && (user.role === 'admin' || user.role === 'Super Administrador' || user.role === 'Taller & Depósito')) {
+        loginAdminSuccess(user, false);
+        hasValidAdmin = true;
+      }
+    } catch (e) {
+      console.error('Session parse error:', e);
+    }
+  }
+
+  // Also check if user is already logged in as admin in main store session
+  if (!hasValidAdmin) {
+    try {
+      const storeUserStr = localStorage.getItem('mates_rio_user');
+      if (storeUserStr) {
+        const storeUser = JSON.parse(storeUserStr);
+        if (storeUser && (storeUser.role === 'admin' || storeUser.role === 'Super Administrador')) {
+          loginAdminSuccess(storeUser, false);
+          hasValidAdmin = true;
+        }
+      }
+    } catch (e) {
+      console.error('Store user parse error:', e);
+    }
+  }
+
+  const isEmbedded = !!document.getElementById('admin-embedded-view');
+
+  if (!hasValidAdmin) {
+    if (!isEmbedded) {
+      showSecurityGate();
+    }
+  }
+
+  // Check secret URL hash: index.html#admin
+  if (window.location.hash === '#admin') {
+    openAdminEmbeddedView();
+  }
+}
+
+function showSecurityGate() {
+  const gate = document.getElementById('admin-gate-screen');
+  const app = document.getElementById('admin-app-wrapper');
+  if (gate) gate.style.display = 'flex';
+  if (app) app.style.display = 'none';
+}
+
+function hideSecurityGate() {
+  const gate = document.getElementById('admin-gate-screen');
+  const app = document.getElementById('admin-app-wrapper');
+  if (gate) gate.style.display = 'none';
+  if (app) app.style.display = 'flex';
+}
+
+// Open Hidden Embedded Admin View inside index.html
+function openAdminEmbeddedView() {
+  const embedded = document.getElementById('admin-embedded-view');
+  if (!embedded) {
+    window.location.href = 'admin.html';
+    return;
+  }
+
+  embedded.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  const session = sessionStorage.getItem('mates_rio_admin_session') || localStorage.getItem('mates_rio_admin_session');
   if (session) {
     try {
       const user = JSON.parse(session);
@@ -56,24 +149,50 @@ function checkAdminSession() {
         loginAdminSuccess(user, false);
         return;
       }
-    } catch (e) {
-      console.error('Session parse error:', e);
-    }
+    } catch (e) {}
   }
 
-  // Not authenticated as admin -> show gate
   showSecurityGate();
 }
 
-function showSecurityGate() {
-  document.getElementById('admin-gate-screen').style.display = 'flex';
-  document.getElementById('admin-app-wrapper').style.display = 'none';
+// Close Hidden Embedded Admin View
+function closeAdminEmbeddedView() {
+  const embedded = document.getElementById('admin-embedded-view');
+  if (embedded) {
+    embedded.classList.remove('active');
+    document.body.style.overflow = '';
+    if (window.location.hash === '#admin') {
+      history.replaceState(null, null, ' ');
+    }
+  }
 }
 
-function hideSecurityGate() {
-  document.getElementById('admin-gate-screen').style.display = 'none';
-  document.getElementById('admin-app-wrapper').style.display = 'flex';
+// Secret click trigger (e.g. 3 rapid clicks on footer copyright or logo)
+let secretClickCount = 0;
+let secretClickTimer = null;
+
+function handleSecretAdminTrigger() {
+  secretClickCount++;
+  clearTimeout(secretClickTimer);
+
+  if (secretClickCount >= 3) {
+    secretClickCount = 0;
+    openAdminEmbeddedView();
+    showAdminToast('Portal Secreto Activado: Abriendo Panel Admin', 'fa-key');
+  } else {
+    secretClickTimer = setTimeout(() => {
+      secretClickCount = 0;
+    }, 1500);
+  }
 }
+
+// Secret Keyboard Shortcut: Ctrl + Shift + A
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+    e.preventDefault();
+    openAdminEmbeddedView();
+  }
+});
 
 // Handle login attempt
 function handleAdminLogin(e) {
@@ -236,11 +355,15 @@ function switchAdminSection(sectionId) {
 }
 
 function toggleMobileSidebar() {
-  document.getElementById('admin-sidebar')?.classList.toggle('sidebar-open');
+  const sidebar = document.getElementById('admin-sidebar');
+  const overlay = document.getElementById('admin-sidebar-overlay');
+  const isOpen = sidebar?.classList.toggle('sidebar-open');
+  if (overlay) overlay.classList.toggle('active', !!isOpen);
 }
 
 function closeMobileSidebar() {
   document.getElementById('admin-sidebar')?.classList.remove('sidebar-open');
+  document.getElementById('admin-sidebar-overlay')?.classList.remove('active');
 }
 
 // Live Clock for Buenos Aires
@@ -338,7 +461,7 @@ function renderInventoryTable() {
   const tbody = document.getElementById('inventory-table-tbody');
   if (!tbody) return;
 
-  const searchQuery = (document.getElementById('inventory-search-input')?.value || '').toLowerCase().trim();
+  const searchQuery = cleanStr(document.getElementById('inventory-search-input')?.value);
   const catFilter = document.getElementById('inventory-cat-filter')?.value || 'all';
   const stockFilter = document.getElementById('inventory-stock-filter')?.value || 'all';
 
@@ -351,7 +474,7 @@ function renderInventoryTable() {
 
   // Filter by search
   if (searchQuery) {
-    list = list.filter(p => p.name.toLowerCase().includes(searchQuery) || p.id.toLowerCase().includes(searchQuery));
+    list = list.filter(p => cleanStr(p.name).includes(searchQuery) || cleanStr(p.id).includes(searchQuery));
   }
 
   // Filter by stock status
@@ -659,16 +782,16 @@ function renderOrdersTable() {
   const tbody = document.getElementById('orders-table-tbody');
   if (!tbody) return;
 
-  const search = (document.getElementById('orders-search-input')?.value || '').toLowerCase().trim();
+  const search = cleanStr(document.getElementById('orders-search-input')?.value);
   const statusFilter = document.getElementById('orders-status-filter')?.value || 'all';
 
   let list = [...orders];
 
   if (search) {
     list = list.filter(o => 
-      o.id.toLowerCase().includes(search) || 
-      (o.customerName && o.customerName.toLowerCase().includes(search)) ||
-      (o.items && o.items.toLowerCase().includes(search))
+      cleanStr(o.id).includes(search) || 
+      (o.customerName && cleanStr(o.customerName).includes(search)) ||
+      (o.items && cleanStr(o.items).includes(search))
     );
   }
 

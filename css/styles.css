@@ -4923,7 +4923,7 @@ input, select, textarea {
 
 @media (max-width: 768px) {
   .customizer-main-container {
-    padding: 20px 0 84px;
+    padding: 20px 0 calc(96px + env(safe-area-inset-bottom, 12px));
   }
   .customizer-container {
     padding: 0 14px;
@@ -6266,10 +6266,9 @@ input, select, textarea {
     padding: 20px 14px !important;
   }
   .modal-close-icon {
-    position: sticky;
-    top: 8px;
-    right: 8px;
-    float: right;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     width: 32px;
     height: 32px;
     font-size: 0.9rem;
@@ -6424,6 +6423,12 @@ input, select, textarea {
     overflow-y: auto;
     right: 0;
     bottom: 66px;
+  }
+  .whatsapp-chat-popup.active ~ .back-to-top-btn,
+  body:has(.whatsapp-chat-popup.active) .back-to-top-btn {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
   .back-to-top-btn {
     width: 36px;

@@ -58,8 +58,9 @@ const CONFIG = {
 
 // Coupons Database
 const COUPONS = {
-  "MATERIO10": { discount: 0.10, label: "10% OFF Bienvenida" },
-  "PROMORIO": { discount: 0.15, label: "15% OFF Especial" },
+  "MATERIO10": { discount: 0.10, label: "10% OFF Bienvenida", freeShipping: false },
+  "PROMORIO": { discount: 0.15, label: "15% OFF Especial", freeShipping: false },
+  "EXPERTO15": { discount: 0.15, label: "15% OFF Especial Matero", freeShipping: false },
   "ENVIOGRATIS": { discount: 0.0, freeShipping: true, label: "Envío Bonificado" }
 };
 
@@ -231,6 +232,16 @@ function setCategoryFilter(categoryId) {
   renderProducts();
 }
 
+// Helper for accent-insensitive search
+function cleanStr(s) {
+  return (s || '')
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
 function getFilteredProducts() {
   if (typeof PRODUCTS_DATA === 'undefined') return [];
   let list = [...PRODUCTS_DATA];
@@ -240,13 +251,14 @@ function getFilteredProducts() {
     list = list.filter(p => p.category.toLowerCase() === state.activeCategory.toLowerCase());
   }
 
-  // 2. Filter by search query
+  // 2. Filter by search query (Accent-insensitive, e.g. "camionero", "clasico", "termo")
   if (state.searchQuery && state.searchQuery.trim()) {
-    const q = state.searchQuery.toLowerCase().trim();
+    const q = cleanStr(state.searchQuery);
     list = list.filter(p => 
-      p.name.toLowerCase().includes(q) ||
-      p.description.toLowerCase().includes(q) ||
-      p.categoryName.toLowerCase().includes(q)
+      cleanStr(p.name).includes(q) ||
+      cleanStr(p.description).includes(q) ||
+      cleanStr(p.categoryName).includes(q) ||
+      cleanStr(p.badge).includes(q)
     );
   }
 
@@ -1140,6 +1152,10 @@ function handleLogin(e) {
   if (user) {
     state.currentUser = user;
     localStorage.setItem('mates_rio_user', JSON.stringify(user));
+    if (user.role === 'admin' || user.role === 'Super Administrador') {
+      localStorage.setItem('mates_rio_admin_session', JSON.stringify(user));
+      sessionStorage.setItem('mates_rio_admin_session', JSON.stringify(user));
+    }
     updateAuthUI();
     closeAuthModal();
     showToast(`¡Bienvenido de vuelta, ${user.name}!`);
@@ -1191,6 +1207,8 @@ function handleRegister(e) {
 function logoutUser() {
   state.currentUser = null;
   localStorage.removeItem('mates_rio_user');
+  localStorage.removeItem('mates_rio_admin_session');
+  sessionStorage.removeItem('mates_rio_admin_session');
   updateAuthUI();
   closeProfileModal();
   closeUserDropdown();
@@ -1627,8 +1645,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 350);
   }
 
-  // 14. Initialize Customizer if container exists
-  if (document.getElementById('customizer-mates-grid') && typeof initCustomizer === 'function') {
+  // 14. Initialize Customizer if container exists and not already handled by dedicated customizer.js
+  if (document.getElementById('customizer-mates-grid') && typeof initStudio !== 'function' && typeof initCustomizer === 'function') {
     initCustomizer();
   }
 });

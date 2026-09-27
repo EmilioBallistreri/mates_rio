@@ -26,6 +26,7 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/admin.css" />
 </head>
 <body>
 
@@ -68,7 +69,7 @@
         </button>
 
         <a href="#inicio" class="brand-logo-wrap" title="Mates Río - Inicio">
-          <img src="assets/images/logo.jpg" alt="Logo de Mates Río" class="brand-logo-img" />
+          <img src="assets/images/logo.jpg" alt="Logo de Mates Río" class="brand-logo-img" ondblclick="handleSecretAdminTrigger()" />
           <div class="brand-name-group">
             <span class="brand-name">MATES RÍO</span>
             <span class="brand-tagline">Tradición & Estilo</span>
@@ -199,7 +200,7 @@
             <div class="user-dropdown-item" onclick="openProfileModal()">
               <i class="fas fa-box-open"></i> Mis Pedidos
             </div>
-            <a href="admin.html" class="user-dropdown-item" id="dropdown-admin-link" style="display: none; color: var(--accent-leather); font-weight: 800; text-decoration: none;">
+            <a href="javascript:void(0)" onclick="openAdminEmbeddedView(); closeUserDropdown();" class="user-dropdown-item" id="dropdown-admin-link" style="display: none; color: var(--accent-leather); font-weight: 800; text-decoration: none;">
               <i class="fas fa-shield-halved" style="color: var(--accent-gold);"></i> Panel de Administración
             </a>
             <div class="user-dropdown-item logout" onclick="logoutUser()">
@@ -240,7 +241,7 @@
         </a>
       </li>
       <li class="mobile-nav-item" id="mobile-nav-admin-item" style="display: none; background: #fffdf9;">
-        <a href="admin.html">
+        <a href="javascript:void(0)" onclick="openAdminEmbeddedView(); closeMobileDrawer();">
           <span><i class="fas fa-shield-halved" style="width: 22px; color: var(--accent-gold);"></i> <b style="color: var(--accent-leather);">Panel Admin</b></span>
           <span class="nav-badge-pill pill-gold">STAFF</span>
         </a>
@@ -848,13 +849,8 @@
 
       <!-- Footer Bottom Copyright Bar -->
       <div class="footer-bottom-bar">
-        <span>© 2026 Mates Río. Todos los derechos reservados. Pasión por la cultura matera.</span>
-        <span>
-          Hecho con dedicación artesanal • Envíos a todo el país • 
-          <a href="admin.html" class="footer-admin-link" title="Acceso exclusivo administración" style="color: var(--accent-gold); text-decoration: none; font-weight: 700; margin-left: 6px;">
-            <i class="fas fa-lock" style="font-size: 0.75rem;"></i> Acceso Administración
-          </a>
-        </span>
+        <span onclick="handleSecretAdminTrigger()" style="cursor: default;" title="Mates Río Oficial">© 2026 Mates Río. Todos los derechos reservados. Pasión por la cultura matera.</span>
+        <span>Hecho con dedicación artesanal • Envíos a toda la República Argentina</span>
       </div>
     </div>
   </footer>
@@ -1397,8 +1393,690 @@
        ========================================================================== -->
   <div class="toast-container" id="toast-container"></div>
 
+
+  <!-- ==========================================================================
+       HIDDEN EMBEDDED ADMIN PANEL (ACTIVATED VIA LOGIN, SHORTCUT OR SECRET TRIGGER)
+       ========================================================================== -->
+  <div class="admin-embedded-view" id="admin-embedded-view">
+    <div class="admin-embedded-close-bar">
+      <div class="admin-embedded-badge">
+        <i class="fas fa-shield-halved"></i> Modo Administración Interno
+      </div>
+      <button type="button" class="btn-close-admin-embedded" onclick="closeAdminEmbeddedView()">
+        <i class="fas fa-store"></i> Volver a la Tienda Pública
+      </button>
+    </div>
+
+<!-- ==========================================================================
+       1. SECURITY ACCESS GATE / LOGIN SCREEN (Visible when not authenticated)
+       ========================================================================== -->
+  <div class="admin-gate-screen" id="admin-gate-screen">
+    <div class="admin-gate-box">
+      <div class="admin-gate-header">
+        <img src="assets/images/logo.jpg" alt="Mates Río Logo" class="admin-gate-logo" />
+        <div>
+          <span class="admin-gate-badge"><i class="fas fa-shield-halved"></i> Acceso Restringido</span>
+        </div>
+        <h1 class="admin-gate-title">MATES RÍO</h1>
+        <p class="admin-gate-subtitle">Portal de Gestión & Control Administrativo</p>
+      </div>
+
+      <div class="admin-gate-body">
+        <!-- Error Alert Box -->
+        <div class="admin-error-box" id="admin-error-box">
+          <i class="fas fa-triangle-exclamation"></i>
+          <span id="admin-error-text">Credenciales inválidas</span>
+        </div>
+
+        <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+          <div class="admin-form-group">
+            <label class="admin-form-label" for="admin-email">Correo Electrónico de Administrador</label>
+            <div class="admin-input-wrap">
+              <i class="fas fa-envelope admin-input-icon"></i>
+              <input type="email" id="admin-email" class="admin-input" placeholder="admin@matesrio.com" required autocomplete="email" />
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-form-label" for="admin-password">Contraseña de Seguridad</label>
+            <div class="admin-input-wrap">
+              <i class="fas fa-lock admin-input-icon"></i>
+              <input type="password" id="admin-password" class="admin-input" placeholder="••••••••" required autocomplete="current-password" />
+              <button type="button" class="admin-pwd-toggle" onclick="togglePasswordVisibility()" aria-label="Mostrar contraseña">
+                <i class="fas fa-eye" id="pwd-eye-icon"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-admin-login" id="btn-admin-submit">
+            <i class="fas fa-key"></i> Iniciar Sesión en el Panel
+          </button>
+        </form>
+
+        <!-- Quick Demo Access (for easy testing) -->
+        <div class="admin-demo-accounts">
+          <p class="admin-demo-title"><i class="fas fa-bolt"></i> Cuentas Demo para Prueba Rápida</p>
+          <div class="admin-demo-grid">
+            <button type="button" class="btn-demo-quick" onclick="fillAdminDemo('admin@matesrio.com', 'admin123')">
+              <span class="demo-role-name">👑 Super Admin</span>
+              <span class="demo-role-cred">admin@matesrio.com</span>
+            </button>
+            <button type="button" class="btn-demo-quick" onclick="fillAdminDemo('taller@matesrio.com', 'taller123')">
+              <span class="demo-role-name">🔨 Taller & Stock</span>
+              <span class="demo-role-cred">taller@matesrio.com</span>
+            </button>
+          </div>
+        </div>
+
+        <a href="index.html" class="admin-gate-back-link">
+          <i class="fas fa-store"></i> Volver a la Tienda Pública Mates Río
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       2. MAIN ADMIN APP INTERFACE (Visible only when authenticated)
+       ========================================================================== -->
+  <div class="admin-app-wrapper" id="admin-app-wrapper">
+    
+    <!-- Sidebar Backdrop Overlay for Mobile -->
+    <div class="admin-sidebar-overlay" id="admin-sidebar-overlay" onclick="closeMobileSidebar()"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <img src="assets/images/logo.jpg" alt="Mates Río" class="sidebar-logo-img" />
+        <div>
+          <span class="sidebar-brand-name">MATES RÍO</span>
+          <span class="sidebar-brand-sub">PANEL DE CONTROL</span>
+        </div>
+        <button type="button" class="btn-close-sidebar-mobile" onclick="closeMobileSidebar()" aria-label="Cerrar menú">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <nav class="admin-sidebar-nav">
+        <div class="sidebar-nav-group-title">Métricas & Operaciones</div>
+        <a class="sidebar-nav-item active" data-section="dashboard" onclick="switchAdminSection('dashboard')">
+          <i class="fas fa-chart-pie"></i>
+          <span>Dashboard General</span>
+        </a>
+        <a class="sidebar-nav-item" data-section="inventory" onclick="switchAdminSection('inventory')">
+          <i class="fas fa-boxes-stacked"></i>
+          <span>Control de Stock</span>
+          <span class="sidebar-badge badge-alert" id="sidebar-low-stock-badge">0</span>
+        </a>
+        <a class="sidebar-nav-item" data-section="orders" onclick="switchAdminSection('orders')">
+          <i class="fas fa-receipt"></i>
+          <span>Ventas & Pedidos</span>
+          <span class="sidebar-badge badge-info" id="sidebar-orders-badge">0</span>
+        </a>
+        <a class="sidebar-nav-item" data-section="stats" onclick="switchAdminSection('stats')">
+          <i class="fas fa-chart-line"></i>
+          <span>Estadísticas de Taller</span>
+        </a>
+
+        <div class="sidebar-nav-group-title">Administración</div>
+        <a class="sidebar-nav-item" data-section="users" onclick="switchAdminSection('users')">
+          <i class="fas fa-users-gear"></i>
+          <span>Clientes & Accesos</span>
+        </a>
+        <a class="sidebar-nav-item" data-section="audit" onclick="switchAdminSection('audit')">
+          <i class="fas fa-clock-rotate-left"></i>
+          <span>Registro de Actividad</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Footer with User Details & Logout -->
+      <div class="admin-sidebar-footer">
+        <div class="sidebar-admin-profile">
+          <div class="admin-avatar" id="sidebar-admin-avatar">A</div>
+          <div class="admin-profile-info">
+            <span class="admin-profile-name" id="sidebar-admin-name">Admin Mates Río</span>
+            <span class="admin-profile-role" id="sidebar-admin-role">Super Administrador</span>
+          </div>
+        </div>
+
+        <div class="sidebar-actions-row">
+          <button type="button" class="btn-sidebar-action" onclick="closeAdminEmbeddedView()" title="Volver a la Tienda Pública">
+            <i class="fas fa-store"></i> Ver Web
+          </button>
+          <button type="button" class="btn-sidebar-action btn-sidebar-logout" onclick="handleAdminLogout()" title="Cerrar Sesión">
+            <i class="fas fa-sign-out-alt"></i> Salir
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Stage -->
+    <main class="admin-main-stage">
+      
+      <!-- Topbar Header -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button type="button" class="btn-toggle-sidebar-mobile" onclick="toggleMobileSidebar()" aria-label="Abrir Menú">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="topbar-breadcrumb">
+            Mates Río / <b id="topbar-current-page">Dashboard General</b>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="topbar-live-clock" id="topbar-live-clock">
+            <i class="fas fa-clock"></i> <span id="clock-display">--:--:--</span> (Bs. As.)
+          </div>
+
+          <a href="personaliza-tu-mate.html" target="_blank" class="btn-store-preview" title="Ir al Estudio de Grabado">
+            <i class="fas fa-magic" style="color: var(--admin-gold);"></i> <span class="preview-btn-text">Taller de Grabado</span>
+          </a>
+
+          <button type="button" class="btn-store-preview" onclick="closeAdminEmbeddedView()" title="Ver Tienda Online">
+            <i class="fas fa-store"></i> <span class="preview-btn-text">Ver Tienda</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic Content Wrapper -->
+      <div class="admin-content-container">
+
+        <!-- ==================================================================
+             SECTION 1: DASHBOARD GENERAL (KPIs, Gráficos, Actividad)
+             ================================================================== -->
+        <section class="admin-section active" id="sec-dashboard">
+          <div class="section-head-bar">
+            <div>
+              <h2 class="section-page-title">Visión General del Negocio</h2>
+              <p class="section-page-desc">Métricas en tiempo real de facturación, volumen de pedidos y estado del inventario artesanal.</p>
+            </div>
+            <div class="section-actions">
+              <button class="btn-admin btn-admin-outline" onclick="refreshDashboardData()">
+                <i class="fas fa-rotate"></i> Actualizar
+              </button>
+              <button class="btn-admin btn-admin-primary" onclick="exportSalesReportCSV()">
+                <i class="fas fa-file-excel"></i> Exportar Ventas
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <div class="kpi-grid">
+            <!-- Facturación Total -->
+            <div class="kpi-card kpi-gold">
+              <div class="kpi-top-row">
+                <span class="kpi-title">Facturación Total</span>
+                <div class="kpi-icon-wrap icon-wrap-gold">
+                  <i class="fas fa-sack-dollar"></i>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpi-total-revenue">$ 0</div>
+              <div class="kpi-footer-sub">
+                <span class="trend-pill trend-up"><i class="fas fa-arrow-trend-up"></i> +18.4%</span>
+                <span>vs. mes anterior</span>
+              </div>
+            </div>
+
+            <!-- Total de Pedidos -->
+            <div class="kpi-card kpi-success">
+              <div class="kpi-top-row">
+                <span class="kpi-title">Pedidos Totales</span>
+                <div class="kpi-icon-wrap icon-wrap-success">
+                  <i class="fas fa-bag-shopping"></i>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpi-total-orders">0</div>
+              <div class="kpi-footer-sub">
+                <span id="kpi-pending-orders-text">0 pedidos en taller</span>
+              </div>
+            </div>
+
+            <!-- Ticket Promedio -->
+            <div class="kpi-card kpi-leather">
+              <div class="kpi-top-row">
+                <span class="kpi-title">Ticket Promedio</span>
+                <div class="kpi-icon-wrap icon-wrap-leather">
+                  <i class="fas fa-receipt"></i>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpi-avg-ticket">$ 0</div>
+              <div class="kpi-footer-sub">
+                <span>Por compra finalizada</span>
+              </div>
+            </div>
+
+            <!-- Tasa de Grabado en Virola -->
+            <div class="kpi-card kpi-warning">
+              <div class="kpi-top-row">
+                <span class="kpi-title">Tasa Grabado Virola</span>
+                <div class="kpi-icon-wrap icon-wrap-warning">
+                  <i class="fas fa-magic"></i>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpi-engraving-rate">0%</div>
+              <div class="kpi-footer-sub">
+                <span>Mates con personalización</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts & Distribution Row -->
+          <div class="stats-two-col">
+            <!-- Ventas por Categoría -->
+            <div class="stat-box-card">
+              <div class="stat-box-header">
+                <div>
+                  <h3 class="stat-box-title">Ventas por Categoría de Producto</h3>
+                  <p class="stat-box-subtitle">Distribución porcentual de la demanda artesanal</p>
+                </div>
+                <span class="sidebar-badge badge-info" id="dash-cat-count-badge">6 Líneas</span>
+              </div>
+
+              <div class="category-bars-list" id="category-bars-list">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+
+            <!-- Métodos de Pago y Preferencia -->
+            <div class="stat-box-card">
+              <div class="stat-box-header">
+                <div>
+                  <h3 class="stat-box-title">Métodos de Pago</h3>
+                  <p class="stat-box-subtitle">Preferencia de los clientes al pagar</p>
+                </div>
+              </div>
+
+              <div class="payment-pills-list" id="payment-methods-list">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Orders Preview & Stock Alert Table -->
+          <div class="stat-box-card">
+            <div class="stat-box-header">
+              <div>
+                <h3 class="stat-box-title">Últimos Pedidos Recibidos</h3>
+                <p class="stat-box-subtitle">Órdenes más recientes que requieren atención o despacho</p>
+              </div>
+              <button class="btn-admin btn-admin-outline" onclick="switchAdminSection('orders')">
+                Ver Todos <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+
+            <div class="table-responsive-card">
+              <table class="admin-data-table">
+                <thead>
+                  <tr>
+                    <th>Nº Pedido</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-recent-orders-tbody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================================================================
+             SECTION 2: CONTROL DE INVENTARIO Y STOCK
+             ================================================================== -->
+        <section class="admin-section" id="sec-inventory">
+          <div class="section-head-bar">
+            <div>
+              <h2 class="section-page-title">Control de Inventario & Stock</h2>
+              <p class="section-page-desc">Monitoreá la disponibilidad de mates, termos, combos y accesorios en tiempo real.</p>
+            </div>
+            <div class="section-actions">
+              <button class="btn-admin btn-admin-outline" onclick="restockAllProducts(10)">
+                <i class="fas fa-boxes-packing"></i> Reabastecer Todo (+10)
+              </button>
+              <button class="btn-admin btn-admin-primary" onclick="exportInventoryCSV()">
+                <i class="fas fa-file-csv"></i> Descargar Inventario
+              </button>
+            </div>
+          </div>
+
+          <!-- Inventory Filter Bar -->
+          <div class="table-filter-bar">
+            <div class="filter-group-left">
+              <div class="admin-input-wrap">
+                <i class="fas fa-search admin-input-icon"></i>
+                <input type="text" class="admin-search-input" id="inventory-search-input" placeholder="Buscar por nombre o ID..." oninput="filterInventoryTable()" />
+              </div>
+
+              <select class="admin-select" id="inventory-cat-filter" onchange="filterInventoryTable()">
+                <option value="all">Todas las Categorías</option>
+                <option value="promos">Combos & Promos</option>
+                <option value="mates">Mates Imperiales & Torpedos</option>
+                <option value="termos">Termos</option>
+                <option value="accesorios">Bombillas & Accesorios</option>
+                <option value="yerbas">Yerbas Seleccionadas</option>
+                <option value="equipos">Equipos de Mate</option>
+              </select>
+
+              <select class="admin-select" id="inventory-stock-filter" onchange="filterInventoryTable()">
+                <option value="all">Todos los Estados</option>
+                <option value="low">🟡 Bajo Stock (<= 5)</option>
+                <option value="out">🔴 Agotados (0)</option>
+                <option value="healthy">🟢 Stock Saludable</option>
+              </select>
+            </div>
+
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--admin-text-muted);" id="inventory-count-label">
+              Mostrando 20 productos
+            </div>
+          </div>
+
+          <!-- Inventory Table -->
+          <div class="table-responsive-card">
+            <table class="admin-data-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Precio Venta</th>
+                  <th>Stock Actual</th>
+                  <th>Estado</th>
+                  <th>Ajuste Rápido</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-table-tbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+
+        <!-- ==================================================================
+             SECTION 3: VENTAS Y GESTIÓN DE PEDIDOS
+             ================================================================== -->
+        <section class="admin-section" id="sec-orders">
+          <div class="section-head-bar">
+            <div>
+              <h2 class="section-page-title">Gestión de Ventas y Pedidos</h2>
+              <p class="section-page-desc">Administrá los pedidos de clientes, actualizá estados y coordiná despachos.</p>
+            </div>
+            <div class="section-actions">
+              <button class="btn-admin btn-admin-outline" onclick="createSampleOrder()">
+                <i class="fas fa-plus"></i> Generar Pedido de Prueba
+              </button>
+              <button class="btn-admin btn-admin-primary" onclick="exportSalesReportCSV()">
+                <i class="fas fa-download"></i> Exportar Órdenes
+              </button>
+            </div>
+          </div>
+
+          <!-- Orders Filter Bar -->
+          <div class="table-filter-bar">
+            <div class="filter-group-left">
+              <div class="admin-input-wrap">
+                <i class="fas fa-search admin-input-icon"></i>
+                <input type="text" class="admin-search-input" id="orders-search-input" placeholder="Buscar por cliente o ID de pedido..." oninput="filterOrdersTable()" />
+              </div>
+
+              <select class="admin-select" id="orders-status-filter" onchange="filterOrdersTable()">
+                <option value="all">Todos los Estados</option>
+                <option value="prep">En Preparación / Taller</option>
+                <option value="shipped">Despachados</option>
+                <option value="delivered">Entregados</option>
+                <option value="cancelled">Cancelados</option>
+              </select>
+            </div>
+
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--admin-text-muted);" id="orders-count-label">
+              Total: 0 pedidos
+            </div>
+          </div>
+
+          <!-- Orders Table -->
+          <div class="table-responsive-card">
+            <table class="admin-data-table">
+              <thead>
+                <tr>
+                  <th>Nº Pedido</th>
+                  <th>Fecha</th>
+                  <th>Cliente</th>
+                  <th>Artículos Comprados</th>
+                  <th>Total</th>
+                  <th>Método Pago</th>
+                  <th>Estado del Pedido</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-tbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+
+        <!-- ==================================================================
+             SECTION 4: ESTADÍSTICAS AVANZADAS DEL TALLER
+             ================================================================== -->
+        <section class="admin-section" id="sec-stats">
+          <div class="section-head-bar">
+            <div>
+              <h2 class="section-page-title">Estadísticas & Rendimiento del Negocio</h2>
+              <p class="section-page-desc">Información estratégica sobre los productos más rentables y demanda de grabado.</p>
+            </div>
+          </div>
+
+          <!-- Top Selling Products & Customization Rate -->
+          <div class="stats-two-col">
+            <div class="stat-box-card">
+              <div class="stat-box-header">
+                <h3 class="stat-box-title">Top 5 Productos Más Vendidos</h3>
+                <span class="sidebar-badge badge-info">Por Unidades</span>
+              </div>
+              <div class="category-bars-list" id="top-products-list">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+
+            <div class="stat-box-card">
+              <div class="stat-box-header">
+                <h3 class="stat-box-title">Métricas de Virola & Grabado</h3>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div class="payment-method-row">
+                  <div class="payment-method-info">
+                    <div class="payment-method-icon"><i class="fas fa-bolt" style="color: var(--admin-gold);"></i></div>
+                    <div>
+                      <div class="payment-method-name">Grabado Láser HD</div>
+                      <div class="payment-method-sub">Técnica preferida por clientes</div>
+                    </div>
+                  </div>
+                  <div class="payment-method-stat">
+                    <div class="payment-method-pct">68%</div>
+                  </div>
+                </div>
+
+                <div class="payment-method-row">
+                  <div class="payment-method-info">
+                    <div class="payment-method-icon"><i class="fas fa-gem" style="color: var(--admin-leather);"></i></div>
+                    <div>
+                      <div class="payment-method-name">Cincelado Orfebre</div>
+                      <div class="payment-method-sub">Grabado artesanal clásico</div>
+                    </div>
+                  </div>
+                  <div class="payment-method-stat">
+                    <div class="payment-method-pct">24%</div>
+                  </div>
+                </div>
+
+                <div class="payment-method-row">
+                  <div class="payment-method-info">
+                    <div class="payment-method-icon"><i class="fas fa-award" style="color: #2980b9;"></i></div>
+                    <div>
+                      <div class="payment-method-name">Fotograbado Satinado</div>
+                      <div class="payment-method-sub">Retratos y logos especiales</div>
+                    </div>
+                  </div>
+                  <div class="payment-method-stat">
+                    <div class="payment-method-pct">8%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- ==================================================================
+             SECTION 5: CLIENTES & USUARIOS REGISTRADOS
+             ================================================================== -->
+        <section class="admin-section" id="sec-users">
+          <div class="section-head-bar">
+            <div>
+              <h2 class="section-page-title">Gestión de Clientes & Roles</h2>
+              <p class="section-page-desc">Usuarios registrados en la plataforma y permisos de administración.</p>
+            </div>
+          </div>
+
+          <div class="table-responsive-card">
+            <table class="admin-data-table">
+              <thead>
+                <tr>
+                  <th>Nombre y Apellido</th>
+                  <th>Correo Electrónico</th>
+                  <th>Teléfono</th>
+                  <th>Rol de Acceso</th>
+                  <th>Pedidos Registrados</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-tbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+
+        <!-- ==================================================================
+             SECTION 6: REGISTRO DE AUDITORÍA
+             ================================================================== -->
+        <section class="admin-section" id="sec-audit">
+          <div class="section-head-bar">
+            <div>
+              <h2 class="section-page-title">Historial de Actividad & Auditoría</h2>
+              <p class="section-page-desc">Registro cronológico de cambios de stock, pedidos y accesos administrativos.</p>
+            </div>
+            <button class="btn-admin btn-admin-outline" onclick="clearAuditLog()">
+              <i class="fas fa-trash-can"></i> Limpiar Registro
+            </button>
+          </div>
+
+          <div class="table-responsive-card">
+            <table class="admin-data-table">
+              <thead>
+                <tr>
+                  <th>Fecha y Hora</th>
+                  <th>Usuario / Rol</th>
+                  <th>Acción Realizada</th>
+                  <th>Detalle</th>
+                </tr>
+              </thead>
+              <tbody id="audit-table-tbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+
+  <!-- ==========================================================================
+       MODAL: EDIT PRODUCT STOCK & PRICE
+       ========================================================================== -->
+  <div class="admin-modal-overlay" id="edit-product-modal">
+    <div class="admin-modal-card">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title"><i class="fas fa-pen-to-square" style="color: var(--admin-gold);"></i> Editar Producto & Stock</h3>
+        <button class="admin-modal-close" onclick="closeEditProductModal()"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="admin-modal-body">
+        <input type="hidden" id="edit-product-id" />
+        
+        <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--admin-border);">
+          <img src="" id="edit-product-img" style="width: 58px; height: 58px; border-radius: 6px; object-fit: cover; border: 1px solid var(--admin-border);" />
+          <div>
+            <h4 id="edit-product-name" style="font-size: 0.95rem; font-weight: 800; color: var(--admin-text-main);"></h4>
+            <span id="edit-product-cat" style="font-size: 0.72rem; color: var(--admin-text-muted);"></span>
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="edit-product-stock">Unidades en Stock</label>
+          <input type="number" id="edit-product-stock" class="admin-input" min="0" />
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="edit-product-price">Precio de Venta ($ ARS)</label>
+          <input type="number" id="edit-product-price" class="admin-input" min="0" step="100" />
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="edit-product-min-stock">Alerta de Stock Crítico (Unidades)</label>
+          <input type="number" id="edit-product-min-stock" class="admin-input" min="1" value="5" />
+        </div>
+      </div>
+
+      <div class="admin-modal-footer">
+        <button type="button" class="btn-admin btn-admin-outline" onclick="closeEditProductModal()">Cancelar</button>
+        <button type="button" class="btn-admin btn-admin-primary" onclick="saveProductEdits()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       MODAL: ORDER DETAIL / REMITO DE TALLER
+       ========================================================================== -->
+  <div class="admin-modal-overlay" id="order-detail-modal">
+    <div class="admin-modal-card" style="max-width: 620px;">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title"><i class="fas fa-file-invoice" style="color: var(--admin-gold);"></i> Detalle de Pedido & Taller</h3>
+        <button class="admin-modal-close" onclick="closeOrderDetailModal()"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="admin-modal-body" id="order-detail-modal-body">
+        <!-- Populated via JS -->
+      </div>
+
+      <div class="admin-modal-footer">
+        <button type="button" class="btn-admin btn-admin-outline" onclick="closeOrderDetailModal()">Cerrar</button>
+        <button type="button" class="btn-admin btn-admin-success" id="btn-modal-whatsapp-contact">
+          <i class="fab fa-whatsapp"></i> Notificar al Cliente
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Toast Notification Box -->
+  <div class="admin-toast-box" id="admin-toast-box"></div>
+  </div>
+
   <!-- Scripts -->
   <script src="js/products.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/admin.js"></script>
 </body>
 </html>
