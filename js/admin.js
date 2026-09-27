@@ -14,8 +14,20 @@ const ADMIN_CREDENTIALS = [
     role: "Super Administrador"
   },
   {
+    email: "admin@matesrio.com",
+    password: "admin",
+    name: "Administrador General",
+    role: "Super Administrador"
+  },
+  {
     email: "taller@matesrio.com",
     password: "taller123",
+    name: "Encargado de Taller",
+    role: "Taller & Depósito"
+  },
+  {
+    email: "taller@matesrio.com",
+    password: "admin",
     name: "Encargado de Taller",
     role: "Taller & Depósito"
   }
@@ -34,6 +46,16 @@ if (typeof formatARS !== 'function') {
       maximumFractionDigits: 0
     }).format(amount).replace('ARS', '$');
   };
+}
+
+// Accent-insensitive normalization helper
+function cleanStr(s) {
+  return (s || '')
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
 }
 
 // ==========================================================================
@@ -61,6 +83,22 @@ function checkAdminSession() {
       }
     } catch (e) {
       console.error('Session parse error:', e);
+    }
+  }
+
+  // Also check if user is already logged in as admin in main store session
+  if (!hasValidAdmin) {
+    try {
+      const storeUserStr = localStorage.getItem('mates_rio_user');
+      if (storeUserStr) {
+        const storeUser = JSON.parse(storeUserStr);
+        if (storeUser && (storeUser.role === 'admin' || storeUser.role === 'Super Administrador')) {
+          loginAdminSuccess(storeUser, false);
+          hasValidAdmin = true;
+        }
+      }
+    } catch (e) {
+      console.error('Store user parse error:', e);
     }
   }
 
@@ -317,11 +355,15 @@ function switchAdminSection(sectionId) {
 }
 
 function toggleMobileSidebar() {
-  document.getElementById('admin-sidebar')?.classList.toggle('sidebar-open');
+  const sidebar = document.getElementById('admin-sidebar');
+  const overlay = document.getElementById('admin-sidebar-overlay');
+  const isOpen = sidebar?.classList.toggle('sidebar-open');
+  if (overlay) overlay.classList.toggle('active', !!isOpen);
 }
 
 function closeMobileSidebar() {
   document.getElementById('admin-sidebar')?.classList.remove('sidebar-open');
+  document.getElementById('admin-sidebar-overlay')?.classList.remove('active');
 }
 
 // Live Clock for Buenos Aires
@@ -419,7 +461,7 @@ function renderInventoryTable() {
   const tbody = document.getElementById('inventory-table-tbody');
   if (!tbody) return;
 
-  const searchQuery = (document.getElementById('inventory-search-input')?.value || '').toLowerCase().trim();
+  const searchQuery = cleanStr(document.getElementById('inventory-search-input')?.value);
   const catFilter = document.getElementById('inventory-cat-filter')?.value || 'all';
   const stockFilter = document.getElementById('inventory-stock-filter')?.value || 'all';
 
@@ -432,7 +474,7 @@ function renderInventoryTable() {
 
   // Filter by search
   if (searchQuery) {
-    list = list.filter(p => p.name.toLowerCase().includes(searchQuery) || p.id.toLowerCase().includes(searchQuery));
+    list = list.filter(p => cleanStr(p.name).includes(searchQuery) || cleanStr(p.id).includes(searchQuery));
   }
 
   // Filter by stock status
@@ -740,16 +782,16 @@ function renderOrdersTable() {
   const tbody = document.getElementById('orders-table-tbody');
   if (!tbody) return;
 
-  const search = (document.getElementById('orders-search-input')?.value || '').toLowerCase().trim();
+  const search = cleanStr(document.getElementById('orders-search-input')?.value);
   const statusFilter = document.getElementById('orders-status-filter')?.value || 'all';
 
   let list = [...orders];
 
   if (search) {
     list = list.filter(o => 
-      o.id.toLowerCase().includes(search) || 
-      (o.customerName && o.customerName.toLowerCase().includes(search)) ||
-      (o.items && o.items.toLowerCase().includes(search))
+      cleanStr(o.id).includes(search) || 
+      (o.customerName && cleanStr(o.customerName).includes(search)) ||
+      (o.items && cleanStr(o.items).includes(search))
     );
   }
 

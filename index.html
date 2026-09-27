@@ -1481,6 +1481,9 @@
        ========================================================================== -->
   <div class="admin-app-wrapper" id="admin-app-wrapper">
     
+    <!-- Sidebar Backdrop Overlay for Mobile -->
+    <div class="admin-sidebar-overlay" id="admin-sidebar-overlay" onclick="closeMobileSidebar()"></div>
+
     <!-- Sidebar Navigation -->
     <aside class="admin-sidebar" id="admin-sidebar">
       <div class="admin-sidebar-header">
@@ -1489,6 +1492,9 @@
           <span class="sidebar-brand-name">MATES RÍO</span>
           <span class="sidebar-brand-sub">PANEL DE CONTROL</span>
         </div>
+        <button type="button" class="btn-close-sidebar-mobile" onclick="closeMobileSidebar()" aria-label="Cerrar menú">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
 
       <nav class="admin-sidebar-nav">
@@ -1534,9 +1540,9 @@
         </div>
 
         <div class="sidebar-actions-row">
-          <a href="index.html" target="_blank" class="btn-sidebar-action" title="Abrir Tienda Pública">
-            <i class="fas fa-external-link-alt"></i> Ver Web
-          </a>
+          <button type="button" class="btn-sidebar-action" onclick="closeAdminEmbeddedView()" title="Volver a la Tienda Pública">
+            <i class="fas fa-store"></i> Ver Web
+          </button>
           <button type="button" class="btn-sidebar-action btn-sidebar-logout" onclick="handleAdminLogout()" title="Cerrar Sesión">
             <i class="fas fa-sign-out-alt"></i> Salir
           </button>
@@ -1564,12 +1570,12 @@
           </div>
 
           <a href="personaliza-tu-mate.html" target="_blank" class="btn-store-preview" title="Ir al Estudio de Grabado">
-            <i class="fas fa-magic" style="color: var(--admin-gold);"></i> Taller de Grabado
+            <i class="fas fa-magic" style="color: var(--admin-gold);"></i> <span class="preview-btn-text">Taller de Grabado</span>
           </a>
 
-          <a href="index.html" target="_blank" class="btn-store-preview" title="Ver Tienda Online">
-            <i class="fas fa-store"></i> Ver Tienda
-          </a>
+          <button type="button" class="btn-store-preview" onclick="closeAdminEmbeddedView()" title="Ver Tienda Online">
+            <i class="fas fa-store"></i> <span class="preview-btn-text">Ver Tienda</span>
+          </button>
         </div>
       </header>
 
