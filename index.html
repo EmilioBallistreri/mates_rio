@@ -199,6 +199,9 @@
             <div class="user-dropdown-item" onclick="openProfileModal()">
               <i class="fas fa-box-open"></i> Mis Pedidos
             </div>
+            <a href="admin.html" class="user-dropdown-item" id="dropdown-admin-link" style="display: none; color: var(--accent-leather); font-weight: 800; text-decoration: none;">
+              <i class="fas fa-shield-halved" style="color: var(--accent-gold);"></i> Panel de Administración
+            </a>
             <div class="user-dropdown-item logout" onclick="logoutUser()">
               <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
             </div>
@@ -234,6 +237,12 @@
         <a href="javascript:void(0)" onclick="handleMobileAuthClick()">
           <span><i class="fas fa-user-circle" style="width: 22px; color: var(--accent-leather);"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item" id="mobile-nav-admin-item" style="display: none; background: #fffdf9;">
+        <a href="admin.html">
+          <span><i class="fas fa-shield-halved" style="width: 22px; color: var(--accent-gold);"></i> <b style="color: var(--accent-leather);">Panel Admin</b></span>
+          <span class="nav-badge-pill pill-gold">STAFF</span>
         </a>
       </li>
       <li class="mobile-nav-item">
@@ -840,7 +849,12 @@
       <!-- Footer Bottom Copyright Bar -->
       <div class="footer-bottom-bar">
         <span>© 2026 Mates Río. Todos los derechos reservados. Pasión por la cultura matera.</span>
-        <span>Hecho con dedicación artesanal • Envíos a toda la República Argentina</span>
+        <span>
+          Hecho con dedicación artesanal • Envíos a todo el país • 
+          <a href="admin.html" class="footer-admin-link" title="Acceso exclusivo administración" style="color: var(--accent-gold); text-decoration: none; font-weight: 700; margin-left: 6px;">
+            <i class="fas fa-lock" style="font-size: 0.75rem;"></i> Acceso Administración
+          </a>
+        </span>
       </div>
     </div>
   </footer>

@@ -17,7 +17,22 @@ const state = {
       name: "Juan Matero",
       email: "juan@ejemplo.com",
       phone: "1155554444",
-      password: "123"
+      password: "123",
+      role: "customer"
+    },
+    {
+      name: "Administrador Mates Río",
+      email: "admin@matesrio.com",
+      phone: "1134567890",
+      password: "admin",
+      role: "admin"
+    },
+    {
+      name: "Taller & Grabados",
+      email: "taller@matesrio.com",
+      phone: "1134567891",
+      password: "admin",
+      role: "admin"
     }
   ],
   orders: JSON.parse(localStorage.getItem('mates_rio_orders')) || [
@@ -981,18 +996,47 @@ function processWebCheckout(e) {
   const shippingAmount = isFreeShipping ? 0 : CONFIG.shippingCost;
   const total = subtotal - paymentDiscount + shippingAmount;
 
+  const hasCustomization = state.cart.some(i => i.customization);
+  const firstCustomItem = state.cart.find(i => i.customization);
+
   const newOrder = {
     id: orderId,
     date: new Date().toLocaleDateString('es-AR'),
+    customerName: name,
+    customerPhone: document.getElementById('checkout-phone')?.value.trim() || '',
+    customerEmail: document.getElementById('checkout-email')?.value.trim() || '',
     items: state.cart.map(i => `${i.quantity}x ${i.name}`).join(', '),
     total: total,
     status: "Confirmado - En preparación artesanal",
     address: `${address}, ${city}`,
-    paymentMethod: paymentMethod
+    paymentMethod: paymentMethod,
+    hasCustomEngraving: hasCustomization,
+    engravingDetails: firstCustomItem ? {
+      text: firstCustomItem.customization.text || 'Sin texto',
+      technique: firstCustomItem.customization.typeName || 'Láser HD',
+      font: firstCustomItem.customization.fontName || 'Gauchesca',
+      location: firstCustomItem.customization.location || 'Frente'
+    } : null
   };
 
   state.orders.unshift(newOrder);
   localStorage.setItem('mates_rio_orders', JSON.stringify(state.orders));
+
+  // Decrement inventory stock
+  try {
+    const inv = JSON.parse(localStorage.getItem('mates_rio_inventory'));
+    if (inv) {
+      state.cart.forEach(item => {
+        if (inv[item.id]) {
+          inv[item.id].stock = Math.max(0, inv[item.id].stock - item.quantity);
+          inv[item.id].inStock = inv[item.id].stock > 0;
+        }
+      });
+      localStorage.setItem('mates_rio_inventory', JSON.stringify(inv));
+    }
+  } catch (err) {
+    console.error('Error updating inventory stock:', err);
+  }
 
   // Reset cart
   state.cart = [];
@@ -1167,6 +1211,17 @@ function updateAuthUI() {
   const userBtn = document.getElementById('user-account-btn');
   const userDropdown = document.getElementById('user-dropdown-menu');
   const mobileAuthText = document.getElementById('mobile-nav-auth-text');
+  const adminDropdownLink = document.getElementById('dropdown-admin-link');
+  const mobileAdminItem = document.getElementById('mobile-nav-admin-item');
+
+  const isAdmin = state.currentUser && (state.currentUser.role === 'admin' || state.currentUser.role === 'Super Administrador');
+
+  if (adminDropdownLink) {
+    adminDropdownLink.style.display = isAdmin ? 'flex' : 'none';
+  }
+  if (mobileAdminItem) {
+    mobileAdminItem.style.display = isAdmin ? 'block' : 'none';
+  }
 
   if (state.currentUser) {
     const firstName = state.currentUser.name.split(' ')[0];
@@ -1177,8 +1232,8 @@ function updateAuthUI() {
         e.stopPropagation();
         toggleUserDropdown();
       };
-      userBtn.title = `Cuenta de ${state.currentUser.name}`;
-      userBtn.style.borderColor = 'var(--accent-gold)';
+      userBtn.title = `Cuenta de ${state.currentUser.name}${isAdmin ? ' (Admin)' : ''}`;
+      userBtn.style.borderColor = isAdmin ? 'var(--accent-gold)' : 'var(--accent-leather)';
     }
   } else {
     if (userBtnText) userBtnText.textContent = "Ingresar";
