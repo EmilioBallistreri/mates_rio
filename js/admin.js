@@ -423,12 +423,38 @@ function initInventoryDB() {
           image: p.image,
           stock: mockStocks[p.id] !== undefined ? mockStocks[p.id] : 10,
           minStock: 5,
-          inStock: (mockStocks[p.id] !== undefined ? mockStocks[p.id] : 10) > 0
+          inStock: (mockStocks[p.id] !== undefined ? mockStocks[p.id] : 10) > 0,
+          isCustom: !!p.isCustom
         };
       });
     }
 
     localStorage.setItem('mates_rio_inventory', JSON.stringify(inventory));
+  } else {
+    // Sincronizar productos nuevos o creados por el admin que falten en inventory
+    if (typeof PRODUCTS_DATA !== 'undefined') {
+      let changed = false;
+      PRODUCTS_DATA.forEach(p => {
+        if (!inventory[p.id]) {
+          inventory[p.id] = {
+            id: p.id,
+            name: p.name,
+            category: p.category,
+            categoryName: p.categoryName || (p.category ? p.category.toUpperCase() : 'GENERAL'),
+            price: p.price,
+            image: p.image,
+            stock: p.stock !== undefined ? p.stock : 10,
+            minStock: p.minStock !== undefined ? p.minStock : 5,
+            inStock: (p.stock !== undefined ? p.stock : 10) > 0,
+            isCustom: !!p.isCustom
+          };
+          changed = true;
+        }
+      });
+      if (changed) {
+        localStorage.setItem('mates_rio_inventory', JSON.stringify(inventory));
+      }
+    }
   }
 }
 
@@ -522,7 +548,7 @@ function renderInventoryTable() {
           <div class="product-row-item">
             <img src="${item.image}" alt="${item.name}" class="table-product-thumb" />
             <div class="table-product-info">
-              <span class="table-product-name">${item.name}</span>
+              <span class="table-product-name">${item.name} ${item.isCustom ? '<span style="font-size: 0.65rem; background: rgba(197, 155, 39, 0.2); color: #c59b27; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-left: 4px;">NUEVO</span>' : ''}</span>
               <span class="table-product-sku">ID: <code>${item.id}</code></span>
             </div>
           </div>
@@ -556,6 +582,10 @@ function renderInventoryTable() {
             <button type="button" class="btn-table-action" onclick="quickAdjustStock('${item.id}', 10)" title="Reabastecer +10">
               <i class="fas fa-truck-ramp-box"></i>
             </button>
+            ${item.isCustom ? `
+            <button type="button" class="btn-table-action" onclick="deleteCustomProduct('${item.id}')" title="Eliminar Producto del Catálogo" style="color: var(--admin-danger);">
+              <i class="fas fa-trash-alt"></i>
+            </button>` : ''}
           </div>
         </td>
       </tr>
@@ -651,6 +681,205 @@ function restockAllProducts(qty = 10) {
     logAuditAction('Reabastecimiento Masivo', `Se sumaron +${qty} unidades a ${count} productos en alerta.`);
     showAdminToast(`¡Reabastecimiento masivo aplicado a ${count} productos!`, 'fa-boxes-packing');
   }
+}
+
+// ==========================================================================
+// 4.1 PRODUCT CREATION & DELETION (ADMIN ENGINE)
+// ==========================================================================
+function openCreateProductModal() {
+  const modal = document.getElementById('create-product-modal');
+  if (!modal) return;
+
+  const form = document.getElementById('new-product-form');
+  if (form) form.reset();
+
+  const preview = document.getElementById('new-prod-img-preview');
+  if (preview) preview.src = 'assets/images/prod_mate_imperial.jpg';
+
+  const customInput = document.getElementById('new-prod-img-custom');
+  if (customInput) customInput.style.display = 'none';
+
+  modal.classList.add('active');
+}
+
+function closeCreateProductModal() {
+  const modal = document.getElementById('create-product-modal');
+  if (modal) modal.classList.remove('active');
+}
+
+function onNewProductImageChange() {
+  const select = document.getElementById('new-prod-img-select');
+  const customInput = document.getElementById('new-prod-img-custom');
+  const preview = document.getElementById('new-prod-img-preview');
+  if (!select || !preview) return;
+
+  if (select.value === 'custom') {
+    if (customInput) {
+      customInput.style.display = 'block';
+      if (customInput.value.trim()) {
+        preview.src = customInput.value.trim();
+      }
+    }
+  } else {
+    if (customInput) customInput.style.display = 'none';
+    preview.src = select.value;
+  }
+}
+
+function onNewProductCustomImgInput() {
+  const customInput = document.getElementById('new-prod-img-custom');
+  const preview = document.getElementById('new-prod-img-preview');
+  if (customInput && preview && customInput.value.trim()) {
+    preview.src = customInput.value.trim();
+  }
+}
+
+function handleCreateProduct() {
+  const name = document.getElementById('new-prod-name')?.value.trim();
+  const category = document.getElementById('new-prod-category')?.value;
+  const price = parseInt(document.getElementById('new-prod-price')?.value, 10);
+  const origPriceVal = document.getElementById('new-prod-orig-price')?.value;
+  const origPrice = origPriceVal ? parseInt(origPriceVal, 10) : null;
+  const badge = document.getElementById('new-prod-badge')?.value.trim();
+  const badgeType = document.getElementById('new-prod-badge-type')?.value || 'new';
+  const imgSelect = document.getElementById('new-prod-img-select')?.value;
+  const imgCustom = document.getElementById('new-prod-img-custom')?.value.trim();
+  const image = (imgSelect === 'custom' && imgCustom) ? imgCustom : (imgSelect || 'assets/images/prod_mate_imperial.jpg');
+  const desc = document.getElementById('new-prod-desc')?.value.trim();
+  const specMaterial = document.getElementById('new-prod-spec-material')?.value.trim();
+  const specVirola = document.getElementById('new-prod-spec-virola')?.value.trim();
+  const specExtra = document.getElementById('new-prod-spec-extra')?.value.trim();
+  const stock = parseInt(document.getElementById('new-prod-stock')?.value, 10);
+  const minStock = parseInt(document.getElementById('new-prod-min-stock')?.value, 10) || 5;
+
+  if (!name || !category || isNaN(price) || price <= 0 || isNaN(stock) || stock < 0 || !desc) {
+    alert('Por favor completá todos los campos obligatorios con valores válidos (Nombre, Categoría, Precio, Stock y Descripción).');
+    return;
+  }
+
+  const prodId = `prod-custom-${Date.now()}`;
+  const catNamesMap = {
+    'mates': 'MATES',
+    'promos': 'PROMOS',
+    'termos': 'TERMOS',
+    'accesorios': 'ACCESORIOS',
+    'yerbas': 'YERBAS',
+    'equipos': 'EQUIPOS DE MATE'
+  };
+
+  const newProduct = {
+    id: prodId,
+    name: name,
+    category: category,
+    categoryName: catNamesMap[category] || category.toUpperCase(),
+    price: price,
+    originalPrice: origPrice && origPrice > price ? origPrice : null,
+    badge: badge || (origPrice && origPrice > price ? 'OFERTA' : 'NUEVO'),
+    badgeType: badgeType,
+    rating: 5.0,
+    reviewsCount: 1,
+    image: image,
+    description: desc,
+    specs: {
+      material: specMaterial || 'Material artesanal de primera calidad',
+      virola: specVirola || 'Terminación artesanal',
+      garantia: specExtra || 'Garantía artesanal Mates Río'
+    },
+    inStock: stock > 0,
+    isCustom: true
+  };
+
+  // 1. Guardar en localStorage custom products
+  let customProducts = [];
+  try {
+    const raw = localStorage.getItem('mates_rio_custom_products');
+    if (raw) customProducts = JSON.parse(raw) || [];
+  } catch (e) {
+    customProducts = [];
+  }
+  customProducts.push(newProduct);
+  localStorage.setItem('mates_rio_custom_products', JSON.stringify(customProducts));
+
+  // 2. Insertar en tiempo de ejecución en PRODUCTS_DATA
+  if (typeof PRODUCTS_DATA !== 'undefined' && !PRODUCTS_DATA.some(p => p.id === newProduct.id)) {
+    PRODUCTS_DATA.push(newProduct);
+  }
+
+  // 3. Registrar en base de datos de inventario
+  const inv = getInventory();
+  inv[newProduct.id] = {
+    id: newProduct.id,
+    name: newProduct.name,
+    category: newProduct.category,
+    categoryName: newProduct.categoryName,
+    price: newProduct.price,
+    image: newProduct.image,
+    stock: stock,
+    minStock: minStock,
+    inStock: stock > 0,
+    isCustom: true
+  };
+  saveInventory(inv);
+
+  // 4. Actualizar interfaz
+  closeCreateProductModal();
+  renderInventoryTable();
+  updateKPIs();
+
+  if (typeof renderProducts === 'function') {
+    renderProducts();
+  }
+  if (typeof renderCategories === 'function') {
+    renderCategories();
+  }
+
+  logAuditAction('Carga de Producto', `Nuevo producto creado: "${newProduct.name}" (${newProduct.categoryName}) con ${stock} un.`);
+  showAdminToast(`¡"${newProduct.name}" publicado exitosamente!`, 'fa-circle-check');
+}
+
+function deleteCustomProduct(productId) {
+  const inv = getInventory();
+  const prod = inv[productId];
+  const prodName = prod ? prod.name : productId;
+
+  if (!confirm(`¿Estás seguro de que deseás eliminar "${prodName}" del catálogo y del inventario? Esta acción no se puede deshacer.`)) {
+    return;
+  }
+
+  // 1. Eliminar de custom products en localStorage
+  try {
+    let customProducts = JSON.parse(localStorage.getItem('mates_rio_custom_products')) || [];
+    customProducts = customProducts.filter(p => p.id !== productId);
+    localStorage.setItem('mates_rio_custom_products', JSON.stringify(customProducts));
+  } catch (e) {
+    console.warn('Error al eliminar producto custom:', e);
+  }
+
+  // 2. Eliminar de PRODUCTS_DATA
+  if (typeof PRODUCTS_DATA !== 'undefined') {
+    const idx = PRODUCTS_DATA.findIndex(p => p.id === productId);
+    if (idx !== -1) {
+      PRODUCTS_DATA.splice(idx, 1);
+    }
+  }
+
+  // 3. Eliminar de inventario
+  delete inv[productId];
+  saveInventory(inv);
+
+  // 4. Actualizar vistas
+  renderInventoryTable();
+  updateKPIs();
+
+  if (typeof renderProducts === 'function') {
+    renderProducts();
+  }
+  if (typeof renderCategories === 'function') {
+    renderCategories();
+  }
+
+  logAuditAction('Eliminación de Producto', `Producto "${prodName}" eliminado del catálogo.`);
+  showAdminToast(`Producto "${prodName}" eliminado.`, 'fa-trash-alt');
 }
 
 // ==========================================================================
