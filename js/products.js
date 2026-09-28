@@ -447,3 +447,25 @@ const CATEGORIES_DATA = [
   { id: "yerbas", name: "YERBAS", label: "Barbaquá & Orgánicas", image: "assets/images/cat_yerbas.jpg", count: 3, badge: "Selección Autor" },
   { id: "equipos", name: "EQUIPOS DE MATE", label: "Mochilas & Canastas", image: "assets/images/cat_equipos.jpg", count: 3, badge: "Cuero Genuino" }
 ];
+
+// Carga automática de productos creados por administradores desde el panel
+(function initCustomProducts() {
+  try {
+    const raw = localStorage.getItem('mates_rio_custom_products');
+    if (raw) {
+      const customList = JSON.parse(raw);
+      if (Array.isArray(customList) && customList.length > 0) {
+        const existingIds = new Set(PRODUCTS_DATA.map(p => p.id));
+        customList.forEach(prod => {
+          if (prod && prod.id && !existingIds.has(prod.id)) {
+            PRODUCTS_DATA.push(prod);
+            existingIds.add(prod.id);
+          }
+        });
+      }
+    }
+  } catch (e) {
+    console.warn('Error al cargar productos creados por administrador:', e);
+  }
+})();
+

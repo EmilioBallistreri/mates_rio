@@ -1607,3 +1607,60 @@ body.admin-body {
   color: #17110c;
   border-color: var(--admin-gold);
 }
+
+/* ==========================================================================
+   PRODUCT CREATION MODAL & ENHANCED FORM STYLES
+   ========================================================================== */
+.admin-modal-card.admin-modal-lg {
+  max-width: 740px;
+}
+
+.admin-form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 16px;
+}
+
+.admin-modal-card .modal-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #faf8f5;
+  border: 1.5px solid var(--admin-border);
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  color: var(--admin-text-main);
+  transition: var(--transition);
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.admin-modal-card .modal-input:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: var(--admin-gold);
+  box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.18);
+}
+
+.btn-admin-gold {
+  background: linear-gradient(135deg, #c59b27 0%, #dbb242 100%);
+  color: #17110c;
+  font-weight: 700;
+  border: 1px solid rgba(197, 155, 39, 0.4);
+  box-shadow: 0 4px 12px rgba(197, 155, 39, 0.25);
+}
+
+.btn-admin-gold:hover {
+  background: linear-gradient(135deg, #d4a72d 0%, #e8c050 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(197, 155, 39, 0.4);
+}
+
+@media (max-width: 680px) {
+  .admin-form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .admin-form-grid-2 > div[style*="grid-column: span 2"] {
+    grid-column: span 1 !important;
+  }
+}
+
