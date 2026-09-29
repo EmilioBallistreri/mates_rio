@@ -35,8 +35,8 @@
   --admin-shadow-md: 0 6px 18px rgba(34, 24, 16, 0.08);
   --admin-shadow-lg: 0 14px 34px rgba(34, 24, 16, 0.12);
 
-  --font-heading: 'Cinzel', 'Playfair Display', Georgia, serif;
-  --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  --admin-font-heading: 'Cinzel', 'Playfair Display', Georgia, serif;
+  --admin-font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
@@ -46,10 +46,19 @@
 
 body.admin-body,
 .admin-embedded-view {
-  font-family: var(--font-body);
+  font-family: var(--admin-font-body, 'Montserrat', sans-serif);
   background-color: var(--admin-bg-main);
   color: var(--admin-text-main);
   -webkit-font-smoothing: antialiased;
+}
+
+body.admin-body h1,
+body.admin-body h2,
+body.admin-body h3,
+body.admin-body h4,
+body.admin-body .brand-name,
+body.admin-body .gate-brand-name {
+  font-family: var(--admin-font-heading, 'Cinzel', serif);
 }
 
 body.admin-body {

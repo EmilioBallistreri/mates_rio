@@ -659,7 +659,7 @@ function updateCartUI() {
         </div>
         <h4 class="empty-cart-title">Tu carrito está vacío</h4>
         <p class="empty-cart-subtitle">Descubrí nuestros mates imperiales de autor, termos y combos completos con 3 cuotas sin interés.</p>
-        <button class="btn btn-primary" onclick="closeCartDrawer(); document.getElementById('catalogo')?.scrollIntoView({behavior: 'smooth'})">
+        <button class="btn btn-primary" onclick="closeCartDrawer(); if (document.getElementById('catalogo')) { document.getElementById('catalogo').scrollIntoView({behavior: 'smooth'}); } else { window.location.href = 'catalogo.html'; }">
           <i class="fas fa-shopping-bag"></i> Explorar Catálogo
         </button>
       </div>
@@ -1019,13 +1019,18 @@ function processWebCheckout(e) {
   const orderId = 'RIO-' + Math.floor(1000 + Math.random() * 9000);
   const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   
+  let discountAmount = 0;
+  if (state.activeCoupon && COUPONS[state.activeCoupon]?.discount > 0) {
+    discountAmount = Math.round(subtotal * COUPONS[state.activeCoupon].discount);
+  }
+
   let paymentDiscount = 0;
   if (paymentMethod === 'transferencia') {
-    paymentDiscount = Math.round(subtotal * CONFIG.transferDiscountRate);
+    paymentDiscount = Math.round((subtotal - discountAmount) * CONFIG.transferDiscountRate);
   }
   const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold || (state.activeCoupon && COUPONS[state.activeCoupon]?.freeShipping);
   const shippingAmount = isFreeShipping ? 0 : CONFIG.shippingCost;
-  const total = subtotal - paymentDiscount + shippingAmount;
+  const total = Math.max(0, subtotal - discountAmount - paymentDiscount + shippingAmount);
 
   const hasCustomization = state.cart.some(i => i.customization);
   const firstCustomItem = state.cart.find(i => i.customization);
@@ -1156,35 +1161,78 @@ function togglePasswordVisibility(inputId, iconId) {
   }
 }
 
+// Helper to determine if a user account has administrative privileges
+function isUserAdmin(user) {
+  if (!user) return false;
+  const role = (user.role || '').toLowerCase();
+  const email = (user.email || '').toLowerCase();
+  return (
+    role.includes('admin') ||
+    role.includes('taller') ||
+    email === 'admin@matesrio.com' ||
+    email === 'taller@matesrio.com'
+  );
+}
+
 function handleLogin(e) {
   e.preventDefault();
-  const email = document.getElementById('login-email')?.value.trim();
-  const password = document.getElementById('login-password')?.value;
+  const email = (document.getElementById('login-email')?.value || '').trim();
+  const password = (document.getElementById('login-password')?.value || '').trim();
 
   if (!email || !password) {
     showToast('Ingresá tu correo y contraseña', 'fa-exclamation-triangle');
     return;
   }
 
-  // Find user in mock db
-  const user = state.usersDb.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+  const emailLower = email.toLowerCase();
+  const isSuperAdminCred = emailLower === 'admin@matesrio.com' && (password === 'admin123' || password === 'admin');
+  const isTallerCred = emailLower === 'taller@matesrio.com' && (password === 'taller123' || password === 'admin');
+
+  let user = null;
+
+  if (isSuperAdminCred) {
+    user = {
+      name: "Administrador General",
+      email: "admin@matesrio.com",
+      phone: "1134567890",
+      password: password,
+      role: "Super Administrador"
+    };
+  } else if (isTallerCred) {
+    user = {
+      name: "Encargado de Taller",
+      email: "taller@matesrio.com",
+      phone: "1134567891",
+      password: password,
+      role: "Taller & Depósito"
+    };
+  } else {
+    user = state.usersDb.find(u => u.email.toLowerCase() === emailLower && u.password === password);
+  }
+
   if (user) {
-    state.currentUser = user;
-    localStorage.setItem('mates_rio_user', JSON.stringify(user));
-    if (user.role === 'admin' || user.role === 'Super Administrador') {
+    if (isUserAdmin(user)) {
+      user.role = user.role || 'Super Administrador';
       localStorage.setItem('mates_rio_admin_session', JSON.stringify(user));
       sessionStorage.setItem('mates_rio_admin_session', JSON.stringify(user));
     }
+    state.currentUser = user;
+    localStorage.setItem('mates_rio_user', JSON.stringify(user));
     updateAuthUI();
     closeAuthModal();
-    showToast(`¡Bienvenido de vuelta, ${user.name}!`);
+    showToast(`¡Bienvenido, ${user.name}!`);
   } else {
     // If not in demo, register as new session
     const fallbackUser = {
       name: email.split('@')[0],
       email: email,
-      phone: "1155554444"
+      phone: "1155554444",
+      role: isUserAdmin({ email }) ? "Super Administrador" : "customer"
     };
+    if (isUserAdmin(fallbackUser)) {
+      localStorage.setItem('mates_rio_admin_session', JSON.stringify(fallbackUser));
+      sessionStorage.setItem('mates_rio_admin_session', JSON.stringify(fallbackUser));
+    }
     state.currentUser = fallbackUser;
     localStorage.setItem('mates_rio_user', JSON.stringify(fallbackUser));
     updateAuthUI();
@@ -1211,9 +1259,15 @@ function handleRegister(e) {
     return;
   }
 
-  const newUser = { name, email, phone, password };
+  const role = isUserAdmin({ email }) ? "Super Administrador" : "customer";
+  const newUser = { name, email, phone, password, role };
   state.usersDb.push(newUser);
   localStorage.setItem('mates_rio_users_db', JSON.stringify(state.usersDb));
+
+  if (isUserAdmin(newUser)) {
+    localStorage.setItem('mates_rio_admin_session', JSON.stringify(newUser));
+    sessionStorage.setItem('mates_rio_admin_session', JSON.stringify(newUser));
+  }
 
   state.currentUser = newUser;
   localStorage.setItem('mates_rio_user', JSON.stringify(newUser));
@@ -1248,29 +1302,54 @@ function updateAuthUI() {
   const userBtn = document.getElementById('user-account-btn');
   const userDropdown = document.getElementById('user-dropdown-menu');
   const mobileAuthText = document.getElementById('mobile-nav-auth-text');
-  const adminDropdownLink = document.getElementById('dropdown-admin-link');
-  const mobileAdminItem = document.getElementById('mobile-nav-admin-item');
+  const adminDropdownLinks = document.querySelectorAll('#dropdown-admin-link, #user-menu-admin-item, .admin-only-item, .btn-admin-nav-direct');
+  const mobileAdminItems = document.querySelectorAll('#mobile-nav-admin-item, .mobile-admin-item');
+  const profileAdminCard = document.getElementById('profile-admin-card');
+  const profileAdminRoleBadge = document.getElementById('profile-admin-role-badge');
 
-  const isAdmin = state.currentUser && (state.currentUser.role === 'admin' || state.currentUser.role === 'Super Administrador');
-
-  if (adminDropdownLink) {
-    adminDropdownLink.style.display = isAdmin ? 'flex' : 'none';
+  // Auto-upgrade role if email is an admin
+  if (state.currentUser && isUserAdmin(state.currentUser) && !state.currentUser.role) {
+    state.currentUser.role = state.currentUser.email === 'taller@matesrio.com' ? 'Taller & Depósito' : 'Super Administrador';
+    localStorage.setItem('mates_rio_user', JSON.stringify(state.currentUser));
+    localStorage.setItem('mates_rio_admin_session', JSON.stringify(state.currentUser));
   }
-  if (mobileAdminItem) {
-    mobileAdminItem.style.display = isAdmin ? 'block' : 'none';
+
+  const isAdmin = isUserAdmin(state.currentUser);
+
+  // Show/Hide admin panel links in dropdowns & navbar
+  adminDropdownLinks.forEach(link => {
+    link.style.display = isAdmin ? 'flex' : 'none';
+  });
+
+  // Show/Hide admin panel link in mobile menu drawer
+  mobileAdminItems.forEach(item => {
+    item.style.display = isAdmin ? 'block' : 'none';
+  });
+
+  // Show/Hide admin panel banner inside Profile Modal
+  if (profileAdminCard) {
+    profileAdminCard.style.display = isAdmin ? 'block' : 'none';
+    if (profileAdminRoleBadge && state.currentUser) {
+      profileAdminRoleBadge.textContent = state.currentUser.role || 'ADMIN';
+    }
   }
 
   if (state.currentUser) {
-    const firstName = state.currentUser.name.split(' ')[0];
-    if (userBtnText) userBtnText.textContent = firstName;
-    if (mobileAuthText) mobileAuthText.textContent = `Hola, ${firstName} (Mi Perfil)`;
+    const firstName = state.currentUser.name ? state.currentUser.name.split(' ')[0] : 'Usuario';
+    if (userBtnText) userBtnText.textContent = isAdmin ? 'Admin' : firstName;
+    if (mobileAuthText) mobileAuthText.textContent = `Hola, ${firstName} (${isAdmin ? 'Admin' : 'Mi Perfil'})`;
     if (userBtn) {
       userBtn.onclick = (e) => {
         e.stopPropagation();
         toggleUserDropdown();
       };
-      userBtn.title = `Cuenta de ${state.currentUser.name}${isAdmin ? ' (Admin)' : ''}`;
+      userBtn.title = `Cuenta de ${state.currentUser.name}${isAdmin ? ' (Administrador)' : ''}`;
       userBtn.style.borderColor = isAdmin ? 'var(--accent-gold)' : 'var(--accent-leather)';
+      if (isAdmin) {
+        userBtn.classList.add('admin-active');
+      } else {
+        userBtn.classList.remove('admin-active');
+      }
     }
   } else {
     if (userBtnText) userBtnText.textContent = "Ingresar";
@@ -1279,6 +1358,7 @@ function updateAuthUI() {
       userBtn.onclick = () => openAuthModal('login');
       userBtn.title = "Iniciar sesión o Registrarse";
       userBtn.style.borderColor = 'var(--border-light)';
+      userBtn.classList.remove('admin-active');
     }
     if (userDropdown) userDropdown.classList.remove('active');
   }
@@ -1303,10 +1383,21 @@ function openProfileModal() {
   const emailEl = document.getElementById('profile-email-display');
   const phoneEl = document.getElementById('profile-phone-display');
   const ordersListEl = document.getElementById('profile-orders-list');
+  const profileAdminCard = document.getElementById('profile-admin-card');
+  const profileAdminRoleBadge = document.getElementById('profile-admin-role-badge');
+
+  const isAdmin = isUserAdmin(state.currentUser);
 
   if (nameEl) nameEl.textContent = state.currentUser.name;
   if (emailEl) emailEl.textContent = state.currentUser.email;
   if (phoneEl) phoneEl.textContent = state.currentUser.phone || "No especificado";
+
+  if (profileAdminCard) {
+    profileAdminCard.style.display = isAdmin ? 'block' : 'none';
+    if (profileAdminRoleBadge) {
+      profileAdminRoleBadge.textContent = state.currentUser.role || 'ADMIN';
+    }
+  }
 
   if (ordersListEl) {
     if (state.orders.length === 0) {
@@ -2234,5 +2325,10 @@ function saveCustomizedMateToCart() {
   }
 
   showToast(`¡Grabado en virola guardado para "${product.name}"!`, 'fa-check-circle');
+}
+
+// Secret shortcut trigger: double click on logo or copyright redirects to admin
+function handleSecretAdminTrigger() {
+  window.location.href = 'admin.html';
 }
 

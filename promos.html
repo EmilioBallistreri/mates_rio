@@ -266,6 +266,31 @@
           <i class="fas fa-arrow-left"></i>
         </a>
 
+        <!-- User Account (Login / Register / Profile Dropdown) -->
+        <div class="user-btn-wrap">
+          <button class="user-account-btn" id="user-account-btn" onclick="openAuthModal('login')" title="Mi Cuenta">
+            <i class="far fa-user"></i>
+            <span class="user-name-display" id="user-btn-name">Ingresar</span>
+          </button>
+
+          <!-- User Dropdown Menu for Logged In User -->
+          <div class="user-dropdown-menu" id="user-dropdown-menu">
+            <div class="user-dropdown-item" onclick="openProfileModal()">
+              <i class="far fa-id-badge"></i> Mi Perfil
+            </div>
+            <div class="user-dropdown-item" onclick="openProfileModal()">
+              <i class="fas fa-box-open"></i> Mis Pedidos
+            </div>
+            <a href="admin.html" class="user-dropdown-item admin-only-item admin-highlight-link" id="dropdown-admin-link" style="display: none; color: var(--accent-leather); font-weight: 800; text-decoration: none;">
+              <i class="fas fa-shield-halved" style="color: var(--accent-gold);"></i> Panel de Administración
+            </a>
+            <div class="user-dropdown-divider"></div>
+            <div class="user-dropdown-item text-danger" onclick="logoutUser()">
+              <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </div>
+          </div>
+        </div>
+
         <!-- Shopping Cart Trigger Button -->
         <button class="action-btn cart-btn-highlight" id="open-cart-btn" onclick="openCartDrawer()" title="Ver Carrito de Compras">
           <i class="fas fa-shopping-bag"></i>
@@ -289,6 +314,18 @@
     </div>
 
     <ul class="mobile-nav-list">
+      <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
+        <a href="javascript:void(0)" onclick="handleMobileAuthClick()">
+          <span><i class="fas fa-user-circle" style="width: 22px; color: var(--accent-leather);"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item" id="mobile-nav-admin-item" style="display: none; background: #fffdf9; border-left: 4px solid var(--accent-gold);">
+        <a href="admin.html" onclick="closeMobileDrawer();">
+          <span><i class="fas fa-shield-halved" style="width: 22px; color: var(--accent-gold);"></i> <b style="color: var(--accent-leather);">Panel Admin</b></span>
+          <span class="nav-badge-pill pill-gold">STAFF</span>
+        </a>
+      </li>
       <li class="mobile-nav-item">
         <a href="index.html">
           <span><i class="fas fa-home" style="width: 22px; color: var(--accent-gold);"></i> Inicio</span>
@@ -565,7 +602,7 @@
         <h4 class="footer-title">Atención & Envíos</h4>
         <ul class="footer-contact-list">
           <li><i class="fab fa-whatsapp"></i> <span>WhatsApp: <b>+54 9 11 3456-7890</b></span></li>
-          <li><i class="fas fa-envelope"></i> <span>Email: <b>contacto@matesrio.com</b></span></li>
+          <li><i class="fas fa-envelope"></i> <span>Email: <a href="mailto:contacto@matesrio.com.ar" style="color: inherit; text-decoration: none;"><b>contacto@matesrio.com.ar</b></a></span></li>
           <li><i class="fas fa-location-dot"></i> <span>Showroom & Taller: <b>CABA, Argentina</b></span></li>
           <li><i class="fas fa-truck"></i> <span>Envíos a todo el país vía Correo Argentino y Andreani</span></li>
         </ul>
@@ -688,6 +725,161 @@
       </div>
     </div>
   </aside>
+
+  <!-- ==========================================================================
+       MODAL: AUTH (INICIAR SESIÓN / CREAR CUENTA)
+       ========================================================================== -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-box">
+      <button class="modal-close-icon" onclick="closeAuthModal()" aria-label="Cerrar modal">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">
+          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </button>
+        <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">
+          <i class="fas fa-user-plus"></i> Crear Cuenta
+        </button>
+      </div>
+
+      <div class="auth-panel active" id="auth-panel-login">
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" id="login-email" required class="form-input" placeholder="tunombre@correo.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <div class="input-with-eye">
+              <input type="password" id="login-password" required class="form-input" placeholder="••••••••" />
+              <i class="far fa-eye eye-toggle-btn" id="login-eye-icon" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')"></i>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.8rem;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" checked /> Recordarme
+            </label>
+            <a href="#" onclick="showToast('Te enviamos un enlace de recuperación a tu email.'); return false;" style="color: var(--accent-leather);">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            Ingresar a mi cuenta
+          </button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center; font-size: 0.84rem; color: var(--text-secondary);">
+          ¿Todavía no tenés cuenta?
+          <a href="#" onclick="switchAuthTab('register'); return false;" style="color: var(--accent-gold); font-weight: 700;">Registrate gratis</a>
+        </div>
+      </div>
+
+      <div class="auth-panel" id="auth-panel-register">
+        <form onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label">Nombre y Apellido *</label>
+            <input type="text" id="reg-name" required class="form-input" placeholder="Ej: Lucas González" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Teléfono / WhatsApp *</label>
+            <input type="tel" id="reg-phone" required class="form-input" placeholder="Ej: 11 4455 6677" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Correo electrónico *</label>
+            <input type="email" id="reg-email" required class="form-input" placeholder="tuemail@ejemplo.com" />
+          </div>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Contraseña *</label>
+              <div class="input-with-eye">
+                <input type="password" id="reg-password" required class="form-input" placeholder="••••••••" />
+                <i class="far fa-eye eye-toggle-btn" id="reg-eye-icon1" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon1')"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Confirmar *</label>
+              <div class="input-with-eye">
+                <input type="password" id="reg-password-confirm" required class="form-input" placeholder="••••••••" />
+                <i class="far fa-eye eye-toggle-btn" id="reg-eye-icon2" onclick="togglePasswordVisibility('reg-password-confirm', 'reg-eye-icon2')"></i>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 20px; font-size: 0.78rem; color: var(--text-secondary);">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" required checked /> Acepto los términos, condiciones y políticas de privacidad.
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            Crear mi Cuenta
+          </button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center; font-size: 0.84rem; color: var(--text-secondary);">
+          ¿Ya tenés cuenta?
+          <a href="#" onclick="switchAuthTab('login'); return false;" style="color: var(--accent-gold); font-weight: 700;">Iniciá sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: USER PROFILE & MIS PEDIDOS
+       ========================================================================== -->
+  <div class="modal-overlay" id="profile-modal">
+    <div class="modal-box modal-box-padded">
+      <button class="modal-close-icon" onclick="closeProfileModal()" aria-label="Cerrar perfil">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--border-light);">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center;">
+          <i class="far fa-user"></i>
+        </div>
+        <div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem;" id="profile-name-display">Usuario</h3>
+          <p style="font-size: 0.82rem; color: var(--text-secondary);" id="profile-email-display">email@ejemplo.com</p>
+          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 11 ...</span>
+        </div>
+      </div>
+
+      <!-- Admin Quick Access Card (Visible para todos los administradores) -->
+      <div id="profile-admin-card" style="display: none; background: linear-gradient(135deg, #17110c 0%, #2a1b12 100%); border: 1.5px solid var(--accent-gold); border-radius: var(--radius-md); padding: 16px; margin-bottom: 22px; box-shadow: 0 4px 16px rgba(197, 155, 39, 0.18);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.5px;">
+            <i class="fas fa-shield-halved"></i> Permisos de Administrador
+          </span>
+          <span class="nav-badge-pill pill-gold" id="profile-admin-role-badge">STAFF</span>
+        </div>
+        <p style="font-size: 0.8rem; color: #ede3d5; margin: 0 0 12px; line-height: 1.4;">
+          Tenés acceso habilitado para gestionar stock, precios, pedidos y reportes de taller.
+        </p>
+        <a href="admin.html" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.88rem; font-weight: 800; padding: 11px 14px; text-decoration: none; border-radius: var(--radius-sm); background: var(--accent-gold); color: #17110c; border: none; box-shadow: 0 2px 8px rgba(197, 155, 39, 0.35);">
+          <i class="fas fa-arrow-up-right-from-square"></i> Abrir Panel de Administración
+        </a>
+      </div>
+
+      <h4 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 12px;">
+        <i class="fas fa-box" style="color: var(--accent-gold); margin-right: 6px;"></i> Mis Pedidos Recientes
+      </h4>
+
+      <div id="profile-orders-list">
+        <!-- Rendered via JS -->
+      </div>
+
+      <button class="btn btn-outline-dark" onclick="logoutUser()" style="width: 100%; margin-top: 20px;">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </div>
 
   <!-- ==========================================================================
        MODAL: WEB CHECKOUT
