@@ -1058,9 +1058,9 @@
 
           <div style="display: flex; align-items: center; gap: 14px; margin-top: auto; padding-top: 16px;">
             <div class="qty-stepper" style="height: 44px;">
-              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="const q = document.getElementById('qv-qty'); if (q.value > 1) q.value--;">-</button>
+              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="changeQuickViewQty(-1)" aria-label="Disminuir cantidad">-</button>
               <input type="number" id="qv-qty" value="1" min="1" max="99" style="width: 44px; text-align: center; border: none; font-weight: 700;" />
-              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="const q = document.getElementById('qv-qty'); q.value++;">+</button>
+              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="changeQuickViewQty(1)" aria-label="Aumentar cantidad">+</button>
             </div>
 
             <button class="btn btn-primary" id="qv-btn-add" onclick="addQuickViewToCart()" style="flex: 1; height: 44px;">

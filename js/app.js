@@ -1508,6 +1508,17 @@ function closeQuickView() {
   document.body.style.overflow = '';
 }
 
+function changeQuickViewQty(delta) {
+  const q = document.getElementById('qv-qty');
+  if (!q) return;
+  const current = parseInt(q.value, 10) || 1;
+  const next = current + delta;
+  if (next >= 1 && next <= 99) {
+    q.value = next;
+  }
+}
+window.changeQuickViewQty = changeQuickViewQty;
+
 function addQuickViewToCart() {
   if (!currentQuickViewProduct) return;
   const qtyInput = document.getElementById('qv-qty');
