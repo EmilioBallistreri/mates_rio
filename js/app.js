@@ -203,14 +203,23 @@ function renderCategoriesGrid() {
     </div>
   `).join('');
 
-  // Click on category card filters catalog and smoothly scrolls
+  // Click on category card filters catalog if on catalog page, or navigates to dedicated catalog page
   container.querySelectorAll('.category-card').forEach(card => {
     card.addEventListener('click', () => {
       const catId = card.getAttribute('data-category');
-      setCategoryFilter(catId);
-      const catalogEl = document.getElementById('catalogo');
-      if (catalogEl) {
-        catalogEl.scrollIntoView({ behavior: 'smooth' });
+      if (catId === 'promos') {
+        window.location.href = 'promos.html';
+        return;
+      }
+      const productsGrid = document.getElementById('products-grid');
+      if (productsGrid) {
+        setCategoryFilter(catId);
+        const catalogEl = document.getElementById('catalogo');
+        if (catalogEl) {
+          catalogEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        window.location.href = 'catalogo.html?categoria=' + encodeURIComponent(catId);
       }
     });
   });
@@ -218,6 +227,16 @@ function renderCategoriesGrid() {
 
 function setCategoryFilter(categoryId) {
   state.activeCategory = categoryId;
+
+  const productsGrid = document.getElementById('products-grid');
+  if (!productsGrid) {
+    if (categoryId === 'promos') {
+      window.location.href = 'promos.html';
+    } else {
+      window.location.href = 'catalogo.html?categoria=' + encodeURIComponent(categoryId);
+    }
+    return;
+  }
 
   // Update pills UI
   document.querySelectorAll('.filter-pill').forEach(pill => {
@@ -1486,6 +1505,23 @@ function switchCureTab(type) {
 // APP INITIALIZATION & EVENT LISTENERS
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
+  // 0. Parse URL query parameters (e.g. catalogo.html?categoria=mates or ?buscar=imperial)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const catParam = urlParams.get('categoria') || urlParams.get('category');
+    const searchParam = urlParams.get('buscar') || urlParams.get('q') || urlParams.get('search');
+    const focusParam = urlParams.get('focus');
+
+    if (catParam) {
+      state.activeCategory = catParam.toLowerCase();
+    }
+    if (searchParam) {
+      state.searchQuery = searchParam;
+    }
+  } catch (err) {
+    console.warn('URL params parsing error:', err);
+  }
+
   // 1. Init Hero Banner Slider
   initSlider();
 
@@ -1494,6 +1530,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. Render Catalog
   renderProducts();
+
+  // Apply search query into search input & highlight active category pill if URL set state
+  const searchInputInit = document.getElementById('catalog-search-input');
+  const clearBtnInit = document.getElementById('search-clear-btn');
+  if (searchInputInit && state.searchQuery) {
+    searchInputInit.value = state.searchQuery;
+    if (clearBtnInit) clearBtnInit.classList.add('visible');
+  }
+
+  if (state.activeCategory) {
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+      const pillCat = pill.getAttribute('data-category');
+      const isActive = pillCat === state.activeCategory;
+      pill.classList.toggle('active', isActive);
+      if (isActive && typeof pill.scrollIntoView === 'function') {
+        pill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    });
+  }
+
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('focus') === 'search' && searchInputInit) {
+      setTimeout(() => searchInputInit.focus(), 350);
+    }
+  } catch (e) {}
 
   // 4. Update Cart & Auth state
   updateCartUI();

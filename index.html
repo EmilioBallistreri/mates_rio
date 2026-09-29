@@ -86,14 +86,14 @@
 
           <!-- Dropdown: Productos -->
           <li class="nav-item-dropdown" id="nav-dropdown-products">
-            <a href="#catalogo" class="nav-link nav-dropdown-trigger">
+            <a href="catalogo.html" class="nav-link nav-dropdown-trigger">
               Productos <i class="fas fa-chevron-down dropdown-arrow"></i>
             </a>
             
             <!-- Floating Mega Dropdown Panel -->
             <div class="nav-dropdown-menu">
               <div class="dropdown-categories-grid">
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('promos')">
+                <a href="promos.html" class="dropdown-cat-card">
                   <div class="dropdown-cat-icon"><i class="fas fa-fire" style="color: var(--badge-promo);"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">PROMOS & COMBOS</span>
@@ -101,7 +101,7 @@
                   </div>
                 </a>
 
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('mates')">
+                <a href="catalogo.html?categoria=mates" class="dropdown-cat-card" onclick="setCategoryFilter('mates')">
                   <div class="dropdown-cat-icon"><i class="fas fa-mug-hot" style="color: var(--accent-leather);"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">MATES IMPERIALES</span>
@@ -109,7 +109,7 @@
                   </div>
                 </a>
 
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('termos')">
+                <a href="catalogo.html?categoria=termos" class="dropdown-cat-card" onclick="setCategoryFilter('termos')">
                   <div class="dropdown-cat-icon"><i class="fas fa-temperature-high" style="color: var(--accent-gold);"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">TERMOS TÉRMICOS</span>
@@ -117,7 +117,7 @@
                   </div>
                 </a>
 
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('accesorios')">
+                <a href="catalogo.html?categoria=accesorios" class="dropdown-cat-card" onclick="setCategoryFilter('accesorios')">
                   <div class="dropdown-cat-icon"><i class="fas fa-magic" style="color: #4a6fa5;"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">ACCESORIOS</span>
@@ -125,7 +125,7 @@
                   </div>
                 </a>
 
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('yerbas')">
+                <a href="catalogo.html?categoria=yerbas" class="dropdown-cat-card" onclick="setCategoryFilter('yerbas')">
                   <div class="dropdown-cat-icon"><i class="fas fa-leaf" style="color: #27ae60;"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">YERBAS DE AUTOR</span>
@@ -133,7 +133,7 @@
                   </div>
                 </a>
 
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('equipos')">
+                <a href="catalogo.html?categoria=equipos" class="dropdown-cat-card" onclick="setCategoryFilter('equipos')">
                   <div class="dropdown-cat-icon"><i class="fas fa-briefcase" style="color: var(--accent-leather);"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">EQUIPOS DE MATE</span>
@@ -143,7 +143,7 @@
               </div>
 
               <div class="dropdown-footer">
-                <a href="#catalogo" onclick="setCategoryFilter('all')" class="dropdown-all-link">
+                <a href="catalogo.html" onclick="setCategoryFilter('all')" class="dropdown-all-link">
                   Ver todo el catálogo completo <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
@@ -151,7 +151,7 @@
           </li>
 
           <li>
-            <a href="#catalogo" class="nav-link" onclick="setCategoryFilter('promos')">
+            <a href="promos.html" class="nav-link">
               Promos <span class="nav-badge-pill">OFF</span>
             </a>
           </li>
@@ -164,7 +164,7 @@
           </li>
 
           <li>
-            <a href="#guia-curado" class="nav-link">Tips Materos</a>
+            <a href="#comunidad" class="nav-link">Comunidad</a>
           </li>
 
           <li>
@@ -181,9 +181,9 @@
         </a>
 
         <!-- Search Trigger Button -->
-        <button class="action-btn" onclick="document.getElementById('catalog-search-input')?.focus(); document.getElementById('catalogo')?.scrollIntoView({behavior: 'smooth'})" title="Buscar productos">
+        <a href="catalogo.html?focus=search" class="action-btn" title="Buscar productos">
           <i class="fas fa-search"></i>
-        </button>
+        </a>
 
         <!-- User Account (Login / Register / Profile Dropdown) -->
         <div class="user-btn-wrap">
@@ -259,13 +259,19 @@
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('promos'); closeMobileDrawer()">
+        <a href="promos.html" onclick="closeMobileDrawer()">
           <span><i class="fas fa-fire" style="width: 22px; color: var(--badge-promo);"></i> PROMOS</span>
           <span class="nav-badge-pill">Hasta 25% OFF</span>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('mates'); closeMobileDrawer()">
+        <a href="catalogo.html" onclick="setCategoryFilter('all'); closeMobileDrawer()">
+          <span><i class="fas fa-th-large" style="width: 22px; color: var(--accent-gold);"></i> Catálogo Completo</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=mates" onclick="setCategoryFilter('mates'); closeMobileDrawer()">
           <span><i class="fas fa-mug-hot" style="width: 22px; color: var(--accent-leather);"></i> Mates Imperiales</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
@@ -277,25 +283,25 @@
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('termos'); closeMobileDrawer()">
+        <a href="catalogo.html?categoria=termos" onclick="setCategoryFilter('termos'); closeMobileDrawer()">
           <span><i class="fas fa-temperature-high" style="width: 22px; color: var(--accent-gold);"></i> Termos de Acero</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('accesorios'); closeMobileDrawer()">
+        <a href="catalogo.html?categoria=accesorios" onclick="setCategoryFilter('accesorios'); closeMobileDrawer()">
           <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Bombillas & Accesorios</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('yerbas'); closeMobileDrawer()">
+        <a href="catalogo.html?categoria=yerbas" onclick="setCategoryFilter('yerbas'); closeMobileDrawer()">
           <span><i class="fas fa-leaf" style="width: 22px; color: #27ae60;"></i> Yerbas Seleccionadas</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('equipos'); closeMobileDrawer()">
+        <a href="catalogo.html?categoria=equipos" onclick="setCategoryFilter('equipos'); closeMobileDrawer()">
           <span><i class="fas fa-briefcase" style="width: 22px; color: var(--accent-leather);"></i> Equipos de Mate</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
@@ -341,10 +347,10 @@
                 Calabazas gruesas seleccionadas, cuero vacuno genuino con costura uruguaya y virolas cinceladas a mano en alpaca maciza. Diseñados para que cada cebada sea única.
               </p>
               <div class="hero-cta-group">
-                <a href="#catalogo" class="btn btn-primary" onclick="setCategoryFilter('mates')">
+                <a href="catalogo.html?categoria=mates" class="btn btn-primary">
                   <i class="fas fa-shopping-bag"></i> Explorar Mates
                 </a>
-                <a href="#catalogo" class="btn btn-secondary" onclick="setCategoryFilter('promos')">
+                <a href="promos.html" class="btn btn-secondary">
                   Ver Promociones
                 </a>
               </div>
@@ -364,7 +370,7 @@
                 Sets materos completos con termo de acero inoxidable 1L, mate imperial o camionero, bombilla de alpaca y matera de cuero. ¡Todo listo para disfrutar!
               </p>
               <div class="hero-cta-group">
-                <a href="#catalogo" class="btn btn-primary" onclick="setCategoryFilter('promos')">
+                <a href="promos.html" class="btn btn-primary">
                   <i class="fas fa-fire"></i> Aprovechar Ofertas
                 </a>
                 <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20asesorarme%20sobre%20los%20combos%20materos." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
@@ -387,7 +393,7 @@
                 Termos térmicos con pico vertedor de precisión y aislamiento al vacío que mantiene el agua caliente por más de 24 horas. Construidos para durar.
               </p>
               <div class="hero-cta-group">
-                <a href="#catalogo" class="btn btn-primary" onclick="setCategoryFilter('termos')">
+                <a href="catalogo.html?categoria=termos" class="btn btn-primary">
                   <i class="fas fa-mug-hot"></i> Ver Termos
                 </a>
                 <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
@@ -469,240 +475,92 @@
          ========================================================================== -->
     <section class="categories-section" id="categorias">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Colecciones Exclusivas</span>
-          <h2 class="section-title">Nuestras Categorías</h2>
-          <p class="section-subtitle">
-            Explorá nuestra selección artesanal pensada para cada estilo matero. Hacé clic para ver todos los modelos disponibles.
-          </p>
-        </div>
-
+        <!-- 6 Category Cards first, exactly as requested by client -->
         <div class="categories-grid" id="categories-grid">
           <!-- Rendered dynamically by js/app.js -->
         </div>
-      </div>
-    </section>
 
-    <!-- ==========================================================================
-         PRODUCTS CATALOG & LIVE FILTER SECTION
-         ========================================================================== -->
-    <section class="catalog-section" id="catalogo">
-      <div class="container">
-        <div class="section-header" style="margin-bottom: 30px;">
-          <span class="section-tag">Catálogo Completo</span>
-          <h2 class="section-title">Productos Destacados</h2>
+        <!-- Section title & description placed cleanly below the cards -->
+        <div class="categories-bottom-info">
+          <span class="section-tag">Colecciones Exclusivas</span>
+          <h2 class="section-title">Nuestras Categorías</h2>
           <p class="section-subtitle">
-            Buscá por nombre o filtrá por tu categoría y precio preferido para encontrar tu próximo compañero de rondas.
+            Explorá nuestra selección artesanal pensada para cada estilo matero. Hacé clic en cualquier categoría para descubrir todos los modelos disponibles en el catálogo.
           </p>
-        </div>
-
-        <!-- Filter & Search Toolbar -->
-        <div class="catalog-toolbar">
-          <div class="toolbar-top-row">
-            <!-- Live Search Bar -->
-            <div class="search-box-wrap">
-              <i class="fas fa-search search-icon"></i>
-              <input
-                type="text"
-                id="catalog-search-input"
-                class="search-input"
-                placeholder="Buscar por nombre, modelo, material (ej: imperial, termo, alpaca...)"
-                aria-label="Buscar productos"
-              />
-              <i class="fas fa-times-circle search-clear-btn" id="search-clear-btn" title="Limpiar búsqueda"></i>
-            </div>
-
-            <!-- Right Filters (Sort & Price) -->
-            <div class="filter-controls-right">
-              <!-- Filter by Price -->
-              <div class="sort-wrap">
-                <label for="catalog-price-select" class="sort-label">Precio:</label>
-                <select id="catalog-price-select" class="sort-select">
-                  <option value="all">Todos los precios</option>
-                  <option value="under-40k">Hasta $ 40.000</option>
-                  <option value="40k-70k">$ 40.000 a $ 70.000</option>
-                  <option value="over-70k">Más de $ 70.000</option>
-                </select>
-              </div>
-
-              <!-- Sort Select -->
-              <div class="sort-wrap">
-                <label for="catalog-sort-select" class="sort-label">Ordenar:</label>
-                <select id="catalog-sort-select" class="sort-select">
-                  <option value="featured">Destacados</option>
-                  <option value="price-low">Menor precio</option>
-                  <option value="price-high">Mayor precio</option>
-                  <option value="rating">Mejor valorados</option>
-                  <option value="name-asc">Nombre A-Z</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category Pills Filter Bar -->
-          <div class="category-filter-pills" role="tablist">
-            <button class="filter-pill active" data-category="all">Todos los Productos</button>
-            <button class="filter-pill" data-category="promos">🔥 PROMOS</button>
-            <button class="filter-pill" data-category="mates">🧉 MATES</button>
-            <button class="filter-pill" data-category="termos">⚡ TERMOS</button>
-            <button class="filter-pill" data-category="accesorios">✨ ACCESORIOS</button>
-            <button class="filter-pill" data-category="yerbas">🌿 YERBAS</button>
-            <button class="filter-pill" data-category="equipos">🎒 EQUIPOS DE MATE</button>
-          </div>
-        </div>
-
-        <!-- Results Counter & Clear Link -->
-        <div class="results-status-bar">
-          <span class="results-count" id="results-count">Cargando productos...</span>
-          <span class="clear-filters-link" id="clear-filters-link" onclick="resetFilters()">
-            <i class="fas fa-times"></i> Limpiar filtros
-          </span>
-        </div>
-
-        <!-- Products Grid Container -->
-        <div class="products-grid" id="products-grid">
-          <!-- Populated dynamically via JS from PRODUCTS_DATA -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-         SHOWCASE PROMO: PERSONALIZÁ TU MATE (ACCESO AL ESTUDIO DEDICADO)
-         ========================================================================== -->
-    <section class="customize-banner-section" id="personaliza-tu-mate" aria-label="Taller de Personalización">
-      <div class="container">
-        <div class="customize-promo-card">
-          <div class="promo-text-side">
-            <span class="section-tag"><i class="fas fa-magic"></i> Taller de Grabado Oficial</span>
-            <h2 class="promo-title">Personalizá tu Mate en Vivo</h2>
-            <p class="promo-desc">
-              Ingresá a nuestro sitio interactivo: elegí tu modelo, la terminación del metal y grabá tus nombres, fechas, escudos o tu propio logo <b>exclusivamente en la virola</b> con vista previa en tiempo real.
-            </p>
-            <div class="promo-perks">
-              <span class="promo-perk-item"><i class="fas fa-check-circle"></i> Grabado Láser Bonificado ($0)</span>
-              <span class="promo-perk-item"><i class="fas fa-check-circle"></i> Vista previa interactiva en vivo</span>
-              <span class="promo-perk-item"><i class="fas fa-check-circle"></i> Despacho rápido en 24/48 hs</span>
-            </div>
-            <div class="promo-actions">
-              <a href="personaliza-tu-mate.html" class="btn btn-primary btn-enter-studio">
-                <i class="fas fa-magic"></i> Ir a personalizar tu mate <i class="fas fa-arrow-right"></i>
-              </a>
-            </div>
-          </div>
-          <div class="promo-preview-side">
-            <div class="promo-virola-visual">
-              <img src="assets/images/prod_mate_imperial.jpg" alt="Mate Imperial Personalizado" class="promo-mate-img" />
-              <div class="promo-virola-badge">
-                <i class="fas fa-ring"></i> Grabado exclusivo en la Virola
-              </div>
-            </div>
+          <div class="categories-bottom-action">
+            <a href="catalogo.html" class="btn btn-primary btn-catalog-link">
+              <i class="fas fa-th-large"></i> Ver Todo el Catálogo <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ==========================================================================
-         HOW TO CURE YOUR MATE (INTERACTIVE VALUE-ADD TABS)
+         COMMUNITY SHOWCASE SECTION (INSTAGRAM, TIKTOK, FACEBOOK)
          ========================================================================== -->
-    <section class="cure-guide-section" id="guia-curado">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Tips Materos de Mates Río</span>
-          <h2 class="section-title">¿Cómo curar tu Mate en simples pasos?</h2>
-          <p class="section-subtitle">
-            Curar la pieza sella los poros, quita el sabor astringente y garantiza mates deliciosos durante toda la vida.
-          </p>
-        </div>
-
-        <!-- Interactive Tabs for Mate Type -->
-        <div class="cure-tabs-bar">
-          <button class="cure-tab-pill active" data-cure-tab="calabaza" onclick="switchCureTab('calabaza')">
-            <i class="fas fa-seedling"></i> Mate de Calabaza (Imperial / Torpedo)
-          </button>
-          <button class="cure-tab-pill" data-cure-tab="algarrobo" onclick="switchCureTab('algarrobo')">
-            <i class="fas fa-tree"></i> Mate de Madera (Algarrobo)
-          </button>
-          <button class="cure-tab-pill" data-cure-tab="cuidados" onclick="switchCureTab('cuidados')">
-            <i class="fas fa-shield-virus"></i> Cuidados y Limpieza Diaria
-          </button>
-        </div>
-
-        <div class="cure-grid" id="cure-steps-grid">
-          <div class="cure-step-card">
-            <div class="step-number">01</div>
-            <h4>Llenar con Yerba Húmeda</h4>
-            <p>
-              Colocá yerba mate ya usada (húmeda, tibia) hasta el borde del mate. Nunca uses agua hirviendo ya que puede quebrar la calabaza natural.
-            </p>
-          </div>
-
-          <div class="cure-step-card">
-            <div class="step-number">02</div>
-            <h4>Reposar 24 Horas</h4>
-            <p>
-              Dejalo reposar por 24 horas completas. Si notás que la yerba absorbió toda la humedad, agregale un chorrito de agua tibia para que siga actuando.
-            </p>
-          </div>
-
-          <div class="cure-step-card">
-            <div class="step-number">03</div>
-            <h4>Raspar Suavemente</h4>
-            <p>
-              Vaciá el mate y con una cuchara sopera raspá suavemente las paredes internas para retirar el hollejo suelto. ¡Enjuagá y tu mate ya está listo para cebar!
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-         INSTAGRAM COMMUNITY SHOWCASE SECTION
-         ========================================================================== -->
-    <section class="instagram-section">
+    <section class="instagram-section" id="comunidad">
       <div class="container">
         <div class="instagram-banner-box">
           <div class="insta-text">
-            <h3><i class="fab fa-instagram insta-gradient-icon"></i> @mates_rio_</h3>
+            <span class="section-tag" style="color: var(--accent-gold); margin-bottom: 6px; display: inline-block;">
+              <i class="fas fa-users"></i> Comunidad Matera Oficial
+            </span>
+            <h3>Sumate a Nuestra Comunidad</h3>
             <p>
-              Sumate a nuestra comunidad en Instagram. Compartimos fotos de clientes, tips de cebado, sorteos mensuales y lanzamientos exclusivos.
+              Compartimos fotos de clientes, videos virales de cebado y preparación en TikTok, sorteos mensuales y lanzamientos exclusivos. ¡Seguinos y sé parte de la familia matera!
             </p>
           </div>
-          <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-            <i class="fab fa-instagram"></i> Seguir en Instagram
-          </a>
+
+          <!-- Multi-network action buttons -->
+          <div class="community-social-group">
+            <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" title="Seguinos en Instagram">
+              <i class="fab fa-instagram"></i> Instagram
+            </a>
+            <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok" title="Seguinos en TikTok">
+              <i class="fab fa-tiktok"></i> TikTok
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="btn btn-facebook" title="Seguinos en Facebook">
+              <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+          </div>
         </div>
 
-        <!-- Instagram Feed Highlights -->
+        <!-- Community Feed Highlights -->
         <div class="insta-feed-grid">
           <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="insta-post-card">
             <img src="assets/images/prod_mate_imperial.jpg" alt="Foto Instagram Mate Imperial Negro" class="insta-post-img" loading="lazy" />
+            <div class="insta-post-badge insta-badge-tag"><i class="fab fa-instagram"></i> Instagram</div>
             <div class="insta-post-overlay">
               <span><i class="fas fa-heart"></i> 482</span>
               <span><i class="fas fa-comment"></i> 34</span>
             </div>
           </a>
 
-          <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="insta-post-card">
-            <img src="assets/images/banner_2.jpg" alt="Foto Instagram Combo Matero" class="insta-post-img" loading="lazy" />
+          <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="insta-post-card">
+            <img src="assets/images/banner_2.jpg" alt="Video TikTok Combo Matero" class="insta-post-img" loading="lazy" />
+            <div class="insta-post-badge tiktok-badge-tag"><i class="fab fa-tiktok"></i> TikTok Viral</div>
             <div class="insta-post-overlay">
-              <span><i class="fas fa-heart"></i> 621</span>
-              <span><i class="fas fa-comment"></i> 52</span>
+              <span><i class="fas fa-play"></i> 14.2k</span>
+              <span><i class="fas fa-heart"></i> 1.2k</span>
             </div>
           </a>
 
           <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="insta-post-card">
             <img src="assets/images/banner_3.jpg" alt="Foto Instagram Mateando en el Sur" class="insta-post-img" loading="lazy" />
+            <div class="insta-post-badge insta-badge-tag"><i class="fab fa-instagram"></i> Reel</div>
             <div class="insta-post-overlay">
               <span><i class="fas fa-heart"></i> 894</span>
               <span><i class="fas fa-comment"></i> 76</span>
             </div>
           </a>
 
-          <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="insta-post-card">
-            <img src="assets/images/prod_canasta_matera.jpg" alt="Foto Instagram Canasta Matera de Cuero" class="insta-post-img" loading="lazy" />
+          <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="insta-post-card">
+            <img src="assets/images/prod_canasta_matera.jpg" alt="Video TikTok Canasta Matera" class="insta-post-img" loading="lazy" />
+            <div class="insta-post-badge tiktok-badge-tag"><i class="fab fa-tiktok"></i> TikTok Tips</div>
             <div class="insta-post-overlay">
-              <span><i class="fas fa-heart"></i> 512</span>
-              <span><i class="fas fa-comment"></i> 29</span>
+              <span><i class="fas fa-play"></i> 8.6k</span>
+              <span><i class="fas fa-heart"></i> 740</span>
             </div>
           </a>
         </div>
@@ -750,11 +608,12 @@
         <div>
           <h4 class="footer-title">Navegación</h4>
           <ul class="footer-nav-list">
-            <li><a href="#inicio" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Inicio</a></li>
-            <li><a href="#catalogo" class="footer-nav-link" onclick="setCategoryFilter('promos')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Promociones</a></li>
-            <li><a href="#catalogo" class="footer-nav-link" onclick="setCategoryFilter('mates')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Mates Imperiales</a></li>
-            <li><a href="#catalogo" class="footer-nav-link" onclick="setCategoryFilter('termos')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Termos de Acero</a></li>
-            <li><a href="#catalogo" class="footer-nav-link" onclick="setCategoryFilter('accesorios')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Bombillas & Accesorios</a></li>
+            <li><a href="index.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Inicio</a></li>
+            <li><a href="catalogo.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Catálogo Completo</a></li>
+            <li><a href="promos.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Promociones</a></li>
+            <li><a href="catalogo.html?categoria=mates" class="footer-nav-link" onclick="setCategoryFilter('mates')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Mates Imperiales</a></li>
+            <li><a href="catalogo.html?categoria=termos" class="footer-nav-link" onclick="setCategoryFilter('termos')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Termos de Acero</a></li>
+            <li><a href="catalogo.html?categoria=accesorios" class="footer-nav-link" onclick="setCategoryFilter('accesorios')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Bombillas & Accesorios</a></li>
             <li><a href="personaliza-tu-mate.html" class="footer-nav-link"><i class="fas fa-magic" style="font-size: 0.65rem; color: var(--accent-gold);"></i> Taller de Grabado</a></li>
           </ul>
         </div>
@@ -1348,7 +1207,7 @@
               <button class="qty-btn" style="width: 36px; height: 100%;" onclick="const q = document.getElementById('qv-qty'); q.value++;">+</button>
             </div>
 
-            <button class="btn btn-primary" onclick="addQuickViewToCart()" style="flex: 1; height: 44px;">
+            <button class="btn btn-primary" id="qv-btn-add" onclick="addQuickViewToCart()" style="flex: 1; height: 44px;">
               <i class="fas fa-shopping-bag"></i> Agregar al Carrito
             </button>
           </div>
@@ -1419,7 +1278,7 @@
             <div class="admin-input-wrap">
               <i class="fas fa-lock admin-input-icon"></i>
               <input type="password" id="admin-password" class="admin-input" placeholder="••••••••" required autocomplete="current-password" />
-              <button type="button" class="admin-pwd-toggle" onclick="togglePasswordVisibility()" aria-label="Mostrar contraseña">
+              <button type="button" class="admin-pwd-toggle" onclick="toggleAdminPasswordVisibility()" aria-label="Mostrar contraseña">
                 <i class="fas fa-eye" id="pwd-eye-icon"></i>
               </button>
             </div>
@@ -2127,26 +1986,19 @@
                 <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
                   <select id="new-prod-img-select" class="admin-select modal-input" onchange="onNewProductImageChange()">
                     <option value="assets/images/prod_mate_imperial.jpg">Mate Imperial Cuero Negro</option>
-                    <option value="assets/images/prod_mate_torpedo.jpg">Mate Torpedo Uruguayo</option>
-                    <option value="assets/images/prod_mate_camionero.jpg">Mate Camionero Suela</option>
-                    <option value="assets/images/prod_mate_algarrobo.jpg">Mate Algarrobo Criollo</option>
-                    <option value="assets/images/prod_termo_acero.jpg">Termo Acero Clásico 1L</option>
-                    <option value="assets/images/prod_termo_media_manija.jpg">Termo Media Manija Cuero</option>
-                    <option value="assets/images/prod_termo_cuero.jpg">Termo Forrado en Cuero</option>
-                    <option value="assets/images/prod_bombilla_alpaca.jpg">Bombilla Alpaca Pico Loro</option>
-                    <option value="assets/images/prod_bombillon_cincelado.jpg">Bombillón Cincelado</option>
-                    <option value="assets/images/prod_yerbera_cuero.jpg">Yerbera Cuero con Pico</option>
-                    <option value="assets/images/prod_cepillo_limpieza.jpg">Set de Limpieza Bombillas</option>
-                    <option value="assets/images/prod_yerba_barbaqua.jpg">Yerba Barbaquá 500g</option>
-                    <option value="assets/images/prod_yerba_organica.jpg">Yerba Orgánica Agroecológica</option>
-                    <option value="assets/images/prod_yerba_despalada.jpg">Yerba Sin Palo Despalada</option>
-                    <option value="assets/images/prod_mochila_matera.jpg">Mochila Matera Cuero</option>
+                    <option value="assets/images/cat_mates.jpg">Mate Torpedo Uruguayo</option>
+                    <option value="assets/images/banner_1.jpg">Mate Camionero Suela</option>
+                    <option value="assets/images/cat_termos.jpg">Termo Media Manija Cuero</option>
+                    <option value="assets/images/banner_3.jpg">Termo Adventure Acero 1.3L</option>
+                    <option value="assets/images/cat_accesorios.jpg">Bombilla Alpaca Pico Loro</option>
+                    <option value="assets/images/cat_yerbas.jpg">Yerba Barbaquá Seleccionada</option>
+                    <option value="assets/images/cat_equipos.jpg">Mochila Matera Cuero</option>
                     <option value="assets/images/prod_canasta_matera.jpg">Canasta Matera Criolla</option>
                     <option value="assets/images/cat_promos.jpg">Combo Matero Imperial</option>
                     <option value="assets/images/banner_2.jpg">Set Matero Completo</option>
                     <option value="custom">-- Ingresar URL o ruta personalizada --</option>
                   </select>
-                  <input type="text" id="new-prod-img-custom" class="admin-input modal-input" placeholder="Ruta local o URL web (ej: assets/images/foto.jpg o https://...)" style="display: none;" oninput="onNewProductCustomImgInput()" />
+                  <input type="text" id="new-prod-img-custom" class="admin-input modal-input" placeholder="Ruta local o URL web (ej: assets/images/banner_2.jpg o https://...)" style="display: none;" oninput="onNewProductCustomImgInput()" />
                 </div>
               </div>
             </div>
