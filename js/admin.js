@@ -76,10 +76,17 @@ function checkAdminSession() {
   const session = sessionStorage.getItem('mates_rio_admin_session') || localStorage.getItem('mates_rio_admin_session');
   let hasValidAdmin = false;
 
+  const isAdminRole = (u) => {
+    if (!u) return false;
+    const r = (u.role || '').toLowerCase();
+    const e = (u.email || '').toLowerCase();
+    return r.includes('admin') || r.includes('taller') || e === 'admin@matesrio.com' || e === 'taller@matesrio.com';
+  };
+
   if (session) {
     try {
       const user = JSON.parse(session);
-      if (user && (user.role === 'admin' || user.role === 'Super Administrador' || user.role === 'Taller & Depósito')) {
+      if (isAdminRole(user)) {
         loginAdminSuccess(user, false);
         hasValidAdmin = true;
       }
@@ -94,7 +101,7 @@ function checkAdminSession() {
       const storeUserStr = localStorage.getItem('mates_rio_user');
       if (storeUserStr) {
         const storeUser = JSON.parse(storeUserStr);
-        if (storeUser && (storeUser.role === 'admin' || storeUser.role === 'Super Administrador')) {
+        if (isAdminRole(storeUser)) {
           loginAdminSuccess(storeUser, false);
           hasValidAdmin = true;
         }

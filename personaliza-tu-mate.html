@@ -88,6 +88,31 @@
           <i class="fas fa-arrow-left"></i>
         </a>
 
+        <!-- User Account (Login / Register / Profile Dropdown) -->
+        <div class="user-btn-wrap">
+          <button class="user-account-btn" id="user-account-btn" onclick="openAuthModal('login')" title="Mi Cuenta">
+            <i class="far fa-user"></i>
+            <span class="user-name-display" id="user-btn-name">Ingresar</span>
+          </button>
+
+          <!-- User Dropdown Menu for Logged In User -->
+          <div class="user-dropdown-menu" id="user-dropdown-menu">
+            <div class="user-dropdown-item" onclick="openProfileModal()">
+              <i class="far fa-id-badge"></i> Mi Perfil
+            </div>
+            <div class="user-dropdown-item" onclick="openProfileModal()">
+              <i class="fas fa-box-open"></i> Mis Pedidos
+            </div>
+            <a href="admin.html" class="user-dropdown-item admin-only-item admin-highlight-link" id="dropdown-admin-link" style="display: none; color: var(--accent-leather); font-weight: 800; text-decoration: none;">
+              <i class="fas fa-shield-halved" style="color: var(--accent-gold);"></i> Panel de Administración
+            </a>
+            <div class="user-dropdown-divider"></div>
+            <div class="user-dropdown-item text-danger" onclick="logoutUser()">
+              <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </div>
+          </div>
+        </div>
+
         <!-- Shopping Cart Trigger Button -->
         <button class="action-btn cart-btn-highlight" id="open-cart-btn" onclick="openCartDrawer()" title="Ver Carrito de Compras">
           <i class="fas fa-shopping-bag"></i>
@@ -581,6 +606,128 @@
   </main>
 
   <!-- ==========================================================================
+       SITE FOOTER
+       ========================================================================== -->
+  <footer class="site-footer" id="contacto">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Column 1: Brand & Slogan -->
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="assets/images/logo.jpg" alt="Mates Río Logo" class="footer-logo-img" />
+            <div>
+              <span class="footer-brand-title">MATES RÍO</span>
+              <p style="font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 1px; font-weight: 600;">INDUSTRIA ARGENTINA</p>
+            </div>
+          </div>
+          <p class="footer-brand-desc">
+            Mates imperiales seleccionados, termos de alto rendimiento y accesorios artesanales hechos con pasión matera.
+          </p>
+
+          <!-- Social Links -->
+          <div class="social-links">
+            <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="social-icon-btn instagram" title="Instagram @mates_rio_">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20taller%20de%20personalizaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="https://www.facebook.com/matesrio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="TikTok">
+              <i class="fab fa-tiktok"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Column 2: Navigation Links -->
+        <div>
+          <h4 class="footer-title">Navegación</h4>
+          <ul class="footer-nav-list">
+            <li><a href="index.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Inicio</a></li>
+            <li><a href="catalogo.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Catálogo Completo</a></li>
+            <li><a href="promos.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Promociones & Combos</a></li>
+            <li><a href="catalogo.html?categoria=mates" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Mates Imperiales</a></li>
+            <li><a href="catalogo.html?categoria=termos" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Termos de Acero</a></li>
+            <li><a href="personaliza-tu-mate.html" class="footer-nav-link active" style="color: var(--accent-gold); font-weight: 700;"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Taller de Personalización</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Payment & Shipping Methods -->
+        <div>
+          <h4 class="footer-title">Pagos & Envíos</h4>
+          <div class="payment-badges-wrap">
+            <span class="pay-badge"><i class="far fa-credit-card"></i> Mercado Pago</span>
+            <span class="pay-badge"><i class="fab fa-cc-visa"></i> 3 Cuotas s/interés</span>
+            <span class="pay-badge"><i class="fas fa-money-bill-wave"></i> Transf. 10% OFF</span>
+          </div>
+
+          <div class="shipping-methods-info" style="margin-top: 10px;">
+            <p><i class="fas fa-truck-fast" style="color: var(--accent-gold); margin-right: 4px;"></i> Envíos a todo el país vía <b>Correo Argentino</b> y <b>Andreani</b> con seguimiento.</p>
+          </div>
+        </div>
+
+        <!-- Column 4: Contact & Taller -->
+        <div>
+          <h4 class="footer-title">Contacto & Taller</h4>
+          <ul class="contact-info-list">
+            <li class="contact-item">
+              <i class="fab fa-whatsapp"></i>
+              <div>
+                <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 11 3456-7890</a>
+              </div>
+            </li>
+            <li class="contact-item">
+              <i class="far fa-envelope"></i>
+              <div>
+                <a href="mailto:contacto@matesrio.com.ar">contacto@matesrio.com.ar</a>
+              </div>
+            </li>
+            <li class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <span>Av. Corrientes 1234, CABA</span> • <span style="font-size: 0.74rem; color: #a39587;">Lun a Sáb</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Newsletter Bar -->
+      <div class="newsletter-box">
+        <div class="newsletter-text">
+          <h4 style="font-family: var(--font-heading); font-size: 1.02rem; color: #fff; margin-bottom: 2px;">
+            <i class="far fa-envelope-open" style="color: var(--accent-gold); margin-right: 6px;"></i> Sumate al Club Matero
+          </h4>
+          <p style="font-size: 0.8rem; color: var(--text-light-muted);">
+            Recibí novedades, tips de curado y <b>10% OFF</b> en tu primera compra.
+          </p>
+        </div>
+
+        <form id="newsletter-form" class="newsletter-form" onsubmit="event.preventDefault(); showToast('¡Gracias por sumarte al Club Matero! Recibiste tu cupón.');">
+          <input
+            type="email"
+            id="newsletter-email"
+            required
+            placeholder="Tu correo electrónico..."
+            class="newsletter-input"
+          />
+          <button type="submit" class="btn btn-primary newsletter-submit-btn">
+            Suscribirme
+          </button>
+        </form>
+      </div>
+
+      <!-- Footer Bottom Copyright Bar -->
+      <div class="footer-bottom-bar">
+        <span onclick="handleSecretAdminTrigger()" style="cursor: default;" title="Mates Río Oficial">© 2026 Mates Río. Pasión por la cultura matera.</span>
+        <span>Envíos a toda la República Argentina</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
        MODAL: FINALIZAR PERSONALIZACIÓN (COMPRA ONLINE O WHATSAPP O CONTINUAR)
        ========================================================================== -->
   <div class="modal-overlay" id="completion-modal">
@@ -746,6 +893,161 @@
       </div>
     </div>
   </aside>
+
+  <!-- ==========================================================================
+       MODAL: AUTH (INICIAR SESIÓN / CREAR CUENTA)
+       ========================================================================== -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-box">
+      <button class="modal-close-icon" onclick="closeAuthModal()" aria-label="Cerrar modal">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">
+          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </button>
+        <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">
+          <i class="fas fa-user-plus"></i> Crear Cuenta
+        </button>
+      </div>
+
+      <div class="auth-panel active" id="auth-panel-login">
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" id="login-email" required class="form-input" placeholder="tunombre@correo.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <div class="input-with-eye">
+              <input type="password" id="login-password" required class="form-input" placeholder="••••••••" />
+              <i class="far fa-eye eye-toggle-btn" id="login-eye-icon" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')"></i>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.8rem;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" checked /> Recordarme
+            </label>
+            <a href="#" onclick="showToast('Te enviamos un enlace de recuperación a tu email.'); return false;" style="color: var(--accent-leather);">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            Ingresar a mi cuenta
+          </button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center; font-size: 0.84rem; color: var(--text-secondary);">
+          ¿Todavía no tenés cuenta?
+          <a href="#" onclick="switchAuthTab('register'); return false;" style="color: var(--accent-gold); font-weight: 700;">Registrate gratis</a>
+        </div>
+      </div>
+
+      <div class="auth-panel" id="auth-panel-register">
+        <form onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label">Nombre y Apellido *</label>
+            <input type="text" id="reg-name" required class="form-input" placeholder="Ej: Lucas González" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Teléfono / WhatsApp *</label>
+            <input type="tel" id="reg-phone" required class="form-input" placeholder="Ej: 11 4455 6677" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Correo electrónico *</label>
+            <input type="email" id="reg-email" required class="form-input" placeholder="tuemail@ejemplo.com" />
+          </div>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Contraseña *</label>
+              <div class="input-with-eye">
+                <input type="password" id="reg-password" required class="form-input" placeholder="••••••••" />
+                <i class="far fa-eye eye-toggle-btn" id="reg-eye-icon1" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon1')"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Confirmar *</label>
+              <div class="input-with-eye">
+                <input type="password" id="reg-password-confirm" required class="form-input" placeholder="••••••••" />
+                <i class="far fa-eye eye-toggle-btn" id="reg-eye-icon2" onclick="togglePasswordVisibility('reg-password-confirm', 'reg-eye-icon2')"></i>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 20px; font-size: 0.78rem; color: var(--text-secondary);">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" required checked /> Acepto los términos, condiciones y políticas de privacidad.
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            Crear mi Cuenta
+          </button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center; font-size: 0.84rem; color: var(--text-secondary);">
+          ¿Ya tenés cuenta?
+          <a href="#" onclick="switchAuthTab('login'); return false;" style="color: var(--accent-gold); font-weight: 700;">Iniciá sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: USER PROFILE & MIS PEDIDOS
+       ========================================================================== -->
+  <div class="modal-overlay" id="profile-modal">
+    <div class="modal-box modal-box-padded">
+      <button class="modal-close-icon" onclick="closeProfileModal()" aria-label="Cerrar perfil">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--border-light);">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center;">
+          <i class="far fa-user"></i>
+        </div>
+        <div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem;" id="profile-name-display">Usuario</h3>
+          <p style="font-size: 0.82rem; color: var(--text-secondary);" id="profile-email-display">email@ejemplo.com</p>
+          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 11 ...</span>
+        </div>
+      </div>
+
+      <!-- Admin Quick Access Card (Visible para todos los administradores) -->
+      <div id="profile-admin-card" style="display: none; background: linear-gradient(135deg, #17110c 0%, #2a1b12 100%); border: 1.5px solid var(--accent-gold); border-radius: var(--radius-md); padding: 16px; margin-bottom: 22px; box-shadow: 0 4px 16px rgba(197, 155, 39, 0.18);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.5px;">
+            <i class="fas fa-shield-halved"></i> Permisos de Administrador
+          </span>
+          <span class="nav-badge-pill pill-gold" id="profile-admin-role-badge">STAFF</span>
+        </div>
+        <p style="font-size: 0.8rem; color: #ede3d5; margin: 0 0 12px; line-height: 1.4;">
+          Tenés acceso habilitado para gestionar stock, precios, pedidos y reportes de taller.
+        </p>
+        <a href="admin.html" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.88rem; font-weight: 800; padding: 11px 14px; text-decoration: none; border-radius: var(--radius-sm); background: var(--accent-gold); color: #17110c; border: none; box-shadow: 0 2px 8px rgba(197, 155, 39, 0.35);">
+          <i class="fas fa-arrow-up-right-from-square"></i> Abrir Panel de Administración
+        </a>
+      </div>
+
+      <h4 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 12px;">
+        <i class="fas fa-box" style="color: var(--accent-gold); margin-right: 6px;"></i> Mis Pedidos Recientes
+      </h4>
+
+      <div id="profile-orders-list">
+        <!-- Rendered via JS -->
+      </div>
+
+      <button class="btn btn-outline-dark" onclick="logoutUser()" style="width: 100%; margin-top: 20px;">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </div>
 
   <!-- ==========================================================================
        MODAL: WEB CHECKOUT
@@ -924,6 +1226,53 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top-btn" id="back-to-top-btn" aria-label="Volver arriba" title="Volver al inicio">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- Floating WhatsApp Action -->
+  <div class="floating-whatsapp-container">
+    <div class="whatsapp-chat-popup" id="whatsapp-chat-popup">
+      <div class="chat-popup-header">
+        <img src="assets/images/logo.jpg" alt="Asesor Mates Río" class="chat-avatar" />
+        <div class="chat-title-info">
+          <h5>Mates Río</h5>
+          <span class="chat-status">En línea ahora</span>
+        </div>
+        <button class="chat-popup-close" onclick="toggleWhatsAppChat()" aria-label="Cerrar chat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="chat-popup-body">
+        <div class="chat-bubble">
+          ¡Hola! 👋 ¿Querés asesoramiento para tu diseño de virola o necesitás grabar un logo especial?
+          <time>Ahora</time>
+        </div>
+
+        <div class="chat-quick-options">
+          <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20consultar%20sobre%20un%20grabado%20especial." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
+            Consultar por grabado de logo
+          </a>
+          <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Tengo%20dudas%20con%20el%20simulador%20de%20mates." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
+            Ayuda con el simulador
+          </a>
+        </div>
+      </div>
+
+      <div class="chat-popup-footer">
+        <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20personalizador%20web." target="_blank" rel="noopener noreferrer" class="btn-chat-send">
+          <i class="fab fa-whatsapp"></i> Iniciar Chat en WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <button class="floating-whatsapp-btn" onclick="toggleWhatsAppChat()" aria-label="Abrir chat de WhatsApp" title="¿Dudas con tu mate? Escribinos">
+      <i class="fab fa-whatsapp"></i>
+    </button>
   </div>
 
   <!-- Toast Notification Container -->

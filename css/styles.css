@@ -1553,6 +1553,7 @@ input, select, textarea {
   margin-bottom: 8px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   height: 2.7em;
@@ -1705,6 +1706,7 @@ input, select, textarea {
 .insta-gradient-icon {
   background: var(--instagram-gradient);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -2703,6 +2705,7 @@ input, select, textarea {
   margin-bottom: 8px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   cursor: pointer;
@@ -5996,6 +5999,7 @@ input, select, textarea {
     margin-bottom: 18px;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -6243,6 +6247,7 @@ input, select, textarea {
     margin-bottom: 6px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -6617,6 +6622,9 @@ input, select, textarea {
 
 /* 4. Small Smartphones (<= 480px) */
 @media (max-width: 480px) {
+  .header-right .instagram-btn {
+    display: none !important;
+  }
   .hero-slider {
     height: 420px;
   }
