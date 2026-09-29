@@ -56,7 +56,7 @@
             <div class="admin-input-wrap">
               <i class="fas fa-lock admin-input-icon"></i>
               <input type="password" id="admin-password" class="admin-input" placeholder="••••••••" required autocomplete="current-password" />
-              <button type="button" class="admin-pwd-toggle" onclick="togglePasswordVisibility()" aria-label="Mostrar contraseña">
+              <button type="button" class="admin-pwd-toggle" onclick="toggleAdminPasswordVisibility()" aria-label="Mostrar contraseña">
                 <i class="fas fa-eye" id="pwd-eye-icon"></i>
               </button>
             </div>
@@ -764,26 +764,19 @@
                 <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
                   <select id="new-prod-img-select" class="admin-select modal-input" onchange="onNewProductImageChange()">
                     <option value="assets/images/prod_mate_imperial.jpg">Mate Imperial Cuero Negro</option>
-                    <option value="assets/images/prod_mate_torpedo.jpg">Mate Torpedo Uruguayo</option>
-                    <option value="assets/images/prod_mate_camionero.jpg">Mate Camionero Suela</option>
-                    <option value="assets/images/prod_mate_algarrobo.jpg">Mate Algarrobo Criollo</option>
-                    <option value="assets/images/prod_termo_acero.jpg">Termo Acero Clásico 1L</option>
-                    <option value="assets/images/prod_termo_media_manija.jpg">Termo Media Manija Cuero</option>
-                    <option value="assets/images/prod_termo_cuero.jpg">Termo Forrado en Cuero</option>
-                    <option value="assets/images/prod_bombilla_alpaca.jpg">Bombilla Alpaca Pico Loro</option>
-                    <option value="assets/images/prod_bombillon_cincelado.jpg">Bombillón Cincelado</option>
-                    <option value="assets/images/prod_yerbera_cuero.jpg">Yerbera Cuero con Pico</option>
-                    <option value="assets/images/prod_cepillo_limpieza.jpg">Set de Limpieza Bombillas</option>
-                    <option value="assets/images/prod_yerba_barbaqua.jpg">Yerba Barbaquá 500g</option>
-                    <option value="assets/images/prod_yerba_organica.jpg">Yerba Orgánica Agroecológica</option>
-                    <option value="assets/images/prod_yerba_despalada.jpg">Yerba Sin Palo Despalada</option>
-                    <option value="assets/images/prod_mochila_matera.jpg">Mochila Matera Cuero</option>
+                    <option value="assets/images/cat_mates.jpg">Mate Torpedo Uruguayo</option>
+                    <option value="assets/images/banner_1.jpg">Mate Camionero Suela</option>
+                    <option value="assets/images/cat_termos.jpg">Termo Media Manija Cuero</option>
+                    <option value="assets/images/banner_3.jpg">Termo Adventure Acero 1.3L</option>
+                    <option value="assets/images/cat_accesorios.jpg">Bombilla Alpaca Pico Loro</option>
+                    <option value="assets/images/cat_yerbas.jpg">Yerba Barbaquá Seleccionada</option>
+                    <option value="assets/images/cat_equipos.jpg">Mochila Matera Cuero</option>
                     <option value="assets/images/prod_canasta_matera.jpg">Canasta Matera Criolla</option>
                     <option value="assets/images/cat_promos.jpg">Combo Matero Imperial</option>
                     <option value="assets/images/banner_2.jpg">Set Matero Completo</option>
                     <option value="custom">-- Ingresar URL o ruta personalizada --</option>
                   </select>
-                  <input type="text" id="new-prod-img-custom" class="admin-input modal-input" placeholder="Ruta local o URL web (ej: assets/images/foto.jpg o https://...)" style="display: none;" oninput="onNewProductCustomImgInput()" />
+                  <input type="text" id="new-prod-img-custom" class="admin-input modal-input" placeholder="Ruta local o URL web (ej: assets/images/banner_2.jpg o https://...)" style="display: none;" oninput="onNewProductCustomImgInput()" />
                 </div>
               </div>
             </div>

@@ -448,8 +448,9 @@ const CATEGORIES_DATA = [
   { id: "equipos", name: "EQUIPOS DE MATE", label: "Mochilas & Canastas", image: "assets/images/cat_equipos.jpg", count: 3, badge: "Cuero Genuino" }
 ];
 
-// Carga automática de productos creados por administradores desde el panel
+// Carga automática de productos creados por administradores y sincronización con inventario
 (function initCustomProducts() {
+  if (typeof localStorage === 'undefined') return;
   try {
     const raw = localStorage.getItem('mates_rio_custom_products');
     if (raw) {
@@ -464,8 +465,21 @@ const CATEGORIES_DATA = [
         });
       }
     }
+
+    // Sincronizar precios y stock actualizados en el panel
+    const invRaw = localStorage.getItem('mates_rio_inventory');
+    if (invRaw) {
+      const inv = JSON.parse(invRaw);
+      PRODUCTS_DATA.forEach(p => {
+        if (inv[p.id]) {
+          if (typeof inv[p.id].price === 'number') p.price = inv[p.id].price;
+          if (typeof inv[p.id].inStock === 'boolean') p.inStock = inv[p.id].inStock;
+          if (typeof inv[p.id].stock === 'number') p.stock = inv[p.id].stock;
+        }
+      });
+    }
   } catch (e) {
-    console.warn('Error al cargar productos creados por administrador:', e);
+    console.warn('Error al cargar productos creados por administrador o sincronizar inventario:', e);
   }
 })();
 

@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promos & Combos Materos Exclusivos | Mates Río</title>
+  <meta name="description" content="Aprovechá hasta 25% OFF en Combos Materos completos de Mates Río: Mates imperiales, termos de acero inoxidable, bombillas de alpaca y materas de cuero vacuno. 3 cuotas sin interés y envío gratis." />
+  <meta name="keywords" content="promos mates, combos materos, set matero completo, mate imperial promo, oferta mates rio, 3 cuotas sin interes" />
+
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Promos & Combos Materos | Mates Río" />
+  <meta property="og:description" content="Hasta 25% OFF en sets completos y combos materos con grabado en virola bonificado. 3 cuotas sin interés y envíos a todo el país." />
+  <meta property="og:image" content="assets/images/cat_promos.jpg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
+
+  <!-- Google Fonts: Montserrat, Outfit, Cinzel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <style>
+    /* Estilos específicos para la página de Promociones */
+    .promos-hero-section {
+      position: relative;
+      background: linear-gradient(135deg, rgba(18, 18, 18, 0.92) 0%, rgba(35, 24, 16, 0.85) 100%), url('assets/images/banner_2.jpg') center/cover no-repeat;
+      color: #ffffff;
+      padding: 60px 0 50px;
+      border-bottom: 2px solid var(--accent-gold);
+    }
+    .promos-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--badge-promo);
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      margin-bottom: 16px;
+      box-shadow: 0 4px 15px rgba(192, 57, 43, 0.35);
+    }
+    .promos-hero-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      color: #ffffff;
+    }
+    .promos-hero-title span {
+      color: var(--accent-gold);
+    }
+    .promos-hero-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: #dedede;
+      max-width: 680px;
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+    .promos-perks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      max-width: 900px;
+      margin-top: 10px;
+    }
+    .promo-perk-item {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: #f0f0f0;
+    }
+    .promo-perk-item i {
+      font-size: 1.25rem;
+      color: var(--accent-gold);
+      flex-shrink: 0;
+    }
+    .promos-urgency-banner {
+      background: #17110c;
+      color: #f7e7ce;
+      padding: 12px 20px;
+      border-bottom: 1px solid rgba(197, 155, 39, 0.3);
+      font-size: 0.88rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .promos-catalog-section {
+      padding: 50px 0 70px;
+    }
+    .promos-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1.5px solid var(--border-light);
+    }
+    .promos-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .promo-filter-chip {
+      background: #ffffff;
+      border: 1.5px solid var(--border-light);
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .promo-filter-chip:hover,
+    .promo-filter-chip.active {
+      background: var(--bg-dark);
+      color: #ffffff;
+      border-color: var(--bg-dark);
+    }
+    .promo-filter-chip.active i {
+      color: var(--accent-gold);
+    }
+    .why-combo-section {
+      background: #ffffff;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      padding: 60px 0;
+      margin-top: 40px;
+    }
+    .why-combo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 30px;
+    }
+    .why-combo-card {
+      background: var(--bg-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+      transition: var(--transition-base);
+    }
+    .why-combo-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--accent-gold);
+    }
+    .why-combo-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #fdfaf2;
+      border: 1.5px solid var(--accent-gold-light);
+      color: var(--accent-leather);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin: 0 auto 16px;
+    }
+    .why-combo-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .why-combo-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body class="page-promos">
+
+  <!-- Top Scroll Progress Indicator -->
+  <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+
+  <!-- Announcement Bar -->
+  <aside class="announcement-bar">
+    <div class="container announcement-inner">
+      <div class="announcement-center-msg">
+        <span class="announcement-item"><i class="far fa-credit-card"></i> <b>3 Cuotas sin interés</b></span>
+        <span class="announcement-sep">•</span>
+        <span class="announcement-item"><i class="fas fa-bolt"></i> <b>10% OFF</b> Transferencia</span>
+        <span class="announcement-sep announcement-sep-desktop">•</span>
+        <span class="announcement-item announcement-item-desktop"><i class="fas fa-truck"></i> <b>Envío Gratis</b> +$ 60.000</span>
+      </div>
+
+      <div class="announcement-links">
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" title="Instagram Oficial">
+          <i class="fab fa-instagram"></i> @mates_rio_
+        </a>
+        <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20consultar%20sobre%20las%20promociones." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sticky Header with Navigation -->
+  <header class="site-header" id="main-header">
+    <div class="container header-inner">
+      
+      <!-- Mobile Menu Trigger -->
+      <button class="mobile-menu-btn" id="mobile-menu-open-btn" onclick="openMobileDrawer()" aria-label="Abrir menú de navegación">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Brand Logo -->
+      <a href="index.html" class="header-brand" title="Mates Río - Tienda Oficial">
+        <img src="assets/images/logo.jpg" alt="Logo Mates Río" class="brand-logo-img" />
+        <div class="brand-text">
+          <span class="brand-name">MATES RÍO</span>
+          <span class="brand-tagline">COMBOS & OFERTAS</span>
+        </div>
+      </a>
+
+      <!-- Desktop Breadcrumb & Navigation -->
+      <nav class="header-center" aria-label="Ruta de navegación">
+        <ul class="customizer-breadcrumb" style="list-style: none; display: flex; align-items: center; gap: 8px; font-size: 0.85rem;">
+          <li><a href="index.html" style="color: var(--text-secondary); text-decoration: none;"><i class="fas fa-home"></i> Inicio</a></li>
+          <li><i class="fas fa-chevron-right" style="font-size: 0.65rem; color: #aaa;"></i></li>
+          <li><a href="catalogo.html" style="color: var(--text-secondary); text-decoration: none;">Catálogo</a></li>
+          <li><i class="fas fa-chevron-right" style="font-size: 0.65rem; color: #aaa;"></i></li>
+          <li style="color: var(--badge-promo); font-weight: 800;"><i class="fas fa-fire"></i> Promos & Combos</li>
+        </ul>
+      </nav>
+
+      <!-- Right Zone: Volver a la Tienda & Cart Trigger -->
+      <div class="header-right">
+        <!-- Desktop Back to Store -->
+        <a href="index.html" class="btn btn-outline-dark btn-header-back" title="Explorar todo el catálogo">
+          <i class="fas fa-arrow-left"></i> <span>Volver a la Tienda</span>
+        </a>
+
+        <!-- Mobile Back Icon -->
+        <a href="index.html" class="btn-header-back-mobile" title="Volver a la Tienda" aria-label="Volver a la Tienda">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+
+        <!-- Shopping Cart Trigger Button -->
+        <button class="action-btn cart-btn-highlight" id="open-cart-btn" onclick="openCartDrawer()" title="Ver Carrito de Compras">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-count-badge" id="cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu Overlay & Drawer -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileDrawer()"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Menú Móvil">
+    <div class="mobile-drawer-header">
+      <div class="mobile-drawer-brand">
+        <img src="assets/images/logo.jpg" alt="Mates Río" class="mobile-brand-img" />
+        <span class="mobile-brand-title">MATES RÍO</span>
+      </div>
+      <button class="mobile-drawer-close" onclick="closeMobileDrawer()" aria-label="Cerrar menú">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <ul class="mobile-nav-list">
+      <li class="mobile-nav-item">
+        <a href="index.html">
+          <span><i class="fas fa-home" style="width: 22px; color: var(--accent-gold);"></i> Inicio</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="index.html#categorias">
+          <span><i class="fas fa-th-large" style="width: 22px; color: var(--accent-gold);"></i> Todas las Categorías</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item active" style="background: #fff8f5; border-left: 4px solid var(--badge-promo);">
+        <a href="promos.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-fire" style="width: 22px; color: var(--badge-promo);"></i> <b>PROMOS & COMBOS</b></span>
+          <span class="nav-badge-pill">Hasta 25% OFF</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=mates">
+          <span><i class="fas fa-mug-hot" style="width: 22px; color: var(--accent-leather);"></i> Mates Imperiales</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="personaliza-tu-mate.html">
+          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Personalizá tu Mate</span>
+          <span class="nav-badge-pill pill-gold">VIROLA</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=termos">
+          <span><i class="fas fa-temperature-high" style="width: 22px; color: var(--accent-gold);"></i> Termos de Acero</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=accesorios">
+          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Bombillas & Accesorios</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=yerbas">
+          <span><i class="fas fa-leaf" style="width: 22px; color: #27ae60;"></i> Yerbas Seleccionadas</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=equipos">
+          <span><i class="fas fa-briefcase" style="width: 22px; color: var(--accent-leather);"></i> Equipos de Mate</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="index.html#contacto">
+          <span><i class="fas fa-envelope" style="width: 22px; color: var(--accent-gold);"></i> Contacto & Ubicación</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+    </ul>
+
+    <div class="mobile-drawer-socials">
+      <a href="https://wa.me/5491134567890" target="_blank" rel="noopener noreferrer" class="btn-social-mobile wa">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </a>
+      <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn-social-mobile ig">
+        <i class="fab fa-instagram"></i> Instagram
+      </a>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       PROMOS HERO SECTION
+       ========================================================================== -->
+  <section class="promos-hero-section">
+    <div class="container">
+      <div class="promos-hero-badge">
+        <i class="fas fa-fire"></i> OFERTAS & COMBOS MATEROS
+      </div>
+      <h1 class="promos-hero-title">
+        Equipate Completo con <span>hasta 25% OFF</span>
+      </h1>
+      <p class="promos-hero-subtitle">
+        Descubrí los combos materos oficiales de Mates Río: mate imperial o camionero de calabaza gruesa, termo de acero 1L doble capa, bombilla de alpaca y materas de cuero vacuno legítimo.
+      </p>
+
+      <!-- Trust Perks Grid -->
+      <div class="promos-perks-grid">
+        <div class="promo-perk-item">
+          <i class="far fa-credit-card"></i>
+          <div>
+            <strong>3 Cuotas Sin Interés</strong>
+            <div style="font-size: 0.75rem; color: #bbb;">Con todas las tarjetas bancarias</div>
+          </div>
+        </div>
+        <div class="promo-perk-item">
+          <i class="fas fa-bolt"></i>
+          <div>
+            <strong>10% OFF Transferencia</strong>
+            <div style="font-size: 0.75rem; color: #bbb;">Descuento acumulable en el checkout</div>
+          </div>
+        </div>
+        <div class="promo-perk-item">
+          <i class="fas fa-truck-fast"></i>
+          <div>
+            <strong>Envío Gratis +$ 60.000</strong>
+            <div style="font-size: 0.75rem; color: #bbb;">Despacho rápido a todo el país</div>
+          </div>
+        </div>
+        <div class="promo-perk-item">
+          <i class="fas fa-magic"></i>
+          <div>
+            <strong>Grabado Bonificado</strong>
+            <div style="font-size: 0.75rem; color: #bbb;">Personalización láser en la virola</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Urgency Notice Bar -->
+  <div class="promos-urgency-banner">
+    <i class="fas fa-clock" style="color: var(--accent-gold);"></i>
+    <span><b>Precios promocionales especiales:</b> Disponibles por tiempo limitado o hasta agotar stock de taller.</span>
+  </div>
+
+  <!-- ==========================================================================
+       PROMOS CATALOG GRID & CONTROLS
+       ========================================================================== -->
+  <section class="promos-catalog-section">
+    <div class="container">
+      
+      <!-- Filter / Sort Header -->
+      <div class="promos-filter-bar">
+        <div>
+          <span class="section-tag" style="display: block; margin-bottom: 4px;">CATÁLOGO DE PROMOCIONES</span>
+          <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; margin: 0;">
+            Nuestros Combos Disponibles
+          </h2>
+          <span id="results-count" style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; display: inline-block;">
+            Cargando combos...
+          </span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <div class="sort-select-wrap">
+            <select class="catalog-select" id="catalog-sort-select">
+              <option value="featured">✨ Destacados</option>
+              <option value="price-low">💵 Menor precio</option>
+              <option value="price-high">💎 Mayor precio</option>
+              <option value="rating">⭐ Mejor valorados</option>
+            </select>
+          </div>
+
+          <a href="catalogo.html" class="btn btn-outline-dark" style="font-size: 0.82rem; padding: 8px 16px;">
+            <i class="fas fa-store"></i> Ver Catálogo Completo
+          </a>
+        </div>
+      </div>
+
+      <!-- Products Grid (Populated dynamically via app.js) -->
+      <div class="products-grid" id="products-grid">
+        <!-- Rendered by app.js -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       WHY BUY A COMBO SECTION
+       ========================================================================== -->
+  <section class="why-combo-section">
+    <div class="container">
+      <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+        <span class="section-tag">VENTAJAS EXCLUSIVAS</span>
+        <h2 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800;">
+          ¿Por qué elegir un Combo Mates Río?
+        </h2>
+        <p style="font-size: 0.92rem; color: var(--text-secondary); margin-top: 8px;">
+          Diseñamos cada set para que tengas la armonía perfecta de materiales, estética y funcionalidad artesanal.
+        </p>
+      </div>
+
+      <div class="why-combo-grid">
+        <div class="why-combo-card">
+          <div class="why-combo-icon"><i class="fas fa-hand-holding-dollar"></i></div>
+          <h3 class="why-combo-title">Máximo Ahorro</h3>
+          <p class="why-combo-text">
+            Comprando el combo ahorrás hasta un 25% respecto a comprar cada pieza por separado. La mejor relación precio-calidad.
+          </p>
+        </div>
+
+        <div class="why-combo-card">
+          <div class="why-combo-icon"><i class="fas fa-shield-halved"></i></div>
+          <h3 class="why-combo-title">Garantía de Autor</h3>
+          <p class="why-combo-text">
+            Cada combo incluye productos testeados para durar años: calabaza gruesa de Brasil, alpaca maciza y acero inoxidable 18/8.
+          </p>
+        </div>
+
+        <div class="why-combo-card">
+          <div class="why-combo-icon"><i class="fas fa-gift"></i></div>
+          <h3 class="why-combo-title">Listo para Regalo</h3>
+          <p class="why-combo-text">
+            Todos nuestros combos se entregan con caja rígida o packaging de presentación artesanal de regalo, ideal para obsequiar.
+          </p>
+        </div>
+
+        <div class="why-combo-card">
+          <div class="why-combo-icon"><i class="fas fa-magic"></i></div>
+          <h3 class="why-combo-title">Virola Personalizada</h3>
+          <p class="why-combo-text">
+            Podés personalizar la virola de los mates incluidos en tu combo con grabado láser HD de nombres, fechas o escudos sin costo extra.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CTA BANNER: PERSONALIZACIÓN
+       ========================================================================== -->
+  <section style="background: #17110c; color: #ffffff; padding: 60px 0; text-align: center; border-top: 2px solid var(--accent-gold);">
+    <div class="container" style="max-width: 720px;">
+      <span class="badge-tag" style="background: var(--accent-gold); color: #17110c; margin-bottom: 12px; font-weight: 800;">
+        <i class="fas fa-magic"></i> TALLER DE GRABADO
+      </span>
+      <h2 style="font-family: var(--font-heading); font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 900; line-height: 1.2; margin: 10px 0 16px;">
+        ¿Querés un Mate Único e Irrepetible?
+      </h2>
+      <p style="font-size: 1rem; color: #dedede; line-height: 1.6; margin-bottom: 26px;">
+        Entrá a nuestro simulador interactivo y grabá nombres, iniciales, fechas especiales o el escudo de tu club en la virola de tu próximo mate.
+      </p>
+      <a href="personaliza-tu-mate.html" class="btn btn-primary" style="padding: 14px 32px; font-size: 1rem;">
+        <i class="fas fa-magic"></i> Personalizar mi Mate Ahora
+      </a>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SITE FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="footer-brand">
+          <img src="assets/images/logo.jpg" alt="Mates Río" class="footer-logo-img" />
+          <span class="footer-brand-name">MATES RÍO</span>
+        </div>
+        <p class="footer-bio">
+          Pasión, nobleza y tradición artesanal argentina. Seleccionamos las mejores calabazas y metales nobles para que cada mateada sea un momento especial.
+        </p>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" title="Instagram Oficial"><i class="fab fa-instagram"></i></a>
+          <a href="https://wa.me/5491134567890" target="_blank" rel="noopener noreferrer" title="WhatsApp Directo"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Navegación</h4>
+        <ul class="footer-nav-list">
+          <li><a href="index.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Inicio</a></li>
+          <li><a href="catalogo.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Catálogo Completo</a></li>
+          <li><a href="promos.html" class="footer-nav-link active" style="color: var(--accent-gold); font-weight: 700;"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Promociones & Combos</a></li>
+          <li><a href="catalogo.html?categoria=mates" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Mates Imperiales</a></li>
+          <li><a href="personaliza-tu-mate.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Personalizá tu Mate</a></li>
+          <li><a href="catalogo.html?categoria=termos" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Termos de Acero</a></li>
+          <li><a href="index.html#contacto" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Contacto & Taller</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-title">Atención & Envíos</h4>
+        <ul class="footer-contact-list">
+          <li><i class="fab fa-whatsapp"></i> <span>WhatsApp: <b>+54 9 11 3456-7890</b></span></li>
+          <li><i class="fas fa-envelope"></i> <span>Email: <b>contacto@matesrio.com</b></span></li>
+          <li><i class="fas fa-location-dot"></i> <span>Showroom & Taller: <b>CABA, Argentina</b></span></li>
+          <li><i class="fas fa-truck"></i> <span>Envíos a todo el país vía Correo Argentino y Andreani</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p class="copyright-text">
+          © 2026 <b>Mates Río</b>. Todos los derechos reservados. Industria Argentina.
+        </p>
+        <div class="payment-badges-row">
+          <span class="pay-badge"><i class="far fa-credit-card"></i> 3 Cuotas sin interés</span>
+          <span class="pay-badge"><i class="fas fa-bolt"></i> 10% OFF Transferencia</span>
+          <span class="pay-badge"><i class="fas fa-lock"></i> Compra 100% Protegida</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       SHOPPING CART DRAWER (FULL SLIDE-OVER)
+       ========================================================================== -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Carrito de Compras">
+    <div class="cart-drawer-header">
+      <div class="cart-drawer-title-group">
+        <i class="fas fa-shopping-bag cart-title-icon"></i>
+        <h3 class="cart-drawer-title">Tu Carrito</h3>
+        <span class="cart-items-count-tag" id="cart-count-title">(0 productos)</span>
+      </div>
+      <button class="cart-close-btn" onclick="closeCartDrawer()" aria-label="Cerrar carrito" title="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Free Shipping Progress Meter -->
+    <div class="cart-shipping-meter">
+      <div class="shipping-meter-text" id="free-shipping-text">
+        <i class="fas fa-truck-fast"></i> ¡Sumá <b>$ 60.000</b> para tener <b>ENVÍO GRATIS</b>!
+      </div>
+      <div class="shipping-progress-track">
+        <div class="shipping-progress-bar" id="free-shipping-bar" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Alert Banner inside Drawer -->
+    <div class="cart-drawer-alert" id="cart-added-banner">
+      <div id="cart-added-banner-text">¡Producto agregado al carrito!</div>
+    </div>
+
+    <!-- Scrollable Items List -->
+    <div class="cart-drawer-body" id="cart-items-container">
+      <!-- Injected via app.js -->
+    </div>
+
+    <!-- Drawer Footer & Checkout Controls -->
+    <div class="cart-drawer-footer">
+      <div class="cart-tools-accordion">
+        <button type="button" class="cart-tool-btn" id="btn-toggle-coupon" onclick="toggleCartTool('coupon')">
+          <span><i class="fas fa-tag"></i> ¿Tenés un cupón de descuento?</span>
+          <i class="fas fa-chevron-down arrow" id="arrow-coupon"></i>
+        </button>
+        <button type="button" class="cart-tool-btn" id="btn-toggle-shipping" onclick="toggleCartTool('shipping')">
+          <span><i class="fas fa-truck"></i> Calcular costo de envío</span>
+          <i class="fas fa-chevron-down arrow" id="arrow-shipping"></i>
+        </button>
+      </div>
+
+      <div class="cart-tool-collapse" id="collapse-coupon">
+        <div class="coupon-input-wrap">
+          <input type="text" id="cart-coupon-input" placeholder="Ej: MATERIO10" style="text-transform: uppercase;" />
+          <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
+        </div>
+        <div id="coupon-feedback" class="tool-feedback-msg"></div>
+      </div>
+
+      <div class="cart-tool-collapse" id="collapse-shipping">
+        <div class="shipping-calc-wrap">
+          <input type="text" id="cart-cp-input" placeholder="Tu Código Postal (ej: 1425)" maxlength="8" />
+          <button class="btn btn-outline-dark shipping-calc-btn" onclick="calculateShippingCP()">Calcular</button>
+        </div>
+        <div id="cart-cp-result" class="tool-feedback-msg"></div>
+      </div>
+
+      <div id="active-coupon-container"></div>
+
+      <div class="cart-summary-totals">
+        <div class="summary-line">
+          <span>Subtotal</span>
+          <span class="value" id="cart-subtotal">$ 0</span>
+        </div>
+        <div class="summary-line discount" id="cart-discount-row" style="display: none;">
+          <span>Descuento aplicado</span>
+          <span class="value" id="cart-discount-amount">-$ 0</span>
+        </div>
+        <div class="summary-line">
+          <span>Costo de envío</span>
+          <span class="value" id="cart-shipping-amount">A calcular</span>
+        </div>
+        <div class="summary-line total">
+          <span>Total a pagar</span>
+          <span class="value" id="cart-total">$ 0</span>
+        </div>
+      </div>
+
+      <div class="cart-checkout-actions">
+        <button class="btn btn-primary btn-checkout-main" onclick="openWebCheckout()">
+          <i class="fas fa-lock"></i> Iniciar Compra Online
+        </button>
+        <button class="btn btn-whatsapp-secondary" onclick="checkoutWhatsApp()" title="Atención y pedido por WhatsApp">
+          <i class="fab fa-whatsapp"></i> Finalizar Pedido por WhatsApp
+        </button>
+      </div>
+
+      <div class="cart-footer-links">
+        <button onclick="closeCartDrawer()" class="cart-continue-link">Continuar mirando combos</button>
+        <span class="sep">•</span>
+        <button onclick="confirmClearCart()" class="cart-clear-link">Vaciar carrito</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       MODAL: WEB CHECKOUT
+       ========================================================================== -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal-card checkout-modal-card">
+      <button class="modal-close-icon" onclick="closeWebCheckout()" aria-label="Cerrar checkout">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="checkout-header">
+        <h3 class="checkout-title"><i class="fas fa-shield-alt"></i> Checkout Seguro - Mates Río</h3>
+        <p class="checkout-subtitle">Completá tus datos para coordinar el envío y pago de tu orden.</p>
+      </div>
+
+      <form id="checkout-form" onsubmit="processWebCheckout(event)">
+        <div class="checkout-body-grid">
+          
+          <div>
+            <h4 class="checkout-section-title"><i class="fas fa-user"></i> Datos del Comprador</h4>
+            <div class="form-group">
+              <label for="checkout-name" class="form-label">Nombre Completo *</label>
+              <input type="text" id="checkout-name" class="form-input" required placeholder="Ej: Santiago González" />
+            </div>
+
+            <div class="form-group-2">
+              <div class="form-group">
+                <label for="checkout-email" class="form-label">Correo Electrónico *</label>
+                <input type="email" id="checkout-email" class="form-input" required placeholder="tu@email.com" />
+              </div>
+              <div class="form-group">
+                <label for="checkout-phone" class="form-label">Teléfono / WhatsApp *</label>
+                <input type="tel" id="checkout-phone" class="form-input" required placeholder="Ej: 11 3456-7890" />
+              </div>
+            </div>
+
+            <h4 class="checkout-section-title" style="margin-top: 18px;"><i class="fas fa-truck"></i> Datos de Entrega</h4>
+            <div class="form-group">
+              <label for="checkout-address" class="form-label">Dirección (Calle y Número) *</label>
+              <input type="text" id="checkout-address" class="form-input" required placeholder="Ej: Av. Santa Fe 3200 4to B" />
+            </div>
+
+            <div class="form-group-2">
+              <div class="form-group">
+                <label for="checkout-city" class="form-label">Localidad / Ciudad *</label>
+                <input type="text" id="checkout-city" class="form-input" required placeholder="Ej: Palermo, CABA" />
+              </div>
+              <div class="form-group">
+                <label for="checkout-postal" class="form-label">Código Postal *</label>
+                <input type="text" id="checkout-postal" class="form-input" required placeholder="Ej: 1425" />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="checkout-section-title"><i class="fas fa-credit-card"></i> Forma de Pago</h4>
+            <div class="payment-options-grid">
+              <label class="payment-radio-card active">
+                <input type="radio" name="payment_method" value="transferencia" checked onchange="updateCheckoutSummary()" />
+                <div class="radio-content">
+                  <div class="radio-header">
+                    <span class="radio-name"><i class="fas fa-university"></i> Transferencia Bancaria</span>
+                    <span class="badge-discount-pay">10% OFF</span>
+                  </div>
+                  <span class="radio-desc">Te enviamos nuestro CBU / Alias con el 10% de descuento directo ya aplicado.</span>
+                </div>
+              </label>
+
+              <label class="payment-radio-card">
+                <input type="radio" name="payment_method" value="tarjeta" onchange="updateCheckoutSummary()" />
+                <div class="radio-content">
+                  <div class="radio-header">
+                    <span class="radio-name"><i class="far fa-credit-card"></i> Tarjeta de Crédito / Débito</span>
+                    <span class="badge-cuotas-pay">3 CUOTAS</span>
+                  </div>
+                  <span class="radio-desc">Hasta 3 cuotas sin interés mediante link oficial de pago protegido.</span>
+                </div>
+              </label>
+            </div>
+
+            <h4 class="checkout-section-title" style="margin-top: 18px;"><i class="fas fa-receipt"></i> Resumen del Pedido</h4>
+            <div class="checkout-summary-box" id="checkout-order-summary-box">
+              <!-- Injected via app.js -->
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-submit-order" style="margin-top: 16px;">
+              <i class="fas fa-check-circle"></i> Confirmar Pedido
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: ORDER SUCCESS
+       ========================================================================== -->
+  <div class="modal-overlay" id="order-success-modal">
+    <div class="modal-card success-modal-card">
+      <button class="modal-close-icon" onclick="closeOrderSuccess()" aria-label="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="success-icon-wrap">
+        <i class="fas fa-check"></i>
+      </div>
+
+      <h3 class="success-title">¡Muchas Gracias por tu Compra!</h3>
+      <p class="success-subtitle">Tu orden fue recibida y ya estamos preparando tus productos en el taller.</p>
+
+      <div class="success-order-box">
+        <div class="success-data-row">
+          <span>Número de Pedido:</span>
+          <strong id="success-order-id" style="color: var(--accent-leather);">RIO-9842</strong>
+        </div>
+        <div class="success-data-row">
+          <span>Total a abonar:</span>
+          <strong id="success-order-total">$ 0</strong>
+        </div>
+      </div>
+
+      <div class="success-bank-info" id="success-bank-info">
+        <h5 style="font-size: 0.85rem; font-weight: 800; color: var(--accent-leather); margin-bottom: 6px;">
+          <i class="fas fa-building-columns"></i> Datos para Transferencia Bancaria (10% OFF Aplicado)
+        </h5>
+        <div style="font-size: 0.82rem; line-height: 1.5; color: var(--text-secondary);">
+          <div>Banco: <b>Banco Santander</b></div>
+          <div>Titular: <b>Mates Río S.R.L.</b></div>
+          <div>Alias: <code style="background: #fff; padding: 2px 6px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold;">MATES.RIO.OFICIAL</code></div>
+          <button class="btn btn-outline-dark" onclick="copyCBU('MATES.RIO.OFICIAL')" style="padding: 6px 14px; font-size: 0.76rem; width: 100%; margin-top: 8px;">
+            <i class="fas fa-copy"></i> Copiar Alias Bancario
+          </button>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="closeOrderSuccess(); window.location.href='index.html';" style="width: 100%; margin-top: 14px;">
+        <i class="fas fa-store"></i> Volver a la Tienda
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: QUICK VIEW (VISTA RÁPIDA)
+       ========================================================================== -->
+  <div class="modal-overlay" id="quick-view-modal">
+    <div class="modal-card quick-view-card">
+      <button class="modal-close-icon" onclick="closeQuickView()" aria-label="Cerrar vista rápida">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="quick-view-grid">
+        <div>
+          <img src="" id="qv-image" alt="Detalle del producto" class="quick-view-img" />
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <span id="qv-badge" class="badge-tag promo" style="align-self: flex-start; margin-bottom: 8px;"></span>
+          <span id="qv-category" style="font-size: 0.75rem; font-weight: 700; color: var(--accent-leather); letter-spacing: 1px; text-transform: uppercase;"></span>
+          <h3 id="qv-title" style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; line-height: 1.25; margin: 6px 0 10px;"></h3>
+
+          <div id="qv-rating" style="display: flex; align-items: center; gap: 4px; color: #e5a100; font-size: 0.85rem; margin-bottom: 14px;"></div>
+
+          <div style="margin-bottom: 16px;">
+            <span id="qv-price" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: var(--bg-dark);"></span>
+            <span id="qv-orig-price" style="font-size: 1rem; color: var(--text-muted); text-decoration: line-through; margin-left: 10px;"></span>
+            <div style="font-size: 0.8rem; color: #27ae60; font-weight: 600; margin-top: 4px;">
+              <i class="far fa-credit-card"></i> 3 Cuotas sin interés • 10% OFF extra con Transferencia
+            </div>
+          </div>
+
+          <p id="qv-description" style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;"></p>
+
+          <h5 style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; color: var(--text-main); margin-bottom: 6px;">Ficha Técnica:</h5>
+          <ul id="qv-specs" class="specs-list"></ul>
+
+          <div style="display: flex; align-items: center; gap: 14px; margin-top: auto; padding-top: 16px;">
+            <div class="qty-stepper" style="height: 44px;">
+              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="const q = document.getElementById('qv-qty'); if (q.value > 1) q.value--;">-</button>
+              <input type="number" id="qv-qty" value="1" min="1" max="99" style="width: 44px; text-align: center; border: none; font-weight: 700;" />
+              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="const q = document.getElementById('qv-qty'); q.value++;">+</button>
+            </div>
+
+            <button class="btn btn-primary" id="qv-btn-add" onclick="addQuickViewToCart()" style="flex: 1; height: 44px;">
+              <i class="fas fa-shopping-bag"></i> Agregar al Carrito
+            </button>
+          </div>
+
+          <button id="qv-btn-personalize" class="btn btn-outline-dark" onclick="if (currentQuickViewProduct) { goToPersonalizarMate(currentQuickViewProduct.id); closeQuickView(); }" style="margin-top: 8px; width: 100%; display: none;">
+            <i class="fas fa-magic"></i> Personalizar Virola de este Mate
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Floating WhatsApp Action -->
+  <div class="floating-whatsapp-container">
+    <div class="whatsapp-chat-popup" id="whatsapp-chat-popup">
+      <div class="chat-popup-header">
+        <div class="chat-avatar-wrap">
+          <img src="assets/images/logo.jpg" alt="Mates Río" />
+          <span class="online-indicator"></span>
+        </div>
+        <div>
+          <h4 class="chat-header-title">Mates Río Oficial</h4>
+          <span class="chat-header-status">En línea • Taller y Asesoría</span>
+        </div>
+        <button class="chat-close-btn" onclick="toggleWhatsAppChat()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="chat-popup-body">
+        <div class="chat-bubble received">
+          ¡Hola! 👋 ¿Querés armar un combo personalizado o tenés dudas sobre las promociones? Escribinos y te asesoramos en vivo.
+          <span class="chat-time">Ahora</span>
+        </div>
+      </div>
+      <div class="chat-popup-footer">
+        <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20consultar%20sobre%20las%20promociones%20y%20combos." target="_blank" rel="noopener noreferrer" class="btn-send-whatsapp">
+          <i class="fab fa-whatsapp"></i> Iniciar Chat en WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <button class="floating-whatsapp-btn" onclick="toggleWhatsAppChat()" aria-label="Consultar por WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+      <span class="wa-tooltip">¿Dudas con los combos?</span>
+    </button>
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top-btn" id="back-to-top-btn" aria-label="Volver arriba">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // Initializer for dedicated Promos page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Force active category to 'promos'
+      if (typeof state !== 'undefined') {
+        state.activeCategory = 'promos';
+        if (typeof renderProducts === 'function') {
+          renderProducts();
+        }
+      }
+
+      // Update count label on page
+      const countEl = document.getElementById('results-count');
+      if (countEl && typeof PRODUCTS_DATA !== 'undefined') {
+        const promoCount = PRODUCTS_DATA.filter(p => p.category === 'promos').length;
+        countEl.innerHTML = `Mostrando <b>${promoCount}</b> combos y sets en oferta especial`;
+      }
+    });
+  </script>
+</body>
+</html>

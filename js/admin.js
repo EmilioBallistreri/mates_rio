@@ -49,13 +49,15 @@ if (typeof formatARS !== 'function') {
 }
 
 // Accent-insensitive normalization helper
-function cleanStr(s) {
-  return (s || '')
-    .toString()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
+if (typeof cleanStr !== 'function') {
+  window.cleanStr = function(s) {
+    return (s || '')
+      .toString()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  };
 }
 
 // ==========================================================================
@@ -300,7 +302,7 @@ function fillAdminDemo(email, pass) {
   }
 }
 
-function togglePasswordVisibility() {
+function toggleAdminPasswordVisibility() {
   const pwdInput = document.getElementById('admin-password');
   const icon = document.getElementById('pwd-eye-icon');
   if (pwdInput && icon) {
@@ -653,9 +655,39 @@ function saveProductEdits() {
   inv[id].inStock = newStock > 0;
 
   saveInventory(inv);
+
+  // Sync in-memory PRODUCTS_DATA
+  if (typeof PRODUCTS_DATA !== 'undefined') {
+    const p = PRODUCTS_DATA.find(x => x.id === id);
+    if (p) {
+      p.price = newPrice;
+      p.inStock = newStock > 0;
+      p.stock = newStock;
+    }
+  }
+
+  // Update in custom products if applicable
+  try {
+    const raw = localStorage.getItem('mates_rio_custom_products');
+    if (raw) {
+      const customList = JSON.parse(raw);
+      const cp = customList.find(x => x.id === id);
+      if (cp) {
+        cp.price = newPrice;
+        cp.inStock = newStock > 0;
+        cp.stock = newStock;
+        localStorage.setItem('mates_rio_custom_products', JSON.stringify(customList));
+      }
+    }
+  } catch (e) {}
+
   closeEditProductModal();
   renderInventoryTable();
   updateKPIs();
+
+  if (typeof renderProducts === 'function') {
+    renderProducts();
+  }
 
   logAuditAction('Edición de Producto', `${inv[id].name}: Stock=${newStock}, Precio=${formatARS(newPrice)}.`);
   showAdminToast(`Cambios guardados para "${inv[id].name}"`, 'fa-circle-check');
@@ -829,8 +861,8 @@ function handleCreateProduct() {
   if (typeof renderProducts === 'function') {
     renderProducts();
   }
-  if (typeof renderCategories === 'function') {
-    renderCategories();
+  if (typeof renderCategoriesGrid === 'function') {
+    renderCategoriesGrid();
   }
 
   logAuditAction('Carga de Producto', `Nuevo producto creado: "${newProduct.name}" (${newProduct.categoryName}) con ${stock} un.`);
@@ -874,8 +906,8 @@ function deleteCustomProduct(productId) {
   if (typeof renderProducts === 'function') {
     renderProducts();
   }
-  if (typeof renderCategories === 'function') {
-    renderCategories();
+  if (typeof renderCategoriesGrid === 'function') {
+    renderCategoriesGrid();
   }
 
   logAuditAction('Eliminación de Producto', `Producto "${prodName}" eliminado del catálogo.`);
@@ -888,7 +920,7 @@ function deleteCustomProduct(productId) {
 function initOrdersDB() {
   let orders = JSON.parse(localStorage.getItem('mates_rio_orders'));
 
-  if (!orders || orders.length <= 1) {
+  if (!orders || orders.length === 0) {
     orders = [
       {
         id: "RIO-9847",
@@ -1171,10 +1203,14 @@ function openOrderDetailModal(orderId) {
           <strong style="color: var(--admin-leather); font-size: 0.9rem;">Instrucciones para el Taller de Grabado en Virola:</strong>
         </div>
         <ul style="font-size: 0.8rem; list-style: none; padding-left: 0; line-height: 1.6;">
-          <li>• <b>Texto a Grabar:</b> <span style="font-family: monospace; background: #fff; padding: 2px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; font-weight: bold;">"${order.engravingDetails.text}"</span></li>
-          <li>• <b>Técnica en Virola:</b> ${order.engravingDetails.technique}</li>
-          <li>• <b>Tipografía Seleccionada:</b> ${order.engravingDetails.font}</li>
-          <li>• <b>Ubicación del Grabado:</b> ${order.engravingDetails.location}</li>
+          ${order.engravingDetails.text ? `<li>• <b>Texto a Grabar:</b> <span style="font-family: monospace; background: #fff; padding: 2px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; font-weight: bold;">"${order.engravingDetails.text}"</span></li>` : ''}
+          ${order.engravingDetails.technique ? `<li>• <b>Técnica en Virola:</b> ${order.engravingDetails.technique}</li>` : ''}
+          ${order.engravingDetails.metalFinish ? `<li>• <b>Terminación Virola:</b> ${order.engravingDetails.metalFinish}</li>` : ''}
+          ${order.engravingDetails.font ? `<li>• <b>Tipografía:</b> ${order.engravingDetails.font}</li>` : ''}
+          ${order.engravingDetails.guarda && order.engravingDetails.guarda !== 'Sin guarda' && order.engravingDetails.guarda !== 'Lisa' ? `<li>• <b>Guarda Perimetral:</b> ${order.engravingDetails.guarda}</li>` : ''}
+          ${order.engravingDetails.location ? `<li>• <b>Ubicación:</b> ${order.engravingDetails.location}</li>` : ''}
+          ${order.engravingDetails.uploadedFile ? `<li>• <b>Archivo Adjunto:</b> <code>${order.engravingDetails.uploadedFile}</code></li>` : ''}
+          ${order.engravingDetails.notes ? `<li>• <b>Notas del Cliente:</b> <em>"${order.engravingDetails.notes}"</em></li>` : ''}
         </ul>
       </div>
     ` : ''}
