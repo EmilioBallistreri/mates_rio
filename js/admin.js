@@ -1131,7 +1131,7 @@ function renderOrdersTable() {
             <button type="button" class="btn-table-action" onclick="openOrderDetailModal('${order.id}')" title="Ver Detalle / Remito">
               <i class="fas fa-eye"></i>
             </button>
-            <button type="button" class="btn-table-action" onclick="contactCustomerWhatsApp('${order.customerPhone || '5491134567890'}', '${order.id}', '${order.customerName || 'Cliente'}', '${order.status}')" title="Contactar por WhatsApp">
+            <button type="button" class="btn-table-action" onclick="contactCustomerWhatsApp('${order.customerPhone || '5493543600000'}', '${order.id}', '${order.customerName || 'Cliente'}', '${order.status}')" title="Contactar por WhatsApp">
               <i class="fab fa-whatsapp" style="color: #27ae60;"></i>
             </button>
           </div>
@@ -1191,7 +1191,7 @@ function openOrderDetailModal(orderId) {
 
       <div style="background: var(--admin-bg-main); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
         <strong style="display: block; font-size: 0.78rem; color: var(--admin-leather); margin-bottom: 4px;">Envío & Entrega</strong>
-        <div style="font-size: 0.82rem; font-weight: 700;"><i class="fas fa-location-dot" style="color: var(--admin-gold);"></i> ${order.address || 'Showroom Retiro CABA'}</div>
+        <div style="font-size: 0.82rem; font-weight: 700;"><i class="fas fa-location-dot" style="color: var(--admin-gold);"></i> ${order.address || 'Taller Río Ceballos, Córdoba'}</div>
         <div style="font-size: 0.74rem; color: var(--admin-text-muted); margin-top: 4px;">Método de Pago: <b>${payLabel}</b></div>
       </div>
     </div>
@@ -1231,7 +1231,7 @@ function openOrderDetailModal(orderId) {
   // Set WhatsApp button handler
   const btnWa = document.getElementById('btn-modal-whatsapp-contact');
   if (btnWa) {
-    btnWa.onclick = () => contactCustomerWhatsApp(order.customerPhone || '5491134567890', order.id, order.customerName || 'Cliente', order.status);
+    btnWa.onclick = () => contactCustomerWhatsApp(order.customerPhone || '5493543600000', order.id, order.customerName || 'Cliente', order.status);
   }
 
   document.getElementById('order-detail-modal').classList.add('active');
@@ -1242,7 +1242,7 @@ function closeOrderDetailModal() {
 }
 
 function contactCustomerWhatsApp(phone, orderId, name, status) {
-  const cleanPhone = (phone || '').replace(/\D/g, '') || '5491134567890';
+  const cleanPhone = (phone || '').replace(/\D/g, '') || '5493543600000';
   const msg = `¡Hola ${name}! Te escribimos desde *Mates Río* respecto a tu pedido *#${orderId}*. Tu orden se encuentra en estado: *${status}*. Si necesitás realizar alguna consulta o requerimiento para el taller, estamos a tu disposición. ¡Muchas gracias!`;
   const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');

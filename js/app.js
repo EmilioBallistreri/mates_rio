@@ -50,19 +50,70 @@ const state = {
 const CONFIG = {
   siteUrl: "http://localhost:5005",
   freeShippingThreshold: 60000,
-  shippingCost: 5500,
+  shippingCost: 3800,
   transferDiscountRate: 0.10, // 10% OFF
-  whatsappNumber: "5491134567890",
-  instagramUrl: "https://www.instagram.com/mates_rio_/"
+  whatsappNumber: "5493543600000", // Mates Río WhatsApp (Río Ceballos, Córdoba)
+  whatsappDisplay: "+54 9 3543 60-0000",
+  instagramUrl: "https://www.instagram.com/mates_rio_/",
+  instagramHandle: "@mates_rio_",
+  facebookUrl: "https://www.facebook.com/matesrio",
+  tiktokUrl: "https://www.tiktok.com/@mates_rio",
+  tiktokHandle: "@mates_rio",
+  originCity: "Río Ceballos",
+  originProvince: "Córdoba",
+  locationDisplay: "Río Ceballos, Sierras Chicas, Córdoba, Argentina"
 };
 
-// Coupons Database
-const COUPONS = {
-  "MATERIO10": { discount: 0.10, label: "10% OFF Bienvenida", freeShipping: false },
-  "PROMORIO": { discount: 0.15, label: "15% OFF Especial", freeShipping: false },
-  "EXPERTO15": { discount: 0.15, label: "15% OFF Especial Matero", freeShipping: false },
-  "ENVIOGRATIS": { discount: 0.0, freeShipping: true, label: "Envío Bonificado" }
+// Zonas de Envío desde Río Ceballos, Córdoba
+const SHIPPING_ZONES = {
+  local: {
+    id: "local",
+    name: "Río Ceballos & Sierras Chicas (Local)",
+    cost: 2500,
+    time: "24 hs hábiles / Retiro en Taller",
+    match: ["rio ceballos", "río ceballos", "unquillo", "mendiolaza", "salsipuedes", "villa allende"]
+  },
+  cordoba_capital: {
+    id: "cordoba_capital",
+    name: "Córdoba Capital & Gran Córdoba",
+    cost: 3800,
+    time: "24 a 48 hs hábiles",
+    match: ["cordoba", "córdoba", "cordoba capital", "córdoba capital", "la calera"]
+  },
+  cordoba_interior: {
+    id: "cordoba_interior",
+    name: "Interior de la Provincia de Córdoba",
+    cost: 5200,
+    time: "2 a 3 días hábiles",
+    provinceMatch: ["cordoba", "córdoba"]
+  },
+  nacional: {
+    id: "nacional",
+    name: "Resto del País (Envío Nacional)",
+    cost: 6900,
+    time: "3 a 5 días hábiles a todo el país vía Correo/Andreani"
+  }
 };
+
+function calculateShippingZone(province = '', city = '') {
+  const pNorm = (province || '').toLowerCase().trim();
+  const cNorm = (city || '').toLowerCase().trim();
+
+  // 1. Local Sierras Chicas
+  if (SHIPPING_ZONES.local.match.some(m => cNorm.includes(m))) {
+    return SHIPPING_ZONES.local;
+  }
+  // 2. Córdoba Capital
+  if (SHIPPING_ZONES.cordoba_capital.match.some(m => cNorm.includes(m))) {
+    return SHIPPING_ZONES.cordoba_capital;
+  }
+  // 3. Interior de Córdoba
+  if (pNorm.includes('cordoba') || pNorm.includes('córdoba') || cNorm.includes('cba')) {
+    return SHIPPING_ZONES.cordoba_interior;
+  }
+  // 4. Nacional
+  return SHIPPING_ZONES.nacional;
+}
 
 // Currency Formatter (Argentine Pesos)
 function formatARS(amount) {
@@ -268,6 +319,19 @@ function getFilteredProducts() {
   // 1. Filter by category
   if (state.activeCategory !== 'all') {
     list = list.filter(p => p.category.toLowerCase() === state.activeCategory.toLowerCase());
+  }
+
+  // 1.5. Subfilter for Promos (Combos categorization)
+  if (state.activeCategory === 'promos' && state.promoSubfilter && state.promoSubfilter !== 'all') {
+    if (state.promoSubfilter === 'termo') {
+      list = list.filter(p => cleanStr(p.name).includes('termo') || cleanStr(p.description).includes('termo'));
+    } else if (state.promoSubfilter === 'imperial') {
+      list = list.filter(p => cleanStr(p.name).includes('imperial') || cleanStr(p.description).includes('imperial'));
+    } else if (state.promoSubfilter === 'canasta') {
+      list = list.filter(p => cleanStr(p.name).includes('canasta') || cleanStr(p.description).includes('canasta') || cleanStr(p.name).includes('matera') || cleanStr(p.description).includes('matera') || cleanStr(p.name).includes('bolso') || cleanStr(p.description).includes('bolso'));
+    } else if (state.promoSubfilter === 'under-80k') {
+      list = list.filter(p => p.price <= 80000);
+    }
   }
 
   // 2. Filter by search query (Accent-insensitive, e.g. "camionero", "clasico", "termo")
@@ -559,9 +623,6 @@ function updateCartUI() {
   const countTitle = document.getElementById('cart-count-title');
   const itemsContainer = document.getElementById('cart-items-container');
   const subtotalEl = document.getElementById('cart-subtotal');
-  const discountRow = document.getElementById('cart-discount-row');
-  const discountEl = document.getElementById('cart-discount-amount');
-  const activeCouponContainer = document.getElementById('active-coupon-container');
   const shippingEl = document.getElementById('cart-shipping-amount');
   const totalEl = document.getElementById('cart-total');
   const meterText = document.getElementById('free-shipping-text');
@@ -579,11 +640,11 @@ function updateCartUI() {
   // Free shipping meter
   if (meterText && meterBar) {
     if (subtotal === 0) {
-      meterText.innerHTML = `<i class="fas fa-truck-fast"></i> ¡Sumá <b>${formatARS(CONFIG.freeShippingThreshold)}</b> para tener <b>ENVÍO GRATIS</b>!`;
+      meterText.innerHTML = `<i class="fas fa-truck-fast"></i> ¡Sumá <b>${formatARS(CONFIG.freeShippingThreshold)}</b> para <b>ENVÍO GRATIS</b>!`;
       meterBar.style.width = '0%';
       meterBar.style.background = 'linear-gradient(90deg, var(--accent-gold) 0%, #27ae60 100%)';
     } else if (subtotal >= CONFIG.freeShippingThreshold) {
-      meterText.innerHTML = `<span style="color: #27ae60; font-weight: 700;"><i class="fas fa-check-circle"></i> ¡Felicitaciones! Tenés ENVÍO GRATIS a todo el país</span>`;
+      meterText.innerHTML = `<span style="color: #27ae60; font-weight: 700;"><i class="fas fa-check-circle"></i> ¡Tenés ENVÍO GRATIS a todo el país!</span>`;
       meterBar.style.width = '100%';
       meterBar.style.background = '#27ae60';
     } else {
@@ -595,42 +656,8 @@ function updateCartUI() {
     }
   }
 
-  // Calculate discount
-  let discountAmount = 0;
-  if (state.activeCoupon && COUPONS[state.activeCoupon]) {
-    const couponData = COUPONS[state.activeCoupon];
-    if (couponData.discount > 0) {
-      discountAmount = Math.round(subtotal * couponData.discount);
-    }
-  }
-
-  // Active coupon chip & row
-  if (discountRow && discountEl) {
-    if (discountAmount > 0) {
-      discountRow.style.display = 'flex';
-      discountEl.textContent = `- ${formatARS(discountAmount)}`;
-    } else {
-      discountRow.style.display = 'none';
-    }
-  }
-
-  if (activeCouponContainer) {
-    if (state.activeCoupon && COUPONS[state.activeCoupon]) {
-      activeCouponContainer.innerHTML = `
-        <div class="active-coupon-chip">
-          <i class="fas fa-tag"></i>
-          <span><b>${state.activeCoupon}</b> (${COUPONS[state.activeCoupon].label})</span>
-          <button onclick="removeCoupon()" title="Quitar cupón" aria-label="Quitar cupón">×</button>
-        </div>
-      `;
-    } else {
-      activeCouponContainer.innerHTML = '';
-    }
-  }
-
-  // Calculate shipping
-  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold || (state.activeCoupon && COUPONS[state.activeCoupon]?.freeShipping);
-  const shippingAmount = subtotal > 0 ? (isFreeShipping ? 0 : CONFIG.shippingCost) : 0;
+  // Calculate shipping preview
+  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold;
   if (shippingEl) {
     if (subtotal === 0) {
       shippingEl.textContent = 'A calcular';
@@ -639,14 +666,13 @@ function updateCartUI() {
       shippingEl.innerHTML = `<b style="color: #27ae60;"><i class="fas fa-check"></i> ¡GRATIS!</b>`;
       shippingEl.style.color = '#27ae60';
     } else {
-      shippingEl.textContent = formatARS(shippingAmount);
+      shippingEl.innerHTML = `<span style="font-size: 0.85rem; color: var(--text-secondary);">Calculado según tu zona</span>`;
       shippingEl.style.color = 'inherit';
     }
   }
 
   // Final Total
-  const finalTotal = Math.max(0, subtotal - discountAmount + shippingAmount);
-  if (totalEl) totalEl.textContent = formatARS(finalTotal);
+  if (totalEl) totalEl.textContent = formatARS(subtotal);
 
   // Render items
   if (!itemsContainer) return;
@@ -901,7 +927,7 @@ function checkoutWhatsApp() {
 }
 
 // ==========================================================================
-// WEB CHECKOUT MODAL & ORDER CREATION
+// WEB CHECKOUT MODAL & ORDER CREATION (DESDE RÍO CEBALLOS, CÓRDOBA)
 // ==========================================================================
 function openWebCheckout() {
   if (state.cart.length === 0) {
@@ -918,9 +944,32 @@ function openWebCheckout() {
     const nameInput = document.getElementById('checkout-name');
     const emailInput = document.getElementById('checkout-email');
     const phoneInput = document.getElementById('checkout-phone');
+    const provinceSelect = document.getElementById('checkout-province');
+    const cityInput = document.getElementById('checkout-city');
+    const addressInput = document.getElementById('checkout-address');
+    const zipInput = document.getElementById('checkout-zip');
+
     if (nameInput) nameInput.value = state.currentUser.name || '';
     if (emailInput) emailInput.value = state.currentUser.email || '';
     if (phoneInput) phoneInput.value = state.currentUser.phone || '';
+
+    const addr = state.currentUser.address || {};
+    if (provinceSelect && addr.province) provinceSelect.value = addr.province;
+    if (cityInput && addr.city) cityInput.value = addr.city;
+    if (addressInput && addr.street) addressInput.value = addr.street;
+    if (zipInput && addr.zip) zipInput.value = addr.zip;
+  }
+
+  // Setup live listeners on location fields for real-time shipping calculation
+  const provEl = document.getElementById('checkout-province');
+  const cityEl = document.getElementById('checkout-city');
+  if (provEl && !provEl.dataset.hasListener) {
+    provEl.addEventListener('change', updateCheckoutSummary);
+    provEl.dataset.hasListener = 'true';
+  }
+  if (cityEl && !cityEl.dataset.hasListener) {
+    cityEl.addEventListener('input', updateCheckoutSummary);
+    cityEl.dataset.hasListener = 'true';
   }
 
   // Update checkout order summary preview
@@ -935,21 +984,22 @@ function updateCheckoutSummary() {
   if (!summaryEl) return;
 
   const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold || (state.activeCoupon && COUPONS[state.activeCoupon]?.freeShipping);
-  const shippingAmount = isFreeShipping ? 0 : CONFIG.shippingCost;
 
-  let discountAmount = 0;
-  if (state.activeCoupon && COUPONS[state.activeCoupon]?.discount > 0) {
-    discountAmount = Math.round(subtotal * COUPONS[state.activeCoupon].discount);
-  }
+  // Dynamic Shipping Calculation based on Río Ceballos, Córdoba
+  const provVal = document.getElementById('checkout-province')?.value || state.currentUser?.address?.province || 'Córdoba';
+  const cityVal = document.getElementById('checkout-city')?.value || state.currentUser?.address?.city || '';
+  const zone = calculateShippingZone(provVal, cityVal);
+
+  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold;
+  const shippingAmount = isFreeShipping ? 0 : zone.cost;
 
   const selectedPayment = document.querySelector('input[name="payment_method"]:checked')?.value || 'transferencia';
   let paymentDiscount = 0;
   if (selectedPayment === 'transferencia') {
-    paymentDiscount = Math.round((subtotal - discountAmount) * CONFIG.transferDiscountRate);
+    paymentDiscount = Math.round(subtotal * CONFIG.transferDiscountRate);
   }
 
-  const total = Math.max(0, subtotal - discountAmount - paymentDiscount + shippingAmount);
+  const total = Math.max(0, subtotal - paymentDiscount + shippingAmount);
 
   const itemsSummaryHtml = state.cart.map(item => `
     <div style="padding: 4px 0; border-bottom: 1px dashed var(--border-light);">
@@ -976,21 +1026,21 @@ function updateCheckoutSummary() {
         <span>Subtotal (${state.cart.reduce((s, i) => s + i.quantity, 0)} arts):</span>
         <b>${formatARS(subtotal)}</b>
       </div>
-      ${discountAmount > 0 ? `
-      <div style="display: flex; justify-content: space-between; color: #27ae60;">
-        <span>Cupón (${state.activeCoupon}):</span>
-        <b>-${formatARS(discountAmount)}</b>
-      </div>` : ''}
       ${paymentDiscount > 0 ? `
       <div style="display: flex; justify-content: space-between; color: #27ae60;">
         <span>10% OFF Transferencia:</span>
         <b>-${formatARS(paymentDiscount)}</b>
       </div>` : ''}
-      <div style="display: flex; justify-content: space-between;">
-        <span>Envío:</span>
-        <b>${isFreeShipping ? 'GRATIS' : formatARS(shippingAmount)}</b>
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border-light); padding-top: 4px;">
+        <div>
+          <span>Envío:</span>
+          <small style="color: var(--accent-leather); display: block; font-size: 0.74rem;">
+            ${zone.name} • ${zone.time}
+          </small>
+        </div>
+        <b>${isFreeShipping ? '<span style="color: #27ae60;">¡GRATIS! (Supera los ' + formatARS(CONFIG.freeShippingThreshold) + ')</span>' : formatARS(shippingAmount)}</b>
       </div>
-      <div style="display: flex; justify-content: space-between; font-size: 1.1rem; color: var(--text-main); font-weight: 800; border-top: 1px dashed var(--border-light); margin-top: 6px; padding-top: 6px;">
+      <div style="display: flex; justify-content: space-between; font-size: 1.1rem; color: var(--text-main); font-weight: 800; border-top: 1px solid var(--border-light); margin-top: 6px; padding-top: 6px;">
         <span>Total:</span>
         <b style="color: var(--accent-leather);">${formatARS(total)}</b>
       </div>
@@ -1007,8 +1057,12 @@ function processWebCheckout(e) {
   e.preventDefault();
 
   const name = document.getElementById('checkout-name')?.value.trim();
-  const address = document.getElementById('checkout-address')?.value.trim();
+  const phone = document.getElementById('checkout-phone')?.value.trim();
+  const email = document.getElementById('checkout-email')?.value.trim();
+  const province = document.getElementById('checkout-province')?.value || 'Córdoba';
   const city = document.getElementById('checkout-city')?.value.trim();
+  const address = document.getElementById('checkout-address')?.value.trim();
+  const zip = document.getElementById('checkout-zip')?.value.trim();
   const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'transferencia';
 
   if (!name || !address || !city) {
@@ -1019,32 +1073,42 @@ function processWebCheckout(e) {
   const orderId = 'RIO-' + Math.floor(1000 + Math.random() * 9000);
   const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   
-  let discountAmount = 0;
-  if (state.activeCoupon && COUPONS[state.activeCoupon]?.discount > 0) {
-    discountAmount = Math.round(subtotal * COUPONS[state.activeCoupon].discount);
-  }
-
   let paymentDiscount = 0;
   if (paymentMethod === 'transferencia') {
-    paymentDiscount = Math.round((subtotal - discountAmount) * CONFIG.transferDiscountRate);
+    paymentDiscount = Math.round(subtotal * CONFIG.transferDiscountRate);
   }
-  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold || (state.activeCoupon && COUPONS[state.activeCoupon]?.freeShipping);
-  const shippingAmount = isFreeShipping ? 0 : CONFIG.shippingCost;
-  const total = Math.max(0, subtotal - discountAmount - paymentDiscount + shippingAmount);
+
+  const zone = calculateShippingZone(province, city);
+  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold;
+  const shippingAmount = isFreeShipping ? 0 : zone.cost;
+  const total = Math.max(0, subtotal - paymentDiscount + shippingAmount);
 
   const hasCustomization = state.cart.some(i => i.customization);
   const firstCustomItem = state.cart.find(i => i.customization);
+
+  // Save address into logged in user profile for future purchases
+  if (state.currentUser) {
+    state.currentUser.address = { province, city, street: address, zip };
+    localStorage.setItem('mates_rio_user', JSON.stringify(state.currentUser));
+    const uIdx = state.usersDb.findIndex(u => u.email.toLowerCase() === state.currentUser.email.toLowerCase());
+    if (uIdx !== -1) {
+      state.usersDb[uIdx].address = state.currentUser.address;
+      localStorage.setItem('mates_rio_users_db', JSON.stringify(state.usersDb));
+    }
+  }
 
   const newOrder = {
     id: orderId,
     date: new Date().toLocaleDateString('es-AR'),
     customerName: name,
-    customerPhone: document.getElementById('checkout-phone')?.value.trim() || '',
-    customerEmail: document.getElementById('checkout-email')?.value.trim() || '',
+    customerPhone: phone || (state.currentUser?.phone || ''),
+    customerEmail: email || (state.currentUser?.email || ''),
     items: state.cart.map(i => `${i.quantity}x ${i.name}`).join(', '),
     total: total,
     status: "Confirmado - En preparación artesanal",
-    address: `${address}, ${city}`,
+    address: `${address}, ${city}, ${province} (CP ${zip})`,
+    shippingZone: zone.name,
+    shippingCost: shippingAmount,
     paymentMethod: paymentMethod,
     hasCustomEngraving: hasCustomization,
     engravingDetails: firstCustomItem ? {
@@ -1220,7 +1284,7 @@ function handleLogin(e) {
     localStorage.setItem('mates_rio_user', JSON.stringify(user));
     updateAuthUI();
     closeAuthModal();
-    showToast(`¡Bienvenido, ${user.name}!`);
+    playAuthLoginEffect(user, false);
   } else {
     // If not in demo, register as new session
     const fallbackUser = {
@@ -1237,7 +1301,7 @@ function handleLogin(e) {
     localStorage.setItem('mates_rio_user', JSON.stringify(fallbackUser));
     updateAuthUI();
     closeAuthModal();
-    showToast(`¡Bienvenido a Mates Río, ${fallbackUser.name}!`);
+    playAuthLoginEffect(fallbackUser, false);
   }
 }
 
@@ -1274,10 +1338,11 @@ function handleRegister(e) {
 
   updateAuthUI();
   closeAuthModal();
-  showToast(`¡Cuenta creada con éxito! Bienvenido, ${name}.`);
+  playAuthLoginEffect(newUser, true);
 }
 
 function logoutUser() {
+  const prevName = state.currentUser ? state.currentUser.name : 'Matero';
   state.currentUser = null;
   localStorage.removeItem('mates_rio_user');
   localStorage.removeItem('mates_rio_admin_session');
@@ -1285,7 +1350,7 @@ function logoutUser() {
   updateAuthUI();
   closeProfileModal();
   closeUserDropdown();
-  showToast('Has cerrado sesión correctamente');
+  playAuthLogoutEffect(prevName);
 }
 
 function toggleUserDropdown() {
@@ -1334,6 +1399,12 @@ function updateAuthUI() {
     }
   }
 
+  // Show/Hide floating quick add button for admins on web
+  const floatingAddBtn = document.getElementById('admin-floating-add-btn');
+  if (floatingAddBtn) {
+    floatingAddBtn.style.display = isAdmin ? 'inline-flex' : 'none';
+  }
+
   if (state.currentUser) {
     const firstName = state.currentUser.name ? state.currentUser.name.split(' ')[0] : 'Usuario';
     if (userBtnText) userBtnText.textContent = isAdmin ? 'Admin' : firstName;
@@ -1373,25 +1444,62 @@ function handleMobileAuthClick() {
   }
 }
 
-// User Profile & Orders Modal
-function openProfileModal() {
+// User Profile & Orders Modal with Location and Tabs
+function switchProfileTab(tab) {
+  const tabProfileBtn = document.getElementById('profile-tab-btn-info');
+  const tabOrdersBtn = document.getElementById('profile-tab-btn-orders');
+  const panelProfile = document.getElementById('profile-panel-info');
+  const panelOrders = document.getElementById('profile-panel-orders');
+
+  if (tab === 'orders') {
+    tabOrdersBtn?.classList.add('active');
+    tabProfileBtn?.classList.remove('active');
+    panelOrders?.classList.add('active');
+    panelProfile?.classList.remove('active');
+  } else {
+    tabProfileBtn?.classList.add('active');
+    tabOrdersBtn?.classList.remove('active');
+    panelProfile?.classList.add('active');
+    panelOrders?.classList.remove('active');
+  }
+}
+
+function openProfileModal(initialTab = 'profile') {
   closeUserDropdown();
   const modal = document.getElementById('profile-modal');
   if (!modal || !state.currentUser) return;
 
+  switchProfileTab(initialTab);
+
+  // Populate Profile Info
   const nameEl = document.getElementById('profile-name-display');
   const emailEl = document.getElementById('profile-email-display');
   const phoneEl = document.getElementById('profile-phone-display');
-  const ordersListEl = document.getElementById('profile-orders-list');
   const profileAdminCard = document.getElementById('profile-admin-card');
   const profileAdminRoleBadge = document.getElementById('profile-admin-role-badge');
-
-  const isAdmin = isUserAdmin(state.currentUser);
 
   if (nameEl) nameEl.textContent = state.currentUser.name;
   if (emailEl) emailEl.textContent = state.currentUser.email;
   if (phoneEl) phoneEl.textContent = state.currentUser.phone || "No especificado";
 
+  // Populate Location Form
+  const addr = state.currentUser.address || {};
+  const provEl = document.getElementById('profile-input-province');
+  const cityEl = document.getElementById('profile-input-city');
+  const streetEl = document.getElementById('profile-input-street');
+  const zipEl = document.getElementById('profile-input-zip');
+  const notesEl = document.getElementById('profile-input-notes');
+
+  if (provEl) provEl.value = addr.province || 'Córdoba';
+  if (cityEl) cityEl.value = addr.city || '';
+  if (streetEl) streetEl.value = addr.street || '';
+  if (zipEl) zipEl.value = addr.zip || '';
+  if (notesEl) notesEl.value = addr.notes || '';
+
+  // Calculate & show shipping zone hint for this user
+  updateProfileLocationZoneHint();
+
+  const isAdmin = isUserAdmin(state.currentUser);
   if (profileAdminCard) {
     profileAdminCard.style.display = isAdmin ? 'block' : 'none';
     if (profileAdminRoleBadge) {
@@ -1399,28 +1507,118 @@ function openProfileModal() {
     }
   }
 
-  if (ordersListEl) {
-    if (state.orders.length === 0) {
-      ordersListEl.innerHTML = `<p style="color: var(--text-muted); font-size: 0.88rem; text-align: center; padding: 20px;">Aún no realizaste ningún pedido.</p>`;
-    } else {
-      ordersListEl.innerHTML = state.orders.map(ord => `
-        <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 10px;">
-          <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 0.88rem;">
-            <span>Pedido #${ord.id}</span>
-            <span style="color: var(--accent-leather); font-size: 0.95rem;">${formatARS(ord.total)}</span>
-          </div>
-          <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 6px 0;">${ord.items}</p>
-          <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted); margin-top: 6px; border-top: 1px dashed var(--border-light); padding-top: 6px;">
-            <span>Fecha: ${ord.date}</span>
-            <span style="color: #27ae60; font-weight: 700;"><i class="fas fa-truck"></i> ${ord.status}</span>
-          </div>
-        </div>
-      `).join('');
-    }
-  }
+  // Populate Orders List for this specific user
+  renderProfileOrders();
 
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
+}
+
+function updateProfileLocationZoneHint() {
+  const hintEl = document.getElementById('profile-location-zone-hint');
+  if (!hintEl) return;
+  const prov = document.getElementById('profile-input-province')?.value || 'Córdoba';
+  const city = document.getElementById('profile-input-city')?.value || '';
+  const zone = calculateShippingZone(prov, city);
+  hintEl.innerHTML = `
+    <div style="font-size: 0.8rem; color: var(--accent-leather); display: flex; align-items: center; gap: 6px; margin-top: 6px;">
+      <i class="fas fa-truck"></i> <span>Zona asignada: <b>${zone.name}</b> (${formatARS(zone.cost)} / ${zone.time})</span>
+    </div>
+  `;
+}
+
+function saveUserLocation(e) {
+  if (e) e.preventDefault();
+  if (!state.currentUser) return;
+
+  const province = document.getElementById('profile-input-province')?.value || 'Córdoba';
+  const city = document.getElementById('profile-input-city')?.value.trim() || '';
+  const street = document.getElementById('profile-input-street')?.value.trim() || '';
+  const zip = document.getElementById('profile-input-zip')?.value.trim() || '';
+  const notes = document.getElementById('profile-input-notes')?.value.trim() || '';
+
+  state.currentUser.address = { province, city, street, zip, notes };
+
+  // Update in user db & local storage
+  localStorage.setItem('mates_rio_user', JSON.stringify(state.currentUser));
+  const userIdx = state.usersDb.findIndex(u => u.email.toLowerCase() === state.currentUser.email.toLowerCase());
+  if (userIdx !== -1) {
+    state.usersDb[userIdx].address = state.currentUser.address;
+    localStorage.setItem('mates_rio_users_db', JSON.stringify(state.usersDb));
+  }
+
+  updateProfileLocationZoneHint();
+  showToast('¡Ubicación y dirección guardadas correctamente!', 'fa-check-circle');
+}
+
+function renderProfileOrders() {
+  const ordersListEl = document.getElementById('profile-orders-list');
+  if (!ordersListEl || !state.currentUser) return;
+
+  // Filter orders by currentUser email or name
+  const currentEmail = (state.currentUser.email || '').toLowerCase();
+  const currentName = (state.currentUser.name || '').toLowerCase();
+  const userOrders = state.orders.filter(ord => {
+    const oEmail = (ord.customerEmail || '').toLowerCase();
+    const oName = (ord.customerName || '').toLowerCase();
+    return oEmail === currentEmail || oName === currentName || (!ord.customerEmail && currentEmail.includes('juan'));
+  });
+
+  const ordersCountBadge = document.getElementById('profile-orders-tab-count');
+  if (ordersCountBadge) {
+    ordersCountBadge.textContent = userOrders.length;
+  }
+
+  if (userOrders.length === 0) {
+    ordersListEl.innerHTML = `
+      <div style="text-align: center; padding: 32px 16px;">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--bg-main); display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.3rem; margin-bottom: 12px;">
+          <i class="fas fa-box-open"></i>
+        </div>
+        <h5 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 6px;">Aún no realizaste ningún pedido</h5>
+        <p style="color: var(--text-secondary); font-size: 0.84rem; max-width: 320px; margin: 0 auto 16px;">
+          Elegí tu mate imperial favorito o armá tu set personalizado y viví la experiencia Mates Río.
+        </p>
+        <button class="btn btn-primary" onclick="closeProfileModal(); window.location.href='catalogo.html';" style="font-size: 0.82rem; padding: 9px 18px;">
+          <i class="fas fa-store"></i> Explorar Catálogo
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  ordersListEl.innerHTML = userOrders.map(ord => `
+    <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+        <div>
+          <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">Pedido #${ord.id}</span>
+          <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">
+            <i class="far fa-calendar-alt"></i> ${ord.date}
+          </div>
+        </div>
+        <span style="color: var(--accent-leather); font-size: 1.05rem; font-weight: 800;">${formatARS(ord.total)}</span>
+      </div>
+
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 6px 0; line-height: 1.4;">
+        <b>Productos:</b> ${ord.items}
+      </p>
+
+      ${ord.address ? `
+        <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 6px;">
+          <i class="fas fa-map-marker-alt" style="color: var(--accent-gold);"></i> <b>Entrega en:</b> ${ord.address}
+        </div>
+      ` : ''}
+
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; border-top: 1px dashed var(--border-light); padding-top: 8px; margin-top: 6px;">
+        <span style="color: #27ae60; font-weight: 700;">
+          <i class="fas fa-truck"></i> ${ord.status}
+        </span>
+        <button class="btn btn-outline-dark" onclick="startDirectWhatsAppChat('¡Hola Mates Río! Quisiera consultar sobre el estado de mi pedido #${ord.id}')" style="font-size: 0.72rem; padding: 4px 10px;">
+          <i class="fab fa-whatsapp"></i> Consultar
+        </button>
+      </div>
+    </div>
+  `).join('');
 }
 
 function closeProfileModal() {
@@ -2342,4 +2540,224 @@ function saveCustomizedMateToCart() {
 function handleSecretAdminTrigger() {
   window.location.href = 'admin.html';
 }
+
+// ==========================================================================
+// AUTH VISUAL EFFECTS: CELEBRATION LOGIN & GENTLE LOGOUT
+// ==========================================================================
+function playAuthLoginEffect(user, isNew = false) {
+  const firstName = user && user.name ? user.name.split(' ')[0] : 'Matero';
+  let overlay = document.getElementById('auth-effect-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'auth-effect-overlay';
+    overlay.className = 'auth-effect-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  overlay.innerHTML = `
+    <div class="auth-login-card">
+      <div class="auth-login-sparkle">
+        <i class="fas fa-crown"></i>
+      </div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.55rem; font-weight: 800; margin-bottom: 8px; color: var(--accent-gold);">
+        ${isNew ? '¡Cuenta Creada con Éxito!' : '¡Bienvenido/a a Mates Río!'}
+      </h3>
+      <p style="font-size: 1.05rem; margin-bottom: 16px; color: #f5f5f7;">
+        Hola <b>${firstName}</b>, qué lindo tenerte con nosotros.
+      </p>
+      <div style="font-size: 0.85rem; color: #a8a8b0; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 12px;">
+        <i class="fas fa-shield-alt" style="color: #27ae60;"></i> Tu sesión quedó guardada. Cuando vuelvas a entrar, seguirás conectado/a.
+      </div>
+    </div>
+  `;
+
+  overlay.classList.add('active');
+
+  // Add gold aura animation to user button
+  const userBtn = document.getElementById('user-account-btn');
+  if (userBtn) {
+    userBtn.classList.add('pulse-gold-aura');
+    setTimeout(() => userBtn.classList.remove('pulse-gold-aura'), 4000);
+  }
+
+  setTimeout(() => {
+    overlay.classList.remove('active');
+  }, 2200);
+}
+
+function playAuthLogoutEffect(name = 'Matero') {
+  const firstName = name ? name.split(' ')[0] : 'Matero';
+  let overlay = document.getElementById('auth-effect-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'auth-effect-overlay';
+    overlay.className = 'auth-effect-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  overlay.innerHTML = `
+    <div class="auth-logout-card">
+      <div class="auth-wave-icon">👋</div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; margin-bottom: 8px;">
+        ¡Hasta pronto, ${firstName}!
+      </h3>
+      <p style="font-size: 0.95rem; color: #a8a8b0; margin-bottom: 8px;">
+        Has cerrado sesión correctamente.
+      </p>
+      <small style="color: var(--accent-gold); font-size: 0.8rem; font-weight: 600;">
+        ¡Te esperamos en tu próxima mateada!
+      </small>
+    </div>
+  `;
+
+  overlay.classList.add('active');
+
+  setTimeout(() => {
+    overlay.classList.remove('active');
+  }, 2000);
+}
+
+// Session Persistence Helper
+function saveSessionProgress() {
+  try {
+    const sessionData = {
+      page: window.location.pathname + window.location.search,
+      userEmail: state.currentUser ? state.currentUser.email : null,
+      savedAt: Date.now()
+    };
+    localStorage.setItem('mates_rio_last_session', JSON.stringify(sessionData));
+  } catch (err) {
+    // Ignore storage quota errors
+  }
+}
+window.addEventListener('beforeunload', saveSessionProgress);
+
+// ==========================================================================
+// ADMIN DIRECT WEB PRODUCT CREATOR (COMPU Y CELU)
+// ==========================================================================
+function openAdminAddProductModal() {
+  if (!isUserAdmin(state.currentUser)) {
+    showToast('Acceso exclusivo para administradores de Mates Río', 'fa-lock');
+    return;
+  }
+  const modal = document.getElementById('admin-add-product-modal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeAdminAddProductModal() {
+  document.getElementById('admin-add-product-modal')?.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function handleAdminCreateProductWeb(e) {
+  if (e) e.preventDefault();
+  if (!isUserAdmin(state.currentUser)) return;
+
+  const name = document.getElementById('admin-web-name')?.value.trim();
+  const category = document.getElementById('admin-web-category')?.value;
+  const price = parseInt(document.getElementById('admin-web-price')?.value, 10);
+  const origPriceVal = document.getElementById('admin-web-orig-price')?.value;
+  const origPrice = origPriceVal ? parseInt(origPriceVal, 10) : null;
+  const badge = document.getElementById('admin-web-badge')?.value.trim();
+  const badgeType = document.getElementById('admin-web-badge-type')?.value || 'new';
+  const imgSelect = document.getElementById('admin-web-img-select')?.value;
+  const imgCustom = document.getElementById('admin-web-img-custom')?.value.trim();
+  const image = (imgSelect === 'custom' && imgCustom) ? imgCustom : (imgSelect || 'assets/images/prod_mate_imperial.jpg');
+  const desc = document.getElementById('admin-web-desc')?.value.trim();
+  const stock = parseInt(document.getElementById('admin-web-stock')?.value, 10) || 10;
+
+  if (!name || !category || isNaN(price) || price <= 0 || !desc) {
+    showToast('Por favor completá los campos obligatorios', 'fa-exclamation-triangle');
+    return;
+  }
+
+  const catNamesMap = {
+    'mates': 'MATES',
+    'promos': 'PROMOS',
+    'termos': 'TERMOS',
+    'accesorios': 'ACCESORIOS',
+    'yerbas': 'YERBAS',
+    'equipos': 'EQUIPOS DE MATE'
+  };
+
+  const newProd = {
+    id: `prod-custom-${Date.now()}`,
+    name: name,
+    category: category,
+    categoryName: catNamesMap[category] || category.toUpperCase(),
+    price: price,
+    originalPrice: origPrice && origPrice > price ? origPrice : null,
+    badge: badge || (origPrice && origPrice > price ? 'OFERTA' : 'NUEVO'),
+    badgeType: badgeType,
+    rating: 5.0,
+    reviewsCount: 1,
+    image: image,
+    description: desc,
+    specs: {
+      material: "Selección artesanal de taller",
+      origen: "Río Ceballos, Córdoba, Argentina",
+      garantia: "Garantía artesanal Mates Río"
+    },
+    inStock: stock > 0,
+    stock: stock,
+    isCustom: true
+  };
+
+  // Add to PRODUCTS_DATA
+  if (typeof PRODUCTS_DATA !== 'undefined') {
+    PRODUCTS_DATA.unshift(newProd);
+  }
+
+  // Save to localStorage
+  try {
+    let customList = JSON.parse(localStorage.getItem('mates_rio_custom_products') || '[]');
+    customList.unshift(newProd);
+    localStorage.setItem('mates_rio_custom_products', JSON.stringify(customList));
+
+    // Update inventory storage as well
+    let inv = JSON.parse(localStorage.getItem('mates_rio_inventory') || '{}');
+    inv[newProd.id] = { price: newProd.price, stock: stock, inStock: stock > 0 };
+    localStorage.setItem('mates_rio_inventory', JSON.stringify(inv));
+  } catch (err) {
+    console.error('Error saving custom product:', err);
+  }
+
+  // Re-render products if on catalog or promos or index
+  if (typeof renderProducts === 'function') {
+    renderProducts();
+  }
+
+  closeAdminAddProductModal();
+  showToast(`¡"${newProd.name}" cargado al catálogo con éxito! 🎉`, 'fa-check-circle');
+
+  // Reset form
+  document.getElementById('admin-web-product-form')?.reset();
+}
+
+// ==========================================================================
+// PROMOS FILTERING ENHANCEMENT
+// ==========================================================================
+function setPromoSubfilter(subFilter, btnEl) {
+  state.promoSubfilter = subFilter;
+  document.querySelectorAll('.promos-filter-chips .filter-pill').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  if (btnEl) btnEl.classList.add('active');
+  if (typeof renderProducts === 'function') {
+    renderProducts();
+  }
+}
+
+function filterPromosLive() {
+  const input = document.getElementById('promos-search-input');
+  if (!input) return;
+  state.searchQuery = input.value.trim();
+  if (typeof renderProducts === 'function') {
+    renderProducts();
+  }
+}
+
 
