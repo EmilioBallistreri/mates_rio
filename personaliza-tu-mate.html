@@ -39,14 +39,14 @@
         <span class="announcement-sep announcement-sep-desktop">•</span>
         <span class="announcement-item announcement-item-desktop"><i class="fas fa-bolt"></i> <b>Grabado en Virola BONIFICADO</b></span>
         <span class="announcement-sep announcement-sep-desktop">•</span>
-        <span class="announcement-item announcement-item-desktop"><i class="fas fa-truck"></i> Despacho en <b>24/48 hs hábiles</b></span>
+        <span class="announcement-item announcement-item-desktop"><i class="fas fa-truck"></i> Despacho desde <b>Río Ceballos, Córdoba</b></span>
       </div>
 
       <div class="announcement-links">
         <a href="index.html" title="Ir a la Tienda Principal">
           <i class="fas fa-store"></i> Volver a la Tienda
         </a>
-        <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20consultar%20sobre%20la%20personalizaci%C3%B3n%20de%20un%20mate." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
+        <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20consultar%20sobre%20la%20personalizaci%C3%B3n%20de%20un%20mate." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
           <i class="fab fa-whatsapp"></i> Asesoría WhatsApp
         </a>
       </div>
@@ -56,14 +56,20 @@
   <!-- Sticky Header with Clean Navigation Back to Store -->
   <header class="site-header" id="main-header">
     <div class="container header-inner">
-      <!-- 1. Brand Logo -->
-      <a href="index.html" class="header-brand" title="Mates Río - Volver a la tienda">
-        <img src="assets/images/logo.jpg" alt="Logo Mates Río" class="brand-logo-img" />
-        <div class="brand-text">
-          <span class="brand-name">MATES RÍO</span>
-          <span class="brand-tagline">TALLER DE PERSONALIZACIÓN</span>
-        </div>
-      </a>
+      <!-- 1. Brand Logo & Mobile Menu Toggle (Tres rayitas al lado del logo para celu) -->
+      <div class="header-left">
+        <button class="mobile-menu-btn" id="mobile-menu-toggle" onclick="openMobileDrawer()" aria-label="Abrir Menú de Navegación" title="Menú">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <a href="index.html" class="header-brand" title="Mates Río - Volver a la tienda">
+          <img src="assets/images/logo.jpg" alt="Logo Mates Río" class="brand-logo-img" />
+          <div class="brand-text">
+            <span class="brand-name">MATES RÍO</span>
+            <span class="brand-tagline">TALLER DE PERSONALIZACIÓN</span>
+          </div>
+        </a>
+      </div>
 
       <!-- 2. Breadcrumb / Status -->
       <nav class="header-center header-breadcrumb-nav" aria-label="Ruta de navegación">
@@ -121,6 +127,114 @@
       </div>
     </div>
   </header>
+
+  <!-- ==========================================================================
+       MOBILE NAVIGATION DRAWER & OVERLAY (Menú hamburguesa en celular)
+       ========================================================================== -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileDrawer()"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Navegación Móvil">
+    <div class="mobile-drawer-header">
+      <div class="mobile-drawer-brand">
+        <img src="assets/images/logo.jpg" alt="Logo Mates Río" class="drawer-logo-img" />
+        <div>
+          <span class="drawer-brand-name">MATES RÍO</span>
+          <span class="drawer-brand-sub">RÍO CEBALLOS • CÓRDOBA</span>
+        </div>
+      </div>
+      <button class="mobile-drawer-close" onclick="closeMobileDrawer()" aria-label="Cerrar menú">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <ul class="mobile-nav-list">
+      <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
+        <a href="javascript:void(0)" onclick="handleMobileAuthClick()">
+          <span><i class="fas fa-user-circle" style="width: 22px; color: var(--accent-leather);"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item" id="mobile-nav-admin-item" style="display: none; background: #fffdf9; border-left: 4px solid var(--accent-gold);">
+        <a href="admin.html" onclick="closeMobileDrawer();">
+          <span><i class="fas fa-shield-halved" style="width: 22px; color: var(--accent-gold);"></i> <b style="color: var(--accent-leather);">Panel Admin</b></span>
+          <span class="nav-badge-pill pill-gold">STAFF</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="index.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-home" style="width: 22px; color: var(--accent-gold);"></i> Inicio</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="promos.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-fire" style="width: 22px; color: var(--badge-promo);"></i> PROMOS & COMBOS</span>
+          <span class="nav-badge-pill">Hasta 25% OFF</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-th-large" style="width: 22px; color: var(--accent-gold);"></i> Catálogo Completo</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=mates" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-mug-hot" style="width: 22px; color: var(--accent-leather);"></i> Mates Imperiales</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="personaliza-tu-mate.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Personalizá tu Mate</span>
+          <span class="nav-badge-pill pill-gold">VIROLA</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=termos" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-temperature-high" style="width: 22px; color: var(--accent-gold);"></i> Termos de Acero</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=accesorios" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Bombillas & Accesorios</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=yerbas" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-leaf" style="width: 22px; color: #27ae60;"></i> Yerbas Seleccionadas</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=equipos" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-briefcase" style="width: 22px; color: var(--accent-leather);"></i> Equipos de Mate</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="#contacto" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-envelope" style="width: 22px; color: var(--accent-gold);"></i> Contacto & Taller</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+    </ul>
+
+    <div class="mobile-nav-footer">
+      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+        <a href="https://wa.me/5493543600000" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="flex: 1; padding: 10px; font-size: 0.78rem;">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="flex: 1; padding: 10px; font-size: 0.78rem;">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+      </div>
+      <p style="font-size: 0.75rem; color: var(--text-secondary); text-align: center;">
+        Taller en Río Ceballos, Córdoba • Envíos a todo el país
+      </p>
+    </div>
+  </aside>
 
   <!-- ==========================================================================
        MAIN STUDIO WORKSPACE
@@ -606,7 +720,7 @@
   </main>
 
   <!-- ==========================================================================
-       SITE FOOTER
+       SITE FOOTER (UNIFICADO, SIN CLUB MATERO, TALLER EN RÍO CEBALLOS, CÓRDOBA)
        ========================================================================== -->
   <footer class="site-footer" id="contacto">
     <div class="container">
@@ -621,7 +735,7 @@
             </div>
           </div>
           <p class="footer-brand-desc">
-            Mates imperiales seleccionados, termos de alto rendimiento y accesorios artesanales hechos con pasión matera.
+            Mates imperiales seleccionados, termos de alto rendimiento y accesorios artesanales hechos con pasión matera en las Sierras de Córdoba.
           </p>
 
           <!-- Social Links -->
@@ -629,13 +743,13 @@
             <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="social-icon-btn instagram" title="Instagram @mates_rio_">
               <i class="fab fa-instagram"></i>
             </a>
-            <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20taller%20de%20personalizaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
+            <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20taller%20de%20personalizaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
               <i class="fab fa-whatsapp"></i>
             </a>
-            <a href="https://www.facebook.com/matesrio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Facebook">
+            <a href="https://www.facebook.com/matesrio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Facebook matesrio">
               <i class="fab fa-facebook-f"></i>
             </a>
-            <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="TikTok">
+            <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="TikTok @mates_rio">
               <i class="fab fa-tiktok"></i>
             </a>
           </div>
@@ -664,7 +778,7 @@
           </div>
 
           <div class="shipping-methods-info" style="margin-top: 10px;">
-            <p><i class="fas fa-truck-fast" style="color: var(--accent-gold); margin-right: 4px;"></i> Envíos a todo el país vía <b>Correo Argentino</b> y <b>Andreani</b> con seguimiento.</p>
+            <p><i class="fas fa-truck-fast" style="color: var(--accent-gold); margin-right: 4px;"></i> Envíos a todo el país desde nuestro taller en <b>Río Ceballos, Sierras Chicas • Córdoba</b> vía Correo Argentino y Andreani.</p>
           </div>
         </div>
 
@@ -675,7 +789,7 @@
             <li class="contact-item">
               <i class="fab fa-whatsapp"></i>
               <div>
-                <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 11 3456-7890</a>
+                <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 3543 60-0000</a>
               </div>
             </li>
             <li class="contact-item">
@@ -687,41 +801,16 @@
             <li class="contact-item">
               <i class="fas fa-map-marker-alt"></i>
               <div>
-                <span>Av. Corrientes 1234, CABA</span> • <span style="font-size: 0.74rem; color: #a39587;">Lun a Sáb</span>
+                <span>Río Ceballos, Sierras Chicas • Córdoba, Argentina</span>
               </div>
             </li>
           </ul>
         </div>
       </div>
 
-      <!-- Newsletter Bar -->
-      <div class="newsletter-box">
-        <div class="newsletter-text">
-          <h4 style="font-family: var(--font-heading); font-size: 1.02rem; color: #fff; margin-bottom: 2px;">
-            <i class="far fa-envelope-open" style="color: var(--accent-gold); margin-right: 6px;"></i> Sumate al Club Matero
-          </h4>
-          <p style="font-size: 0.8rem; color: var(--text-light-muted);">
-            Recibí novedades, tips de curado y <b>10% OFF</b> en tu primera compra.
-          </p>
-        </div>
-
-        <form id="newsletter-form" class="newsletter-form" onsubmit="event.preventDefault(); showToast('¡Gracias por sumarte al Club Matero! Recibiste tu cupón.');">
-          <input
-            type="email"
-            id="newsletter-email"
-            required
-            placeholder="Tu correo electrónico..."
-            class="newsletter-input"
-          />
-          <button type="submit" class="btn btn-primary newsletter-submit-btn">
-            Suscribirme
-          </button>
-        </form>
-      </div>
-
       <!-- Footer Bottom Copyright Bar -->
       <div class="footer-bottom-bar">
-        <span onclick="handleSecretAdminTrigger()" style="cursor: default;" title="Mates Río Oficial">© 2026 Mates Río. Pasión por la cultura matera.</span>
+        <span onclick="handleSecretAdminTrigger()" style="cursor: default;" title="Mates Río Oficial">© 2026 Mates Río. Pasión por la cultura matera. Río Ceballos, Córdoba.</span>
         <span>Envíos a toda la República Argentina</span>
       </div>
     </div>
@@ -824,71 +913,52 @@
       <!-- Populated via JS -->
     </div>
 
-    <div class="cart-footer" id="cart-footer">
-      <!-- Collapsible Tools -->
-      <div class="cart-tools-bar">
-        <button type="button" class="cart-tool-btn" id="btn-toggle-coupon" onclick="toggleCartTool('coupon')">
-          <i class="fas fa-tag"></i> <span>Cupón de descuento</span>
-          <i class="fas fa-chevron-down tool-arrow" id="arrow-coupon"></i>
-        </button>
+    <div class="cart-drawer-footer">
+      <div class="cart-tools-accordion">
         <button type="button" class="cart-tool-btn" id="btn-toggle-shipping" onclick="toggleCartTool('shipping')">
-          <i class="fas fa-map-marker-alt"></i> <span>Calcular envío</span>
-          <i class="fas fa-chevron-down tool-arrow" id="arrow-shipping"></i>
+          <span><i class="fas fa-truck"></i> Calcular costo de envío por Código Postal</span>
+          <i class="fas fa-chevron-down arrow" id="arrow-shipping"></i>
         </button>
-      </div>
-
-      <div class="cart-tool-collapse" id="collapse-coupon">
-        <div id="active-coupon-container"></div>
-        <div class="cart-coupon-box">
-          <input type="text" id="cart-coupon-input" class="coupon-input" placeholder="CÓDIGO (EJ: MATERIO10)" />
-          <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
-        </div>
       </div>
 
       <div class="cart-tool-collapse" id="collapse-shipping">
-        <div class="shipping-calc-input-row">
-          <input type="text" id="cart-cp-input" class="shipping-calc-input" placeholder="Tu Código Postal (ej: 1425)" />
+        <div class="shipping-calc-wrap">
+          <input type="text" id="cart-cp-input" placeholder="Tu Código Postal (ej: 5111)" maxlength="8" />
           <button class="btn btn-outline-dark shipping-calc-btn" onclick="calculateShippingCP()">Calcular</button>
         </div>
-        <div id="cart-cp-result"></div>
+        <div id="cart-cp-result" class="tool-feedback-msg"></div>
       </div>
 
-      <div class="cart-summary-card">
-        <div class="cart-totals-row">
-          <span class="row-label">Subtotal</span>
-          <span class="row-val" id="cart-subtotal">$ 0</span>
+      <div class="cart-summary-totals">
+        <div class="summary-line">
+          <span>Subtotal</span>
+          <span class="value" id="cart-subtotal">$ 0</span>
         </div>
-        <div class="cart-totals-row" id="cart-discount-row" style="display: none;">
-          <span class="row-label discount-label"><i class="fas fa-tag"></i> Descuento cupón</span>
-          <span class="row-val discount-val" id="cart-discount-amount">-$ 0</span>
+        <div class="summary-line">
+          <span>Costo de envío</span>
+          <span class="value" id="cart-shipping-amount">A calcular</span>
         </div>
-        <div class="cart-totals-row">
-          <span class="row-label">Envío</span>
-          <span class="row-val" id="cart-shipping-amount">A calcular</span>
-        </div>
-        <div class="cart-totals-row total-final">
-          <div class="total-label-wrap">
-            <span class="row-label-total">Total estimado</span>
-            <small class="transfer-savings-hint"><i class="fas fa-bolt"></i> 10% OFF pagando por Transferencia</small>
+        <div class="summary-line total">
+          <div style="display: flex; flex-direction: column;">
+            <span>Total a pagar</span>
+            <small style="font-size: 0.72rem; color: #27ae60; font-weight: 600;"><i class="fas fa-bolt"></i> 10% OFF extra con transferencia</small>
           </div>
-          <span class="row-val-total" id="cart-total">$ 0</span>
+          <span class="value" id="cart-total">$ 0</span>
         </div>
       </div>
 
       <div class="cart-checkout-actions">
         <button class="btn btn-primary btn-checkout-main" onclick="openWebCheckout()">
-          <i class="fas fa-credit-card"></i> Iniciar Compra Online
+          <i class="fas fa-lock"></i> Iniciar Compra Online
         </button>
-        <button class="btn btn-whatsapp-secondary" onclick="checkoutWhatsApp()">
-          <i class="fab fa-whatsapp"></i> O pedir y pagar por WhatsApp
+        <button class="btn btn-whatsapp-secondary" onclick="checkoutWhatsApp()" title="Atención y pedido por WhatsApp">
+          <i class="fab fa-whatsapp"></i> Finalizar Pedido por WhatsApp
         </button>
       </div>
 
-      <div class="cart-footer-security-row">
-        <span><i class="fas fa-shield-alt"></i> Compra Segura</span>
-        <span>•</span>
-        <span><i class="fas fa-truck"></i> Envíos a todo el país</span>
-        <span>•</span>
+      <div class="cart-footer-links">
+        <button onclick="closeCartDrawer()" class="cart-continue-link">Continuar personalizando</button>
+        <span class="sep">•</span>
         <button onclick="confirmClearCart()" class="cart-clear-link">Vaciar carrito</button>
       </div>
     </div>
@@ -1000,7 +1070,7 @@
   </div>
 
   <!-- ==========================================================================
-       MODAL: USER PROFILE & MIS PEDIDOS
+       MODAL: USER PROFILE & MIS PEDIDOS (SEPARADOS CON PESTAÑAS Y UBICACIÓN)
        ========================================================================== -->
   <div class="modal-overlay" id="profile-modal">
     <div class="modal-box modal-box-padded">
@@ -1008,115 +1078,238 @@
         <i class="fas fa-times"></i>
       </button>
 
-      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--border-light);">
-        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center;">
+      <!-- Profile Header Summary -->
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border-light);">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
           <i class="far fa-user"></i>
         </div>
-        <div>
-          <h3 style="font-family: var(--font-heading); font-size: 1.25rem;" id="profile-name-display">Usuario</h3>
-          <p style="font-size: 0.82rem; color: var(--text-secondary);" id="profile-email-display">email@ejemplo.com</p>
-          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 11 ...</span>
+        <div style="overflow: hidden;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-name-display">Usuario</h3>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-email-display">email@ejemplo.com</p>
+          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 3543 ...</span>
         </div>
       </div>
 
-      <!-- Admin Quick Access Card (Visible para todos los administradores) -->
-      <div id="profile-admin-card" style="display: none; background: linear-gradient(135deg, #17110c 0%, #2a1b12 100%); border: 1.5px solid var(--accent-gold); border-radius: var(--radius-md); padding: 16px; margin-bottom: 22px; box-shadow: 0 4px 16px rgba(197, 155, 39, 0.18);">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.5px;">
+      <!-- Admin Quick Access Card (Visible para administradores) -->
+      <div id="profile-admin-card" style="display: none; background: linear-gradient(135deg, #17110c 0%, #2a1b12 100%); border: 1.5px solid var(--accent-gold); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px; box-shadow: 0 4px 16px rgba(197, 155, 39, 0.18);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase;">
             <i class="fas fa-shield-halved"></i> Permisos de Administrador
           </span>
           <span class="nav-badge-pill pill-gold" id="profile-admin-role-badge">STAFF</span>
         </div>
-        <p style="font-size: 0.8rem; color: #ede3d5; margin: 0 0 12px; line-height: 1.4;">
-          Tenés acceso habilitado para gestionar stock, precios, pedidos y reportes de taller.
-        </p>
-        <a href="admin.html" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.88rem; font-weight: 800; padding: 11px 14px; text-decoration: none; border-radius: var(--radius-sm); background: var(--accent-gold); color: #17110c; border: none; box-shadow: 0 2px 8px rgba(197, 155, 39, 0.35);">
-          <i class="fas fa-arrow-up-right-from-square"></i> Abrir Panel de Administración
-        </a>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <button type="button" class="btn btn-primary" onclick="closeProfileModal(); openAdminAddProductModal();" style="flex: 1; font-size: 0.78rem; padding: 8px 10px; background: var(--accent-gold); color: #121212; border: none; font-weight: 800;">
+            <i class="fas fa-plus"></i> + Crear Producto
+          </button>
+          <a href="admin.html" class="btn btn-outline-light" style="flex: 1; font-size: 0.78rem; padding: 8px 10px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; color: #f5f5f7; border: 1px solid rgba(255,255,255,0.25);">
+            <i class="fas fa-cog"></i> Panel General
+          </a>
+        </div>
       </div>
 
-      <h4 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 12px;">
-        <i class="fas fa-box" style="color: var(--accent-gold); margin-right: 6px;"></i> Mis Pedidos Recientes
-      </h4>
-
-      <div id="profile-orders-list">
-        <!-- Rendered via JS -->
+      <!-- Navigation Tabs: Mi Perfil vs Mis Pedidos -->
+      <div class="profile-modal-tabs">
+        <button class="profile-tab-btn active" id="profile-tab-btn-info" onclick="switchProfileTab('profile')">
+          <i class="far fa-id-badge"></i> Mi Perfil y Ubicación
+        </button>
+        <button class="profile-tab-btn" id="profile-tab-btn-orders" onclick="switchProfileTab('orders')">
+          <i class="fas fa-box-open"></i> Mis Pedidos
+        </button>
       </div>
 
-      <button class="btn btn-outline-dark" onclick="logoutUser()" style="width: 100%; margin-top: 20px;">
+      <!-- Panel 1: Perfil y Datos de Envío -->
+      <div id="profile-panel-info">
+        <form onsubmit="saveUserLocation(event)" class="location-box">
+          <div class="location-box-title">
+            <i class="fas fa-location-dot" style="color: var(--accent-gold);"></i> Mi Dirección de Entrega Guardada
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+            Guardá tu ubicación para calcular automáticamente tu costo de envío y pre-completar el checkout desde Río Ceballos, Córdoba.
+          </p>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Provincia *</label>
+              <select id="profile-input-province" class="form-input" style="height: 40px; font-size: 0.84rem;">
+                <option value="Córdoba">Córdoba</option>
+                <option value="Buenos Aires">Buenos Aires</option>
+                <option value="CABA">Ciudad de Buenos Aires (CABA)</option>
+                <option value="Santa Fe">Santa Fe</option>
+                <option value="Mendoza">Mendoza</option>
+                <option value="Entre Ríos">Entre Ríos</option>
+                <option value="Salta">Salta</option>
+                <option value="Tucumán">Tucumán</option>
+                <option value="Chaco">Chaco</option>
+                <option value="Corrientes">Corrientes</option>
+                <option value="Misiones">Misiones</option>
+                <option value="San Juan">San Juan</option>
+                <option value="San Luis">San Luis</option>
+                <option value="Catamarca">Catamarca</option>
+                <option value="La Rioja">La Rioja</option>
+                <option value="Santiago del Estero">Santiago del Estero</option>
+                <option value="Jujuy">Jujuy</option>
+                <option value="Neuquén">Neuquén</option>
+                <option value="Río Negro">Río Negro</option>
+                <option value="Chubut">Chubut</option>
+                <option value="Santa Cruz">Santa Cruz</option>
+                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                <option value="La Pampa">La Pampa</option>
+                <option value="Formosa">Formosa</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Ciudad / Localidad *</label>
+              <input type="text" id="profile-input-city" class="form-input" placeholder="Ej: Río Ceballos / Córdoba / Rosario" />
+            </div>
+          </div>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Dirección (Calle y Nro) *</label>
+              <input type="text" id="profile-input-address" class="form-input" placeholder="Ej: San Martín 450" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Código Postal *</label>
+              <input type="text" id="profile-input-zip" class="form-input" placeholder="Ej: 5111" />
+            </div>
+          </div>
+
+          <div id="profile-location-zone-hint" style="font-size: 0.78rem; color: #27ae60; font-weight: 600; margin-bottom: 12px; display: none;"></div>
+
+          <button type="submit" class="btn btn-outline-dark" style="width: 100%; font-size: 0.82rem; padding: 9px 14px;">
+            <i class="fas fa-floppy-disk"></i> Guardar Dirección de Entrega
+          </button>
+        </form>
+      </div>
+
+      <!-- Panel 2: Mis Pedidos -->
+      <div id="profile-panel-orders" style="display: none;">
+        <h4 style="font-family: var(--font-heading); font-size: 1rem; margin-bottom: 12px; color: var(--accent-leather);">
+          <i class="fas fa-clock-rotate-left"></i> Historial de Compras
+        </h4>
+        <div id="profile-orders-list">
+          <!-- Rendered dynamically via JS -->
+        </div>
+      </div>
+
+      <button class="btn btn-outline-dark" onclick="logoutUser()" style="width: 100%; margin-top: 16px; border-color: #ddd;">
         <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
       </button>
     </div>
   </div>
 
   <!-- ==========================================================================
-       MODAL: WEB CHECKOUT
+       MODAL: WEB CHECKOUT (CON PROVINCIA Y ENVÍO DINÁMICO DESDE RÍO CEBALLOS)
        ========================================================================== -->
   <div class="modal-overlay" id="checkout-modal">
-    <div class="modal-box modal-box-padded" style="max-width: 580px;">
-      <button class="modal-close-icon" onclick="closeWebCheckout()" aria-label="Cerrar checkout">
+    <div class="modal-box modal-box-padded" style="max-width: 640px;">
+      <button class="modal-close-icon" onclick="closeWebCheckout()" aria-label="Cerrar">
         <i class="fas fa-times"></i>
       </button>
 
-      <div style="text-align: center; margin-bottom: 20px;">
-        <span class="section-tag">Finalizar Compra</span>
-        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800;">Tus Datos de Envío</h3>
-      </div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; margin-bottom: 6px;">
+        Datos de Envío y Facturación
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px;">
+        Despachamos desde nuestro taller en Río Ceballos, Córdoba a todo el país.
+      </p>
 
-      <form id="checkout-form" onsubmit="processWebCheckout(event)">
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label class="form-label" for="checkout-name">Nombre y Apellido *</label>
-            <input type="text" id="checkout-name" class="form-input" required placeholder="Ej: Juan Pérez" />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="checkout-phone">WhatsApp / Teléfono *</label>
-            <input type="tel" id="checkout-phone" class="form-input" required placeholder="Ej: 11 3456-7890" />
-          </div>
-        </div>
+      <!-- Order Summary Box inside Checkout -->
+      <div id="checkout-order-summary-box" style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px;"></div>
 
+      <form onsubmit="processWebCheckout(event)">
         <div class="form-group">
-          <label class="form-label" for="checkout-email">Correo Electrónico *</label>
-          <input type="email" id="checkout-email" class="form-input" required placeholder="tu@email.com" />
+          <label class="form-label">Nombre y Apellido *</label>
+          <input type="text" id="checkout-name" required class="form-input" placeholder="Ej: Santiago Pérez" />
         </div>
 
         <div class="form-grid-2col">
           <div class="form-group">
-            <label class="form-label" for="checkout-address">Dirección de Entrega *</label>
-            <input type="text" id="checkout-address" class="form-input" required placeholder="Calle y número, piso/depto" />
+            <label class="form-label">Teléfono / WhatsApp *</label>
+            <input type="tel" id="checkout-phone" required class="form-input" placeholder="Ej: 351 555-1234" />
           </div>
+
           <div class="form-group">
-            <label class="form-label" for="checkout-city">Ciudad / Localidad *</label>
-            <input type="text" id="checkout-city" class="form-input" required placeholder="Ej: CABA / Rosario" />
+            <label class="form-label">Email *</label>
+            <input type="email" id="checkout-email" required class="form-input" placeholder="tunombre@email.com" />
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Método de Pago:</label>
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label">Provincia de Entrega *</label>
+            <select id="checkout-province" required class="form-input" style="height: 42px;" onchange="updateCheckoutSummary()">
+              <option value="Córdoba">Córdoba</option>
+              <option value="Buenos Aires">Buenos Aires</option>
+              <option value="CABA">Ciudad de Buenos Aires (CABA)</option>
+              <option value="Santa Fe">Santa Fe</option>
+              <option value="Mendoza">Mendoza</option>
+              <option value="Entre Ríos">Entre Ríos</option>
+              <option value="Salta">Salta</option>
+              <option value="Tucumán">Tucumán</option>
+              <option value="Chaco">Chaco</option>
+              <option value="Corrientes">Corrientes</option>
+              <option value="Misiones">Misiones</option>
+              <option value="San Juan">San Juan</option>
+              <option value="San Luis">San Luis</option>
+              <option value="Catamarca">Catamarca</option>
+              <option value="La Rioja">La Rioja</option>
+              <option value="Santiago del Estero">Santiago del Estero</option>
+              <option value="Jujuy">Jujuy</option>
+              <option value="Neuquén">Neuquén</option>
+              <option value="Río Negro">Río Negro</option>
+              <option value="Chubut">Chubut</option>
+              <option value="Santa Cruz">Santa Cruz</option>
+              <option value="Tierra del Fuego">Tierra del Fuego</option>
+              <option value="La Pampa">La Pampa</option>
+              <option value="Formosa">Formosa</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ciudad / Localidad *</label>
+            <input type="text" id="checkout-city" required class="form-input" placeholder="Ej: Río Ceballos / Córdoba / Rosario" oninput="updateCheckoutSummary()" />
+          </div>
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label">Dirección (Calle y Número) *</label>
+            <input type="text" id="checkout-address" required class="form-input" placeholder="Ej: Av. San Martín 1234 4to B" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Código Postal *</label>
+            <input type="text" id="checkout-zip" required class="form-input" placeholder="Ej: 5111" />
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+          <label class="form-label">Forma de Pago:</label>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <label class="payment-radio-card">
-              <input type="radio" name="payment_method" value="transferencia" checked />
-              <div style="margin-left: 8px;">
+              <input type="radio" name="payment_method" value="transferencia" checked onchange="updateCheckoutSummary()" />
+              <div class="pay-card-content">
                 <b>Transferencia Bancaria (10% OFF EXTRA)</b>
-                <p style="font-size: 0.72rem; color: #27ae60; margin: 0;">¡Descuento aplicado en el total!</p>
+                <p style="font-size: 0.78rem; color: var(--text-secondary);">Te enviamos los datos bancarios y Alias oficial con el descuento directo ya aplicado.</p>
               </div>
             </label>
+
             <label class="payment-radio-card">
-              <input type="radio" name="payment_method" value="mercadopago" />
-              <div style="margin-left: 8px;">
-                <b>Mercado Pago / Tarjeta de Débito y Crédito</b>
-                <p style="font-size: 0.72rem; color: var(--text-muted); margin: 0;">Hasta 3 cuotas sin interés con todas las tarjetas</p>
+              <input type="radio" name="payment_method" value="tarjeta" onchange="updateCheckoutSummary()" />
+              <div class="pay-card-content">
+                <b>Tarjeta de Crédito / Débito (3 Cuotas Sin Interés)</b>
+                <p style="font-size: 0.78rem; color: var(--text-secondary);">Pago 100% seguro con todas las tarjetas bancarias.</p>
               </div>
             </label>
           </div>
         </div>
 
-        <div class="checkout-order-summary-box" id="checkout-order-summary-box">
-          <!-- Populated via JS -->
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; margin-top: 14px; font-weight: 800;">
-          <i class="fas fa-lock"></i> Confirmar y Realizar Pedido
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 14px;">
+          <i class="fas fa-check-circle"></i> Confirmar Pedido
         </button>
       </form>
     </div>
@@ -1126,49 +1319,48 @@
        MODAL: ORDER SUCCESS RECEIPT
        ========================================================================== -->
   <div class="modal-overlay" id="order-success-modal">
-    <div class="modal-box modal-box-padded text-center">
+    <div class="modal-card success-modal-card">
       <button class="modal-close-icon" onclick="closeOrderSuccess()" aria-label="Cerrar">
         <i class="fas fa-times"></i>
       </button>
 
-      <div style="width: 68px; height: 68px; border-radius: 50%; background: #e8f8f0; color: #27ae60; font-size: 2.2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;">
+      <div class="success-icon-wrap">
         <i class="fas fa-check"></i>
       </div>
 
-      <h3 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; margin-bottom: 8px;">
-        ¡Muchas gracias por tu compra!
-      </h3>
-      <p style="font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 20px;">
-        Tu pedido ha sido registrado con éxito. Te enviamos la confirmación a tu correo electrónico.
-      </p>
+      <h3 class="success-title">¡Muchas Gracias por tu Compra!</h3>
+      <p class="success-subtitle">Tu orden fue recibida y ya estamos preparando tus productos en el taller.</p>
 
-      <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 18px; margin-bottom: 22px; text-align: left; font-size: 0.88rem;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span style="color: var(--text-secondary);">Número de Orden:</span>
-          <b id="success-order-id" style="color: var(--accent-leather);">RIO-0000</b>
+      <div class="success-order-box">
+        <div class="success-data-row">
+          <span>Número de Pedido:</span>
+          <strong id="success-order-id" style="color: var(--accent-leather);">RIO-9842</strong>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span style="color: var(--text-secondary);">Monto Total:</span>
-          <b id="success-order-total">$ 0</b>
+        <div class="success-data-row">
+          <span>Total a abonar:</span>
+          <strong id="success-order-total">$ 0</strong>
         </div>
-        <div style="border-top: 1px dashed var(--border-light); margin-top: 10px; padding-top: 10px;">
-          <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 8px;">
-            <b>Datos para Transferencia:</b><br />
-            Alias: <code style="background: #e5e5ea; padding: 2px 6px; border-radius: 4px; font-weight: 700;">MATES.RIO.OFICIAL</code><br />
-            CBU: <code style="background: #e5e5ea; padding: 2px 6px; border-radius: 4px;">0000003100045678901234</code><br />
-            Banco: Banco Santander Río
-          </p>
-          <button class="btn btn-outline-dark" onclick="copyCBU('MATES.RIO.OFICIAL')" style="padding: 6px 14px; font-size: 0.76rem; width: 100%;">
-            <i class="far fa-copy"></i> Copiar Alias de Transferencia
+      </div>
+
+      <div class="success-bank-info" id="success-bank-info">
+        <h5 style="font-size: 0.85rem; font-weight: 800; color: var(--accent-leather); margin-bottom: 6px;">
+          <i class="fas fa-building-columns"></i> Datos para Transferencia Bancaria (10% OFF Aplicado)
+        </h5>
+        <div style="font-size: 0.82rem; line-height: 1.5; color: var(--text-secondary);">
+          <div>Banco: <b>Banco Santander</b></div>
+          <div>Titular: <b>Mates Río S.R.L.</b></div>
+          <div>Alias: <code style="background: #fff; padding: 2px 6px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold;">MATES.RIO.OFICIAL</code></div>
+          <button class="btn btn-outline-dark" onclick="copyCBU('MATES.RIO.OFICIAL')" style="padding: 6px 14px; font-size: 0.76rem; width: 100%; margin-top: 8px;">
+            <i class="fas fa-copy"></i> Copiar Alias Bancario
           </button>
         </div>
       </div>
 
-      <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Acabo%20de%20realizar%20un%20pedido%20en%20la%20web." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="width: 100%; margin-bottom: 10px;">
+      <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Acabo%20de%20realizar%20un%20pedido%20en%20el%20personalizador%20web." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="width: 100%; margin-top: 10px;">
         <i class="fab fa-whatsapp"></i> Enviar Comprobante por WhatsApp
       </a>
 
-      <button class="btn btn-outline-dark" onclick="closeOrderSuccess()" style="width: 100%;">
+      <button class="btn btn-outline-dark" onclick="closeOrderSuccess()" style="width: 100%; margin-top: 10px;">
         Seguir viendo productos
       </button>
     </div>
@@ -1228,6 +1420,116 @@
     </div>
   </div>
 
+  <!-- Floating Admin Quick-Add Product Button (Shown automatically for logged-in admins) -->
+  <button class="admin-floating-add-btn" id="admin-floating-add-btn" onclick="openAdminAddProductModal()" aria-label="Agregar producto al catálogo">
+    <i class="fas fa-plus-circle"></i> <span>+ Nuevo Producto</span>
+  </button>
+
+  <!-- ==========================================================================
+       MODAL: ADMIN PRODUCT CREATOR (DIRECTO DESDE LA WEB)
+       ========================================================================== -->
+  <div class="modal-overlay" id="admin-add-product-modal">
+    <div class="modal-box modal-box-padded" style="max-width: 650px;">
+      <button class="modal-close-icon" onclick="closeAdminAddProductModal()" aria-label="Cerrar modal">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+        <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+          <i class="fas fa-shield-halved"></i>
+        </div>
+        <div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.3rem; margin: 0;">Agregar Producto al Catálogo</h3>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 2px 0 0;">Panel rápido para administradores (PC y Celular)</p>
+        </div>
+      </div>
+
+      <form id="admin-web-product-form" onsubmit="handleAdminCreateProductWeb(event)">
+        <div class="form-group">
+          <label class="form-label" for="admin-web-name">Nombre del Producto *</label>
+          <input type="text" id="admin-web-name" required class="form-input" placeholder="Ej: Mate Imperial Cuero Crudo Virola Lisa" />
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label" for="admin-web-category">Categoría *</label>
+            <select id="admin-web-category" required class="form-input" style="height: 42px;">
+              <option value="mates">Mates Imperiales & Torpedos</option>
+              <option value="termos">Termos de Acero</option>
+              <option value="accesorios">Bombillas & Accesorios</option>
+              <option value="yerbas">Yerbas Seleccionadas</option>
+              <option value="equipos">Equipos de Mate</option>
+              <option value="promos">Promociones & Combos</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="admin-web-price">Precio Venta (ARS) *</label>
+            <input type="number" id="admin-web-price" required min="100" class="form-input" placeholder="Ej: 48500" />
+          </div>
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label" for="admin-web-orig-price">Precio Anterior (Opcional tachado)</label>
+            <input type="number" id="admin-web-orig-price" min="100" class="form-input" placeholder="Ej: 56000" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="admin-web-stock">Stock Disponible *</label>
+            <input type="number" id="admin-web-stock" value="10" min="0" class="form-input" />
+          </div>
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label" for="admin-web-badge">Texto de Etiqueta (Badge)</label>
+            <input type="text" id="admin-web-badge" class="form-input" placeholder="Ej: NUEVO / 20% OFF / EDICIÓN LIMITADA" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="admin-web-badge-type">Estilo de Etiqueta</label>
+            <select id="admin-web-badge-type" class="form-input" style="height: 42px;">
+              <option value="promo">Rojo (Promo / Oferta)</option>
+              <option value="featured">Dorado (Destacado / Edición Taller)</option>
+              <option value="bestseller">Negro (Más Vendido)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="admin-web-img-select">Imagen del Producto</label>
+          <select id="admin-web-img-select" class="form-input" style="height: 42px;" onchange="document.getElementById('admin-web-img-custom-wrap').style.display = (this.value === 'custom') ? 'block' : 'none';">
+            <option value="assets/images/prod_mate_imperial.jpg">Mate Imperial Negro (Foto estándar)</option>
+            <option value="assets/images/cat_mates.jpg">Mates Torpedo (Foto catálogo)</option>
+            <option value="assets/images/cat_promos.jpg">Combo Imperial (Foto combos)</option>
+            <option value="assets/images/prod_canasta_matera.jpg">Canasta / Matera de Cuero</option>
+            <option value="assets/images/cat_termos.jpg">Termo de Acero Inoxidable</option>
+            <option value="assets/images/cat_accesorios.jpg">Bombillas y Accesorios</option>
+            <option value="assets/images/cat_yerbas.jpg">Yerba Mate Artesanal</option>
+            <option value="assets/images/banner_2.jpg">Set Matero Completo</option>
+            <option value="custom">-- Ingresar URL personalizada o archivo --</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="admin-web-img-custom-wrap" style="display: none;">
+          <label class="form-label" for="admin-web-img-custom">URL o ruta de imagen personalizada</label>
+          <input type="text" id="admin-web-img-custom" class="form-input" placeholder="assets/images/tu_imagen.jpg o https://..." />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="admin-web-desc">Descripción del Producto *</label>
+          <textarea id="admin-web-desc" required class="form-input" rows="3" placeholder="Detalle de materiales, confección y terminaciones artesanales..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn btn-outline-dark" onclick="closeAdminAddProductModal()" style="flex: 1;">Cancelar</button>
+          <button type="submit" class="btn btn-primary" style="flex: 2;"><i class="fas fa-plus-circle"></i> Publicar en la Web</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Back to Top Button -->
   <button class="back-to-top-btn" id="back-to-top-btn" aria-label="Volver arriba" title="Volver al inicio">
     <i class="fas fa-chevron-up"></i>
@@ -1240,7 +1542,7 @@
         <img src="assets/images/logo.jpg" alt="Asesor Mates Río" class="chat-avatar" />
         <div class="chat-title-info">
           <h5>Mates Río</h5>
-          <span class="chat-status">En línea ahora</span>
+          <span class="chat-status">En línea ahora • Río Ceballos</span>
         </div>
         <button class="chat-popup-close" onclick="toggleWhatsAppChat()" aria-label="Cerrar chat">
           <i class="fas fa-times"></i>
@@ -1254,17 +1556,17 @@
         </div>
 
         <div class="chat-quick-options">
-          <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20consultar%20sobre%20un%20grabado%20especial." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
+          <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20consultar%20sobre%20un%20grabado%20especial." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
             Consultar por grabado de logo
           </a>
-          <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Tengo%20dudas%20con%20el%20simulador%20de%20mates." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
+          <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Tengo%20dudas%20con%20el%20simulador%20de%20mates." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
             Ayuda con el simulador
           </a>
         </div>
       </div>
 
       <div class="chat-popup-footer">
-        <a href="https://wa.me/5491134567890?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20personalizador%20web." target="_blank" rel="noopener noreferrer" class="btn-chat-send">
+        <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20personalizador%20web." target="_blank" rel="noopener noreferrer" class="btn-chat-send">
           <i class="fab fa-whatsapp"></i> Iniciar Chat en WhatsApp
         </a>
       </div>

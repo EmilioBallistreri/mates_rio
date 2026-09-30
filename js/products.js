@@ -66,6 +66,50 @@ const PRODUCTS_DATA = [
     },
     inStock: true
   },
+  {
+    id: "promo-4",
+    name: "Set Imperial Master: Mate Imperial + Termo 1L + Bombilla + Canasta Cuero",
+    category: "promos",
+    categoryName: "PROMOS",
+    price: 119000,
+    originalPrice: 142000,
+    badge: "SET COMPLETO",
+    badgeType: "featured",
+    rating: 5.0,
+    reviewsCount: 42,
+    image: "assets/images/prod_canasta_matera.jpg",
+    description: "El equipamiento supremo para cebadores exigentes. Incluye Mate Imperial con virola cincelada, Termo de acero inox 1L doble capa, bombilla pico de loro de alpaca y canasta matera criolla de cuero vacuno legítimo.",
+    specs: {
+      material: "Calabaza brasileña + Cuero de suela 3mm",
+      virola: "Alpaca maciza cincelada a mano",
+      termo: "Acero inoxidable 18/8 doble pared",
+      canasta: "Canasta con manija de madera torneada",
+      garantia: "Garantía artesanal Mates Río de 1 año"
+    },
+    inStock: true
+  },
+  {
+    id: "promo-5",
+    name: "Combo Matero Express: Mate Torpedo + Yerbera de Cuero + Bombilla",
+    category: "promos",
+    categoryName: "PROMOS",
+    price: 49900,
+    originalPrice: 58000,
+    badge: "SUPER PRECIO",
+    badgeType: "promo",
+    rating: 4.8,
+    reviewsCount: 31,
+    image: "assets/images/cat_promos.jpg",
+    description: "Excelente set accesible para todos los días o para llevar a la oficina y facultad. Mate Torpedo en cuero vacuno, yerbera hermética de cuero con pico vertedor y bombilla de alpaca estándar.",
+    specs: {
+      material: "Calabaza mediana y cuero vaqueta",
+      virola: "Acero pulido brillante",
+      yerbera: "Cuero vacuno con cierre y forro antihumedad",
+      bombilla: "Alpaca maciza con resorte limpiador",
+      garantia: "Garantía oficial Mates Río"
+    },
+    inStock: true
+  },
 
   // MATES
   {
