@@ -657,7 +657,25 @@ input, select, textarea {
 .mobile-menu-btn,
 .mobile-toggle {
   display: none;
+  background: transparent !important;
+  border: none !important;
+  outline: none;
   font-size: 1.25rem;
+  color: var(--accent-gold) !important;
+  cursor: pointer;
+  padding: 6px;
+  -webkit-tap-highlight-color: transparent;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-menu-toggle i,
+.mobile-menu-btn i,
+.mobile-toggle i,
+.mobile-menu-toggle .fa-bars,
+.mobile-menu-btn .fa-bars,
+.mobile-toggle .fa-bars {
+  color: var(--accent-gold) !important;
 }
 
 /* ==========================================================================
@@ -4005,6 +4023,14 @@ input, select, textarea {
   margin-bottom: 16px;
 }
 
+.step-accordion-toggle {
+  display: none !important;
+}
+
+.step-body {
+  display: block !important;
+}
+
 .step-num {
   width: 32px;
   height: 32px;
@@ -5228,26 +5254,100 @@ input, select, textarea {
     font-size: 0.85rem;
   }
 
-  /* Form & Steps */
+  /* Form & Steps Accordion (Mobile Only) */
   .customizer-form-card {
     padding: 18px 14px;
     border-radius: var(--radius-md);
   }
   .custom-step-block {
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     padding-bottom: 18px;
+    transition: margin-bottom 0.25s ease, padding-bottom 0.25s ease;
   }
   .step-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 10px;
     margin-bottom: 12px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    padding: 4px 0;
   }
+  .step-header-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .step-accordion-toggle {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(197, 155, 39, 0.12);
+    border: 1px solid rgba(197, 155, 39, 0.35);
+    color: var(--accent-gold);
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+  .step-toggle-arrow {
+    font-size: 0.8rem;
+    color: var(--accent-gold);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  /* Open state: arrow points UP */
+  .custom-step-block:not(.is-collapsed) .step-toggle-arrow {
+    transform: rotate(180deg);
+  }
+  .custom-step-block:not(.is-collapsed) .step-accordion-toggle {
+    background: rgba(197, 155, 39, 0.18);
+    border-color: var(--accent-gold);
+  }
+  /* Collapsed state: arrow points DOWN */
+  .custom-step-block.is-collapsed .step-toggle-arrow {
+    transform: rotate(0deg);
+  }
+  .custom-step-block.is-collapsed .step-accordion-toggle {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: rgba(0, 0, 0, 0.12);
+  }
+  .custom-step-block.is-collapsed .step-accordion-toggle .step-toggle-arrow {
+    color: var(--text-muted);
+  }
+  .custom-step-block.is-collapsed .step-body {
+    display: none !important;
+  }
+  .custom-step-block.is-collapsed {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(197, 155, 39, 0.25);
+  }
+  .custom-step-block:not(.is-collapsed) .step-body {
+    display: block !important;
+    animation: accordionFadeIn 0.25s ease;
+  }
+
+  @keyframes accordionFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .step-num {
     width: 28px;
     height: 28px;
     font-size: 0.85rem;
   }
   .step-title {
-    font-size: 1rem;
+    font-size: 0.98rem;
   }
   .step-desc {
     font-size: 0.74rem;
@@ -5279,14 +5379,59 @@ input, select, textarea {
     grid-template-columns: 1fr;
     gap: 8px;
   }
+
+  /* Customizer Bottom Buttons on Mobile: exact same proportion, size and styling */
   .custom-buttons-wrap {
+    display: flex;
     flex-direction: column;
-    gap: 8px;
-  }
-  .btn-save-customization {
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     width: 100%;
-    padding: 12px;
-    font-size: 0.85rem;
+    margin-top: 14px;
+  }
+  .custom-buttons-wrap .btn-save-customization,
+  .custom-buttons-wrap .btn-outline-dark {
+    width: 100% !important;
+    max-width: 290px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    max-height: 44px !important;
+    padding: 0 18px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    border-radius: var(--radius-full) !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.4px !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    line-height: 1 !important;
+    flex: none !important;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .custom-buttons-wrap .btn-save-customization {
+    background: linear-gradient(135deg, #c59b27 0%, #e5b94c 50%, #b88a1e 100%) !important;
+    color: #1a1008 !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(197, 155, 39, 0.35) !important;
+  }
+  .custom-buttons-wrap .btn-outline-dark {
+    background: transparent !important;
+    color: var(--text-main) !important;
+    border: 1.5px solid var(--text-main) !important;
+    box-shadow: none !important;
+  }
+  .custom-buttons-wrap .btn-save-customization:active {
+    transform: scale(0.98);
+  }
+  .custom-buttons-wrap .btn-outline-dark:active {
+    background: var(--text-main) !important;
+    color: #ffffff !important;
   }
 
   /* Completion Modal on Mobile */
@@ -6116,7 +6261,16 @@ input, select, textarea {
   .mobile-menu-toggle,
   .mobile-menu-btn,
   .mobile-toggle {
-    display: flex;
+    display: inline-flex !important;
+    color: var(--accent-gold) !important;
+  }
+  .mobile-menu-toggle i,
+  .mobile-menu-btn i,
+  .mobile-toggle i,
+  .mobile-menu-toggle .fa-bars,
+  .mobile-menu-btn .fa-bars,
+  .mobile-toggle .fa-bars {
+    color: var(--accent-gold) !important;
   }
   .announcement-links {
     display: none;
