@@ -96,6 +96,7 @@ function initStudio() {
   switchDesignTab(studioState.designTab);
 
   updateStudioSimulation();
+  initMobileStepAccordions();
 }
 
 function renderStudioMates() {
@@ -548,3 +549,52 @@ function handleFinishAndOrderWhatsApp() {
   closeCompletionModal();
   checkoutWhatsApp();
 }
+
+// ==========================================================================
+// MOBILE STEP ACCORDION (Solo para celular <= 768px)
+// ==========================================================================
+function toggleStepAccordion(stepNum) {
+  if (window.innerWidth > 768) return; // Solo activo en celular
+
+  const block = document.getElementById(`step-block-${stepNum}`);
+  if (!block) return;
+
+  const isCollapsed = block.classList.contains('is-collapsed');
+  if (isCollapsed) {
+    block.classList.remove('is-collapsed');
+    block.classList.add('is-open');
+  } else {
+    block.classList.add('is-collapsed');
+    block.classList.remove('is-open');
+  }
+}
+
+function initMobileStepAccordions() {
+  if (window.innerWidth <= 768) {
+    // En celular, los pasos 2 y 3 inician cerrados para evitar el scroll largo y llegar directo al diseño
+    const b1 = document.getElementById('step-block-1');
+    const b2 = document.getElementById('step-block-2');
+    const b3 = document.getElementById('step-block-3');
+    const b4 = document.getElementById('step-block-4');
+
+    if (b1) { b1.classList.remove('is-collapsed'); b1.classList.add('is-open'); }
+    if (b2) { b2.classList.add('is-collapsed'); b2.classList.remove('is-open'); }
+    if (b3) { b3.classList.add('is-collapsed'); b3.classList.remove('is-open'); }
+    if (b4) { b4.classList.remove('is-collapsed'); b4.classList.add('is-open'); }
+  }
+}
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) {
+    for (let i = 1; i <= 4; i++) {
+      const b = document.getElementById(`step-block-${i}`);
+      if (b) {
+        b.classList.remove('is-collapsed');
+        b.classList.remove('is-open');
+      }
+    }
+  }
+});
+
+window.toggleStepAccordion = toggleStepAccordion;
+window.initMobileStepAccordions = initMobileStepAccordions;

@@ -58,8 +58,8 @@
     <div class="container header-inner">
       <!-- 1. Brand Logo & Mobile Menu Toggle (Tres rayitas al lado del logo para celu) -->
       <div class="header-left">
-        <button class="mobile-menu-btn" id="mobile-menu-toggle" onclick="openMobileDrawer()" aria-label="Abrir Menú de Navegación" title="Menú">
-          <i class="fas fa-bars"></i>
+        <button class="mobile-menu-btn" id="mobile-menu-toggle" onclick="openMobileDrawer()" aria-label="Abrir Menú de Navegación" title="Menú" style="color: var(--accent-gold);">
+          <i class="fas fa-bars" style="color: var(--accent-gold);"></i>
         </button>
 
         <a href="index.html" class="header-brand" title="Mates Río - Volver a la tienda">
@@ -377,289 +377,309 @@
           <div class="customizer-form-card" id="customizer-form-card">
             
             <!-- STEP 1: Seleccionar el Mate -->
-            <div class="custom-step-block">
-              <div class="step-header">
+            <div class="custom-step-block" id="step-block-1">
+              <div class="step-header" onclick="toggleStepAccordion(1)">
                 <span class="step-num">1</span>
-                <div>
+                <div class="step-header-text">
                   <h3 class="step-title">Elegí el modelo de mate</h3>
                   <span class="step-desc">Todos nuestros mates incluyen virola apta para grabado milimétrico</span>
                 </div>
+                <div class="step-accordion-toggle">
+                  <i class="fas fa-chevron-down step-toggle-arrow"></i>
+                </div>
               </div>
 
-              <div class="mates-selector-grid" id="customizer-mates-grid">
-                <!-- Generated dynamically via JS -->
+              <div class="step-body" id="step-body-1">
+                <div class="mates-selector-grid" id="customizer-mates-grid">
+                  <!-- Generated dynamically via JS -->
+                </div>
               </div>
             </div>
 
             <!-- STEP 2: Acabado del Metal de la Virola -->
-            <div class="custom-step-block">
-              <div class="step-header">
+            <div class="custom-step-block" id="step-block-2">
+              <div class="step-header" onclick="toggleStepAccordion(2)">
                 <span class="step-num">2</span>
-                <div>
+                <div class="step-header-text">
                   <h3 class="step-title">Acabado del metal de la virola</h3>
                   <span class="step-desc">Elegí la aleación y el brillo de la corona metálica</span>
                 </div>
+                <div class="step-accordion-toggle">
+                  <i class="fas fa-chevron-down step-toggle-arrow"></i>
+                </div>
               </div>
 
-              <div class="metal-finish-grid">
-                <div class="metal-card active" data-metal="alpaca-brillante" onclick="selectMetalFinish('alpaca-brillante')">
-                  <div class="metal-radio-circle"><i class="fas fa-check"></i></div>
-                  <div class="metal-preview-dot metal-dot-alpaca"></div>
-                  <div class="metal-info">
-                    <strong>Alpaca Maciza Pulida Espejo</strong>
-                    <span>Brillo tradicional orfebre plateado</span>
+              <div class="step-body" id="step-body-2">
+                <div class="metal-finish-grid">
+                  <div class="metal-card active" data-metal="alpaca-brillante" onclick="selectMetalFinish('alpaca-brillante')">
+                    <div class="metal-radio-circle"><i class="fas fa-check"></i></div>
+                    <div class="metal-preview-dot metal-dot-alpaca"></div>
+                    <div class="metal-info">
+                      <strong>Alpaca Maciza Pulida Espejo</strong>
+                      <span>Brillo tradicional orfebre plateado</span>
+                    </div>
                   </div>
-                </div>
 
-                <div class="metal-card" data-metal="acero-satinado" onclick="selectMetalFinish('acero-satinado')">
-                  <div class="metal-radio-circle"><i class="fas fa-check"></i></div>
-                  <div class="metal-preview-dot metal-dot-acero"></div>
-                  <div class="metal-info">
-                    <strong>Acero Quirúrgico Satinado</strong>
-                    <span>Terminación mate de máxima resistencia</span>
+                  <div class="metal-card" data-metal="acero-satinado" onclick="selectMetalFinish('acero-satinado')">
+                    <div class="metal-radio-circle"><i class="fas fa-check"></i></div>
+                    <div class="metal-preview-dot metal-dot-acero"></div>
+                    <div class="metal-info">
+                      <strong>Acero Quirúrgico Satinado</strong>
+                      <span>Terminación mate de máxima resistencia</span>
+                    </div>
                   </div>
-                </div>
 
-                <div class="metal-card" data-metal="alpaca-envejecida" onclick="selectMetalFinish('alpaca-envejecida')">
-                  <div class="metal-radio-circle"><i class="fas fa-check"></i></div>
-                  <div class="metal-preview-dot metal-dot-envejecida"></div>
-                  <div class="metal-info">
-                    <strong>Alpaca Envejecida Artesanal</strong>
-                    <span>Pátina rústica campestre gauchesca</span>
+                  <div class="metal-card" data-metal="alpaca-envejecida" onclick="selectMetalFinish('alpaca-envejecida')">
+                    <div class="metal-radio-circle"><i class="fas fa-check"></i></div>
+                    <div class="metal-preview-dot metal-dot-envejecida"></div>
+                    <div class="metal-info">
+                      <strong>Alpaca Envejecida Artesanal</strong>
+                      <span>Pátina rústica campestre gauchesca</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- STEP 3: Tipo de Grabado / Impresión en la Virola -->
-            <div class="custom-step-block">
-              <div class="step-header">
+            <div class="custom-step-block" id="step-block-3">
+              <div class="step-header" onclick="toggleStepAccordion(3)">
                 <span class="step-num">3</span>
-                <div>
+                <div class="step-header-text">
                   <h3 class="step-title">Tipo de grabado en la virola</h3>
                   <span class="step-desc">Seleccioná la técnica orfebre</span>
                 </div>
+                <div class="step-accordion-toggle">
+                  <i class="fas fa-chevron-down step-toggle-arrow"></i>
+                </div>
               </div>
 
-              <div class="technique-cards-grid">
-                <!-- Technique 1: Láser HD -->
-                <div class="technique-card active" data-technique="laser" onclick="selectEngraveTechnique('laser')">
-                  <div class="tech-radio-indicator"><i class="fas fa-check"></i></div>
-                  <div class="tech-icon-box"><i class="fas fa-bolt"></i></div>
-                  <div class="tech-content">
-                    <div class="tech-top">
-                      <strong class="tech-name">Grabado Láser HD</strong>
-                      <span class="tech-badge-hot">MÁS ELEGIDO</span>
+              <div class="step-body" id="step-body-3">
+                <div class="technique-cards-grid">
+                  <!-- Technique 1: Láser HD -->
+                  <div class="technique-card active" data-technique="laser" onclick="selectEngraveTechnique('laser')">
+                    <div class="tech-radio-indicator"><i class="fas fa-check"></i></div>
+                    <div class="tech-icon-box"><i class="fas fa-bolt"></i></div>
+                    <div class="tech-content">
+                      <div class="tech-top">
+                        <strong class="tech-name">Grabado Láser HD</strong>
+                        <span class="tech-badge-hot">MÁS ELEGIDO</span>
+                      </div>
+                      <p class="tech-desc">Contraste negro nítido milimétrico. Ideal para tipografías finas, escudos y logos complejos.</p>
+                      <span class="tech-price-free">¡BONIFICADO! ($0)</span>
                     </div>
-                    <p class="tech-desc">Contraste negro nítido milimétrico. Ideal para tipografías finas, escudos y logos complejos.</p>
-                    <span class="tech-price-free">¡BONIFICADO! ($0)</span>
                   </div>
-                </div>
 
-                <!-- Technique 2: Cincelado Orfebre -->
-                <div class="technique-card" data-technique="cincelado" onclick="selectEngraveTechnique('cincelado')">
-                  <div class="tech-radio-indicator"><i class="fas fa-check"></i></div>
-                  <div class="tech-icon-box"><i class="fas fa-hammer"></i></div>
-                  <div class="tech-content">
-                    <div class="tech-top">
-                      <strong class="tech-name">Cincelado Orfebre</strong>
-                      <span class="tech-badge-trad">TRADICIONAL</span>
+                  <!-- Technique 2: Cincelado Orfebre -->
+                  <div class="technique-card" data-technique="cincelado" onclick="selectEngraveTechnique('cincelado')">
+                    <div class="tech-radio-indicator"><i class="fas fa-check"></i></div>
+                    <div class="tech-icon-box"><i class="fas fa-hammer"></i></div>
+                    <div class="tech-content">
+                      <div class="tech-top">
+                        <strong class="tech-name">Cincelado Orfebre</strong>
+                        <span class="tech-badge-trad">TRADICIONAL</span>
+                      </div>
+                      <p class="tech-desc">Bajo relieve orfebre artesanal con brillo plateado esculpido sobre el metal.</p>
+                      <span class="tech-price-free">¡BONIFICADO! ($0)</span>
                     </div>
-                    <p class="tech-desc">Bajo relieve orfebre artesanal con brillo plateado esculpido sobre el metal.</p>
-                    <span class="tech-price-free">¡BONIFICADO! ($0)</span>
                   </div>
-                </div>
 
-                <!-- Technique 3: Fotograbado Satinado -->
-                <div class="technique-card" data-technique="fotograbado" onclick="selectEngraveTechnique('fotograbado')">
-                  <div class="tech-radio-indicator"><i class="fas fa-check"></i></div>
-                  <div class="tech-icon-box"><i class="fas fa-gem"></i></div>
-                  <div class="tech-content">
-                    <div class="tech-top">
-                      <strong class="tech-name">Fotograbado Satinado</strong>
-                      <span class="tech-badge-subtle">SUTIL</span>
+                  <!-- Technique 3: Fotograbado Satinado -->
+                  <div class="technique-card" data-technique="fotograbado" onclick="selectEngraveTechnique('fotograbado')">
+                    <div class="tech-radio-indicator"><i class="fas fa-check"></i></div>
+                    <div class="tech-icon-box"><i class="fas fa-gem"></i></div>
+                    <div class="tech-content">
+                      <div class="tech-top">
+                        <strong class="tech-name">Fotograbado Satinado</strong>
+                        <span class="tech-badge-subtle">SUTIL</span>
+                      </div>
+                      <p class="tech-desc">Tono gris mate sedoso de bajorrelieve suave. Distinción discreta y elegante.</p>
+                      <span class="tech-price-free">¡BONIFICADO! ($0)</span>
                     </div>
-                    <p class="tech-desc">Tono gris mate sedoso de bajorrelieve suave. Distinción discreta y elegante.</p>
-                    <span class="tech-price-free">¡BONIFICADO! ($0)</span>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- STEP 4: Opciones de Diseño a Agregarle -->
-            <div class="custom-step-block">
-              <div class="step-header">
+            <div class="custom-step-block" id="step-block-4">
+              <div class="step-header" onclick="toggleStepAccordion(4)">
                 <span class="step-num">4</span>
-                <div>
+                <div class="step-header-text">
                   <h3 class="step-title">¿Qué le agregamos a tu mate?</h3>
                   <span class="step-desc">Podés combinar texto, escudos, guardas perimetrales o tu propio logo</span>
                 </div>
-              </div>
-
-              <!-- Design Options Category Tabs -->
-              <div class="design-tabs-bar">
-                <button type="button" class="design-tab-btn active" data-design-tab="texto" onclick="switchDesignTab('texto')">
-                  <i class="fas fa-font"></i> Texto / Nombres
-                </button>
-                <button type="button" class="design-tab-btn" data-design-tab="escudos" onclick="switchDesignTab('escudos')">
-                  <i class="fas fa-shield-alt"></i> Escudos Deportivos
-                </button>
-                <button type="button" class="design-tab-btn" data-design-tab="criollo" onclick="switchDesignTab('criollo')">
-                  <i class="fas fa-sun"></i> Motivos Criollos
-                </button>
-                <button type="button" class="design-tab-btn" data-design-tab="guardas" onclick="switchDesignTab('guardas')">
-                  <i class="fas fa-border-style"></i> Guardas Perimetrales
-                </button>
-                <button type="button" class="design-tab-btn" data-design-tab="logo" onclick="switchDesignTab('logo')">
-                  <i class="fas fa-cloud-upload-alt"></i> Subir Mi Logo
-                </button>
-              </div>
-
-              <!-- Tab Panel 1: Texto -->
-              <div class="design-panel active" id="design-panel-texto">
-                <div class="input-field-group">
-                  <div class="input-label-row">
-                    <label for="custom-text-input">Texto o frase para la virola:</label>
-                    <span class="char-counter" id="text-char-count">12 / 30</span>
-                  </div>
-                  <div class="input-with-clear">
-                    <input
-                      type="text"
-                      id="custom-text-input"
-                      class="custom-main-input"
-                      maxlength="30"
-                      value="JUAN & SOFÍA"
-                      placeholder="Ej: JUAN & SOFÍA - 2024"
-                      oninput="onCustomTextChange(this.value)"
-                    />
-                    <button type="button" class="input-quick-clear" onclick="clearCustomText()" title="Borrar texto">×</button>
-                  </div>
-                  <small class="field-hint">Sugerencias: Nombres, iniciales, aniversarios, apodos o frases de aliento.</small>
-                </div>
-
-                <!-- Typography Selection -->
-                <div class="typography-selection-wrap">
-                  <label class="sub-label">Tipografía para el grabado:</label>
-                  <div class="fonts-cards-grid">
-                    <div class="font-card active" data-font="gauchesca" onclick="selectEngraveFont('gauchesca')">
-                      <span class="font-preview font-gauchesca">Mates Río</span>
-                      <span class="font-name">Gauchesca</span>
-                    </div>
-                    <div class="font-card" data-font="cursiva" onclick="selectEngraveFont('cursiva')">
-                      <span class="font-preview font-cursiva">Mates Río</span>
-                      <span class="font-name">Cursiva Elegante</span>
-                    </div>
-                    <div class="font-card" data-font="serif" onclick="selectEngraveFont('serif')">
-                      <span class="font-preview font-serif">MATES RÍO</span>
-                      <span class="font-name">Clásica Romana</span>
-                    </div>
-                    <div class="font-card" data-font="sans" onclick="selectEngraveFont('sans')">
-                      <span class="font-preview font-sans">MATES RÍO</span>
-                      <span class="font-name">Moderna Sans</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Location on the Virola -->
-                <div class="location-selection-wrap">
-                  <label class="sub-label">Ubicación del grabado en la virola:</label>
-                  <div class="location-pills-row">
-                    <button type="button" class="location-pill active" data-loc="frente" onclick="selectLocation('frente')">
-                      <i class="fas fa-align-center"></i> Frente centrado
-                    </button>
-                    <button type="button" class="location-pill" data-loc="ambos" onclick="selectLocation('ambos')">
-                      <i class="fas fa-arrows-alt-h"></i> Frente y Dorso
-                    </button>
-                    <button type="button" class="location-pill" data-loc="completa" onclick="selectLocation('completa')">
-                      <i class="fas fa-circle-notch"></i> Vuelta completa
-                    </button>
-                  </div>
+                <div class="step-accordion-toggle">
+                  <i class="fas fa-chevron-down step-toggle-arrow"></i>
                 </div>
               </div>
 
-              <!-- Tab Panel 2: Escudos & Deportes -->
-              <div class="design-panel" id="design-panel-escudos">
-                <p class="tab-panel-intro">Seleccioná un escudo o logo deportivo para grabar en el centro de la virola (podés combinarlo con texto):</p>
-                <div class="graphics-grid" id="escudos-selector-grid">
-                  <!-- Populated via JS -->
+              <div class="step-body" id="step-body-4">
+                <!-- Design Options Category Tabs -->
+                <div class="design-tabs-bar">
+                  <button type="button" class="design-tab-btn active" data-design-tab="texto" onclick="switchDesignTab('texto')">
+                    <i class="fas fa-font"></i> Texto / Nombres
+                  </button>
+                  <button type="button" class="design-tab-btn" data-design-tab="escudos" onclick="switchDesignTab('escudos')">
+                    <i class="fas fa-shield-alt"></i> Escudos Deportivos
+                  </button>
+                  <button type="button" class="design-tab-btn" data-design-tab="criollo" onclick="switchDesignTab('criollo')">
+                    <i class="fas fa-sun"></i> Motivos Criollos
+                  </button>
+                  <button type="button" class="design-tab-btn" data-design-tab="guardas" onclick="switchDesignTab('guardas')">
+                    <i class="fas fa-border-style"></i> Guardas Perimetrales
+                  </button>
+                  <button type="button" class="design-tab-btn" data-design-tab="logo" onclick="switchDesignTab('logo')">
+                    <i class="fas fa-cloud-upload-alt"></i> Subir Mi Logo
+                  </button>
                 </div>
-              </div>
 
-              <!-- Tab Panel 3: Motivos Criollos & Patrios -->
-              <div class="design-panel" id="design-panel-criollo">
-                <p class="tab-panel-intro">Símbolos tradicionales patrios grabados con máxima precisión orfebre:</p>
-                <div class="graphics-grid" id="criollos-selector-grid">
-                  <!-- Populated via JS -->
-                </div>
-              </div>
-
-              <!-- Tab Panel 4: Guardas Perimetrales -->
-              <div class="design-panel" id="design-panel-guardas">
-                <p class="tab-panel-intro">Elegí una guarda orfebre continua para enmarcar los bordes superior e inferior de la virola:</p>
-                <div class="guardas-selector-grid">
-                  <div class="guarda-card active" data-guarda="lisa" onclick="selectGuarda('lisa')">
-                    <div class="guarda-preview-box">
-                      <span class="guarda-line-plain"></span>
+                <!-- Tab Panel 1: Texto -->
+                <div class="design-panel active" id="design-panel-texto">
+                  <div class="input-field-group">
+                    <div class="input-label-row">
+                      <label for="custom-text-input">Texto o frase para la virola:</label>
+                      <span class="char-counter" id="text-char-count">12 / 30</span>
                     </div>
-                    <strong>Virola Lisa (Sin guarda)</strong>
-                    <span>Acabado limpio minimalista</span>
+                    <div class="input-with-clear">
+                      <input
+                        type="text"
+                        id="custom-text-input"
+                        class="custom-main-input"
+                        maxlength="30"
+                        value="JUAN & SOFÍA"
+                        placeholder="Ej: JUAN & SOFÍA - 2024"
+                        oninput="onCustomTextChange(this.value)"
+                      />
+                      <button type="button" class="input-quick-clear" onclick="clearCustomText()" title="Borrar texto">×</button>
+                    </div>
+                    <small class="field-hint">Sugerencias: Nombres, iniciales, aniversarios, apodos o frases de aliento.</small>
                   </div>
 
-                  <div class="guarda-card" data-guarda="pampa" onclick="selectGuarda('pampa')">
-                    <div class="guarda-preview-box">
-                      <span class="guarda-line-pampa">▲▼▲▼▲▼▲▼▲▼▲</span>
+                  <!-- Typography Selection -->
+                  <div class="typography-selection-wrap">
+                    <label class="sub-label">Tipografía para el grabado:</label>
+                    <div class="fonts-cards-grid">
+                      <div class="font-card active" data-font="gauchesca" onclick="selectEngraveFont('gauchesca')">
+                        <span class="font-preview font-gauchesca">Mates Río</span>
+                        <span class="font-name">Gauchesca</span>
+                      </div>
+                      <div class="font-card" data-font="cursiva" onclick="selectEngraveFont('cursiva')">
+                        <span class="font-preview font-cursiva">Mates Río</span>
+                        <span class="font-name">Cursiva Elegante</span>
+                      </div>
+                      <div class="font-card" data-font="serif" onclick="selectEngraveFont('serif')">
+                        <span class="font-preview font-serif">MATES RÍO</span>
+                        <span class="font-name">Clásica Romana</span>
+                      </div>
+                      <div class="font-card" data-font="sans" onclick="selectEngraveFont('sans')">
+                        <span class="font-preview font-sans">MATES RÍO</span>
+                        <span class="font-name">Moderna Sans</span>
+                      </div>
                     </div>
-                    <strong>Guarda Pampa Continua</strong>
-                    <span>Geometría tradicional de los pueblos originarios</span>
                   </div>
 
-                  <div class="guarda-card" data-guarda="floral" onclick="selectGuarda('floral')">
-                    <div class="guarda-preview-box">
-                      <span class="guarda-line-floral">✿ ❀ ✿ ❀ ✿ ❀ ✿</span>
+                  <!-- Location on the Virola -->
+                  <div class="location-selection-wrap">
+                    <label class="sub-label">Ubicación del grabado en la virola:</label>
+                    <div class="location-pills-row">
+                      <button type="button" class="location-pill active" data-loc="frente" onclick="selectLocation('frente')">
+                        <i class="fas fa-align-center"></i> Frente centrado
+                      </button>
+                      <button type="button" class="location-pill" data-loc="ambos" onclick="selectLocation('ambos')">
+                        <i class="fas fa-arrows-alt-h"></i> Frente y Dorso
+                      </button>
+                      <button type="button" class="location-pill" data-loc="completa" onclick="selectLocation('completa')">
+                        <i class="fas fa-circle-notch"></i> Vuelta completa
+                      </button>
                     </div>
-                    <strong>Cincelado Floral Gauchesco</strong>
-                    <span>Motivos botánicos criollos de orfebrería</span>
-                  </div>
-
-                  <div class="guarda-card" data-guarda="lineas" onclick="selectGuarda('lineas')">
-                    <div class="guarda-preview-box">
-                      <span class="guarda-line-double">═════════════</span>
-                    </div>
-                    <strong>Líneas Dobles de Precisión</strong>
-                    <span>Fileteado fino de orfebrería contemporánea</span>
                   </div>
                 </div>
-              </div>
 
-              <!-- Tab Panel 5: Subir Logo Propio -->
-              <div class="design-panel" id="design-panel-logo">
-                <p class="tab-panel-intro">¿Querés grabar el logo de tu empresa, tu marca de ganado o una firma manuscrita?</p>
-                
-                <div class="file-drop-zone" id="file-drop-zone" onclick="document.getElementById('custom-logo-file').click()">
-                  <input type="file" id="custom-logo-file" accept="image/png, image/jpeg, image/svg+xml, application/pdf" style="display: none;" onchange="handleLogoUpload(event)" />
-                  <div class="drop-zone-content">
-                    <div class="drop-icon-box"><i class="fas fa-cloud-upload-alt"></i></div>
-                    <span class="drop-title">Hacé clic para subir tu imagen o vector</span>
-                    <span class="drop-sub">Formatos admitidos: PNG, JPG, SVG o PDF (en alta definición)</span>
+                <!-- Tab Panel 2: Escudos & Deportes -->
+                <div class="design-panel" id="design-panel-escudos">
+                  <p class="tab-panel-intro">Seleccioná un escudo o logo deportivo para grabar en el centro de la virola (podés combinarlo con texto):</p>
+                  <div class="graphics-grid" id="escudos-selector-grid">
+                    <!-- Populated via JS -->
                   </div>
                 </div>
 
-                <div id="uploaded-logo-chip" class="uploaded-chip" style="display: none;">
-                  <i class="fas fa-check-circle" style="color: #27ae60;"></i>
-                  <span id="uploaded-logo-name">logo.png</span>
-                  <button type="button" onclick="removeUploadedLogo()" title="Quitar archivo">×</button>
+                <!-- Tab Panel 3: Motivos Criollos & Patrios -->
+                <div class="design-panel" id="design-panel-criollo">
+                  <p class="tab-panel-intro">Símbolos tradicionales patrios grabados con máxima precisión orfebre:</p>
+                  <div class="graphics-grid" id="criollos-selector-grid">
+                    <!-- Populated via JS -->
+                  </div>
                 </div>
-              </div>
 
-              <!-- Indicaciones especiales para el orfebre -->
-              <div class="engraver-notes-wrap">
-                <label for="custom-notes-input" class="sub-label">Indicaciones especiales para el maestro orfebre (opcional):</label>
-                <input
-                  type="text"
-                  id="custom-notes-input"
-                  class="custom-notes-input"
-                  placeholder="Ej: Colocar el escudo en el centro y las iniciales a los costados..."
-                />
+                <!-- Tab Panel 4: Guardas Perimetrales -->
+                <div class="design-panel" id="design-panel-guardas">
+                  <p class="tab-panel-intro">Elegí una guarda orfebre continua para enmarcar los bordes superior e inferior de la virola:</p>
+                  <div class="guardas-selector-grid">
+                    <div class="guarda-card active" data-guarda="lisa" onclick="selectGuarda('lisa')">
+                      <div class="guarda-preview-box">
+                        <span class="guarda-line-plain"></span>
+                      </div>
+                      <strong>Virola Lisa (Sin guarda)</strong>
+                      <span>Acabado limpio minimalista</span>
+                    </div>
+
+                    <div class="guarda-card" data-guarda="pampa" onclick="selectGuarda('pampa')">
+                      <div class="guarda-preview-box">
+                        <span class="guarda-line-pampa">▲▼▲▼▲▼▲▼▲▼▲</span>
+                      </div>
+                      <strong>Guarda Pampa Continua</strong>
+                      <span>Geometría tradicional de los pueblos originarios</span>
+                    </div>
+
+                    <div class="guarda-card" data-guarda="floral" onclick="selectGuarda('floral')">
+                      <div class="guarda-preview-box">
+                        <span class="guarda-line-floral">✿ ❀ ✿ ❀ ✿ ❀ ✿</span>
+                      </div>
+                      <strong>Cincelado Floral Gauchesco</strong>
+                      <span>Motivos botánicos criollos de orfebrería</span>
+                    </div>
+
+                    <div class="guarda-card" data-guarda="lineas" onclick="selectGuarda('lineas')">
+                      <div class="guarda-preview-box">
+                        <span class="guarda-line-double">═════════════</span>
+                      </div>
+                      <strong>Líneas Dobles de Precisión</strong>
+                      <span>Fileteado fino de orfebrería contemporánea</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Tab Panel 5: Subir Logo Propio -->
+                <div class="design-panel" id="design-panel-logo">
+                  <p class="tab-panel-intro">¿Querés grabar el logo de tu empresa, tu marca de ganado o una firma manuscrita?</p>
+                  
+                  <div class="file-drop-zone" id="file-drop-zone" onclick="document.getElementById('custom-logo-file').click()">
+                    <input type="file" id="custom-logo-file" accept="image/png, image/jpeg, image/svg+xml, application/pdf" style="display: none;" onchange="handleLogoUpload(event)" />
+                    <div class="drop-zone-content">
+                      <div class="drop-icon-box"><i class="fas fa-cloud-upload-alt"></i></div>
+                      <span class="drop-title">Hacé clic para subir tu imagen o vector</span>
+                      <span class="drop-sub">Formatos admitidos: PNG, JPG, SVG o PDF (en alta definición)</span>
+                    </div>
+                  </div>
+
+                  <div id="uploaded-logo-chip" class="uploaded-chip" style="display: none;">
+                    <i class="fas fa-check-circle" style="color: #27ae60;"></i>
+                    <span id="uploaded-logo-name">logo.png</span>
+                    <button type="button" onclick="removeUploadedLogo()" title="Quitar archivo">×</button>
+                  </div>
+                </div>
+
+                <!-- Indicaciones especiales para el orfebre -->
+                <div class="engraver-notes-wrap">
+                  <label for="custom-notes-input" class="sub-label">Indicaciones especiales para el maestro orfebre (opcional):</label>
+                  <input
+                    type="text"
+                    id="custom-notes-input"
+                    class="custom-notes-input"
+                    placeholder="Ej: Colocar el escudo en el centro y las iniciales a los costados..."
+                  />
+                </div>
               </div>
             </div>
 
