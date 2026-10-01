@@ -226,12 +226,17 @@ input, select, textarea {
   background: rgba(255, 255, 255, 0.98);
 }
 
+.site-header .container {
+  max-width: 1440px;
+  padding: 0 clamp(16px, 2.5vw, 36px);
+}
+
 .header-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 76px;
-  gap: clamp(10px, 1.6vw, 24px);
+  gap: clamp(12px, 1.8vw, 32px);
   width: 100%;
   box-sizing: border-box;
 }
@@ -244,7 +249,8 @@ input, select, textarea {
   flex-shrink: 0;
 }
 
-.brand-logo-wrap {
+.brand-logo-wrap,
+.header-brand {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -264,11 +270,13 @@ input, select, textarea {
   transition: transform var(--transition-fast);
 }
 
-.brand-logo-wrap:hover .brand-logo-img {
+.brand-logo-wrap:hover .brand-logo-img,
+.header-brand:hover .brand-logo-img {
   transform: scale(1.05);
 }
 
-.brand-name-group {
+.brand-name-group,
+.brand-text {
   display: flex;
   flex-direction: column;
 }
@@ -289,32 +297,34 @@ input, select, textarea {
   text-transform: uppercase;
   color: var(--accent-leather);
   font-weight: 700;
+  white-space: nowrap;
 }
 
 /* Zone 2: Center (Streamlined Desktop Navigation) */
 .header-center {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   flex: 1;
   min-width: 0;
+  margin-left: clamp(14px, 3vw, 44px);
 }
 
 .main-nav {
   display: flex;
   align-items: center;
-  gap: clamp(10px, 1.5vw, 24px);
+  gap: clamp(12px, 1.6vw, 24px);
   list-style: none;
   flex-wrap: nowrap;
 }
 
 .nav-link {
-  font-size: clamp(0.78rem, 0.88vw, 0.88rem);
+  font-size: clamp(0.78rem, 0.86vw, 0.88rem);
   font-weight: 600;
   letter-spacing: 0.3px;
   color: var(--text-main);
   text-transform: uppercase;
-  padding: 8px 0;
+  padding: 8px 2px;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -488,11 +498,11 @@ input, select, textarea {
 .header-right {
   display: flex;
   align-items: center;
-  gap: clamp(6px, 0.8vw, 10px);
+  gap: clamp(8px, 1vw, 14px);
   flex-shrink: 0;
   justify-content: flex-end;
-  padding-right: 8px;
-  margin-left: auto;
+  padding-right: 4px;
+  margin-left: clamp(10px, 1.6vw, 24px);
 }
 
 .action-btn {
@@ -643,7 +653,9 @@ input, select, textarea {
   margin-top: 4px;
 }
 
-.mobile-menu-toggle {
+.mobile-menu-toggle,
+.mobile-menu-btn,
+.mobile-toggle {
   display: none;
   font-size: 1.25rem;
 }
@@ -3778,16 +3790,20 @@ input, select, textarea {
 
 .engraving-graphic-slot {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.engraving-graphic-slot svg {
+.engraving-graphic-slot svg,
+.engraving-graphic-slot img {
   width: 100%;
   height: 100%;
+  max-width: 42px;
+  max-height: 42px;
+  object-fit: contain;
   display: block;
 }
 
@@ -3820,11 +3836,29 @@ input, select, textarea {
   filter: drop-shadow(0 0.5px 0.5px rgba(0, 0, 0, 0.35));
 }
 
+.technique-laser .engraving-graphic-slot img {
+  filter: grayscale(100%) contrast(350%) brightness(0.65) drop-shadow(0 0.5px 0.5px rgba(0, 0, 0, 0.45));
+}
+
 .technique-cincelado .engraving-text-slot,
 .technique-cincelado .engraving-graphic-slot {
   color: #ffffff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.95), -1px -1px 1px rgba(255, 255, 255, 0.95);
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
+}
+
+.technique-cincelado .engraving-graphic-slot img {
+  filter: grayscale(100%) brightness(1.7) contrast(180%) drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.9));
+}
+
+.technique-fotograbado .engraving-text-slot,
+.technique-fotograbado .engraving-graphic-slot {
+  color: #484852;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.technique-fotograbado .engraving-graphic-slot img {
+  filter: grayscale(100%) contrast(150%) opacity(0.85);
 }
 
 .technique-fotograbado .engraving-text-slot,
@@ -4553,16 +4587,27 @@ input, select, textarea {
 }
 
 .graphic-svg-wrap {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-main);
+  padding: 2px;
+}
+
+.graphic-svg-wrap svg,
+.graphic-svg-wrap img {
+  width: 100%;
+  height: 100%;
+  max-width: 40px;
+  max-height: 40px;
+  object-fit: contain;
+  display: block;
 }
 
 .graphic-btn-name {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: var(--text-secondary);
   line-height: 1.25;
@@ -6068,7 +6113,9 @@ input, select, textarea {
   .header-center {
     display: none;
   }
-  .mobile-menu-toggle {
+  .mobile-menu-toggle,
+  .mobile-menu-btn,
+  .mobile-toggle {
     display: flex;
   }
   .announcement-links {
