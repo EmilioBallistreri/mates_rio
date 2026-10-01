@@ -1,15 +1,19 @@
 {
-  "name": "mates-rio",
+  "name": "mates-rio-workspace",
   "version": "1.0.0",
-  "description": "Tienda web oficial de Mates Río",
-  "main": "index.html",
+  "description": "Monorepo / Workspace oficial de Mates Río (Frontend y Backend)",
+  "private": true,
   "scripts": {
-    "dev": "serve -l 5005",
-    "start": "serve -l 5005"
+    "dev:front": "npm --prefix frontend-mates-rio run dev",
+    "dev:back": "npm --prefix backend-mates-rio run dev",
+    "start:front": "npm --prefix frontend-mates-rio start",
+    "start:back": "npm --prefix backend-mates-rio start",
+    "install:all": "npm --prefix backend-mates-rio install"
   },
   "keywords": [
     "mates",
-    "ecommerce"
+    "ecommerce",
+    "workspace"
   ],
   "author": "Mates Río"
 }

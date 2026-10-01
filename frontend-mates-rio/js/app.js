@@ -37,7 +37,7 @@ const CONFIG = {
   freeShippingThreshold: 60000,
   shippingCost: 5500,
   transferDiscountRate: 0.10, // 10% OFF
-  whatsappNumber: "5491134567890",
+  whatsappNumber: "5493543600000",
   instagramUrl: "https://www.instagram.com/mates_rio_/"
 };
 
@@ -212,13 +212,59 @@ function setCategoryFilter(categoryId) {
   renderProducts();
 }
 
-function getFilteredProducts() {
+let promoCurrentSubfilter = 'all';
+
+function filterPromosLive() {
+  const input = document.getElementById('promos-search-input');
+  if (!input) return;
+  state.searchQuery = input.value;
+  renderProducts();
+}
+
+function setPromoSubfilter(subfilter, btnEl) {
+  promoCurrentSubfilter = subfilter;
+  if (btnEl) {
+    document.querySelectorAll('.promos-filter-chips .filter-pill').forEach(btn => btn.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+  renderProducts();
+}
+
+function getAllProducts() {
   if (typeof PRODUCTS_DATA === 'undefined') return [];
-  let list = [...PRODUCTS_DATA];
+  try {
+    const custom = JSON.parse(localStorage.getItem('mates_rio_custom_products')) || [];
+    if (custom.length > 0) {
+      const existingIds = new Set(PRODUCTS_DATA.map(p => p.id));
+      const newItems = custom.filter(p => !existingIds.has(p.id));
+      return [...newItems, ...PRODUCTS_DATA];
+    }
+  } catch (e) {
+    console.error("Error cargando productos personalizados:", e);
+  }
+  return PRODUCTS_DATA;
+}
+
+function getFilteredProducts() {
+  let list = getAllProducts();
+  if (!list.length) return [];
 
   // 1. Filter by category
   if (state.activeCategory !== 'all') {
     list = list.filter(p => p.category.toLowerCase() === state.activeCategory.toLowerCase());
+  }
+
+  // 1.b Filter by promo subfilter
+  if (promoCurrentSubfilter && promoCurrentSubfilter !== 'all') {
+    if (promoCurrentSubfilter === 'termo') {
+      list = list.filter(p => (p.name + ' ' + (p.description || '')).toLowerCase().includes('termo'));
+    } else if (promoCurrentSubfilter === 'imperial') {
+      list = list.filter(p => (p.name + ' ' + (p.description || '')).toLowerCase().includes('imperial'));
+    } else if (promoCurrentSubfilter === 'canasta') {
+      list = list.filter(p => (p.name + ' ' + (p.description || '')).toLowerCase().includes('canasta') || (p.name + ' ' + (p.description || '')).toLowerCase().includes('matera'));
+    } else if (promoCurrentSubfilter === 'under-80k') {
+      list = list.filter(p => p.price <= 80000);
+    }
   }
 
   // 2. Filter by search query
@@ -226,8 +272,8 @@ function getFilteredProducts() {
     const q = state.searchQuery.toLowerCase().trim();
     list = list.filter(p => 
       p.name.toLowerCase().includes(q) ||
-      p.description.toLowerCase().includes(q) ||
-      p.categoryName.toLowerCase().includes(q)
+      (p.description && p.description.toLowerCase().includes(q)) ||
+      (p.categoryName && p.categoryName.toLowerCase().includes(q))
     );
   }
 
@@ -445,6 +491,13 @@ function clearCart() {
   showToast('Vaciaste el carrito de compras');
 }
 
+function confirmClearCart() {
+  if (state.cart.length === 0) return;
+  if (confirm("¿Estás seguro de que deseas vaciar el carrito?")) {
+    clearCart();
+  }
+}
+
 function saveCart() {
   localStorage.setItem('mates_rio_cart', JSON.stringify(state.cart));
 }
@@ -540,7 +593,7 @@ function updateCartUI() {
         <i class="fas fa-shopping-bag"></i>
         <h4 style="font-family: var(--font-heading); font-size: 1.25rem;">Tu carrito está vacío</h4>
         <p style="font-size: 0.88rem; margin: 8px 0 20px;">Descubrí nuestros mates imperiales, termos y combos de autor.</p>
-        <button class="btn btn-outline-dark" onclick="closeCartDrawer(); document.getElementById('catalogo').scrollIntoView({behavior: 'smooth'})">
+        <button class="btn btn-outline-dark" onclick="closeCartDrawer(); const catEl = document.getElementById('catalogo'); if (catEl) { catEl.scrollIntoView({behavior: 'smooth'}); } else { window.location.href = 'catalogo.html'; }">
           <i class="fas fa-shopping-basket"></i> Ver Catálogo
         </button>
       </div>
@@ -610,6 +663,22 @@ function removeCoupon() {
 }
 
 // Shipping Postal Code Calculator inside Cart
+function toggleCartTool(tool) {
+  const collapseEl = document.getElementById(`collapse-${tool}`);
+  const arrowEl = document.getElementById(`arrow-${tool}`);
+  if (!collapseEl) return;
+  const isCurrentlyOpen = collapseEl.classList.contains('active') || collapseEl.style.display === 'block';
+  if (isCurrentlyOpen) {
+    collapseEl.classList.remove('active');
+    collapseEl.style.display = 'none';
+    if (arrowEl) arrowEl.style.transform = 'rotate(0deg)';
+  } else {
+    collapseEl.classList.add('active');
+    collapseEl.style.display = 'block';
+    if (arrowEl) arrowEl.style.transform = 'rotate(180deg)';
+  }
+}
+
 function calculateShippingCP() {
   const cpInput = document.getElementById('cart-cp-input');
   const resultEl = document.getElementById('cart-cp-result');
@@ -980,9 +1049,28 @@ function updateAuthUI() {
   const userBtnText = document.getElementById('user-btn-name');
   const userBtn = document.getElementById('user-account-btn');
   const userDropdown = document.getElementById('user-dropdown-menu');
+  const mobileAuthText = document.getElementById('mobile-nav-auth-text');
+  const mobileAdminItem = document.getElementById('mobile-nav-admin-item');
+  const adminFloatBtn = document.getElementById('admin-floating-add-btn');
+
+  const isAdmin = state.currentUser && (
+    state.currentUser.role === 'Super Administrador' ||
+    state.currentUser.role === 'Taller & Depósito' ||
+    state.currentUser.email === 'admin@matesrio.com' ||
+    state.currentUser.email === 'taller@matesrio.com'
+  );
+
+  if (adminFloatBtn) {
+    adminFloatBtn.style.display = isAdmin ? 'flex' : 'none';
+  }
+  if (mobileAdminItem) {
+    mobileAdminItem.style.display = isAdmin ? 'block' : 'none';
+  }
 
   if (state.currentUser) {
-    if (userBtnText) userBtnText.textContent = state.currentUser.name.split(' ')[0];
+    const firstName = state.currentUser.name ? state.currentUser.name.split(' ')[0] : 'Usuario';
+    if (userBtnText) userBtnText.textContent = firstName;
+    if (mobileAuthText) mobileAuthText.textContent = `Mi Perfil (${firstName})`;
     if (userBtn) {
       userBtn.onclick = (e) => {
         e.stopPropagation();
@@ -993,6 +1081,7 @@ function updateAuthUI() {
     }
   } else {
     if (userBtnText) userBtnText.textContent = "Ingresar";
+    if (mobileAuthText) mobileAuthText.textContent = "Mi Cuenta / Ingresar";
     if (userBtn) {
       userBtn.onclick = () => openAuthModal('login');
       userBtn.title = "Iniciar sesión o Registrarse";
@@ -1016,6 +1105,25 @@ function openProfileModal() {
   if (nameEl) nameEl.textContent = state.currentUser.name;
   if (emailEl) emailEl.textContent = state.currentUser.email;
   if (phoneEl) phoneEl.textContent = state.currentUser.phone || "No especificado";
+
+  // Pre-fill location fields if available
+  if (state.currentUser.location) {
+    const loc = state.currentUser.location;
+    const provEl = document.getElementById('profile-input-province');
+    const cityEl = document.getElementById('profile-input-city');
+    const addrEl = document.getElementById('profile-input-address');
+    const zipEl = document.getElementById('profile-input-zip');
+    const hint = document.getElementById('profile-location-zone-hint');
+
+    if (provEl && loc.province) provEl.value = loc.province;
+    if (cityEl && loc.city) cityEl.value = loc.city;
+    if (addrEl && loc.address) addrEl.value = loc.address;
+    if (zipEl && loc.zip) zipEl.value = loc.zip;
+    if (hint && loc.city) {
+      hint.textContent = `✓ Ubicación guardada: ${loc.city}, ${loc.province} (CP ${loc.zip})`;
+      hint.style.display = 'block';
+    }
+  }
 
   if (ordersListEl) {
     if (state.orders.length === 0) {
@@ -1044,6 +1152,52 @@ function openProfileModal() {
 function closeProfileModal() {
   document.getElementById('profile-modal')?.classList.remove('active');
   document.body.style.overflow = '';
+}
+
+function switchProfileTab(tab) {
+  const panelInfo = document.getElementById('profile-panel-info');
+  const panelOrders = document.getElementById('profile-panel-orders');
+  const btnInfo = document.getElementById('profile-tab-btn-info');
+  const btnOrders = document.getElementById('profile-tab-btn-orders');
+
+  if (tab === 'profile') {
+    if (panelInfo) panelInfo.style.display = 'block';
+    if (panelOrders) panelOrders.style.display = 'none';
+    if (btnInfo) btnInfo.classList.add('active');
+    if (btnOrders) btnOrders.classList.remove('active');
+  } else if (tab === 'orders') {
+    if (panelInfo) panelInfo.style.display = 'none';
+    if (panelOrders) panelOrders.style.display = 'block';
+    if (btnInfo) btnInfo.classList.remove('active');
+    if (btnOrders) btnOrders.classList.add('active');
+  }
+}
+
+function saveUserLocation(event) {
+  if (event) event.preventDefault();
+  if (!state.currentUser) {
+    showToast("Debes iniciar sesión para guardar tu dirección", "fa-exclamation-circle");
+    return;
+  }
+
+  const province = document.getElementById('profile-input-province')?.value || '';
+  const city = document.getElementById('profile-input-city')?.value || '';
+  const address = document.getElementById('profile-input-address')?.value || '';
+  const zip = document.getElementById('profile-input-zip')?.value || '';
+
+  state.currentUser.location = { province, city, address, zip };
+  localStorage.setItem('mates_rio_user', JSON.stringify(state.currentUser));
+
+  const cpInput = document.getElementById('cart-cp-input');
+  if (cpInput && zip) cpInput.value = zip;
+
+  const hint = document.getElementById('profile-location-zone-hint');
+  if (hint) {
+    hint.textContent = `✓ Ubicación guardada: ${city}, ${province} (CP ${zip})`;
+    hint.style.display = 'block';
+  }
+
+  showToast("¡Dirección de entrega guardada correctamente!", "fa-check-circle");
 }
 
 // ==========================================================================
@@ -1107,6 +1261,11 @@ function openQuickView(productId) {
     `).join('');
   }
 
+  const btnPersonalize = document.getElementById('qv-btn-personalize');
+  if (btnPersonalize) {
+    btnPersonalize.style.display = (product.category === 'mates') ? 'block' : 'none';
+  }
+
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -1118,6 +1277,18 @@ function capitalizeFirstLetter(str) {
 function closeQuickView() {
   document.getElementById('quick-view-modal')?.classList.remove('active');
   document.body.style.overflow = '';
+}
+
+function changeQuickViewQty(delta) {
+  const qtyInput = document.getElementById('qv-qty');
+  if (!qtyInput) return;
+  let val = parseInt(qtyInput.value, 10) || 1;
+  val = Math.max(1, Math.min(99, val + delta));
+  qtyInput.value = val;
+}
+
+function goToPersonalizarMate(productId) {
+  window.location.href = `personaliza-tu-mate.html?mate=${encodeURIComponent(productId || '')}`;
 }
 
 function addQuickViewToCart() {
@@ -1164,6 +1335,93 @@ function closeMobileDrawer() {
   document.getElementById('mobile-nav-drawer')?.classList.remove('active');
   document.getElementById('mobile-nav-overlay')?.classList.remove('active');
   document.body.style.overflow = '';
+}
+
+function handleMobileAuthClick() {
+  closeMobileDrawer();
+  if (state.currentUser) {
+    openProfileModal();
+  } else {
+    openAuthModal('login');
+  }
+}
+
+// Admin Web Product Creator Modals
+function openAdminAddProductModal() {
+  const modal = document.getElementById('admin-add-product-modal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeAdminAddProductModal() {
+  const modal = document.getElementById('admin-add-product-modal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleAdminCreateProductWeb(event) {
+  if (event) event.preventDefault();
+  const nameEl = document.getElementById('admin-web-name');
+  const catEl = document.getElementById('admin-web-category');
+  const priceEl = document.getElementById('admin-web-price');
+  const origPriceEl = document.getElementById('admin-web-orig-price');
+  const stockEl = document.getElementById('admin-web-stock');
+  const badgeEl = document.getElementById('admin-web-badge');
+  const badgeTypeEl = document.getElementById('admin-web-badge-type');
+  const imgSelectEl = document.getElementById('admin-web-img-select');
+  const imgCustomEl = document.getElementById('admin-web-img-custom');
+  const descEl = document.getElementById('admin-web-desc');
+
+  if (!nameEl || !priceEl) return;
+
+  const image = (imgSelectEl && imgSelectEl.value === 'custom' && imgCustomEl && imgCustomEl.value.trim())
+    ? imgCustomEl.value.trim()
+    : (imgSelectEl ? imgSelectEl.value : 'assets/images/prod_mate_imperial.jpg');
+
+  const newProduct = {
+    id: `prod-custom-${Date.now()}`,
+    name: nameEl.value.trim(),
+    category: catEl ? catEl.value : 'mates',
+    categoryName: catEl ? catEl.options[catEl.selectedIndex].text.toUpperCase() : 'MATES',
+    price: parseFloat(priceEl.value) || 0,
+    originalPrice: origPriceEl && origPriceEl.value ? parseFloat(origPriceEl.value) : null,
+    stock: stockEl ? parseInt(stockEl.value, 10) : 10,
+    inStock: true,
+    badge: badgeEl && badgeEl.value.trim() ? badgeEl.value.trim() : null,
+    badgeType: badgeTypeEl ? badgeTypeEl.value : 'promo',
+    image: image,
+    rating: 5.0,
+    reviewsCount: 1,
+    description: descEl ? descEl.value.trim() : '',
+    specs: {
+      material: "Selección artesanal Mates Río",
+      garantia: "Garantía artesanal oficial de 6 meses"
+    }
+  };
+
+  try {
+    const customList = JSON.parse(localStorage.getItem('mates_rio_custom_products')) || [];
+    customList.unshift(newProduct);
+    localStorage.setItem('mates_rio_custom_products', JSON.stringify(customList));
+
+    if (typeof PRODUCTS_DATA !== 'undefined') {
+      PRODUCTS_DATA.unshift(newProduct);
+    }
+
+    closeAdminAddProductModal();
+    if (typeof renderProducts === 'function') renderProducts();
+    showToast("¡Producto publicado en el catálogo con éxito!", "fa-check-circle");
+
+    const form = document.getElementById('admin-web-product-form');
+    if (form) form.reset();
+  } catch (err) {
+    console.error("Error guardando producto:", err);
+    alert("Error al publicar el producto: " + err.message);
+  }
 }
 
 // ==========================================================================

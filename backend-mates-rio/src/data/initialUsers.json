@@ -1,0 +1,16 @@
+[
+  {
+    "id": "usr-1",
+    "email": "admin@matesrio.com",
+    "password": "admin",
+    "name": "Administrador General",
+    "role": "Super Administrador"
+  },
+  {
+    "id": "usr-2",
+    "email": "taller@matesrio.com",
+    "password": "admin",
+    "name": "Encargado de Taller",
+    "role": "Taller & Depósito"
+  }
+]

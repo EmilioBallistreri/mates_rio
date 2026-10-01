@@ -1,0 +1,16 @@
+{
+  "name": "frontend-mates-rio",
+  "version": "1.0.0",
+  "description": "Frontend web de Mates Río (Tienda oficial, personalizador y panel administrativo)",
+  "main": "index.html",
+  "scripts": {
+    "dev": "serve -l 5005",
+    "start": "serve -l 5005"
+  },
+  "keywords": [
+    "mates",
+    "ecommerce",
+    "frontend"
+  ],
+  "author": "Mates Río"
+}

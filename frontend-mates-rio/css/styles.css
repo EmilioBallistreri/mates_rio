@@ -2590,6 +2590,148 @@ input, select, textarea {
   margin-top: 16px;
 }
 
+/* Cart Collapsible Tools & Savings Hint */
+.cart-tools-bar {
+  margin: 10px 0;
+}
+.cart-tool-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  background: #fdfaf5;
+  border: 1px dashed var(--accent-gold);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-leather);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.cart-tool-btn:hover {
+  background: #f9f2e4;
+  border-color: var(--accent-leather);
+}
+.cart-tool-btn i {
+  color: var(--accent-gold);
+}
+.tool-arrow {
+  transition: transform 0.25s ease;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.cart-tool-collapse {
+  display: none;
+  padding: 10px 0;
+  animation: fadeIn 0.2s ease;
+}
+.cart-tool-collapse.active {
+  display: block;
+}
+.transfer-savings-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: #27ae60;
+  font-weight: 700;
+  margin-top: 3px;
+}
+.transfer-savings-hint i {
+  color: #f39c12;
+}
+
+/* Profile Modal Tabs & Location */
+.modal-box-padded {
+  padding: 28px;
+}
+.profile-modal-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--border-light);
+  padding-bottom: 8px;
+}
+.profile-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.profile-tab-btn.active {
+  color: var(--accent-leather);
+  background: #fdfaf5;
+  box-shadow: inset 0 -2px 0 var(--accent-gold);
+}
+.profile-tab-btn:hover:not(.active) {
+  color: var(--text-primary);
+  background: #f8f8f8;
+}
+.location-box {
+  background: #fdfcf9;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.location-box-title {
+  font-family: var(--font-heading);
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: var(--accent-leather);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Floating Admin Add Button */
+.admin-floating-add-btn {
+  position: fixed;
+  bottom: 96px;
+  left: 24px;
+  z-index: 1050;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, var(--bg-dark), #2a1f18);
+  color: var(--accent-gold);
+  border: 1px solid var(--accent-gold);
+  border-radius: 30px;
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.admin-floating-add-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  background: var(--accent-gold);
+  color: #121212;
+  box-shadow: 0 12px 30px rgba(197, 155, 39, 0.4);
+}
+@media (max-width: 768px) {
+  .admin-floating-add-btn {
+    bottom: 84px;
+    left: 14px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+  }
+}
+
+
 /* ==========================================================================
    MODALS (AUTH, QUICK VIEW, CHECKOUT)
    ========================================================================== */
