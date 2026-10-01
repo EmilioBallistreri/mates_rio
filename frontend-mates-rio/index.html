@@ -16,10 +16,10 @@
   <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
 
-  <!-- Google Fonts: Montserrat & Outfit -->
+  <!-- Google Fonts: Montserrat, Outfit, Cinzel, Dancing Script, Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Dancing+Script:wght@600;700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
 
   <!-- Font Awesome Icons 6.5.1 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -38,11 +38,11 @@
   <aside class="announcement-bar">
     <div class="container announcement-inner">
       <div class="announcement-center-msg">
-        <span><i class="far fa-credit-card"></i> <b>3 Cuotas sin interés</b> en toda la tienda</span>
+        <span class="announcement-item"><i class="far fa-credit-card"></i> <b>3 Cuotas sin interés</b></span>
         <span class="announcement-sep">•</span>
-        <span><i class="fas fa-bolt"></i> <b>10% OFF</b> por Transferencia</span>
-        <span class="announcement-sep">•</span>
-        <span><i class="fas fa-truck"></i> <b>Envío Gratis</b> superando $ 60.000</span>
+        <span class="announcement-item"><i class="fas fa-bolt"></i> <b>10% OFF</b> Transferencia</span>
+        <span class="announcement-sep announcement-sep-desktop">•</span>
+        <span class="announcement-item announcement-item-desktop"><i class="fas fa-truck"></i> <b>Envío Gratis</b> +$ 60.000</span>
       </div>
 
       <div class="announcement-links">
@@ -68,7 +68,7 @@
         </button>
 
         <a href="#inicio" class="brand-logo-wrap" title="Mates Río - Inicio">
-          <img src="assets/images/logo.jpg" alt="Logo de Mates Río" class="brand-logo-img" />
+          <img src="assets/images/logo.jpg" alt="Logo de Mates Río" class="brand-logo-img" ondblclick="handleSecretAdminTrigger()" />
           <div class="brand-name-group">
             <span class="brand-name">MATES RÍO</span>
             <span class="brand-tagline">Tradición & Estilo</span>
@@ -85,14 +85,14 @@
 
           <!-- Dropdown: Productos -->
           <li class="nav-item-dropdown" id="nav-dropdown-products">
-            <a href="#catalogo" class="nav-link nav-dropdown-trigger">
+            <a href="catalogo.html" class="nav-link nav-dropdown-trigger">
               Productos <i class="fas fa-chevron-down dropdown-arrow"></i>
             </a>
             
             <!-- Floating Mega Dropdown Panel -->
             <div class="nav-dropdown-menu">
               <div class="dropdown-categories-grid">
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('promos')">
+                <a href="promos.html" class="dropdown-cat-card">
                   <div class="dropdown-cat-icon"><i class="fas fa-fire" style="color: var(--badge-promo);"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">PROMOS & COMBOS</span>
@@ -100,7 +100,7 @@
                   </div>
                 </a>
 
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('mates')">
+                <a href="catalogo.html?categoria=mates" class="dropdown-cat-card" onclick="setCategoryFilter('mates')">
                   <div class="dropdown-cat-icon"><i class="fas fa-mug-hot" style="color: var(--accent-leather);"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">MATES IMPERIALES</span>
@@ -108,7 +108,7 @@
                   </div>
                 </a>
 
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('termos')">
+                <a href="catalogo.html?categoria=termos" class="dropdown-cat-card" onclick="setCategoryFilter('termos')">
                   <div class="dropdown-cat-icon"><i class="fas fa-temperature-high" style="color: var(--accent-gold);"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">TERMOS TÉRMICOS</span>
@@ -116,7 +116,7 @@
                   </div>
                 </a>
 
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('accesorios')">
+                <a href="catalogo.html?categoria=accesorios" class="dropdown-cat-card" onclick="setCategoryFilter('accesorios')">
                   <div class="dropdown-cat-icon"><i class="fas fa-magic" style="color: #4a6fa5;"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">ACCESORIOS</span>
@@ -124,7 +124,7 @@
                   </div>
                 </a>
 
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('yerbas')">
+                <a href="catalogo.html?categoria=yerbas" class="dropdown-cat-card" onclick="setCategoryFilter('yerbas')">
                   <div class="dropdown-cat-icon"><i class="fas fa-leaf" style="color: #27ae60;"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">YERBAS DE AUTOR</span>
@@ -132,7 +132,7 @@
                   </div>
                 </a>
 
-                <a href="#catalogo" class="dropdown-cat-card" onclick="setCategoryFilter('equipos')">
+                <a href="catalogo.html?categoria=equipos" class="dropdown-cat-card" onclick="setCategoryFilter('equipos')">
                   <div class="dropdown-cat-icon"><i class="fas fa-briefcase" style="color: var(--accent-leather);"></i></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">EQUIPOS DE MATE</span>
@@ -142,7 +142,7 @@
               </div>
 
               <div class="dropdown-footer">
-                <a href="#catalogo" onclick="setCategoryFilter('all')" class="dropdown-all-link">
+                <a href="catalogo.html" onclick="setCategoryFilter('all')" class="dropdown-all-link">
                   Ver todo el catálogo completo <i class="fas fa-arrow-right"></i>
                 </a>
               </div>
@@ -150,13 +150,20 @@
           </li>
 
           <li>
-            <a href="#catalogo" class="nav-link" onclick="setCategoryFilter('promos')">
+            <a href="promos.html" class="nav-link">
               Promos <span class="nav-badge-pill">OFF</span>
             </a>
           </li>
 
+          <li class="nav-item-custom">
+            <a href="personaliza-tu-mate.html" class="nav-link nav-link-custom">
+              <i class="fas fa-magic" style="color: var(--accent-gold); margin-right: 4px;"></i> Personalizá tu Mate
+              <span class="nav-badge-pill pill-gold">VIROLA</span>
+            </a>
+          </li>
+
           <li>
-            <a href="#guia-curado" class="nav-link">Tips Materos</a>
+            <a href="#comunidad" class="nav-link">Comunidad</a>
           </li>
 
           <li>
@@ -173,9 +180,9 @@
         </a>
 
         <!-- Search Trigger Button -->
-        <button class="action-btn" onclick="document.getElementById('catalog-search-input')?.focus(); document.getElementById('catalogo')?.scrollIntoView({behavior: 'smooth'})" title="Buscar productos">
+        <a href="catalogo.html?focus=search" class="action-btn" title="Buscar productos">
           <i class="fas fa-search"></i>
-        </button>
+        </a>
 
         <!-- User Account (Login / Register / Profile Dropdown) -->
         <div class="user-btn-wrap">
@@ -192,6 +199,9 @@
             <div class="user-dropdown-item" onclick="openProfileModal()">
               <i class="fas fa-box-open"></i> Mis Pedidos
             </div>
+            <a href="admin.html" class="user-dropdown-item admin-highlight-link" id="dropdown-admin-link" style="display: none; color: var(--accent-leather); font-weight: 800; text-decoration: none;">
+              <i class="fas fa-shield-halved" style="color: var(--accent-gold);"></i> Panel de Administración
+            </a>
             <div class="user-dropdown-item logout" onclick="logoutUser()">
               <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
             </div>
@@ -223,6 +233,18 @@
     </div>
 
     <ul class="mobile-nav-list">
+      <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
+        <a href="javascript:void(0)" onclick="handleMobileAuthClick()">
+          <span><i class="fas fa-user-circle" style="width: 22px; color: var(--accent-leather);"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item" id="mobile-nav-admin-item" style="display: none; background: #fffdf9; border-left: 4px solid var(--accent-gold);">
+        <a href="admin.html" onclick="closeMobileDrawer();">
+          <span><i class="fas fa-shield-halved" style="width: 22px; color: var(--accent-gold);"></i> <b style="color: var(--accent-leather);">Panel Admin</b></span>
+          <span class="nav-badge-pill pill-gold">STAFF</span>
+        </a>
+      </li>
       <li class="mobile-nav-item">
         <a href="#inicio" onclick="closeMobileDrawer()">
           <span><i class="fas fa-home" style="width: 22px; color: var(--accent-gold);"></i> Inicio</span>
@@ -236,37 +258,49 @@
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('promos'); closeMobileDrawer()">
+        <a href="promos.html" onclick="closeMobileDrawer()">
           <span><i class="fas fa-fire" style="width: 22px; color: var(--badge-promo);"></i> PROMOS</span>
           <span class="nav-badge-pill">Hasta 25% OFF</span>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('mates'); closeMobileDrawer()">
-          <span><i class="fas fa-mug-hot" style="width: 22px; color: var(--accent-leather);"></i> Mates Imperiales</span>
+        <a href="catalogo.html" onclick="setCategoryFilter('all'); closeMobileDrawer()">
+          <span><i class="fas fa-th-large" style="width: 22px; color: var(--accent-gold);"></i> Catálogo Completo</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('termos'); closeMobileDrawer()">
+        <a href="catalogo.html?categoria=mates" onclick="setCategoryFilter('mates'); closeMobileDrawer()">
+          <span><i class="fas fa-mug-hot" style="width: 22px; color: var(--accent-leather);"></i> Mates Imperiales</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="personaliza-tu-mate.html">
+          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Personalizá tu Mate</span>
+          <span class="nav-badge-pill pill-gold">VIROLA</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=termos" onclick="setCategoryFilter('termos'); closeMobileDrawer()">
           <span><i class="fas fa-temperature-high" style="width: 22px; color: var(--accent-gold);"></i> Termos de Acero</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('accesorios'); closeMobileDrawer()">
+        <a href="catalogo.html?categoria=accesorios" onclick="setCategoryFilter('accesorios'); closeMobileDrawer()">
           <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Bombillas & Accesorios</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('yerbas'); closeMobileDrawer()">
+        <a href="catalogo.html?categoria=yerbas" onclick="setCategoryFilter('yerbas'); closeMobileDrawer()">
           <span><i class="fas fa-leaf" style="width: 22px; color: #27ae60;"></i> Yerbas Seleccionadas</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#catalogo" onclick="setCategoryFilter('equipos'); closeMobileDrawer()">
+        <a href="catalogo.html?categoria=equipos" onclick="setCategoryFilter('equipos'); closeMobileDrawer()">
           <span><i class="fas fa-briefcase" style="width: 22px; color: var(--accent-leather);"></i> Equipos de Mate</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
@@ -289,7 +323,7 @@
         </a>
       </div>
       <p style="font-size: 0.75rem; color: var(--text-secondary); text-align: center;">
-        Showroom en CABA • Lunes a Sábados
+        Taller en Río Ceballos, Córdoba • Envíos a todo el país
       </p>
     </div>
   </aside>
@@ -304,7 +338,7 @@
         <div class="hero-slide active" data-slide-index="0">
           <img src="assets/images/banner_1.jpg" alt="Colección de Mates Imperiales Mates Río" class="hero-slide-bg" />
           <div class="hero-overlay"></div>
-          <div class="container" style="height: 100%; display: flex; align-items: center;">
+          <div class="container">
             <div class="hero-content">
               <span class="hero-tag"><i class="fas fa-crown"></i> Tradición & Elegancia Argentina</span>
               <h1 class="hero-title">Mates Imperiales y Artesanales de Selección</h1>
@@ -312,10 +346,10 @@
                 Calabazas gruesas seleccionadas, cuero vacuno genuino con costura uruguaya y virolas cinceladas a mano en alpaca maciza. Diseñados para que cada cebada sea única.
               </p>
               <div class="hero-cta-group">
-                <a href="#catalogo" class="btn btn-primary" onclick="setCategoryFilter('mates')">
+                <a href="catalogo.html?categoria=mates" class="btn btn-primary">
                   <i class="fas fa-shopping-bag"></i> Explorar Mates
                 </a>
-                <a href="#catalogo" class="btn btn-secondary" onclick="setCategoryFilter('promos')">
+                <a href="promos.html" class="btn btn-secondary">
                   Ver Promociones
                 </a>
               </div>
@@ -327,7 +361,7 @@
         <div class="hero-slide" data-slide-index="1">
           <img src="assets/images/banner_2.jpg" alt="Promos y Combos Materos Completos" class="hero-slide-bg" />
           <div class="hero-overlay"></div>
-          <div class="container" style="height: 100%; display: flex; align-items: center;">
+          <div class="container">
             <div class="hero-content">
               <span class="hero-tag"><i class="fas fa-percent"></i> Combos con hasta 25% OFF</span>
               <h2 class="hero-title">Equipate Completo para tus Rondas de Mate</h2>
@@ -335,7 +369,7 @@
                 Sets materos completos con termo de acero inoxidable 1L, mate imperial o camionero, bombilla de alpaca y matera de cuero. ¡Todo listo para disfrutar!
               </p>
               <div class="hero-cta-group">
-                <a href="#catalogo" class="btn btn-primary" onclick="setCategoryFilter('promos')">
+                <a href="promos.html" class="btn btn-primary">
                   <i class="fas fa-fire"></i> Aprovechar Ofertas
                 </a>
                 <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20asesorarme%20sobre%20los%20combos%20materos." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
@@ -350,7 +384,7 @@
         <div class="hero-slide" data-slide-index="2">
           <img src="assets/images/banner_3.jpg" alt="Termos térmicos de alta performance para mate" class="hero-slide-bg" />
           <div class="hero-overlay"></div>
-          <div class="container" style="height: 100%; display: flex; align-items: center;">
+          <div class="container">
             <div class="hero-content">
               <span class="hero-tag"><i class="fas fa-mountain"></i> Compañeros de Aventura</span>
               <h2 class="hero-title">El Ritual del Mate Donde Quiera Que Vayas</h2>
@@ -358,7 +392,7 @@
                 Termos térmicos con pico vertedor de precisión y aislamiento al vacío que mantiene el agua caliente por más de 24 horas. Construidos para durar.
               </p>
               <div class="hero-cta-group">
-                <a href="#catalogo" class="btn btn-primary" onclick="setCategoryFilter('termos')">
+                <a href="catalogo.html?categoria=termos" class="btn btn-primary">
                   <i class="fas fa-mug-hot"></i> Ver Termos
                 </a>
                 <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
@@ -440,205 +474,92 @@
          ========================================================================== -->
     <section class="categories-section" id="categorias">
       <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Colecciones Exclusivas</span>
-          <h2 class="section-title">Nuestras Categorías</h2>
-          <p class="section-subtitle">
-            Explorá nuestra selección artesanal pensada para cada estilo matero. Hacé clic para ver todos los modelos disponibles.
-          </p>
-        </div>
-
+        <!-- 6 Category Cards first, exactly as requested by client -->
         <div class="categories-grid" id="categories-grid">
           <!-- Rendered dynamically by js/app.js -->
         </div>
-      </div>
-    </section>
 
-    <!-- ==========================================================================
-         PRODUCTS CATALOG & LIVE FILTER SECTION
-         ========================================================================== -->
-    <section class="catalog-section" id="catalogo">
-      <div class="container">
-        <div class="section-header" style="margin-bottom: 30px;">
-          <span class="section-tag">Catálogo Completo</span>
-          <h2 class="section-title">Productos Destacados</h2>
+        <!-- Section title & description placed cleanly below the cards -->
+        <div class="categories-bottom-info">
+          <span class="section-tag">Colecciones Exclusivas</span>
+          <h2 class="section-title">Nuestras Categorías</h2>
           <p class="section-subtitle">
-            Buscá por nombre o filtrá por tu categoría y precio preferido para encontrar tu próximo compañero de rondas.
+            Explorá nuestra selección artesanal pensada para cada estilo matero. Hacé clic en cualquier categoría para descubrir todos los modelos disponibles en el catálogo.
           </p>
-        </div>
-
-        <!-- Filter & Search Toolbar -->
-        <div class="catalog-toolbar">
-          <div class="toolbar-top-row">
-            <!-- Live Search Bar -->
-            <div class="search-box-wrap">
-              <i class="fas fa-search search-icon"></i>
-              <input
-                type="text"
-                id="catalog-search-input"
-                class="search-input"
-                placeholder="Buscar por nombre, modelo, material (ej: imperial, termo, alpaca...)"
-                aria-label="Buscar productos"
-              />
-              <i class="fas fa-times-circle search-clear-btn" id="search-clear-btn" title="Limpiar búsqueda"></i>
-            </div>
-
-            <!-- Right Filters (Sort & Price) -->
-            <div class="filter-controls-right">
-              <!-- Filter by Price -->
-              <div class="sort-wrap">
-                <label for="catalog-price-select" class="sort-label">Precio:</label>
-                <select id="catalog-price-select" class="sort-select">
-                  <option value="all">Todos los precios</option>
-                  <option value="under-40k">Hasta $ 40.000</option>
-                  <option value="40k-70k">$ 40.000 a $ 70.000</option>
-                  <option value="over-70k">Más de $ 70.000</option>
-                </select>
-              </div>
-
-              <!-- Sort Select -->
-              <div class="sort-wrap">
-                <label for="catalog-sort-select" class="sort-label">Ordenar:</label>
-                <select id="catalog-sort-select" class="sort-select">
-                  <option value="featured">Destacados</option>
-                  <option value="price-low">Menor precio</option>
-                  <option value="price-high">Mayor precio</option>
-                  <option value="rating">Mejor valorados</option>
-                  <option value="name-asc">Nombre A-Z</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category Pills Filter Bar -->
-          <div class="category-filter-pills" role="tablist">
-            <button class="filter-pill active" data-category="all">Todos los Productos</button>
-            <button class="filter-pill" data-category="promos">🔥 PROMOS</button>
-            <button class="filter-pill" data-category="mates">🧉 MATES</button>
-            <button class="filter-pill" data-category="termos">⚡ TERMOS</button>
-            <button class="filter-pill" data-category="accesorios">✨ ACCESORIOS</button>
-            <button class="filter-pill" data-category="yerbas">🌿 YERBAS</button>
-            <button class="filter-pill" data-category="equipos">🎒 EQUIPOS DE MATE</button>
-          </div>
-        </div>
-
-        <!-- Results Counter & Clear Link -->
-        <div class="results-status-bar">
-          <span class="results-count" id="results-count">Cargando productos...</span>
-          <span class="clear-filters-link" id="clear-filters-link" onclick="resetFilters()">
-            <i class="fas fa-times"></i> Limpiar filtros
-          </span>
-        </div>
-
-        <!-- Products Grid Container -->
-        <div class="products-grid" id="products-grid">
-          <!-- Populated dynamically via JS from PRODUCTS_DATA -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-         HOW TO CURE YOUR MATE (INTERACTIVE VALUE-ADD TABS)
-         ========================================================================== -->
-    <section class="cure-guide-section">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Tips Materos de Mates Río</span>
-          <h2 class="section-title">¿Cómo curar tu Mate en simples pasos?</h2>
-          <p class="section-subtitle">
-            Curar la pieza sella los poros, quita el sabor astringente y garantiza mates deliciosos durante toda la vida.
-          </p>
-        </div>
-
-        <!-- Interactive Tabs for Mate Type -->
-        <div class="cure-tabs-bar">
-          <button class="cure-tab-pill active" data-cure-tab="calabaza" onclick="switchCureTab('calabaza')">
-            <i class="fas fa-seedling"></i> Mate de Calabaza (Imperial / Torpedo)
-          </button>
-          <button class="cure-tab-pill" data-cure-tab="algarrobo" onclick="switchCureTab('algarrobo')">
-            <i class="fas fa-tree"></i> Mate de Madera (Algarrobo)
-          </button>
-          <button class="cure-tab-pill" data-cure-tab="cuidados" onclick="switchCureTab('cuidados')">
-            <i class="fas fa-shield-virus"></i> Cuidados y Limpieza Diaria
-          </button>
-        </div>
-
-        <div class="cure-grid" id="cure-steps-grid">
-          <div class="cure-step-card">
-            <div class="step-number">01</div>
-            <h4>Llenar con Yerba Húmeda</h4>
-            <p>
-              Colocá yerba mate ya usada (húmeda, tibia) hasta el borde del mate. Nunca uses agua hirviendo ya que puede quebrar la calabaza natural.
-            </p>
-          </div>
-
-          <div class="cure-step-card">
-            <div class="step-number">02</div>
-            <h4>Reposar 24 Horas</h4>
-            <p>
-              Dejalo reposar por 24 horas completas. Si notás que la yerba absorbió toda la humedad, agregale un chorrito de agua tibia para que siga actuando.
-            </p>
-          </div>
-
-          <div class="cure-step-card">
-            <div class="step-number">03</div>
-            <h4>Raspar Suavemente</h4>
-            <p>
-              Vaciá el mate y con una cuchara sopera raspá suavemente las paredes internas para retirar el hollejo suelto. ¡Enjuagá y tu mate ya está listo para cebar!
-            </p>
+          <div class="categories-bottom-action">
+            <a href="catalogo.html" class="btn btn-primary btn-catalog-link">
+              <i class="fas fa-th-large"></i> Ver Todo el Catálogo <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ==========================================================================
-         INSTAGRAM COMMUNITY SHOWCASE SECTION
+         COMMUNITY SHOWCASE SECTION (INSTAGRAM, TIKTOK, FACEBOOK)
          ========================================================================== -->
-    <section class="instagram-section">
+    <section class="instagram-section" id="comunidad">
       <div class="container">
         <div class="instagram-banner-box">
           <div class="insta-text">
-            <h3><i class="fab fa-instagram insta-gradient-icon"></i> @mates_rio_</h3>
+            <span class="section-tag" style="color: var(--accent-gold); margin-bottom: 6px; display: inline-block;">
+              <i class="fas fa-users"></i> Comunidad Matera Oficial
+            </span>
+            <h3>Sumate a Nuestra Comunidad</h3>
             <p>
-              Sumate a nuestra comunidad en Instagram. Compartimos fotos de clientes, tips de cebado, sorteos mensuales y lanzamientos exclusivos.
+              Compartimos fotos de clientes, videos virales de cebado y preparación en TikTok, sorteos mensuales y lanzamientos exclusivos. ¡Seguinos y sé parte de la familia matera!
             </p>
           </div>
-          <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram">
-            <i class="fab fa-instagram"></i> Seguir en Instagram
-          </a>
+
+          <!-- Multi-network action buttons -->
+          <div class="community-social-group">
+            <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" title="Seguinos en Instagram">
+              <i class="fab fa-instagram"></i> Instagram
+            </a>
+            <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok" title="Seguinos en TikTok">
+              <i class="fab fa-tiktok"></i> TikTok
+            </a>
+            <a href="https://www.facebook.com/matesrio" target="_blank" rel="noopener noreferrer" class="btn btn-facebook" title="Seguinos en Facebook">
+              <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+          </div>
         </div>
 
-        <!-- Instagram Feed Highlights -->
+        <!-- Community Feed Highlights -->
         <div class="insta-feed-grid">
           <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="insta-post-card">
             <img src="assets/images/prod_mate_imperial.jpg" alt="Foto Instagram Mate Imperial Negro" class="insta-post-img" loading="lazy" />
+            <div class="insta-post-badge insta-badge-tag"><i class="fab fa-instagram"></i> Instagram</div>
             <div class="insta-post-overlay">
               <span><i class="fas fa-heart"></i> 482</span>
               <span><i class="fas fa-comment"></i> 34</span>
             </div>
           </a>
 
-          <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="insta-post-card">
-            <img src="assets/images/banner_2.jpg" alt="Foto Instagram Combo Matero" class="insta-post-img" loading="lazy" />
+          <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="insta-post-card">
+            <img src="assets/images/banner_2.jpg" alt="Video TikTok Combo Matero" class="insta-post-img" loading="lazy" />
+            <div class="insta-post-badge tiktok-badge-tag"><i class="fab fa-tiktok"></i> TikTok Viral</div>
             <div class="insta-post-overlay">
-              <span><i class="fas fa-heart"></i> 621</span>
-              <span><i class="fas fa-comment"></i> 52</span>
+              <span><i class="fas fa-play"></i> 14.2k</span>
+              <span><i class="fas fa-heart"></i> 1.2k</span>
             </div>
           </a>
 
           <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="insta-post-card">
             <img src="assets/images/banner_3.jpg" alt="Foto Instagram Mateando en el Sur" class="insta-post-img" loading="lazy" />
+            <div class="insta-post-badge insta-badge-tag"><i class="fab fa-instagram"></i> Reel</div>
             <div class="insta-post-overlay">
               <span><i class="fas fa-heart"></i> 894</span>
               <span><i class="fas fa-comment"></i> 76</span>
             </div>
           </a>
 
-          <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="insta-post-card">
-            <img src="assets/images/prod_canasta_matera.jpg" alt="Foto Instagram Canasta Matera de Cuero" class="insta-post-img" loading="lazy" />
+          <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="insta-post-card">
+            <img src="assets/images/prod_canasta_matera.jpg" alt="Video TikTok Canasta Matera" class="insta-post-img" loading="lazy" />
+            <div class="insta-post-badge tiktok-badge-tag"><i class="fab fa-tiktok"></i> TikTok Tips</div>
             <div class="insta-post-overlay">
-              <span><i class="fas fa-heart"></i> 512</span>
-              <span><i class="fas fa-comment"></i> 29</span>
+              <span><i class="fas fa-play"></i> 8.6k</span>
+              <span><i class="fas fa-heart"></i> 740</span>
             </div>
           </a>
         </div>
@@ -658,11 +579,11 @@
             <img src="assets/images/logo.jpg" alt="Mates Río Logo" class="footer-logo-img" />
             <div>
               <span class="footer-brand-title">MATES RÍO</span>
-              <p style="font-size: 0.72rem; color: var(--accent-gold); letter-spacing: 1px; font-weight: 600;">INDUSTRIA ARGENTINA</p>
+              <p style="font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 1px; font-weight: 600;">INDUSTRIA ARGENTINA</p>
             </div>
           </div>
           <p class="footer-brand-desc">
-            Emprendimiento argentino dedicado a la fabricación y selección de mates imperiales, termos, accesorios y yerbas de autor. Llevamos la pasión de nuestra cultura a cada rincón del país.
+            Mates imperiales seleccionados, termos de alto rendimiento y combos artesanales hechos con nobleza y tradición criolla.
           </p>
 
           <!-- Social Links -->
@@ -673,10 +594,10 @@
             <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20la%20web." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
               <i class="fab fa-whatsapp"></i>
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Facebook">
+            <a href="https://www.facebook.com/matesrio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Facebook @matesrio">
               <i class="fab fa-facebook-f"></i>
             </a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="TikTok">
+            <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="TikTok @mates_rio">
               <i class="fab fa-tiktok"></i>
             </a>
           </div>
@@ -686,47 +607,34 @@
         <div>
           <h4 class="footer-title">Navegación</h4>
           <ul class="footer-nav-list">
-            <li><a href="#inicio" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Inicio</a></li>
-            <li><a href="#catalogo" class="footer-nav-link" onclick="setCategoryFilter('promos')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Promociones</a></li>
-            <li><a href="#catalogo" class="footer-nav-link" onclick="setCategoryFilter('mates')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Mates Imperiales</a></li>
-            <li><a href="#catalogo" class="footer-nav-link" onclick="setCategoryFilter('termos')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Termos de Acero</a></li>
-            <li><a href="#catalogo" class="footer-nav-link" onclick="setCategoryFilter('accesorios')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Bombillas & Accesorios</a></li>
-            <li><a href="#catalogo" class="footer-nav-link" onclick="setCategoryFilter('yerbas')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Yerbas Seleccionadas</a></li>
-            <li><a href="#catalogo" class="footer-nav-link" onclick="setCategoryFilter('equipos')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Equipos de Mate</a></li>
+            <li><a href="index.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Inicio</a></li>
+            <li><a href="catalogo.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Catálogo Completo</a></li>
+            <li><a href="promos.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Promociones & Combos</a></li>
+            <li><a href="catalogo.html?categoria=mates" class="footer-nav-link" onclick="setCategoryFilter('mates')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Mates Imperiales</a></li>
+            <li><a href="catalogo.html?categoria=termos" class="footer-nav-link" onclick="setCategoryFilter('termos')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Termos de Acero</a></li>
+            <li><a href="catalogo.html?categoria=accesorios" class="footer-nav-link" onclick="setCategoryFilter('accesorios')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Bombillas & Accesorios</a></li>
+            <li><a href="personaliza-tu-mate.html" class="footer-nav-link"><i class="fas fa-magic" style="font-size: 0.65rem; color: var(--accent-gold);"></i> Taller de Grabado</a></li>
           </ul>
         </div>
 
         <!-- Column 3: Payment & Shipping Methods -->
         <div>
-          <h4 class="footer-title">Medios de Pago</h4>
+          <h4 class="footer-title">Pagos & Envíos</h4>
           <div class="payment-badges-wrap">
-            <span class="pay-badge"><i class="far fa-credit-card"></i> Mercado Pago</span>
-            <span class="pay-badge"><i class="fab fa-cc-visa"></i> Visa</span>
-            <span class="pay-badge"><i class="fab fa-cc-mastercard"></i> Mastercard</span>
-            <span class="pay-badge"><i class="fab fa-cc-amex"></i> Amex</span>
-            <span class="pay-badge"><i class="fas fa-money-bill-wave"></i> Transferencia (10% OFF)</span>
-            <span class="pay-badge"><i class="fas fa-barcode"></i> Pago Fácil / RapiPago</span>
+            <span class="pay-badge"><i class="far fa-credit-card"></i> 3 Cuotas sin interés</span>
+            <span class="pay-badge"><i class="fas fa-bolt"></i> Transf. 10% OFF</span>
+            <span class="pay-badge"><i class="fas fa-shield-alt"></i> Compra Protegida</span>
           </div>
 
-          <h4 class="footer-title" style="margin-top: 24px; margin-bottom: 14px;">Formas de Envío</h4>
-          <div class="shipping-methods-info">
-            <p><i class="fas fa-box" style="color: var(--accent-gold);"></i> <b>Correo Argentino</b> a sucursal y a domicilio en todo el país.</p>
-            <p style="margin-top: 6px;"><i class="fas fa-shipping-fast" style="color: var(--accent-gold);"></i> <b>Andreani Express</b> con código de seguimiento en tiempo real.</p>
+          <div class="shipping-methods-info" style="margin-top: 10px;">
+            <p><i class="fas fa-truck-fast" style="color: var(--accent-gold); margin-right: 4px;"></i> Despachos rápidos a todo el país vía <b>Correo Argentino</b> y <b>Andreani</b> con código de seguimiento.</p>
           </div>
         </div>
 
         <!-- Column 4: Contact & Showroom -->
         <div>
-          <h4 class="footer-title">Contacto & Showroom</h4>
+          <h4 class="footer-title">Contacto & Taller</h4>
           <ul class="contact-info-list">
-            <li class="contact-item">
-              <i class="far fa-envelope"></i>
-              <div>
-                <strong>Correo Electrónico:</strong><br />
-                <a href="mailto:contacto@matesrio.com.ar">contacto@matesrio.com.ar</a>
-              </div>
-            </li>
-
             <li class="contact-item">
               <i class="fab fa-whatsapp"></i>
               <div>
@@ -734,15 +642,20 @@
                 <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 3543 60-0000</a>
               </div>
             </li>
-
+            <li class="contact-item">
+              <i class="far fa-envelope"></i>
+              <div>
+                <strong>Correo Electrónico:</strong><br />
+                <a href="mailto:contacto@matesrio.com.ar">contacto@matesrio.com.ar</a>
+              </div>
+            </li>
             <li class="contact-item">
               <i class="fas fa-map-marker-alt"></i>
               <div>
                 <strong>Taller & Showroom:</strong><br />
-                Río Ceballos, Sierras Chicas, Córdoba, Argentina.<br />
+                <span>Río Ceballos, Sierras Chicas</span> • <span style="font-size: 0.74rem; color: #a39587;">Córdoba, Argentina</span>
               </div>
             </li>
-
             <li class="contact-item">
               <i class="far fa-clock"></i>
               <div>
@@ -755,35 +668,10 @@
         </div>
       </div>
 
-      <!-- Newsletter Bar -->
-      <div class="newsletter-box">
-        <div class="newsletter-text">
-          <h4 style="font-family: var(--font-heading); font-size: 1.15rem; color: #fff; margin-bottom: 4px;">
-            <i class="far fa-envelope-open" style="color: var(--accent-gold); margin-right: 8px;"></i> Sumate al Club Matero de Río
-          </h4>
-          <p style="font-size: 0.85rem; color: var(--text-light-muted);">
-            Suscribite y recibí un <b>10% de descuento</b> para tu primera compra online.
-          </p>
-        </div>
-
-        <form id="newsletter-form" class="newsletter-form">
-          <input
-            type="email"
-            id="newsletter-email"
-            required
-            placeholder="Ingresá tu correo electrónico..."
-            class="newsletter-input"
-          />
-          <button type="submit" class="btn btn-primary newsletter-submit-btn">
-            Suscribirme
-          </button>
-        </form>
-      </div>
-
       <!-- Footer Bottom Copyright Bar -->
       <div class="footer-bottom-bar">
-        <span>© 2026 Mates Río. Todos los derechos reservados. Pasión por la cultura matera.</span>
-        <span>Hecho con dedicación artesanal • Envíos a toda la República Argentina</span>
+        <span onclick="handleSecretAdminTrigger()" style="cursor: default;" title="Mates Río Oficial">© 2026 Mates Río. Pasión por la cultura matera. Río Ceballos, Córdoba.</span>
+        <span>Envíos a toda la República Argentina</span>
       </div>
     </div>
   </footer>
@@ -851,116 +739,128 @@
   <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
 
   <aside class="cart-drawer" id="cart-drawer" aria-label="Carrito de Compras">
+    <!-- 1. Cart Header -->
     <div class="cart-header">
-      <h3 class="cart-header-title">
-        <i class="fas fa-shopping-bag"></i> Mi Carrito <span id="cart-count-title" style="font-size: 0.95rem; color: var(--text-muted);">(0)</span>
-      </h3>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <button onclick="clearCart()" title="Vaciar Carrito" style="font-size: 0.76rem; color: var(--text-muted); font-weight: 600; text-decoration: underline;">
-          Vaciar
-        </button>
-        <button class="cart-close-btn" onclick="closeCartDrawer()" aria-label="Cerrar carrito">
-          <i class="fas fa-times"></i>
-        </button>
+      <div class="cart-header-title-group">
+        <div class="cart-header-icon-box">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <div>
+          <h3 class="cart-header-title">Mi Carrito</h3>
+          <span class="cart-items-counter-sub" id="cart-count-title">(0 productos)</span>
+        </div>
       </div>
+      <button class="cart-close-btn" onclick="closeCartDrawer()" aria-label="Cerrar carrito" title="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
-    <!-- Free Shipping Progress Meter -->
+    <!-- 2. Newly Added Product Alert Banner -->
+    <div class="cart-added-banner" id="cart-added-banner">
+      <i class="fas fa-check-circle"></i>
+      <span id="cart-added-banner-text">¡Producto agregado con éxito!</span>
+    </div>
+
+    <!-- 3. Free Shipping Progress Meter -->
     <div class="free-shipping-meter">
       <div class="meter-text" id="free-shipping-text">
-        ¡Calculando envío gratis...!
+        <i class="fas fa-truck-fast"></i> ¡Sumá más productos para tener <b>ENVÍO GRATIS</b>!
       </div>
       <div class="meter-bar-track">
         <div class="meter-bar-fill" id="free-shipping-bar"></div>
       </div>
     </div>
 
-    <!-- Items List -->
+    <!-- 4. Items List -->
     <div class="cart-items-list" id="cart-items-container">
-      <!-- Populated via JS -->
+      <!-- Populated dynamically via JS -->
     </div>
 
-    <!-- Cart Footer & Checkout -->
-    <div class="cart-footer">
-      <!-- Active Coupon Chip Container -->
-      <div id="active-coupon-container"></div>
-
-      <!-- Coupon Code Box -->
-      <div class="cart-coupon-box">
-        <input
-          type="text"
-          id="cart-coupon-input"
-          class="coupon-input"
-          placeholder="CUPÓN DE DESCUENTO (EJ: MATERIO10)"
-        />
-        <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
+    <!-- 5. Cart Footer & Checkout -->
+    <div class="cart-footer" id="cart-footer">
+      <!-- Collapsible Tools: Envío -->
+      <div class="cart-tools-bar">
+        <button type="button" class="cart-tool-btn" id="btn-toggle-shipping" onclick="toggleCartTool('shipping')" style="width: 100%;">
+          <i class="fas fa-truck"></i> <span>Calcular costo de envío por Código Postal</span>
+          <i class="fas fa-chevron-down tool-arrow" id="arrow-shipping"></i>
+        </button>
       </div>
 
-      <!-- Shipping Calculator in Cart -->
-      <details class="cart-shipping-calc-box">
-        <summary>
-          <span><i class="fas fa-truck" style="color: var(--accent-gold); margin-right: 6px;"></i> Calcular costo de envío</span>
-          <i class="fas fa-chevron-down" style="font-size: 0.75rem;"></i>
-        </summary>
+      <!-- Collapsible Shipping Box -->
+      <div class="cart-tool-collapse" id="collapse-shipping">
         <div class="shipping-calc-input-row">
-          <input type="text" id="cart-cp-input" class="shipping-calc-input" placeholder="Tu Código Postal (ej: 1425)" />
-          <button class="btn btn-outline-dark" onclick="calculateShippingCP()" style="padding: 0 14px; font-size: 0.76rem; height: 36px;">
+          <input type="text" id="cart-cp-input" class="shipping-calc-input" placeholder="Tu Código Postal (ej: 5111)" />
+          <button class="btn btn-outline-dark shipping-calc-btn" onclick="calculateShippingCP()">
             Calcular
           </button>
         </div>
         <div id="cart-cp-result"></div>
-      </details>
-
-      <div class="cart-totals-row">
-        <span>Subtotal</span>
-        <span id="cart-subtotal">$ 0</span>
       </div>
 
-      <div class="cart-totals-row" id="cart-discount-row" style="display: none; color: #27ae60; font-weight: 600;">
-        <span>Descuento cupón</span>
-        <span id="cart-discount-amount">-$ 0</span>
+      <!-- Summary Breakdown Card -->
+      <div class="cart-summary-card">
+        <div class="cart-totals-row">
+          <span class="row-label">Subtotal</span>
+          <span class="row-val" id="cart-subtotal">$ 0</span>
+        </div>
+
+        <div class="cart-totals-row">
+          <span class="row-label">Envío</span>
+          <span class="row-val" id="cart-shipping-amount">A calcular</span>
+        </div>
+
+        <div class="cart-totals-row total-final">
+          <div class="total-label-wrap">
+            <span class="row-label-total">Total estimado</span>
+            <small class="transfer-savings-hint"><i class="fas fa-bolt"></i> 10% OFF pagando por Transferencia</small>
+          </div>
+          <span class="row-val-total" id="cart-total">$ 0</span>
+        </div>
       </div>
 
-      <div class="cart-totals-row">
-        <span>Costo de envío</span>
-        <span id="cart-shipping-amount">$ 0</span>
-      </div>
-
-      <div class="cart-totals-row total-final">
-        <span>Total a Pagar</span>
-        <span id="cart-total">$ 0</span>
-      </div>
-
-      <!-- Action Buttons -->
+      <!-- Clear Hierarchy Checkout Actions -->
       <div class="cart-checkout-actions">
-        <!-- WhatsApp Order Checkout (High Conversion) -->
-        <button class="btn btn-whatsapp" onclick="checkoutWhatsApp()" style="width: 100%;">
-          <i class="fab fa-whatsapp"></i> Finalizar Pedido por WhatsApp
+        <!-- Primary Action: Web Checkout (High Contrast) -->
+        <button class="btn btn-primary btn-checkout-main" onclick="openWebCheckout()">
+          <i class="fas fa-credit-card"></i> Iniciar Compra Online
         </button>
 
-        <!-- Web Checkout Form Modal Trigger -->
-        <button class="btn btn-primary" onclick="openWebCheckout()" style="width: 100%;">
-          <i class="fas fa-credit-card"></i> Finalizar Compra en la Web
+        <!-- Secondary Action: WhatsApp Order (Elegant Clean Style) -->
+        <button class="btn btn-whatsapp-secondary" onclick="checkoutWhatsApp()" title="Atención y pedido por WhatsApp">
+          <i class="fab fa-whatsapp"></i> O pedir y pagar por WhatsApp
+        </button>
+      </div>
+
+      <!-- Trust & Safe Shopping Footer Notice -->
+      <div class="cart-footer-security-row">
+        <span><i class="fas fa-shield-alt"></i> Compra Segura</span>
+        <span>•</span>
+        <span><i class="fas fa-truck"></i> Envíos a todo el país</span>
+        <span>•</span>
+        <button onclick="confirmClearCart()" class="cart-clear-link" title="Vaciar todos los productos">
+          Vaciar carrito
         </button>
       </div>
     </div>
   </aside>
 
   <!-- ==========================================================================
-       MODAL: WEB CHECKOUT
+       MODAL: WEB CHECKOUT (CON PROVINCIA Y ENVÍO DINÁMICO DESDE RÍO CEBALLOS)
        ========================================================================== -->
   <div class="modal-overlay" id="checkout-modal">
-    <div class="modal-box modal-box-padded">
+    <div class="modal-box modal-box-padded" style="max-width: 640px;">
       <button class="modal-close-icon" onclick="closeWebCheckout()" aria-label="Cerrar">
         <i class="fas fa-times"></i>
       </button>
 
-      <h3 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; margin-bottom: 6px;">
-        Datos de Envío y Facturación
-      </h3>
-      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px;">
-        Completá tus datos para que preparemos tu paquete de inmediato.
-      </p>
+      <div class="checkout-header-wrap">
+        <h3 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; margin-bottom: 6px;">
+          Datos de Envío y Facturación
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px;">
+          Despachamos desde nuestro taller en Río Ceballos, Córdoba a todo el país.
+        </p>
+      </div>
 
       <!-- Order Summary Box inside Checkout -->
       <div id="checkout-order-summary-box" style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px;"></div>
@@ -974,7 +874,7 @@
         <div class="form-grid-2col">
           <div class="form-group">
             <label class="form-label">Teléfono / WhatsApp *</label>
-            <input type="tel" id="checkout-phone" required class="form-input" placeholder="Ej: 11 3456 7890" />
+            <input type="tel" id="checkout-phone" required class="form-input" placeholder="Ej: 351 555-1234" />
           </div>
 
           <div class="form-group">
@@ -983,20 +883,52 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Dirección de Entrega (Calle y Número) *</label>
-          <input type="text" id="checkout-address" required class="form-input" placeholder="Ej: Av. Santa Fe 2345, Piso 4 B" />
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label">Provincia de Entrega *</label>
+            <select id="checkout-province" required class="form-input" style="height: 42px;" onchange="updateCheckoutSummary()">
+              <option value="Córdoba">Córdoba</option>
+              <option value="Buenos Aires">Buenos Aires</option>
+              <option value="CABA">Ciudad de Buenos Aires (CABA)</option>
+              <option value="Santa Fe">Santa Fe</option>
+              <option value="Mendoza">Mendoza</option>
+              <option value="Entre Ríos">Entre Ríos</option>
+              <option value="Salta">Salta</option>
+              <option value="Tucumán">Tucumán</option>
+              <option value="Chaco">Chaco</option>
+              <option value="Corrientes">Corrientes</option>
+              <option value="Misiones">Misiones</option>
+              <option value="San Juan">San Juan</option>
+              <option value="San Luis">San Luis</option>
+              <option value="Catamarca">Catamarca</option>
+              <option value="La Rioja">La Rioja</option>
+              <option value="Santiago del Estero">Santiago del Estero</option>
+              <option value="Jujuy">Jujuy</option>
+              <option value="Neuquén">Neuquén</option>
+              <option value="Río Negro">Río Negro</option>
+              <option value="Chubut">Chubut</option>
+              <option value="Santa Cruz">Santa Cruz</option>
+              <option value="Tierra del Fuego">Tierra del Fuego</option>
+              <option value="La Pampa">La Pampa</option>
+              <option value="Formosa">Formosa</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ciudad / Localidad *</label>
+            <input type="text" id="checkout-city" required class="form-input" placeholder="Ej: Río Ceballos / Córdoba / Rosario" oninput="updateCheckoutSummary()" />
+          </div>
         </div>
 
         <div class="form-grid-2col">
           <div class="form-group">
-            <label class="form-label">Ciudad / Localidad *</label>
-            <input type="text" id="checkout-city" required class="form-input" placeholder="Ej: CABA / Rosario" />
+            <label class="form-label">Dirección (Calle y Número) *</label>
+            <input type="text" id="checkout-address" required class="form-input" placeholder="Ej: Av. San Martín 1234 4to B" />
           </div>
 
           <div class="form-group">
             <label class="form-label">Código Postal *</label>
-            <input type="text" id="checkout-zip" required class="form-input" placeholder="Ej: 1425" />
+            <input type="text" id="checkout-zip" required class="form-input" placeholder="Ej: 5111" />
           </div>
         </div>
 
@@ -1004,33 +936,25 @@
           <label class="form-label">Forma de Pago:</label>
           <div style="display: flex; flex-direction: column; gap: 8px;">
             <label class="payment-radio-card">
-              <input type="radio" name="payment_method" value="transferencia" checked />
+              <input type="radio" name="payment_method" value="transferencia" checked onchange="updateCheckoutSummary()" />
               <div class="pay-card-content">
                 <b>Transferencia Bancaria (10% OFF EXTRA)</b>
-                <p style="font-size: 0.78rem; color: var(--text-secondary);">Recibirás el CBU y Alias para transferir con descuento inmediato.</p>
+                <p style="font-size: 0.78rem; color: var(--text-secondary);">Te enviamos los datos bancarios y Alias oficial con el descuento directo ya aplicado.</p>
               </div>
             </label>
 
             <label class="payment-radio-card">
-              <input type="radio" name="payment_method" value="mercadopago" />
+              <input type="radio" name="payment_method" value="tarjeta" onchange="updateCheckoutSummary()" />
               <div class="pay-card-content">
-                <b>Mercado Pago / Tarjetas de Crédito</b>
-                <p style="font-size: 0.78rem; color: var(--text-secondary);">Hasta 3 cuotas sin interés con todas las tarjetas.</p>
-              </div>
-            </label>
-
-            <label class="payment-radio-card">
-              <input type="radio" name="payment_method" value="efectivo" />
-              <div class="pay-card-content">
-                <b>Efectivo contra entrega</b>
-                <p style="font-size: 0.78rem; color: var(--text-secondary);">Abonás al recibir el producto (exclusivo CABA y GBA).</p>
+                <b>Tarjeta de Crédito / Débito (3 Cuotas Sin Interés)</b>
+                <p style="font-size: 0.78rem; color: var(--text-secondary);">Pago 100% seguro con todas las tarjetas bancarias.</p>
               </div>
             </label>
           </div>
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 14px;">
-          <i class="fas fa-check-circle"></i> Confirmar y Realizar Pedido
+          <i class="fas fa-check-circle"></i> Confirmar Pedido
         </button>
       </form>
     </div>
@@ -1197,7 +1121,7 @@
   </div>
 
   <!-- ==========================================================================
-       MODAL: USER PROFILE & MIS PEDIDOS
+       MODAL: USER PROFILE & MIS PEDIDOS (SEPARADOS CON PESTAÑAS Y UBICACIÓN)
        ========================================================================== -->
   <div class="modal-overlay" id="profile-modal">
     <div class="modal-box modal-box-padded">
@@ -1205,26 +1129,124 @@
         <i class="fas fa-times"></i>
       </button>
 
-      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--border-light);">
-        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center;">
+      <!-- Profile Header Summary -->
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border-light);">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
           <i class="far fa-user"></i>
         </div>
-        <div>
-          <h3 style="font-family: var(--font-heading); font-size: 1.25rem;" id="profile-name-display">Usuario</h3>
-          <p style="font-size: 0.82rem; color: var(--text-secondary);" id="profile-email-display">email@ejemplo.com</p>
-          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 11 ...</span>
+        <div style="overflow: hidden;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-name-display">Usuario</h3>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-email-display">email@ejemplo.com</p>
+          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 3543 ...</span>
         </div>
       </div>
 
-      <h4 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 12px;">
-        <i class="fas fa-box" style="color: var(--accent-gold); margin-right: 6px;"></i> Mis Pedidos Recientes
-      </h4>
-
-      <div id="profile-orders-list">
-        <!-- Rendered via JS -->
+      <!-- Admin Quick Access Card (Visible para administradores) -->
+      <div id="profile-admin-card" style="display: none; background: linear-gradient(135deg, #17110c 0%, #2a1b12 100%); border: 1.5px solid var(--accent-gold); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px; box-shadow: 0 4px 16px rgba(197, 155, 39, 0.18);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase;">
+            <i class="fas fa-shield-halved"></i> Permisos de Administrador
+          </span>
+          <span class="nav-badge-pill pill-gold" id="profile-admin-role-badge">STAFF</span>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <button type="button" class="btn btn-primary" onclick="closeProfileModal(); openAdminAddProductModal();" style="flex: 1; font-size: 0.78rem; padding: 8px 10px; background: var(--accent-gold); color: #121212; border: none; font-weight: 800;">
+            <i class="fas fa-plus"></i> + Crear Producto
+          </button>
+          <a href="admin.html" class="btn btn-outline-light" style="flex: 1; font-size: 0.78rem; padding: 8px 10px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; color: #f5f5f7; border: 1px solid rgba(255,255,255,0.25);">
+            <i class="fas fa-cog"></i> Panel General
+          </a>
+        </div>
       </div>
 
-      <button class="btn btn-outline-dark" onclick="logoutUser()" style="width: 100%; margin-top: 20px;">
+      <!-- Navigation Tabs: Mi Perfil vs Mis Pedidos -->
+      <div class="profile-modal-tabs">
+        <button class="profile-tab-btn active" id="profile-tab-btn-info" onclick="switchProfileTab('profile')">
+          <i class="far fa-id-badge"></i> Mi Perfil y Ubicación
+        </button>
+        <button class="profile-tab-btn" id="profile-tab-btn-orders" onclick="switchProfileTab('orders')">
+          <i class="fas fa-box-open"></i> Mis Pedidos
+        </button>
+      </div>
+
+      <!-- Panel 1: Perfil y Datos de Envío -->
+      <div id="profile-panel-info">
+        <form onsubmit="saveUserLocation(event)" class="location-box">
+          <div class="location-box-title">
+            <i class="fas fa-location-dot" style="color: var(--accent-gold);"></i> Mi Dirección de Entrega Guardada
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+            Guardá tu ubicación para calcular automáticamente tu costo de envío y pre-completar el checkout desde Río Ceballos, Córdoba.
+          </p>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Provincia *</label>
+              <select id="profile-input-province" class="form-input" style="height: 40px; font-size: 0.84rem;">
+                <option value="Córdoba">Córdoba</option>
+                <option value="Buenos Aires">Buenos Aires</option>
+                <option value="CABA">Ciudad de Buenos Aires (CABA)</option>
+                <option value="Santa Fe">Santa Fe</option>
+                <option value="Mendoza">Mendoza</option>
+                <option value="Entre Ríos">Entre Ríos</option>
+                <option value="Salta">Salta</option>
+                <option value="Tucumán">Tucumán</option>
+                <option value="Chaco">Chaco</option>
+                <option value="Corrientes">Corrientes</option>
+                <option value="Misiones">Misiones</option>
+                <option value="San Juan">San Juan</option>
+                <option value="San Luis">San Luis</option>
+                <option value="Catamarca">Catamarca</option>
+                <option value="La Rioja">La Rioja</option>
+                <option value="Santiago del Estero">Santiago del Estero</option>
+                <option value="Jujuy">Jujuy</option>
+                <option value="Neuquén">Neuquén</option>
+                <option value="Río Negro">Río Negro</option>
+                <option value="Chubut">Chubut</option>
+                <option value="Santa Cruz">Santa Cruz</option>
+                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                <option value="La Pampa">La Pampa</option>
+                <option value="Formosa">Formosa</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Ciudad / Localidad *</label>
+              <input type="text" id="profile-input-city" class="form-input" placeholder="Ej: Río Ceballos / Córdoba / Rosario" />
+            </div>
+          </div>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Dirección (Calle y Nro) *</label>
+              <input type="text" id="profile-input-address" class="form-input" placeholder="Ej: San Martín 450" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Código Postal *</label>
+              <input type="text" id="profile-input-zip" class="form-input" placeholder="Ej: 5111" />
+            </div>
+          </div>
+
+          <div id="profile-location-zone-hint" style="font-size: 0.78rem; color: #27ae60; font-weight: 600; margin-bottom: 12px; display: none;"></div>
+
+          <button type="submit" class="btn btn-outline-dark" style="width: 100%; font-size: 0.82rem; padding: 9px 14px;">
+            <i class="fas fa-floppy-disk"></i> Guardar Dirección de Entrega
+          </button>
+        </form>
+      </div>
+
+      <!-- Panel 2: Mis Pedidos -->
+      <div id="profile-panel-orders" style="display: none;">
+        <h4 style="font-family: var(--font-heading); font-size: 1rem; margin-bottom: 12px; color: var(--accent-leather);">
+          <i class="fas fa-clock-rotate-left"></i> Historial de Compras
+        </h4>
+        <div id="profile-orders-list">
+          <!-- Rendered dynamically via JS -->
+        </div>
+      </div>
+
+      <button class="btn btn-outline-dark" onclick="logoutUser()" style="width: 100%; margin-top: 16px; border-color: #ddd;">
         <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
       </button>
     </div>
@@ -1266,17 +1288,21 @@
 
           <div style="display: flex; align-items: center; gap: 14px; margin-top: auto; padding-top: 16px;">
             <div class="qty-stepper" style="height: 44px;">
-              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="const q = document.getElementById('qv-qty'); if (q.value > 1) q.value--;">-</button>
+              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="changeQuickViewQty(-1)" aria-label="Disminuir cantidad">-</button>
               <input type="number" id="qv-qty" value="1" min="1" max="99" style="width: 44px; text-align: center; border: none; font-weight: 700;" />
-              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="const q = document.getElementById('qv-qty'); q.value++;">+</button>
+              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="changeQuickViewQty(1)" aria-label="Aumentar cantidad">+</button>
             </div>
 
-            <button class="btn btn-primary" onclick="addQuickViewToCart()" style="flex: 1; height: 44px;">
+            <button class="btn btn-primary" id="qv-btn-add" onclick="addQuickViewToCart()" style="flex: 1; height: 44px;">
               <i class="fas fa-shopping-bag"></i> Agregar al Carrito
             </button>
           </div>
 
-          <button class="btn btn-whatsapp" onclick="consultProductWhatsApp()" style="margin-top: 10px; width: 100%;">
+          <button id="qv-btn-personalize" class="btn btn-outline-dark" onclick="if (currentQuickViewProduct) { goToPersonalizarMate(currentQuickViewProduct.id); closeQuickView(); }" style="margin-top: 8px; width: 100%; display: none;">
+            <i class="fas fa-magic"></i> Personalizar Virola de este Mate
+          </button>
+
+          <button class="btn btn-whatsapp" onclick="consultProductWhatsApp()" style="margin-top: 8px; width: 100%;">
             <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
           </button>
         </div>
@@ -1284,13 +1310,122 @@
     </div>
   </div>
 
+  <!-- Floating Admin Quick-Add Product Button (Shown automatically for logged-in admins) -->
+  <button class="admin-floating-add-btn" id="admin-floating-add-btn" onclick="openAdminAddProductModal()" aria-label="Agregar producto al catálogo">
+    <i class="fas fa-plus-circle"></i> <span>+ Nuevo Producto</span>
+  </button>
+
   <!-- ==========================================================================
-       TOAST CONTAINER
+       MODAL: ADMIN PRODUCT CREATOR (DIRECTO DESDE LA WEB)
        ========================================================================== -->
+  <div class="modal-overlay" id="admin-add-product-modal">
+    <div class="modal-box modal-box-padded" style="max-width: 650px;">
+      <button class="modal-close-icon" onclick="closeAdminAddProductModal()" aria-label="Cerrar modal">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
+        <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+          <i class="fas fa-shield-halved"></i>
+        </div>
+        <div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.3rem; margin: 0;">Agregar Producto al Catálogo</h3>
+          <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 2px 0 0;">Panel rápido para administradores (PC y Celular)</p>
+        </div>
+      </div>
+
+      <form id="admin-web-product-form" onsubmit="handleAdminCreateProductWeb(event)">
+        <div class="form-group">
+          <label class="form-label" for="admin-web-name">Nombre del Producto *</label>
+          <input type="text" id="admin-web-name" required class="form-input" placeholder="Ej: Mate Imperial Cuero Crudo Virola Lisa" />
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label" for="admin-web-category">Categoría *</label>
+            <select id="admin-web-category" required class="form-input" style="height: 42px;">
+              <option value="mates">Mates Imperiales & Torpedos</option>
+              <option value="promos">Promociones & Combos</option>
+              <option value="termos">Termos de Acero</option>
+              <option value="accesorios">Bombillas & Accesorios</option>
+              <option value="yerbas">Yerbas Seleccionadas</option>
+              <option value="equipos">Equipos de Mate</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="admin-web-price">Precio Venta (ARS) *</label>
+            <input type="number" id="admin-web-price" required min="100" class="form-input" placeholder="Ej: 48500" />
+          </div>
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label" for="admin-web-orig-price">Precio Anterior (Opcional tachado)</label>
+            <input type="number" id="admin-web-orig-price" min="100" class="form-input" placeholder="Ej: 56000" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="admin-web-stock">Stock Disponible *</label>
+            <input type="number" id="admin-web-stock" value="10" min="0" class="form-input" />
+          </div>
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label" for="admin-web-badge">Texto de Etiqueta (Badge)</label>
+            <input type="text" id="admin-web-badge" class="form-input" placeholder="Ej: NUEVO / 20% OFF / EDICIÓN LIMITADA" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="admin-web-badge-type">Estilo de Etiqueta</label>
+            <select id="admin-web-badge-type" class="form-input" style="height: 42px;">
+              <option value="promo">Rojo (Promo / Oferta)</option>
+              <option value="featured">Dorado (Destacado / Edición Taller)</option>
+              <option value="bestseller">Negro (Más Vendido)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="admin-web-img-select">Imagen del Producto</label>
+          <select id="admin-web-img-select" class="form-input" style="height: 42px;" onchange="document.getElementById('admin-web-img-custom-wrap').style.display = (this.value === 'custom') ? 'block' : 'none';">
+            <option value="assets/images/prod_mate_imperial.jpg">Mate Imperial Negro (Foto estándar)</option>
+            <option value="assets/images/cat_mates.jpg">Mates Torpedo (Foto catálogo)</option>
+            <option value="assets/images/cat_promos.jpg">Combo Imperial (Foto combos)</option>
+            <option value="assets/images/prod_canasta_matera.jpg">Canasta / Matera de Cuero</option>
+            <option value="assets/images/cat_termos.jpg">Termo de Acero Inoxidable</option>
+            <option value="assets/images/cat_accesorios.jpg">Bombillas y Accesorios</option>
+            <option value="assets/images/cat_yerbas.jpg">Yerba Mate Artesanal</option>
+            <option value="assets/images/banner_2.jpg">Set Matero Completo</option>
+            <option value="custom">-- Ingresar URL personalizada o archivo --</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="admin-web-img-custom-wrap" style="display: none;">
+          <label class="form-label" for="admin-web-img-custom">URL o ruta de imagen personalizada</label>
+          <input type="text" id="admin-web-img-custom" class="form-input" placeholder="assets/images/tu_imagen.jpg o https://..." />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="admin-web-desc">Descripción del Producto *</label>
+          <textarea id="admin-web-desc" required class="form-input" rows="3" placeholder="Detalle de materiales, confección y terminaciones artesanales..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn btn-outline-dark" onclick="closeAdminAddProductModal()" style="flex: 1;">Cancelar</button>
+          <button type="submit" class="btn btn-primary" style="flex: 2;"><i class="fas fa-plus-circle"></i> Publicar en la Web</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>
+
 
   <!-- Scripts -->
   <script src="js/products.js"></script>
   <script src="js/app.js"></script>
-</body>
+  </body>
 </html>

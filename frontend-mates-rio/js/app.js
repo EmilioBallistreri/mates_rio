@@ -17,7 +17,22 @@ const state = {
       name: "Juan Matero",
       email: "juan@ejemplo.com",
       phone: "1155554444",
-      password: "123"
+      password: "123",
+      role: "customer"
+    },
+    {
+      name: "Administrador Mates Río",
+      email: "admin@matesrio.com",
+      phone: "1134567890",
+      password: "admin",
+      role: "admin"
+    },
+    {
+      name: "Taller & Grabados",
+      email: "taller@matesrio.com",
+      phone: "1134567891",
+      password: "admin",
+      role: "admin"
     }
   ],
   orders: JSON.parse(localStorage.getItem('mates_rio_orders')) || [
@@ -35,18 +50,70 @@ const state = {
 const CONFIG = {
   siteUrl: "http://localhost:5005",
   freeShippingThreshold: 60000,
-  shippingCost: 5500,
+  shippingCost: 3800,
   transferDiscountRate: 0.10, // 10% OFF
-  whatsappNumber: "5493543600000",
-  instagramUrl: "https://www.instagram.com/mates_rio_/"
+  whatsappNumber: "5493543600000", // Mates Río WhatsApp (Río Ceballos, Córdoba)
+  whatsappDisplay: "+54 9 3543 60-0000",
+  instagramUrl: "https://www.instagram.com/mates_rio_/",
+  instagramHandle: "@mates_rio_",
+  facebookUrl: "https://www.facebook.com/matesrio",
+  tiktokUrl: "https://www.tiktok.com/@mates_rio",
+  tiktokHandle: "@mates_rio",
+  originCity: "Río Ceballos",
+  originProvince: "Córdoba",
+  locationDisplay: "Río Ceballos, Sierras Chicas, Córdoba, Argentina"
 };
 
-// Coupons Database
-const COUPONS = {
-  "MATERIO10": { discount: 0.10, label: "10% OFF Bienvenida" },
-  "PROMORIO": { discount: 0.15, label: "15% OFF Especial" },
-  "ENVIOGRATIS": { discount: 0.0, freeShipping: true, label: "Envío Bonificado" }
+// Zonas de Envío desde Río Ceballos, Córdoba
+const SHIPPING_ZONES = {
+  local: {
+    id: "local",
+    name: "Río Ceballos & Sierras Chicas (Local)",
+    cost: 2500,
+    time: "24 hs hábiles / Retiro en Taller",
+    match: ["rio ceballos", "río ceballos", "unquillo", "mendiolaza", "salsipuedes", "villa allende"]
+  },
+  cordoba_capital: {
+    id: "cordoba_capital",
+    name: "Córdoba Capital & Gran Córdoba",
+    cost: 3800,
+    time: "24 a 48 hs hábiles",
+    match: ["cordoba", "córdoba", "cordoba capital", "córdoba capital", "la calera"]
+  },
+  cordoba_interior: {
+    id: "cordoba_interior",
+    name: "Interior de la Provincia de Córdoba",
+    cost: 5200,
+    time: "2 a 3 días hábiles",
+    provinceMatch: ["cordoba", "córdoba"]
+  },
+  nacional: {
+    id: "nacional",
+    name: "Resto del País (Envío Nacional)",
+    cost: 6900,
+    time: "3 a 5 días hábiles a todo el país vía Correo/Andreani"
+  }
 };
+
+function calculateShippingZone(province = '', city = '') {
+  const pNorm = (province || '').toLowerCase().trim();
+  const cNorm = (city || '').toLowerCase().trim();
+
+  // 1. Local Sierras Chicas
+  if (SHIPPING_ZONES.local.match.some(m => cNorm.includes(m))) {
+    return SHIPPING_ZONES.local;
+  }
+  // 2. Córdoba Capital
+  if (SHIPPING_ZONES.cordoba_capital.match.some(m => cNorm.includes(m))) {
+    return SHIPPING_ZONES.cordoba_capital;
+  }
+  // 3. Interior de Córdoba
+  if (pNorm.includes('cordoba') || pNorm.includes('córdoba') || cNorm.includes('cba')) {
+    return SHIPPING_ZONES.cordoba_interior;
+  }
+  // 4. Nacional
+  return SHIPPING_ZONES.nacional;
+}
 
 // Currency Formatter (Argentine Pesos)
 function formatARS(amount) {
@@ -187,14 +254,23 @@ function renderCategoriesGrid() {
     </div>
   `).join('');
 
-  // Click on category card filters catalog and smoothly scrolls
+  // Click on category card filters catalog if on catalog page, or navigates to dedicated catalog page
   container.querySelectorAll('.category-card').forEach(card => {
     card.addEventListener('click', () => {
       const catId = card.getAttribute('data-category');
-      setCategoryFilter(catId);
-      const catalogEl = document.getElementById('catalogo');
-      if (catalogEl) {
-        catalogEl.scrollIntoView({ behavior: 'smooth' });
+      if (catId === 'promos') {
+        window.location.href = 'promos.html';
+        return;
+      }
+      const productsGrid = document.getElementById('products-grid');
+      if (productsGrid) {
+        setCategoryFilter(catId);
+        const catalogEl = document.getElementById('catalogo');
+        if (catalogEl) {
+          catalogEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        window.location.href = 'catalogo.html?categoria=' + encodeURIComponent(catId);
       }
     });
   });
@@ -203,13 +279,37 @@ function renderCategoriesGrid() {
 function setCategoryFilter(categoryId) {
   state.activeCategory = categoryId;
 
+  const productsGrid = document.getElementById('products-grid');
+  if (!productsGrid) {
+    if (categoryId === 'promos') {
+      window.location.href = 'promos.html';
+    } else {
+      window.location.href = 'catalogo.html?categoria=' + encodeURIComponent(categoryId);
+    }
+    return;
+  }
+
   // Update pills UI
   document.querySelectorAll('.filter-pill').forEach(pill => {
     const pillCat = pill.getAttribute('data-category');
-    pill.classList.toggle('active', pillCat === categoryId);
+    const isActive = pillCat === categoryId;
+    pill.classList.toggle('active', isActive);
+    if (isActive && typeof pill.scrollIntoView === 'function') {
+      pill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
   });
 
   renderProducts();
+}
+
+// Helper for accent-insensitive search
+function cleanStr(s) {
+  return (s || '')
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
 }
 
 let promoCurrentSubfilter = 'all';
@@ -223,6 +323,7 @@ function filterPromosLive() {
 
 function setPromoSubfilter(subfilter, btnEl) {
   promoCurrentSubfilter = subfilter;
+  state.promoSubfilter = subfilter;
   if (btnEl) {
     document.querySelectorAll('.promos-filter-chips .filter-pill').forEach(btn => btn.classList.remove('active'));
     btnEl.classList.add('active');
@@ -254,26 +355,28 @@ function getFilteredProducts() {
     list = list.filter(p => p.category.toLowerCase() === state.activeCategory.toLowerCase());
   }
 
-  // 1.b Filter by promo subfilter
-  if (promoCurrentSubfilter && promoCurrentSubfilter !== 'all') {
-    if (promoCurrentSubfilter === 'termo') {
-      list = list.filter(p => (p.name + ' ' + (p.description || '')).toLowerCase().includes('termo'));
-    } else if (promoCurrentSubfilter === 'imperial') {
-      list = list.filter(p => (p.name + ' ' + (p.description || '')).toLowerCase().includes('imperial'));
-    } else if (promoCurrentSubfilter === 'canasta') {
-      list = list.filter(p => (p.name + ' ' + (p.description || '')).toLowerCase().includes('canasta') || (p.name + ' ' + (p.description || '')).toLowerCase().includes('matera'));
-    } else if (promoCurrentSubfilter === 'under-80k') {
+  // 1.5. Subfilter for Promos (Combos categorization)
+  const activePromoFilter = promoCurrentSubfilter !== 'all' ? promoCurrentSubfilter : state.promoSubfilter;
+  if ((state.activeCategory === 'promos' || window.location.pathname.includes('promos')) && activePromoFilter && activePromoFilter !== 'all') {
+    if (activePromoFilter === 'termo') {
+      list = list.filter(p => cleanStr(p.name).includes('termo') || cleanStr(p.description).includes('termo'));
+    } else if (activePromoFilter === 'imperial') {
+      list = list.filter(p => cleanStr(p.name).includes('imperial') || cleanStr(p.description).includes('imperial'));
+    } else if (activePromoFilter === 'canasta') {
+      list = list.filter(p => cleanStr(p.name).includes('canasta') || cleanStr(p.description).includes('canasta') || cleanStr(p.name).includes('matera') || cleanStr(p.description).includes('matera') || cleanStr(p.name).includes('bolso') || cleanStr(p.description).includes('bolso'));
+    } else if (activePromoFilter === 'under-80k') {
       list = list.filter(p => p.price <= 80000);
     }
   }
 
-  // 2. Filter by search query
+  // 2. Filter by search query (Accent-insensitive)
   if (state.searchQuery && state.searchQuery.trim()) {
-    const q = state.searchQuery.toLowerCase().trim();
+    const q = cleanStr(state.searchQuery);
     list = list.filter(p => 
-      p.name.toLowerCase().includes(q) ||
-      (p.description && p.description.toLowerCase().includes(q)) ||
-      (p.categoryName && p.categoryName.toLowerCase().includes(q))
+      cleanStr(p.name).includes(q) ||
+      cleanStr(p.description).includes(q) ||
+      cleanStr(p.categoryName).includes(q) ||
+      cleanStr(p.badge).includes(q)
     );
   }
 
@@ -423,6 +526,10 @@ function resetFilters() {
 // ==========================================================================
 // SHOPPING CART ENGINE
 // ==========================================================================
+// Track recently added product for animation
+let lastAddedProductId = null;
+let addedBannerTimeout = null;
+
 function addToCart(productId, quantity = 1) {
   if (typeof PRODUCTS_DATA === 'undefined') return;
   const product = PRODUCTS_DATA.find(p => p.id === productId);
@@ -442,24 +549,66 @@ function addToCart(productId, quantity = 1) {
     });
   }
 
+  lastAddedProductId = productId;
   saveCart();
   updateCartUI();
-  showToast(`¡Agregaste "${product.name}" al carrito!`);
+  showToast(`¡"${product.name}" agregado al carrito!`, 'fa-shopping-bag');
 
-  // Visual button feedback
+  // Visual button feedback on product card
   const btn = document.getElementById(`btn-add-${productId}`);
   if (btn) {
-    const originalText = btn.innerHTML;
+    const originalContent = btn.innerHTML;
     btn.innerHTML = `<i class="fas fa-check"></i> ¡Agregado!`;
     btn.classList.add('added');
     setTimeout(() => {
-      btn.innerHTML = originalText;
+      btn.innerHTML = originalContent;
       btn.classList.remove('added');
     }, 1400);
   }
 
+  // Header cart badge bump animation
+  const openCartBtn = document.getElementById('open-cart-btn');
+  if (openCartBtn) {
+    openCartBtn.classList.remove('cart-bump');
+    void openCartBtn.offsetWidth; // Trigger reflow
+    openCartBtn.classList.add('cart-bump');
+    setTimeout(() => openCartBtn.classList.remove('cart-bump'), 450);
+  }
+
   // Open cart drawer
   openCartDrawer();
+
+  // Show in-drawer added alert banner
+  const banner = document.getElementById('cart-added-banner');
+  const bannerText = document.getElementById('cart-added-banner-text');
+  if (banner && bannerText) {
+    const isMate = product.category === 'mates' || (product.specs && product.specs.virola);
+    if (isMate) {
+      bannerText.innerHTML = `<span>¡<b>${product.name}</b> agregado!</span> <button type="button" class="btn-banner-personalize" onclick="goToPersonalizarMate('${productId}')"><i class="fas fa-magic"></i> Personalizar virola 👉</button>`;
+    } else {
+      bannerText.innerHTML = `<span>¡<b>${product.name}</b> agregado al carrito!</span>`;
+    }
+    banner.classList.add('active');
+    clearTimeout(addedBannerTimeout);
+    addedBannerTimeout = setTimeout(() => {
+      banner.classList.remove('active');
+    }, 4500);
+  }
+
+  // Scroll to recently added item in cart
+  setTimeout(() => {
+    const itemEl = document.getElementById(`cart-item-${productId}`);
+    if (itemEl) {
+      itemEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, 150);
+
+  // Clear highlight after 2.5 seconds
+  setTimeout(() => {
+    lastAddedProductId = null;
+    const itemEl = document.getElementById(`cart-item-${productId}`);
+    if (itemEl) itemEl.classList.remove('recently-added');
+  }, 2500);
 }
 
 function updateCartQuantity(productId, delta) {
@@ -477,10 +626,19 @@ function updateCartQuantity(productId, delta) {
 }
 
 function removeFromCart(productId) {
+  const item = state.cart.find(i => i.id === productId);
+  const name = item ? item.name : 'Producto';
   state.cart = state.cart.filter(i => i.id !== productId);
   saveCart();
   updateCartUI();
-  showToast('Producto eliminado del carrito');
+  showToast(`"${name}" eliminado del carrito`, 'fa-trash-alt');
+}
+
+function confirmClearCart() {
+  if (state.cart.length === 0) return;
+  if (confirm('¿Estás seguro de que querés vaciar todos los productos de tu carrito?')) {
+    clearCart();
+  }
 }
 
 function clearCart() {
@@ -488,7 +646,7 @@ function clearCart() {
   state.cart = [];
   saveCart();
   updateCartUI();
-  showToast('Vaciaste el carrito de compras');
+  showToast('Vaciaste el carrito de compras', 'fa-info-circle');
 }
 
 function confirmClearCart() {
@@ -507,9 +665,6 @@ function updateCartUI() {
   const countTitle = document.getElementById('cart-count-title');
   const itemsContainer = document.getElementById('cart-items-container');
   const subtotalEl = document.getElementById('cart-subtotal');
-  const discountRow = document.getElementById('cart-discount-row');
-  const discountEl = document.getElementById('cart-discount-amount');
-  const activeCouponContainer = document.getElementById('active-coupon-container');
   const shippingEl = document.getElementById('cart-shipping-amount');
   const totalEl = document.getElementById('cart-total');
   const meterText = document.getElementById('free-shipping-text');
@@ -518,7 +673,7 @@ function updateCartUI() {
   // Total items count
   const totalCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
   if (badge) badge.textContent = totalCount;
-  if (countTitle) countTitle.textContent = `(${totalCount})`;
+  if (countTitle) countTitle.textContent = `(${totalCount} ${totalCount === 1 ? 'producto' : 'productos'})`;
 
   // Subtotal calculation
   const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -527,62 +682,39 @@ function updateCartUI() {
   // Free shipping meter
   if (meterText && meterBar) {
     if (subtotal === 0) {
-      meterText.innerHTML = `¡Sumá <b>${formatARS(CONFIG.freeShippingThreshold)}</b> para tener <b>ENVÍO GRATIS</b> a todo el país!`;
+      meterText.innerHTML = `<i class="fas fa-truck-fast"></i> ¡Sumá <b>${formatARS(CONFIG.freeShippingThreshold)}</b> para <b>ENVÍO GRATIS</b>!`;
       meterBar.style.width = '0%';
+      meterBar.style.background = 'linear-gradient(90deg, var(--accent-gold) 0%, #27ae60 100%)';
     } else if (subtotal >= CONFIG.freeShippingThreshold) {
-      meterText.innerHTML = `🎉 <b>¡Felicitaciones! Tenés ENVÍO GRATIS a todo el país</b>`;
+      meterText.innerHTML = `<span style="color: #27ae60; font-weight: 700;"><i class="fas fa-check-circle"></i> ¡Tenés ENVÍO GRATIS a todo el país!</span>`;
       meterBar.style.width = '100%';
+      meterBar.style.background = '#27ae60';
     } else {
       const remaining = CONFIG.freeShippingThreshold - subtotal;
       const pct = Math.min(100, Math.round((subtotal / CONFIG.freeShippingThreshold) * 100));
-      meterText.innerHTML = `¡Te faltan <b>${formatARS(remaining)}</b> para <b>ENVÍO GRATIS</b>!`;
+      meterText.innerHTML = `<i class="fas fa-truck-fast"></i> ¡Te faltan <b>${formatARS(remaining)}</b> para <b>ENVÍO GRATIS</b>!`;
       meterBar.style.width = `${pct}%`;
+      meterBar.style.background = 'linear-gradient(90deg, var(--accent-gold) 0%, #27ae60 100%)';
     }
   }
 
-  // Calculate discount
-  let discountAmount = 0;
-  if (state.activeCoupon && COUPONS[state.activeCoupon]) {
-    const couponData = COUPONS[state.activeCoupon];
-    if (couponData.discount > 0) {
-      discountAmount = Math.round(subtotal * couponData.discount);
-    }
-  }
-
-  // Active coupon chip & row
-  if (discountRow && discountEl) {
-    if (discountAmount > 0) {
-      discountRow.style.display = 'flex';
-      discountEl.textContent = `- ${formatARS(discountAmount)}`;
-    } else {
-      discountRow.style.display = 'none';
-    }
-  }
-
-  if (activeCouponContainer) {
-    if (state.activeCoupon && COUPONS[state.activeCoupon]) {
-      activeCouponContainer.innerHTML = `
-        <div class="active-coupon-chip">
-          <i class="fas fa-tag"></i> ${state.activeCoupon} (${COUPONS[state.activeCoupon].label})
-          <button onclick="removeCoupon()" title="Quitar cupón">×</button>
-        </div>
-      `;
-    } else {
-      activeCouponContainer.innerHTML = '';
-    }
-  }
-
-  // Calculate shipping
-  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold || (state.activeCoupon && COUPONS[state.activeCoupon]?.freeShipping);
-  const shippingAmount = subtotal > 0 ? (isFreeShipping ? 0 : CONFIG.shippingCost) : 0;
+  // Calculate shipping preview
+  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold;
   if (shippingEl) {
-    shippingEl.textContent = subtotal === 0 ? '$ 0' : (isFreeShipping ? '¡GRATIS!' : formatARS(shippingAmount));
-    shippingEl.style.color = isFreeShipping ? '#27ae60' : 'inherit';
+    if (subtotal === 0) {
+      shippingEl.textContent = 'A calcular';
+      shippingEl.style.color = 'inherit';
+    } else if (isFreeShipping) {
+      shippingEl.innerHTML = `<b style="color: #27ae60;"><i class="fas fa-check"></i> ¡GRATIS!</b>`;
+      shippingEl.style.color = '#27ae60';
+    } else {
+      shippingEl.innerHTML = `<span style="font-size: 0.85rem; color: var(--text-secondary);">Calculado según tu zona</span>`;
+      shippingEl.style.color = 'inherit';
+    }
   }
 
   // Final Total
-  const finalTotal = Math.max(0, subtotal - discountAmount + shippingAmount);
-  if (totalEl) totalEl.textContent = formatARS(finalTotal);
+  if (totalEl) totalEl.textContent = formatARS(subtotal);
 
   // Render items
   if (!itemsContainer) return;
@@ -590,38 +722,126 @@ function updateCartUI() {
   if (state.cart.length === 0) {
     itemsContainer.innerHTML = `
       <div class="cart-empty-message">
-        <i class="fas fa-shopping-bag"></i>
-        <h4 style="font-family: var(--font-heading); font-size: 1.25rem;">Tu carrito está vacío</h4>
-        <p style="font-size: 0.88rem; margin: 8px 0 20px;">Descubrí nuestros mates imperiales, termos y combos de autor.</p>
-        <button class="btn btn-outline-dark" onclick="closeCartDrawer(); const catEl = document.getElementById('catalogo'); if (catEl) { catEl.scrollIntoView({behavior: 'smooth'}); } else { window.location.href = 'catalogo.html'; }">
-          <i class="fas fa-shopping-basket"></i> Ver Catálogo
+        <div class="empty-cart-icon-circle">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <h4 class="empty-cart-title">Tu carrito está vacío</h4>
+        <p class="empty-cart-subtitle">Descubrí nuestros mates imperiales de autor, termos y combos completos con 3 cuotas sin interés.</p>
+        <button class="btn btn-primary" onclick="closeCartDrawer(); if (document.getElementById('catalogo')) { document.getElementById('catalogo').scrollIntoView({behavior: 'smooth'}); } else { window.location.href = 'catalogo.html'; }">
+          <i class="fas fa-shopping-bag"></i> Explorar Catálogo
         </button>
       </div>
     `;
     return;
   }
 
-  itemsContainer.innerHTML = state.cart.map(item => `
-    <div class="cart-item">
-      <img src="${item.image}" alt="${item.name}" class="cart-item-img" />
-      <div class="cart-item-info">
-        <h5 class="cart-item-title" onclick="openQuickView('${item.id}'); closeCartDrawer();" style="cursor: pointer;">${item.name}</h5>
-        <span class="cart-item-price">${formatARS(item.price * item.quantity)}</span>
-        
-        <div class="cart-item-controls">
-          <div class="qty-stepper">
-            <button class="qty-btn" onclick="updateCartQuantity('${item.id}', -1)" aria-label="Disminuir">-</button>
-            <span class="qty-value">${item.quantity}</span>
-            <button class="qty-btn" onclick="updateCartQuantity('${item.id}', 1)" aria-label="Aumentar">+</button>
+  itemsContainer.innerHTML = state.cart.map(item => {
+    const isRecentlyAdded = lastAddedProductId === item.id;
+    const unitPrice = item.price;
+    const itemTotal = item.price * item.quantity;
+
+    const isCustomizable = item.categoryName === 'MATES' || item.id.startsWith('mate-') || (typeof PRODUCTS_DATA !== 'undefined' && PRODUCTS_DATA.find(p => p.id === item.id)?.specs?.virola);
+    let customCtaHtml = '';
+    if (isCustomizable) {
+      if (item.customization) {
+        customCtaHtml = `
+          <div class="cart-item-custom-badge">
+            <div class="custom-badge-header">
+              <span class="custom-badge-title"><i class="fas fa-magic"></i> Virola: <b>${item.customization.typeName}</b></span>
+              <button type="button" class="btn-cart-edit-custom" onclick="goToPersonalizarMate('${item.id}')" title="Modificar diseño de virola"><i class="fas fa-edit"></i> Editar</button>
+            </div>
+            <div class="custom-badge-desc">
+              ${item.customization.text ? `<div>• Texto: "<b>${item.customization.text}</b>" <small>(${item.customization.fontName})</small></div>` : ''}
+              ${item.customization.graphicName ? `<div>• Motivo: <b>${item.customization.graphicName}</b></div>` : ''}
+              ${item.customization.uploadedFile ? `<div>• Logo: <b>${item.customization.uploadedFile}</b></div>` : ''}
+              <div>• Ubicación: ${item.customization.locationName}</div>
+            </div>
+          </div>
+        `;
+      } else {
+        customCtaHtml = `
+          <div class="cart-item-custom-cta">
+            <button type="button" class="btn-cart-customize" onclick="goToPersonalizarMate('${item.id}')" title="Personalizá la virola de este mate">
+              <i class="fas fa-magic"></i> Personalizar Virola <span class="badge-mini-gold">¡Bonificado!</span>
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    return `
+      <div class="cart-item ${isRecentlyAdded ? 'recently-added' : ''}" id="cart-item-${item.id}">
+        <div class="cart-item-img-wrap" onclick="openQuickView('${item.id}'); closeCartDrawer();" title="Ver detalle de ${item.name}">
+          <img src="${item.image}" alt="${item.name}" class="cart-item-img" />
+          <span class="cart-item-zoom-icon"><i class="fas fa-search-plus"></i></span>
+        </div>
+
+        <div class="cart-item-info">
+          <div class="cart-item-header-row">
+            <span class="cart-item-category">${item.categoryName || 'Colección'}</span>
+            <button class="cart-item-remove-btn" onclick="removeFromCart('${item.id}')" title="Eliminar ${item.name}" aria-label="Eliminar producto">
+              <i class="far fa-trash-alt"></i>
+            </button>
           </div>
 
-          <button class="cart-item-remove-btn" onclick="removeFromCart('${item.id}')" title="Eliminar del carrito" aria-label="Eliminar producto">
-            <i class="far fa-trash-alt"></i>
-          </button>
+          <h5 class="cart-item-title" onclick="openQuickView('${item.id}'); closeCartDrawer();" title="${item.name}">${item.name}</h5>
+
+          ${customCtaHtml}
+
+          <div class="cart-item-bottom-row">
+            <div class="cart-item-price-group">
+              <span class="cart-item-total-price">${formatARS(itemTotal)}</span>
+              ${item.quantity > 1 ? `<span class="cart-item-unit-price">${formatARS(unitPrice)} c/u</span>` : ''}
+            </div>
+
+            <div class="qty-stepper">
+              <button class="qty-btn" onclick="updateCartQuantity('${item.id}', -1)" aria-label="Disminuir" title="Restar">-</button>
+              <span class="qty-value">${item.quantity}</span>
+              <button class="qty-btn" onclick="updateCartQuantity('${item.id}', 1)" aria-label="Aumentar" title="Sumar">+</button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
+}
+
+// Collapsible Drawer Tools (Cupón & Envío)
+function toggleCartTool(tool) {
+  const couponBox = document.getElementById('collapse-coupon');
+  const shippingBox = document.getElementById('collapse-shipping');
+  const arrowCoupon = document.getElementById('arrow-coupon');
+  const arrowShipping = document.getElementById('arrow-shipping');
+  const btnCoupon = document.getElementById('btn-toggle-coupon');
+  const btnShipping = document.getElementById('btn-toggle-shipping');
+
+  if (tool === 'coupon') {
+    const isOpen = couponBox?.classList.contains('active');
+    couponBox?.classList.toggle('active', !isOpen);
+    arrowCoupon?.classList.toggle('open', !isOpen);
+    btnCoupon?.classList.toggle('active', !isOpen);
+    if (shippingBox) {
+      shippingBox.classList.remove('active');
+      arrowShipping?.classList.remove('open');
+      btnShipping?.classList.remove('active');
+    }
+    if (!isOpen) {
+      setTimeout(() => document.getElementById('cart-coupon-input')?.focus(), 150);
+    }
+  } else if (tool === 'shipping') {
+    const isOpen = shippingBox?.classList.contains('active');
+    shippingBox?.classList.toggle('active', !isOpen);
+    arrowShipping?.classList.toggle('open', !isOpen);
+    btnShipping?.classList.toggle('active', !isOpen);
+    if (couponBox) {
+      couponBox.classList.remove('active');
+      arrowCoupon?.classList.remove('open');
+      btnCoupon?.classList.remove('active');
+    }
+    if (!isOpen) {
+      setTimeout(() => document.getElementById('cart-cp-input')?.focus(), 150);
+    }
+  }
 }
 
 function openCartDrawer() {
@@ -648,7 +868,7 @@ function applyCoupon() {
     state.activeCoupon = code;
     localStorage.setItem('mates_rio_coupon', JSON.stringify(code));
     updateCartUI();
-    showToast(`¡Cupón "${code}" aplicado: ${COUPONS[code].label}!`);
+    showToast(`¡Cupón "${code}" aplicado: ${COUPONS[code].label}!`, 'fa-tag');
     input.value = '';
   } else {
     showToast('El código de cupón no es válido (Probá MATERIO10 o PROMORIO)', 'fa-times-circle');
@@ -734,6 +954,14 @@ function checkoutWhatsApp() {
 
   state.cart.forEach((item, idx) => {
     msg += `• ${item.quantity}x ${item.name} (${formatARS(item.price * item.quantity)})\n`;
+    if (item.customization) {
+      msg += `  ✨ *Grabado en Virola:* ${item.customization.typeName}\n`;
+      if (item.customization.text) msg += `     - Texto: "${item.customization.text}" (${item.customization.fontName})\n`;
+      if (item.customization.graphicName) msg += `     - Motivo: ${item.customization.graphicName}\n`;
+      if (item.customization.uploadedFile) msg += `     - Logo/Archivo: ${item.customization.uploadedFile}\n`;
+      msg += `     - Ubicación: ${item.customization.locationName}\n`;
+      if (item.customization.notes) msg += `     - Nota: ${item.customization.notes}\n`;
+    }
   });
 
   msg += `\n💵 *Subtotal:* ${formatARS(subtotal)}`;
@@ -757,7 +985,7 @@ function checkoutWhatsApp() {
 }
 
 // ==========================================================================
-// WEB CHECKOUT MODAL & ORDER CREATION
+// WEB CHECKOUT MODAL & ORDER CREATION (DESDE RÍO CEBALLOS, CÓRDOBA)
 // ==========================================================================
 function openWebCheckout() {
   if (state.cart.length === 0) {
@@ -774,9 +1002,32 @@ function openWebCheckout() {
     const nameInput = document.getElementById('checkout-name');
     const emailInput = document.getElementById('checkout-email');
     const phoneInput = document.getElementById('checkout-phone');
+    const provinceSelect = document.getElementById('checkout-province');
+    const cityInput = document.getElementById('checkout-city');
+    const addressInput = document.getElementById('checkout-address');
+    const zipInput = document.getElementById('checkout-zip');
+
     if (nameInput) nameInput.value = state.currentUser.name || '';
     if (emailInput) emailInput.value = state.currentUser.email || '';
     if (phoneInput) phoneInput.value = state.currentUser.phone || '';
+
+    const addr = state.currentUser.address || {};
+    if (provinceSelect && addr.province) provinceSelect.value = addr.province;
+    if (cityInput && addr.city) cityInput.value = addr.city;
+    if (addressInput && addr.street) addressInput.value = addr.street;
+    if (zipInput && addr.zip) zipInput.value = addr.zip;
+  }
+
+  // Setup live listeners on location fields for real-time shipping calculation
+  const provEl = document.getElementById('checkout-province');
+  const cityEl = document.getElementById('checkout-city');
+  if (provEl && !provEl.dataset.hasListener) {
+    provEl.addEventListener('change', updateCheckoutSummary);
+    provEl.dataset.hasListener = 'true';
+  }
+  if (cityEl && !cityEl.dataset.hasListener) {
+    cityEl.addEventListener('input', updateCheckoutSummary);
+    cityEl.dataset.hasListener = 'true';
   }
 
   // Update checkout order summary preview
@@ -791,43 +1042,63 @@ function updateCheckoutSummary() {
   if (!summaryEl) return;
 
   const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold || (state.activeCoupon && COUPONS[state.activeCoupon]?.freeShipping);
-  const shippingAmount = isFreeShipping ? 0 : CONFIG.shippingCost;
 
-  let discountAmount = 0;
-  if (state.activeCoupon && COUPONS[state.activeCoupon]?.discount > 0) {
-    discountAmount = Math.round(subtotal * COUPONS[state.activeCoupon].discount);
-  }
+  // Dynamic Shipping Calculation based on Río Ceballos, Córdoba
+  const provVal = document.getElementById('checkout-province')?.value || state.currentUser?.address?.province || 'Córdoba';
+  const cityVal = document.getElementById('checkout-city')?.value || state.currentUser?.address?.city || '';
+  const zone = calculateShippingZone(provVal, cityVal);
+
+  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold;
+  const shippingAmount = isFreeShipping ? 0 : zone.cost;
 
   const selectedPayment = document.querySelector('input[name="payment_method"]:checked')?.value || 'transferencia';
   let paymentDiscount = 0;
   if (selectedPayment === 'transferencia') {
-    paymentDiscount = Math.round((subtotal - discountAmount) * CONFIG.transferDiscountRate);
+    paymentDiscount = Math.round(subtotal * CONFIG.transferDiscountRate);
   }
 
-  const total = Math.max(0, subtotal - discountAmount - paymentDiscount + shippingAmount);
+  const total = Math.max(0, subtotal - paymentDiscount + shippingAmount);
+
+  const itemsSummaryHtml = state.cart.map(item => `
+    <div style="padding: 4px 0; border-bottom: 1px dashed var(--border-light);">
+      <div style="display: flex; justify-content: space-between;">
+        <span>${item.quantity}x ${item.name}</span>
+        <b>${formatARS(item.price * item.quantity)}</b>
+      </div>
+      ${item.customization ? `
+        <div style="font-size: 0.74rem; color: var(--accent-leather); margin-top: 2px;">
+          <i class="fas fa-magic"></i> Grabado Virola: ${item.customization.typeName}
+          ${item.customization.text ? `("${item.customization.text}")` : ''}
+          ${item.customization.graphicName ? `[${item.customization.graphicName}]` : ''}
+        </div>
+      ` : ''}
+    </div>
+  `).join('');
 
   summaryEl.innerHTML = `
     <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 4px;">
+      <div style="margin-bottom: 6px; max-height: 120px; overflow-y: auto;">
+        ${itemsSummaryHtml}
+      </div>
       <div style="display: flex; justify-content: space-between;">
-        <span>Productos (${state.cart.reduce((s, i) => s + i.quantity, 0)}):</span>
+        <span>Subtotal (${state.cart.reduce((s, i) => s + i.quantity, 0)} arts):</span>
         <b>${formatARS(subtotal)}</b>
       </div>
-      ${discountAmount > 0 ? `
-      <div style="display: flex; justify-content: space-between; color: #27ae60;">
-        <span>Cupón (${state.activeCoupon}):</span>
-        <b>-${formatARS(discountAmount)}</b>
-      </div>` : ''}
       ${paymentDiscount > 0 ? `
       <div style="display: flex; justify-content: space-between; color: #27ae60;">
         <span>10% OFF Transferencia:</span>
         <b>-${formatARS(paymentDiscount)}</b>
       </div>` : ''}
-      <div style="display: flex; justify-content: space-between;">
-        <span>Envío:</span>
-        <b>${isFreeShipping ? 'GRATIS' : formatARS(shippingAmount)}</b>
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border-light); padding-top: 4px;">
+        <div>
+          <span>Envío:</span>
+          <small style="color: var(--accent-leather); display: block; font-size: 0.74rem;">
+            ${zone.name} • ${zone.time}
+          </small>
+        </div>
+        <b>${isFreeShipping ? '<span style="color: #27ae60;">¡GRATIS! (Supera los ' + formatARS(CONFIG.freeShippingThreshold) + ')</span>' : formatARS(shippingAmount)}</b>
       </div>
-      <div style="display: flex; justify-content: space-between; font-size: 1.1rem; color: var(--text-main); font-weight: 800; border-top: 1px dashed var(--border-light); margin-top: 6px; padding-top: 6px;">
+      <div style="display: flex; justify-content: space-between; font-size: 1.1rem; color: var(--text-main); font-weight: 800; border-top: 1px solid var(--border-light); margin-top: 6px; padding-top: 6px;">
         <span>Total:</span>
         <b style="color: var(--accent-leather);">${formatARS(total)}</b>
       </div>
@@ -844,8 +1115,12 @@ function processWebCheckout(e) {
   e.preventDefault();
 
   const name = document.getElementById('checkout-name')?.value.trim();
-  const address = document.getElementById('checkout-address')?.value.trim();
+  const phone = document.getElementById('checkout-phone')?.value.trim();
+  const email = document.getElementById('checkout-email')?.value.trim();
+  const province = document.getElementById('checkout-province')?.value || 'Córdoba';
   const city = document.getElementById('checkout-city')?.value.trim();
+  const address = document.getElementById('checkout-address')?.value.trim();
+  const zip = document.getElementById('checkout-zip')?.value.trim();
   const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'transferencia';
 
   if (!name || !address || !city) {
@@ -860,22 +1135,66 @@ function processWebCheckout(e) {
   if (paymentMethod === 'transferencia') {
     paymentDiscount = Math.round(subtotal * CONFIG.transferDiscountRate);
   }
-  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold || (state.activeCoupon && COUPONS[state.activeCoupon]?.freeShipping);
-  const shippingAmount = isFreeShipping ? 0 : CONFIG.shippingCost;
-  const total = subtotal - paymentDiscount + shippingAmount;
+
+  const zone = calculateShippingZone(province, city);
+  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold;
+  const shippingAmount = isFreeShipping ? 0 : zone.cost;
+  const total = Math.max(0, subtotal - paymentDiscount + shippingAmount);
+
+  const hasCustomization = state.cart.some(i => i.customization);
+  const firstCustomItem = state.cart.find(i => i.customization);
+
+  // Save address into logged in user profile for future purchases
+  if (state.currentUser) {
+    state.currentUser.address = { province, city, street: address, zip };
+    localStorage.setItem('mates_rio_user', JSON.stringify(state.currentUser));
+    const uIdx = state.usersDb.findIndex(u => u.email.toLowerCase() === state.currentUser.email.toLowerCase());
+    if (uIdx !== -1) {
+      state.usersDb[uIdx].address = state.currentUser.address;
+      localStorage.setItem('mates_rio_users_db', JSON.stringify(state.usersDb));
+    }
+  }
 
   const newOrder = {
     id: orderId,
     date: new Date().toLocaleDateString('es-AR'),
+    customerName: name,
+    customerPhone: phone || (state.currentUser?.phone || ''),
+    customerEmail: email || (state.currentUser?.email || ''),
     items: state.cart.map(i => `${i.quantity}x ${i.name}`).join(', '),
     total: total,
     status: "Confirmado - En preparación artesanal",
-    address: `${address}, ${city}`,
-    paymentMethod: paymentMethod
+    address: `${address}, ${city}, ${province} (CP ${zip})`,
+    shippingZone: zone.name,
+    shippingCost: shippingAmount,
+    paymentMethod: paymentMethod,
+    hasCustomEngraving: hasCustomization,
+    engravingDetails: firstCustomItem ? {
+      text: firstCustomItem.customization.text || 'Sin texto',
+      technique: firstCustomItem.customization.typeName || 'Láser HD',
+      font: firstCustomItem.customization.fontName || 'Gauchesca',
+      location: firstCustomItem.customization.location || 'Frente'
+    } : null
   };
 
   state.orders.unshift(newOrder);
   localStorage.setItem('mates_rio_orders', JSON.stringify(state.orders));
+
+  // Decrement inventory stock
+  try {
+    const inv = JSON.parse(localStorage.getItem('mates_rio_inventory'));
+    if (inv) {
+      state.cart.forEach(item => {
+        if (inv[item.id]) {
+          inv[item.id].stock = Math.max(0, inv[item.id].stock - item.quantity);
+          inv[item.id].inStock = inv[item.id].stock > 0;
+        }
+      });
+      localStorage.setItem('mates_rio_inventory', JSON.stringify(inv));
+    }
+  } catch (err) {
+    console.error('Error updating inventory stock:', err);
+  }
 
   // Reset cart
   state.cart = [];
@@ -964,36 +1283,83 @@ function togglePasswordVisibility(inputId, iconId) {
   }
 }
 
+// Helper to determine if a user account has administrative privileges
+function isUserAdmin(user) {
+  if (!user) return false;
+  const role = (user.role || '').toLowerCase();
+  const email = (user.email || '').toLowerCase();
+  return (
+    role.includes('admin') ||
+    role.includes('taller') ||
+    email === 'admin@matesrio.com' ||
+    email === 'taller@matesrio.com'
+  );
+}
+
 function handleLogin(e) {
   e.preventDefault();
-  const email = document.getElementById('login-email')?.value.trim();
-  const password = document.getElementById('login-password')?.value;
+  const email = (document.getElementById('login-email')?.value || '').trim();
+  const password = (document.getElementById('login-password')?.value || '').trim();
 
   if (!email || !password) {
     showToast('Ingresá tu correo y contraseña', 'fa-exclamation-triangle');
     return;
   }
 
-  // Find user in mock db
-  const user = state.usersDb.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+  const emailLower = email.toLowerCase();
+  const isSuperAdminCred = emailLower === 'admin@matesrio.com' && (password === 'admin123' || password === 'admin');
+  const isTallerCred = emailLower === 'taller@matesrio.com' && (password === 'taller123' || password === 'admin');
+
+  let user = null;
+
+  if (isSuperAdminCred) {
+    user = {
+      name: "Administrador General",
+      email: "admin@matesrio.com",
+      phone: "1134567890",
+      password: password,
+      role: "Super Administrador"
+    };
+  } else if (isTallerCred) {
+    user = {
+      name: "Encargado de Taller",
+      email: "taller@matesrio.com",
+      phone: "1134567891",
+      password: password,
+      role: "Taller & Depósito"
+    };
+  } else {
+    user = state.usersDb.find(u => u.email.toLowerCase() === emailLower && u.password === password);
+  }
+
   if (user) {
+    if (isUserAdmin(user)) {
+      user.role = user.role || 'Super Administrador';
+      localStorage.setItem('mates_rio_admin_session', JSON.stringify(user));
+      sessionStorage.setItem('mates_rio_admin_session', JSON.stringify(user));
+    }
     state.currentUser = user;
     localStorage.setItem('mates_rio_user', JSON.stringify(user));
     updateAuthUI();
     closeAuthModal();
-    showToast(`¡Bienvenido de vuelta, ${user.name}!`);
+    playAuthLoginEffect(user, false);
   } else {
     // If not in demo, register as new session
     const fallbackUser = {
       name: email.split('@')[0],
       email: email,
-      phone: "1155554444"
+      phone: "1155554444",
+      role: isUserAdmin({ email }) ? "Super Administrador" : "customer"
     };
+    if (isUserAdmin(fallbackUser)) {
+      localStorage.setItem('mates_rio_admin_session', JSON.stringify(fallbackUser));
+      sessionStorage.setItem('mates_rio_admin_session', JSON.stringify(fallbackUser));
+    }
     state.currentUser = fallbackUser;
     localStorage.setItem('mates_rio_user', JSON.stringify(fallbackUser));
     updateAuthUI();
     closeAuthModal();
-    showToast(`¡Bienvenido a Mates Río, ${fallbackUser.name}!`);
+    playAuthLoginEffect(fallbackUser, false);
   }
 }
 
@@ -1015,25 +1381,34 @@ function handleRegister(e) {
     return;
   }
 
-  const newUser = { name, email, phone, password };
+  const role = isUserAdmin({ email }) ? "Super Administrador" : "customer";
+  const newUser = { name, email, phone, password, role };
   state.usersDb.push(newUser);
   localStorage.setItem('mates_rio_users_db', JSON.stringify(state.usersDb));
+
+  if (isUserAdmin(newUser)) {
+    localStorage.setItem('mates_rio_admin_session', JSON.stringify(newUser));
+    sessionStorage.setItem('mates_rio_admin_session', JSON.stringify(newUser));
+  }
 
   state.currentUser = newUser;
   localStorage.setItem('mates_rio_user', JSON.stringify(newUser));
 
   updateAuthUI();
   closeAuthModal();
-  showToast(`¡Cuenta creada con éxito! Bienvenido, ${name}.`);
+  playAuthLoginEffect(newUser, true);
 }
 
 function logoutUser() {
+  const prevName = state.currentUser ? state.currentUser.name : 'Matero';
   state.currentUser = null;
   localStorage.removeItem('mates_rio_user');
+  localStorage.removeItem('mates_rio_admin_session');
+  sessionStorage.removeItem('mates_rio_admin_session');
   updateAuthUI();
   closeProfileModal();
   closeUserDropdown();
-  showToast('Has cerrado sesión correctamente');
+  playAuthLogoutEffect(prevName);
 }
 
 function toggleUserDropdown() {
@@ -1050,34 +1425,60 @@ function updateAuthUI() {
   const userBtn = document.getElementById('user-account-btn');
   const userDropdown = document.getElementById('user-dropdown-menu');
   const mobileAuthText = document.getElementById('mobile-nav-auth-text');
-  const mobileAdminItem = document.getElementById('mobile-nav-admin-item');
-  const adminFloatBtn = document.getElementById('admin-floating-add-btn');
+  const adminDropdownLinks = document.querySelectorAll('#dropdown-admin-link, #user-menu-admin-item, .admin-only-item, .btn-admin-nav-direct');
+  const mobileAdminItems = document.querySelectorAll('#mobile-nav-admin-item, .mobile-admin-item');
+  const profileAdminCard = document.getElementById('profile-admin-card');
+  const profileAdminRoleBadge = document.getElementById('profile-admin-role-badge');
 
-  const isAdmin = state.currentUser && (
-    state.currentUser.role === 'Super Administrador' ||
-    state.currentUser.role === 'Taller & Depósito' ||
-    state.currentUser.email === 'admin@matesrio.com' ||
-    state.currentUser.email === 'taller@matesrio.com'
-  );
-
-  if (adminFloatBtn) {
-    adminFloatBtn.style.display = isAdmin ? 'flex' : 'none';
+  // Auto-upgrade role if email is an admin
+  if (state.currentUser && isUserAdmin(state.currentUser) && !state.currentUser.role) {
+    state.currentUser.role = state.currentUser.email === 'taller@matesrio.com' ? 'Taller & Depósito' : 'Super Administrador';
+    localStorage.setItem('mates_rio_user', JSON.stringify(state.currentUser));
+    localStorage.setItem('mates_rio_admin_session', JSON.stringify(state.currentUser));
   }
-  if (mobileAdminItem) {
-    mobileAdminItem.style.display = isAdmin ? 'block' : 'none';
+
+  const isAdmin = isUserAdmin(state.currentUser);
+
+  // Show/Hide admin panel links in dropdowns & navbar
+  adminDropdownLinks.forEach(link => {
+    link.style.display = isAdmin ? 'flex' : 'none';
+  });
+
+  // Show/Hide admin panel link in mobile menu drawer
+  mobileAdminItems.forEach(item => {
+    item.style.display = isAdmin ? 'block' : 'none';
+  });
+
+  // Show/Hide admin panel banner inside Profile Modal
+  if (profileAdminCard) {
+    profileAdminCard.style.display = isAdmin ? 'block' : 'none';
+    if (profileAdminRoleBadge && state.currentUser) {
+      profileAdminRoleBadge.textContent = state.currentUser.role || 'ADMIN';
+    }
+  }
+
+  // Show/Hide floating quick add button for admins on web
+  const floatingAddBtn = document.getElementById('admin-floating-add-btn');
+  if (floatingAddBtn) {
+    floatingAddBtn.style.display = isAdmin ? 'inline-flex' : 'none';
   }
 
   if (state.currentUser) {
     const firstName = state.currentUser.name ? state.currentUser.name.split(' ')[0] : 'Usuario';
-    if (userBtnText) userBtnText.textContent = firstName;
-    if (mobileAuthText) mobileAuthText.textContent = `Mi Perfil (${firstName})`;
+    if (userBtnText) userBtnText.textContent = isAdmin ? 'Admin' : firstName;
+    if (mobileAuthText) mobileAuthText.textContent = `Hola, ${firstName} (${isAdmin ? 'Admin' : 'Mi Perfil'})`;
     if (userBtn) {
       userBtn.onclick = (e) => {
         e.stopPropagation();
         toggleUserDropdown();
       };
-      userBtn.title = `Cuenta de ${state.currentUser.name}`;
-      userBtn.style.borderColor = 'var(--accent-gold)';
+      userBtn.title = `Cuenta de ${state.currentUser.name}${isAdmin ? ' (Administrador)' : ''}`;
+      userBtn.style.borderColor = isAdmin ? 'var(--accent-gold)' : 'var(--accent-leather)';
+      if (isAdmin) {
+        userBtn.classList.add('admin-active');
+      } else {
+        userBtn.classList.remove('admin-active');
+      }
     }
   } else {
     if (userBtnText) userBtnText.textContent = "Ingresar";
@@ -1086,42 +1487,81 @@ function updateAuthUI() {
       userBtn.onclick = () => openAuthModal('login');
       userBtn.title = "Iniciar sesión o Registrarse";
       userBtn.style.borderColor = 'var(--border-light)';
+      userBtn.classList.remove('admin-active');
     }
     if (userDropdown) userDropdown.classList.remove('active');
   }
 }
 
-// User Profile & Orders Modal
-function openProfileModal() {
+function handleMobileAuthClick() {
+  closeMobileDrawer();
+  if (state.currentUser) {
+    openProfileModal();
+  } else {
+    openAuthModal('login');
+  }
+}
+
+// User Profile & Orders Modal with Location and Tabs
+function switchProfileTab(tab) {
+  const tabProfileBtn = document.getElementById('profile-tab-btn-info');
+  const tabOrdersBtn = document.getElementById('profile-tab-btn-orders');
+  const panelProfile = document.getElementById('profile-panel-info');
+  const panelOrders = document.getElementById('profile-panel-orders');
+
+  if (tab === 'orders') {
+    tabOrdersBtn?.classList.add('active');
+    tabProfileBtn?.classList.remove('active');
+    panelOrders?.classList.add('active');
+    panelProfile?.classList.remove('active');
+  } else {
+    tabProfileBtn?.classList.add('active');
+    tabOrdersBtn?.classList.remove('active');
+    panelProfile?.classList.add('active');
+    panelOrders?.classList.remove('active');
+  }
+}
+
+function openProfileModal(initialTab = 'profile') {
   closeUserDropdown();
   const modal = document.getElementById('profile-modal');
   if (!modal || !state.currentUser) return;
 
+  switchProfileTab(initialTab);
+
+  // Populate Profile Info
   const nameEl = document.getElementById('profile-name-display');
   const emailEl = document.getElementById('profile-email-display');
   const phoneEl = document.getElementById('profile-phone-display');
-  const ordersListEl = document.getElementById('profile-orders-list');
+  const profileAdminCard = document.getElementById('profile-admin-card');
+  const profileAdminRoleBadge = document.getElementById('profile-admin-role-badge');
 
   if (nameEl) nameEl.textContent = state.currentUser.name;
   if (emailEl) emailEl.textContent = state.currentUser.email;
   if (phoneEl) phoneEl.textContent = state.currentUser.phone || "No especificado";
 
-  // Pre-fill location fields if available
-  if (state.currentUser.location) {
-    const loc = state.currentUser.location;
-    const provEl = document.getElementById('profile-input-province');
-    const cityEl = document.getElementById('profile-input-city');
-    const addrEl = document.getElementById('profile-input-address');
-    const zipEl = document.getElementById('profile-input-zip');
-    const hint = document.getElementById('profile-location-zone-hint');
+  // Populate Location Form
+  const addr = state.currentUser.address || state.currentUser.location || {};
+  const provEl = document.getElementById('profile-input-province');
+  const cityEl = document.getElementById('profile-input-city');
+  const streetEl = document.getElementById('profile-input-street') || document.getElementById('profile-input-address');
+  const zipEl = document.getElementById('profile-input-zip');
+  const notesEl = document.getElementById('profile-input-notes');
 
-    if (provEl && loc.province) provEl.value = loc.province;
-    if (cityEl && loc.city) cityEl.value = loc.city;
-    if (addrEl && loc.address) addrEl.value = loc.address;
-    if (zipEl && loc.zip) zipEl.value = loc.zip;
-    if (hint && loc.city) {
-      hint.textContent = `✓ Ubicación guardada: ${loc.city}, ${loc.province} (CP ${loc.zip})`;
-      hint.style.display = 'block';
+  if (provEl) provEl.value = addr.province || 'Córdoba';
+  if (cityEl) cityEl.value = addr.city || '';
+  if (streetEl) streetEl.value = addr.street || addr.address || '';
+  if (zipEl) zipEl.value = addr.zip || '';
+  if (notesEl) notesEl.value = addr.notes || '';
+
+  // Calculate & show shipping zone hint for this user
+  updateProfileLocationZoneHint();
+
+  const isAdmin = isUserAdmin(state.currentUser);
+  if (profileAdminCard) {
+    profileAdminCard.style.display = isAdmin ? 'block' : 'none';
+    if (profileAdminRoleBadge) {
+      profileAdminRoleBadge.textContent = state.currentUser.role || 'ADMIN';
     }
   }
 
@@ -1145,8 +1585,118 @@ function openProfileModal() {
     }
   }
 
+  // Populate Orders List for this specific user
+  renderProfileOrders();
+
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
+}
+
+function updateProfileLocationZoneHint() {
+  const hintEl = document.getElementById('profile-location-zone-hint');
+  if (!hintEl) return;
+  const prov = document.getElementById('profile-input-province')?.value || 'Córdoba';
+  const city = document.getElementById('profile-input-city')?.value || '';
+  const zone = calculateShippingZone(prov, city);
+  hintEl.innerHTML = `
+    <div style="font-size: 0.8rem; color: var(--accent-leather); display: flex; align-items: center; gap: 6px; margin-top: 6px;">
+      <i class="fas fa-truck"></i> <span>Zona asignada: <b>${zone.name}</b> (${formatARS(zone.cost)} / ${zone.time})</span>
+    </div>
+  `;
+}
+
+function saveUserLocation(e) {
+  if (e) e.preventDefault();
+  if (!state.currentUser) return;
+
+  const province = document.getElementById('profile-input-province')?.value || 'Córdoba';
+  const city = document.getElementById('profile-input-city')?.value.trim() || '';
+  const street = document.getElementById('profile-input-street')?.value.trim() || '';
+  const zip = document.getElementById('profile-input-zip')?.value.trim() || '';
+  const notes = document.getElementById('profile-input-notes')?.value.trim() || '';
+
+  state.currentUser.address = { province, city, street, zip, notes };
+
+  // Update in user db & local storage
+  localStorage.setItem('mates_rio_user', JSON.stringify(state.currentUser));
+  const userIdx = state.usersDb.findIndex(u => u.email.toLowerCase() === state.currentUser.email.toLowerCase());
+  if (userIdx !== -1) {
+    state.usersDb[userIdx].address = state.currentUser.address;
+    localStorage.setItem('mates_rio_users_db', JSON.stringify(state.usersDb));
+  }
+
+  updateProfileLocationZoneHint();
+  showToast('¡Ubicación y dirección guardadas correctamente!', 'fa-check-circle');
+}
+
+function renderProfileOrders() {
+  const ordersListEl = document.getElementById('profile-orders-list');
+  if (!ordersListEl || !state.currentUser) return;
+
+  // Filter orders by currentUser email or name
+  const currentEmail = (state.currentUser.email || '').toLowerCase();
+  const currentName = (state.currentUser.name || '').toLowerCase();
+  const userOrders = state.orders.filter(ord => {
+    const oEmail = (ord.customerEmail || '').toLowerCase();
+    const oName = (ord.customerName || '').toLowerCase();
+    return oEmail === currentEmail || oName === currentName || (!ord.customerEmail && currentEmail.includes('juan'));
+  });
+
+  const ordersCountBadge = document.getElementById('profile-orders-tab-count');
+  if (ordersCountBadge) {
+    ordersCountBadge.textContent = userOrders.length;
+  }
+
+  if (userOrders.length === 0) {
+    ordersListEl.innerHTML = `
+      <div style="text-align: center; padding: 32px 16px;">
+        <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--bg-main); display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.3rem; margin-bottom: 12px;">
+          <i class="fas fa-box-open"></i>
+        </div>
+        <h5 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 6px;">Aún no realizaste ningún pedido</h5>
+        <p style="color: var(--text-secondary); font-size: 0.84rem; max-width: 320px; margin: 0 auto 16px;">
+          Elegí tu mate imperial favorito o armá tu set personalizado y viví la experiencia Mates Río.
+        </p>
+        <button class="btn btn-primary" onclick="closeProfileModal(); window.location.href='catalogo.html';" style="font-size: 0.82rem; padding: 9px 18px;">
+          <i class="fas fa-store"></i> Explorar Catálogo
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  ordersListEl.innerHTML = userOrders.map(ord => `
+    <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+        <div>
+          <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">Pedido #${ord.id}</span>
+          <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">
+            <i class="far fa-calendar-alt"></i> ${ord.date}
+          </div>
+        </div>
+        <span style="color: var(--accent-leather); font-size: 1.05rem; font-weight: 800;">${formatARS(ord.total)}</span>
+      </div>
+
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 6px 0; line-height: 1.4;">
+        <b>Productos:</b> ${ord.items}
+      </p>
+
+      ${ord.address ? `
+        <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 6px;">
+          <i class="fas fa-map-marker-alt" style="color: var(--accent-gold);"></i> <b>Entrega en:</b> ${ord.address}
+        </div>
+      ` : ''}
+
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; border-top: 1px dashed var(--border-light); padding-top: 8px; margin-top: 6px;">
+        <span style="color: #27ae60; font-weight: 700;">
+          <i class="fas fa-truck"></i> ${ord.status}
+        </span>
+        <button class="btn btn-outline-dark" onclick="startDirectWhatsAppChat('¡Hola Mates Río! Quisiera consultar sobre el estado de mi pedido #${ord.id}')" style="font-size: 0.72rem; padding: 4px 10px;">
+          <i class="fab fa-whatsapp"></i> Consultar
+        </button>
+      </div>
+    </div>
+  `).join('');
 }
 
 function closeProfileModal() {
@@ -1263,7 +1813,8 @@ function openQuickView(productId) {
 
   const btnPersonalize = document.getElementById('qv-btn-personalize');
   if (btnPersonalize) {
-    btnPersonalize.style.display = (product.category === 'mates') ? 'block' : 'none';
+    const isMate = product.category === 'mates' || (product.specs && product.specs.virola);
+    btnPersonalize.style.display = isMate ? 'flex' : 'none';
   }
 
   modal.classList.add('active');
@@ -1280,16 +1831,20 @@ function closeQuickView() {
 }
 
 function changeQuickViewQty(delta) {
-  const qtyInput = document.getElementById('qv-qty');
-  if (!qtyInput) return;
-  let val = parseInt(qtyInput.value, 10) || 1;
-  val = Math.max(1, Math.min(99, val + delta));
-  qtyInput.value = val;
+  const q = document.getElementById('qv-qty');
+  if (!q) return;
+  const current = parseInt(q.value, 10) || 1;
+  const next = current + delta;
+  if (next >= 1 && next <= 99) {
+    q.value = next;
+  }
 }
+window.changeQuickViewQty = changeQuickViewQty;
 
 function goToPersonalizarMate(productId) {
   window.location.href = `personaliza-tu-mate.html?mate=${encodeURIComponent(productId || '')}`;
 }
+window.goToPersonalizarMate = goToPersonalizarMate;
 
 function addQuickViewToCart() {
   if (!currentQuickViewProduct) return;
@@ -1466,6 +2021,23 @@ function switchCureTab(type) {
 // APP INITIALIZATION & EVENT LISTENERS
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
+  // 0. Parse URL query parameters (e.g. catalogo.html?categoria=mates or ?buscar=imperial)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const catParam = urlParams.get('categoria') || urlParams.get('category');
+    const searchParam = urlParams.get('buscar') || urlParams.get('q') || urlParams.get('search');
+    const focusParam = urlParams.get('focus');
+
+    if (catParam) {
+      state.activeCategory = catParam.toLowerCase();
+    }
+    if (searchParam) {
+      state.searchQuery = searchParam;
+    }
+  } catch (err) {
+    console.warn('URL params parsing error:', err);
+  }
+
   // 1. Init Hero Banner Slider
   initSlider();
 
@@ -1474,6 +2046,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 3. Render Catalog
   renderProducts();
+
+  // Apply search query into search input & highlight active category pill if URL set state
+  const searchInputInit = document.getElementById('catalog-search-input');
+  const clearBtnInit = document.getElementById('search-clear-btn');
+  if (searchInputInit && state.searchQuery) {
+    searchInputInit.value = state.searchQuery;
+    if (clearBtnInit) clearBtnInit.classList.add('visible');
+  }
+
+  if (state.activeCategory) {
+    document.querySelectorAll('.filter-pill').forEach(pill => {
+      const pillCat = pill.getAttribute('data-category');
+      const isActive = pillCat === state.activeCategory;
+      pill.classList.toggle('active', isActive);
+      if (isActive && typeof pill.scrollIntoView === 'function') {
+        pill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    });
+  }
+
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('focus') === 'search' && searchInputInit) {
+      setTimeout(() => searchInputInit.focus(), 350);
+    }
+  } catch (e) {}
 
   // 4. Update Cart & Auth state
   updateCartUI();
@@ -1572,10 +2170,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 10. Close dropdowns on document click
+  // 10. Close dropdowns and popups on document click
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.user-btn-wrap')) {
       closeUserDropdown();
+    }
+    if (!e.target.closest('.floating-whatsapp-container')) {
+      document.getElementById('whatsapp-chat-popup')?.classList.remove('active');
     }
   });
 
@@ -1612,4 +2213,767 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // 13. Auto open cart drawer if returning from customizer
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('openCart') === 'true') {
+    setTimeout(() => {
+      openCartDrawer();
+      showToast('¡Mate personalizado guardado en tu carrito!', 'fa-check-circle');
+    }, 350);
+  }
+
+  // 14. Initialize Customizer if container exists and not already handled by dedicated customizer.js
+  if (document.getElementById('customizer-mates-grid') && typeof initStudio !== 'function' && typeof initCustomizer === 'function') {
+    initCustomizer();
+  }
 });
+
+// ==========================================================================
+// PERSONALIZÁ TU MATE: VIROLA ENGRAVING STUDIO ENGINE
+// ==========================================================================
+const customizerState = {
+  selectedMateId: 'mate-1',
+  technique: 'laser', // 'laser' | 'cincelado' | 'fotograbado'
+  designTab: 'texto', // 'texto' | 'escudos' | 'criollo' | 'logo'
+  text: 'JUAN & SOFÍA',
+  font: 'gauchesca', // 'gauchesca' | 'cursiva' | 'serif' | 'sans'
+  location: 'frente', // 'frente' | 'ambos' | 'completa'
+  selectedGraphicId: null,
+  uploadedFileName: null,
+  uploadedFileDataUrl: null,
+  notes: ''
+};
+
+const TECHNIQUES = {
+  laser: {
+    id: 'laser',
+    name: 'Grabado Láser HD (Oscuro)',
+    shortName: 'Láser HD',
+    finishDesc: 'Contraste negro nítido milimétrico',
+    cost: 0
+  },
+  cincelado: {
+    id: 'cincelado',
+    name: 'Cincelado Orfebre (Plateado)',
+    shortName: 'Cincelado Orfebre',
+    finishDesc: 'Bajo relieve esculpido sobre alpaca con brillo artesanal',
+    cost: 0
+  },
+  fotograbado: {
+    id: 'fotograbado',
+    name: 'Fotograbado Satinado (Gris)',
+    shortName: 'Fotograbado Satinado',
+    finishDesc: 'Tono gris mate sedoso y sutil',
+    cost: 0
+  }
+};
+
+const FONTS = {
+  gauchesca: { id: 'gauchesca', name: 'Gauchesca / Criolla', cssClass: 'font-gauchesca' },
+  cursiva: { id: 'cursiva', name: 'Cursiva Elegante', cssClass: 'font-cursiva' },
+  serif: { id: 'serif', name: 'Clásica Romana', cssClass: 'font-serif' },
+  sans: { id: 'sans', name: 'Moderna Sans', cssClass: 'font-sans' }
+};
+
+const LOCATIONS = {
+  frente: { id: 'frente', name: 'Frente centrado' },
+  ambos: { id: 'ambos', name: 'Frente y Dorso' },
+  completa: { id: 'completa', name: 'Vuelta completa' }
+};
+
+const GRAPHICS = {
+  'none': {
+    id: 'none',
+    name: 'Sin escudo (Solo texto)',
+    category: 'all',
+    svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`
+  },
+  'afa': {
+    id: 'afa',
+    name: 'AFA 3 Estrellas',
+    category: 'escudos',
+    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
+      <path d="M50 5 L58 20 L76 20 L62 31 L67 48 L50 38 L33 48 L38 31 L24 20 L42 20 Z" transform="scale(0.35) translate(38, -10)" />
+      <path d="M50 5 L58 20 L76 20 L62 31 L67 48 L50 38 L33 48 L38 31 L24 20 L42 20 Z" transform="scale(0.35) translate(92, -10)" />
+      <path d="M50 5 L58 20 L76 20 L62 31 L67 48 L50 38 L33 48 L38 31 L24 20 L42 20 Z" transform="scale(0.35) translate(146, -10)" />
+      <path d="M22 28 L78 28 L74 74 C69 86 50 94 50 94 C50 94 31 86 26 74 Z" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M35 30 L35 78 M50 30 L50 85 M65 30 L65 78" stroke="currentColor" stroke-width="3"/>
+      <text x="50" y="60" font-family="'Cinzel', serif" font-weight="900" font-size="18" text-anchor="middle" fill="currentColor">AFA</text>
+    </svg>`
+  },
+  'boca': {
+    id: 'boca',
+    name: 'Boca Juniors',
+    category: 'escudos',
+    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
+      <path d="M22 22 L78 22 L74 70 C70 84 50 94 50 94 C50 94 30 84 26 70 Z" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M24 45 L76 45 L75 62 L25 62 Z" fill="currentColor" fill-opacity="0.3"/>
+      <text x="50" y="58" font-family="'Montserrat', sans-serif" font-weight="900" font-size="13" letter-spacing="1" text-anchor="middle" fill="currentColor">CABJ</text>
+      <circle cx="50" cy="32" r="2.5"/>
+      <circle cx="38" cy="36" r="2.5"/>
+      <circle cx="62" cy="36" r="2.5"/>
+      <circle cx="40" cy="74" r="2.5"/>
+      <circle cx="50" cy="78" r="2.5"/>
+      <circle cx="60" cy="74" r="2.5"/>
+    </svg>`
+  },
+  'river': {
+    id: 'river',
+    name: 'River Plate',
+    category: 'escudos',
+    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
+      <path d="M22 22 L78 22 L74 70 C70 84 50 94 50 94 C50 94 30 84 26 70 Z" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M22 22 L78 78 L74 70 L26 22 Z" fill="currentColor" fill-opacity="0.45"/>
+      <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="3"/>
+      <text x="50" y="55" font-family="'Cinzel', serif" font-weight="900" font-size="12" text-anchor="middle" fill="currentColor">CARP</text>
+    </svg>`
+  },
+  'racing': {
+    id: 'racing',
+    name: 'Racing Club',
+    category: 'escudos',
+    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
+      <path d="M22 22 L78 22 L74 70 C70 84 50 94 50 94 C50 94 30 84 26 70 Z" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M36 24 L36 82 M50 24 L50 88 M64 24 L64 82" stroke="currentColor" stroke-width="4"/>
+      <text x="50" y="56" font-family="'Cinzel', serif" font-weight="900" font-size="16" text-anchor="middle" fill="currentColor">RC</text>
+    </svg>`
+  },
+  'independiente': {
+    id: 'independiente',
+    name: 'Independiente',
+    category: 'escudos',
+    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
+      <rect x="22" y="22" width="56" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="4"/>
+      <line x1="22" y1="22" x2="78" y2="78" stroke="currentColor" stroke-width="4"/>
+      <text x="50" y="55" font-family="'Cinzel', serif" font-weight="900" font-size="14" text-anchor="middle" fill="currentColor">CAI</text>
+    </svg>`
+  },
+  'sanlorenzo': {
+    id: 'sanlorenzo',
+    name: 'San Lorenzo',
+    category: 'escudos',
+    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
+      <circle cx="50" cy="50" r="32" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M36 22 L36 78 M50 18 L50 82 M64 22 L64 78" stroke="currentColor" stroke-width="3"/>
+      <circle cx="50" cy="50" r="18" fill="currentColor" fill-opacity="0.18"/>
+      <text x="50" y="54" font-family="'Cinzel', serif" font-weight="900" font-size="10.5" text-anchor="middle" fill="currentColor">CASLA</text>
+    </svg>`
+  },
+  'soldemayo': {
+    id: 'soldemayo',
+    name: 'Sol de Mayo',
+    category: 'criollo',
+    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
+      <circle cx="50" cy="50" r="18" fill="none" stroke="currentColor" stroke-width="3"/>
+      <line x1="50" y1="12" x2="50" y2="28" stroke="currentColor" stroke-width="3"/>
+      <line x1="50" y1="72" x2="50" y2="88" stroke="currentColor" stroke-width="3"/>
+      <line x1="12" y1="50" x2="28" y2="50" stroke="currentColor" stroke-width="3"/>
+      <line x1="72" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="3"/>
+      <line x1="23" y1="23" x2="35" y2="35" stroke="currentColor" stroke-width="3"/>
+      <line x1="65" y1="65" x2="77" y2="77" stroke="currentColor" stroke-width="3"/>
+      <line x1="77" y1="23" x2="65" y2="35" stroke="currentColor" stroke-width="3"/>
+      <line x1="23" y1="77" x2="35" y2="65" stroke="currentColor" stroke-width="3"/>
+      <circle cx="44" cy="46" r="2"/>
+      <circle cx="56" cy="46" r="2"/>
+      <path d="M44 57 Q50 62 56 57" fill="none" stroke="currentColor" stroke-width="2"/>
+    </svg>`
+  },
+  'guardapampa': {
+    id: 'guardapampa',
+    name: 'Guarda Pampa',
+    category: 'criollo',
+    svg: `<svg viewBox="0 0 100 50" class="graphic-svg" fill="currentColor">
+      <path d="M5 25 L20 10 L35 25 L50 10 L65 25 L80 10 L95 25 L80 40 L65 25 L50 40 L35 25 L20 40 Z" fill="none" stroke="currentColor" stroke-width="3.5"/>
+      <rect x="16" y="21" width="8" height="8" fill="currentColor"/>
+      <rect x="46" y="21" width="8" height="8" fill="currentColor"/>
+      <rect x="76" y="21" width="8" height="8" fill="currentColor"/>
+    </svg>`
+  },
+  'malvinas': {
+    id: 'malvinas',
+    name: 'Islas Malvinas',
+    category: 'criollo',
+    svg: `<svg viewBox="0 0 100 70" class="graphic-svg" fill="currentColor">
+      <path d="M22 25 C18 30 16 38 20 45 C24 52 32 55 35 48 C38 42 36 34 32 28 C28 22 24 20 22 25 Z" fill="none" stroke="currentColor" stroke-width="3"/>
+      <path d="M55 20 C50 24 48 35 52 42 C54 48 64 56 70 52 C76 48 78 38 75 30 C72 22 62 16 55 20 Z" fill="none" stroke="currentColor" stroke-width="3"/>
+      <path d="M28 36 L48 32" stroke="currentColor" stroke-width="2" stroke-dasharray="2,2"/>
+    </svg>`
+  },
+  'caballo': {
+    id: 'caballo',
+    name: 'Caballo Criollo',
+    category: 'criollo',
+    svg: `<svg viewBox="0 0 100 80" class="graphic-svg" fill="currentColor">
+      <path d="M30 65 L36 45 C38 40 40 32 38 22 C37 18 42 12 46 15 C50 18 48 24 53 28 C58 32 68 30 74 36 C80 42 82 52 78 65" fill="none" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="43" cy="20" r="2"/>
+      <path d="M48 26 C53 22 60 22 65 24" fill="none" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M20 50 C26 42 32 46 36 45" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    </svg>`
+  },
+  'mapa': {
+    id: 'mapa',
+    name: 'Silueta Argentina',
+    category: 'criollo',
+    svg: `<svg viewBox="0 0 70 100" class="graphic-svg" fill="currentColor">
+      <path d="M35 12 L48 16 L52 24 L45 32 L46 45 L38 58 L36 72 L30 88 L25 82 L26 65 L28 48 L26 35 L28 22 Z" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="36" cy="40" r="3" fill="currentColor"/>
+    </svg>`
+  }
+};
+
+function initCustomizer() {
+  renderCustomizerMates();
+  renderCustomizerGraphics();
+  updateVirolaSimulator();
+}
+
+function renderCustomizerMates() {
+  const container = document.getElementById('customizer-mates-grid');
+  if (!container || typeof PRODUCTS_DATA === 'undefined') return;
+
+  const mates = PRODUCTS_DATA.filter(p => p.category === 'mates');
+  if (mates.length === 0) return;
+
+  container.innerHTML = mates.map(mate => {
+    const isSelected = customizerState.selectedMateId === mate.id;
+    return `
+      <div class="custom-mate-card ${isSelected ? 'active' : ''}" id="custom-mate-card-${mate.id}" onclick="selectEngraveMate('${mate.id}')">
+        <img src="${mate.image}" alt="${mate.name}" class="custom-mate-thumb" />
+        <div class="custom-mate-meta">
+          <strong class="custom-mate-name">${mate.name}</strong>
+          <span class="custom-mate-virola">${mate.specs?.virola || 'Virola de Alpaca'}</span>
+          <span class="custom-mate-price">${formatARS(mate.price)}</span>
+        </div>
+        <div class="custom-mate-radio"><i class="fas fa-check"></i></div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderCustomizerGraphics() {
+  const escudosContainer = document.getElementById('escudos-selector-grid');
+  const criollosContainer = document.getElementById('criollos-selector-grid');
+
+  if (escudosContainer) {
+    const escudos = Object.values(GRAPHICS).filter(g => g.category === 'escudos' || g.id === 'none');
+    escudosContainer.innerHTML = escudos.map(g => {
+      const isSelected = customizerState.selectedGraphicId === g.id;
+      return `
+        <button type="button" class="graphic-btn ${isSelected ? 'active' : ''}" data-graphic-id="${g.id}" onclick="selectGraphic('${g.id}')" title="${g.name}">
+          <div class="graphic-svg-wrap">${g.svg}</div>
+          <span class="graphic-btn-name">${g.name}</span>
+        </button>
+      `;
+    }).join('');
+  }
+
+  if (criollosContainer) {
+    const criollos = Object.values(GRAPHICS).filter(g => g.category === 'criollo' || g.id === 'none');
+    criollosContainer.innerHTML = criollos.map(g => {
+      const isSelected = customizerState.selectedGraphicId === g.id;
+      return `
+        <button type="button" class="graphic-btn ${isSelected ? 'active' : ''}" data-graphic-id="${g.id}" onclick="selectGraphic('${g.id}')" title="${g.name}">
+          <div class="graphic-svg-wrap">${g.svg}</div>
+          <span class="graphic-btn-name">${g.name}</span>
+        </button>
+      `;
+    }).join('');
+  }
+}
+
+function selectEngraveMate(mateId) {
+  customizerState.selectedMateId = mateId;
+  document.querySelectorAll('.custom-mate-card').forEach(c => {
+    c.classList.toggle('active', c.id === `custom-mate-card-${mateId}`);
+  });
+  updateVirolaSimulator();
+}
+
+function selectEngraveTechnique(techId) {
+  if (!TECHNIQUES[techId]) return;
+  customizerState.technique = techId;
+  document.querySelectorAll('.technique-card').forEach(c => {
+    c.classList.toggle('active', c.getAttribute('data-technique') === techId);
+  });
+  updateVirolaSimulator();
+}
+
+function switchDesignTab(tabId) {
+  customizerState.designTab = tabId;
+  document.querySelectorAll('.design-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-design-tab') === tabId);
+  });
+  document.querySelectorAll('.design-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.id === `design-panel-${tabId}`);
+  });
+  updateVirolaSimulator();
+}
+
+function onCustomTextChange(val) {
+  customizerState.text = val.slice(0, 30);
+  const countEl = document.getElementById('text-char-count');
+  if (countEl) countEl.textContent = `${customizerState.text.length} / 30`;
+  updateVirolaSimulator();
+}
+
+function clearCustomText() {
+  const input = document.getElementById('custom-text-input');
+  if (input) input.value = '';
+  onCustomTextChange('');
+  input?.focus();
+}
+
+function selectEngraveFont(fontId) {
+  if (!FONTS[fontId]) return;
+  customizerState.font = fontId;
+  document.querySelectorAll('.font-card').forEach(c => {
+    c.classList.toggle('active', c.getAttribute('data-font') === fontId);
+  });
+  updateVirolaSimulator();
+}
+
+function selectLocation(locId) {
+  if (!LOCATIONS[locId]) return;
+  customizerState.location = locId;
+  document.querySelectorAll('.location-pill').forEach(p => {
+    p.classList.toggle('active', p.getAttribute('data-loc') === locId);
+  });
+  updateVirolaSimulator();
+}
+
+function selectGraphic(graphicId) {
+  if (graphicId === 'none' || customizerState.selectedGraphicId === graphicId) {
+    customizerState.selectedGraphicId = null;
+  } else {
+    customizerState.selectedGraphicId = graphicId;
+  }
+
+  document.querySelectorAll('.graphic-btn').forEach(btn => {
+    const id = btn.getAttribute('data-graphic-id');
+    btn.classList.toggle('active', id === (customizerState.selectedGraphicId || 'none'));
+  });
+
+  updateVirolaSimulator();
+}
+
+function handleLogoUpload(e) {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  customizerState.uploadedFileName = file.name;
+
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    customizerState.uploadedFileDataUrl = event.target?.result;
+    const previewImg = document.getElementById('engraving-uploaded-preview');
+    if (previewImg) previewImg.src = customizerState.uploadedFileDataUrl;
+
+    const chip = document.getElementById('uploaded-logo-chip');
+    const chipName = document.getElementById('uploaded-logo-name');
+    if (chip && chipName) {
+      chipName.textContent = file.name;
+      chip.style.display = 'inline-flex';
+    }
+
+    updateVirolaSimulator();
+    showToast(`Logo "${file.name}" cargado para grabado en virola`, 'fa-check');
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeUploadedLogo() {
+  customizerState.uploadedFileName = null;
+  customizerState.uploadedFileDataUrl = null;
+
+  const fileInput = document.getElementById('custom-logo-file');
+  if (fileInput) fileInput.value = '';
+
+  const chip = document.getElementById('uploaded-logo-chip');
+  if (chip) chip.style.display = 'none';
+
+  updateVirolaSimulator();
+}
+
+function resetCustomizerForm() {
+  customizerState.selectedMateId = 'mate-1';
+  customizerState.technique = 'laser';
+  customizerState.designTab = 'texto';
+  customizerState.text = 'JUAN & SOFÍA';
+  customizerState.font = 'gauchesca';
+  customizerState.location = 'frente';
+  customizerState.selectedGraphicId = null;
+  customizerState.uploadedFileName = null;
+  customizerState.uploadedFileDataUrl = null;
+
+  const textInput = document.getElementById('custom-text-input');
+  if (textInput) textInput.value = 'JUAN & SOFÍA';
+  const notesInput = document.getElementById('custom-notes-input');
+  if (notesInput) notesInput.value = '';
+
+  removeUploadedLogo();
+  renderCustomizerMates();
+  renderCustomizerGraphics();
+  selectEngraveTechnique('laser');
+  selectEngraveFont('gauchesca');
+  selectLocation('frente');
+  switchDesignTab('texto');
+  updateVirolaSimulator();
+  showToast('Personalizador restablecido', 'fa-undo');
+}
+
+function updateVirolaSimulator() {
+  if (typeof PRODUCTS_DATA === 'undefined') return;
+
+  const mate = PRODUCTS_DATA.find(p => p.id === customizerState.selectedMateId) || PRODUCTS_DATA[3];
+  if (!mate) return;
+
+  // Mate image & labels
+  const simImg = document.getElementById('sim-mate-img');
+  const simModelName = document.getElementById('sim-model-name');
+  const simMetalType = document.getElementById('sim-metal-type');
+  const summaryMateName = document.getElementById('summary-mate-name');
+  const summaryTechName = document.getElementById('summary-tech-name');
+  const summaryFinalPrice = document.getElementById('summary-final-price');
+
+  if (simImg) simImg.src = mate.image;
+  if (simModelName) simModelName.textContent = mate.name;
+  if (simMetalType) simMetalType.textContent = mate.specs?.virola || 'Alpaca Maciza Pulida';
+  if (summaryMateName) summaryMateName.textContent = mate.name;
+
+  const tech = TECHNIQUES[customizerState.technique] || TECHNIQUES.laser;
+  if (summaryTechName) summaryTechName.textContent = tech.name;
+  if (summaryFinalPrice) summaryFinalPrice.textContent = formatARS(mate.price);
+
+  // Technique and Location on Mockup Footer
+  const simTechLabel = document.getElementById('sim-technique-label');
+  const simLocLabel = document.getElementById('sim-location-label');
+  if (simTechLabel) simTechLabel.innerHTML = `<i class="fas fa-bolt"></i> Técnica: <b>${tech.name}</b>`;
+  if (simLocLabel) simLocLabel.innerHTML = `<i class="fas fa-crosshairs"></i> Ubicación: <b>${LOCATIONS[customizerState.location]?.name || 'Frente'}</b>`;
+
+  // Ring Technique Styling
+  const ring = document.getElementById('virola-metallic-ring');
+  if (ring) {
+    ring.classList.remove('technique-laser', 'technique-cincelado', 'technique-fotograbado');
+    ring.classList.add(`technique-${customizerState.technique}`);
+  }
+
+  // Text slot
+  const textSlot = document.getElementById('engraving-text-slot');
+  if (textSlot) {
+    textSlot.className = `engraving-text-slot font-${customizerState.font}`;
+    textSlot.textContent = customizerState.text || 'TU TEXTO AQUÍ';
+  }
+
+  // Graphic slot
+  const graphicSlot = document.getElementById('engraving-graphic-slot');
+  if (graphicSlot) {
+    if (customizerState.selectedGraphicId && GRAPHICS[customizerState.selectedGraphicId]?.svg && customizerState.selectedGraphicId !== 'none') {
+      graphicSlot.innerHTML = GRAPHICS[customizerState.selectedGraphicId].svg;
+      graphicSlot.style.display = 'block';
+    } else {
+      graphicSlot.innerHTML = '';
+      graphicSlot.style.display = 'none';
+    }
+  }
+
+  // Uploaded logo slot
+  const uploadSlot = document.getElementById('engraving-upload-slot');
+  if (uploadSlot) {
+    if (customizerState.uploadedFileDataUrl) {
+      uploadSlot.style.display = 'block';
+    } else {
+      uploadSlot.style.display = 'none';
+    }
+  }
+}
+
+// Redirect customer to Personalizá tu Mate dedicated studio page
+function goToPersonalizarMate(productId) {
+  closeCartDrawer();
+  closeQuickView();
+  const url = productId ? `personaliza-tu-mate.html?mate=${encodeURIComponent(productId)}` : 'personaliza-tu-mate.html';
+  window.location.href = url;
+}
+
+// Save customization and add/update in cart
+function saveCustomizedMateToCart() {
+  if (typeof PRODUCTS_DATA === 'undefined') return;
+
+  const product = PRODUCTS_DATA.find(p => p.id === customizerState.selectedMateId);
+  if (!product) return;
+
+  const notesInput = document.getElementById('custom-notes-input');
+  const customization = {
+    type: customizerState.technique,
+    typeName: TECHNIQUES[customizerState.technique]?.name || 'Grabado Láser HD',
+    text: (customizerState.text || '').trim(),
+    font: customizerState.font,
+    fontName: FONTS[customizerState.font]?.name || 'Gauchesca',
+    location: customizerState.location,
+    locationName: LOCATIONS[customizerState.location]?.name || 'Frente centrado',
+    graphicId: customizerState.selectedGraphicId,
+    graphicName: GRAPHICS[customizerState.selectedGraphicId]?.name || null,
+    uploadedFile: customizerState.uploadedFileName,
+    notes: notesInput?.value.trim() || ''
+  };
+
+  const existingItem = state.cart.find(item => item.id === product.id);
+  if (existingItem) {
+    existingItem.customization = customization;
+  } else {
+    state.cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      categoryName: product.categoryName,
+      quantity: 1,
+      customization: customization
+    });
+  }
+
+  saveCart();
+  updateCartUI();
+  openCartDrawer();
+
+  // Button visual feedback
+  const saveBtn = document.getElementById('btn-save-custom-mate');
+  if (saveBtn) {
+    const originalText = saveBtn.innerHTML;
+    saveBtn.innerHTML = `<i class="fas fa-check"></i> ¡Grabado Guardado con Éxito!`;
+    saveBtn.style.backgroundColor = '#27ae60';
+    setTimeout(() => {
+      saveBtn.innerHTML = originalText;
+      saveBtn.style.backgroundColor = '';
+    }, 2000);
+  }
+
+  showToast(`¡Grabado en virola guardado para "${product.name}"!`, 'fa-check-circle');
+}
+
+// Secret shortcut trigger: double click on logo or copyright redirects to admin
+function handleSecretAdminTrigger() {
+  window.location.href = 'admin.html';
+}
+
+// ==========================================================================
+// AUTH VISUAL EFFECTS: CELEBRATION LOGIN & GENTLE LOGOUT
+// ==========================================================================
+function playAuthLoginEffect(user, isNew = false) {
+  const firstName = user && user.name ? user.name.split(' ')[0] : 'Matero';
+  let overlay = document.getElementById('auth-effect-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'auth-effect-overlay';
+    overlay.className = 'auth-effect-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  overlay.innerHTML = `
+    <div class="auth-login-card">
+      <div class="auth-login-sparkle">
+        <i class="fas fa-crown"></i>
+      </div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.55rem; font-weight: 800; margin-bottom: 8px; color: var(--accent-gold);">
+        ${isNew ? '¡Cuenta Creada con Éxito!' : '¡Bienvenido/a a Mates Río!'}
+      </h3>
+      <p style="font-size: 1.05rem; margin-bottom: 16px; color: #f5f5f7;">
+        Hola <b>${firstName}</b>, qué lindo tenerte con nosotros.
+      </p>
+      <div style="font-size: 0.85rem; color: #a8a8b0; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 12px;">
+        <i class="fas fa-shield-alt" style="color: #27ae60;"></i> Tu sesión quedó guardada. Cuando vuelvas a entrar, seguirás conectado/a.
+      </div>
+    </div>
+  `;
+
+  overlay.classList.add('active');
+
+  // Add gold aura animation to user button
+  const userBtn = document.getElementById('user-account-btn');
+  if (userBtn) {
+    userBtn.classList.add('pulse-gold-aura');
+    setTimeout(() => userBtn.classList.remove('pulse-gold-aura'), 4000);
+  }
+
+  setTimeout(() => {
+    overlay.classList.remove('active');
+  }, 2200);
+}
+
+function playAuthLogoutEffect(name = 'Matero') {
+  const firstName = name ? name.split(' ')[0] : 'Matero';
+  let overlay = document.getElementById('auth-effect-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'auth-effect-overlay';
+    overlay.className = 'auth-effect-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  overlay.innerHTML = `
+    <div class="auth-logout-card">
+      <div class="auth-wave-icon">👋</div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; margin-bottom: 8px;">
+        ¡Hasta pronto, ${firstName}!
+      </h3>
+      <p style="font-size: 0.95rem; color: #a8a8b0; margin-bottom: 8px;">
+        Has cerrado sesión correctamente.
+      </p>
+      <small style="color: var(--accent-gold); font-size: 0.8rem; font-weight: 600;">
+        ¡Te esperamos en tu próxima mateada!
+      </small>
+    </div>
+  `;
+
+  overlay.classList.add('active');
+
+  setTimeout(() => {
+    overlay.classList.remove('active');
+  }, 2000);
+}
+
+// Session Persistence Helper
+function saveSessionProgress() {
+  try {
+    const sessionData = {
+      page: window.location.pathname + window.location.search,
+      userEmail: state.currentUser ? state.currentUser.email : null,
+      savedAt: Date.now()
+    };
+    localStorage.setItem('mates_rio_last_session', JSON.stringify(sessionData));
+  } catch (err) {
+    // Ignore storage quota errors
+  }
+}
+window.addEventListener('beforeunload', saveSessionProgress);
+
+// ==========================================================================
+// ADMIN DIRECT WEB PRODUCT CREATOR (COMPU Y CELU)
+// ==========================================================================
+function openAdminAddProductModal() {
+  if (!isUserAdmin(state.currentUser)) {
+    showToast('Acceso exclusivo para administradores de Mates Río', 'fa-lock');
+    return;
+  }
+  const modal = document.getElementById('admin-add-product-modal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeAdminAddProductModal() {
+  document.getElementById('admin-add-product-modal')?.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function handleAdminCreateProductWeb(e) {
+  if (e) e.preventDefault();
+  if (!isUserAdmin(state.currentUser)) return;
+
+  const name = document.getElementById('admin-web-name')?.value.trim();
+  const category = document.getElementById('admin-web-category')?.value;
+  const price = parseInt(document.getElementById('admin-web-price')?.value, 10);
+  const origPriceVal = document.getElementById('admin-web-orig-price')?.value;
+  const origPrice = origPriceVal ? parseInt(origPriceVal, 10) : null;
+  const badge = document.getElementById('admin-web-badge')?.value.trim();
+  const badgeType = document.getElementById('admin-web-badge-type')?.value || 'new';
+  const imgSelect = document.getElementById('admin-web-img-select')?.value;
+  const imgCustom = document.getElementById('admin-web-img-custom')?.value.trim();
+  const image = (imgSelect === 'custom' && imgCustom) ? imgCustom : (imgSelect || 'assets/images/prod_mate_imperial.jpg');
+  const desc = document.getElementById('admin-web-desc')?.value.trim();
+  const stock = parseInt(document.getElementById('admin-web-stock')?.value, 10) || 10;
+
+  if (!name || !category || isNaN(price) || price <= 0 || !desc) {
+    showToast('Por favor completá los campos obligatorios', 'fa-exclamation-triangle');
+    return;
+  }
+
+  const catNamesMap = {
+    'mates': 'MATES',
+    'promos': 'PROMOS',
+    'termos': 'TERMOS',
+    'accesorios': 'ACCESORIOS',
+    'yerbas': 'YERBAS',
+    'equipos': 'EQUIPOS DE MATE'
+  };
+
+  const newProd = {
+    id: `prod-custom-${Date.now()}`,
+    name: name,
+    category: category,
+    categoryName: catNamesMap[category] || category.toUpperCase(),
+    price: price,
+    originalPrice: origPrice && origPrice > price ? origPrice : null,
+    badge: badge || (origPrice && origPrice > price ? 'OFERTA' : 'NUEVO'),
+    badgeType: badgeType,
+    rating: 5.0,
+    reviewsCount: 1,
+    image: image,
+    description: desc,
+    specs: {
+      material: "Selección artesanal de taller",
+      origen: "Río Ceballos, Córdoba, Argentina",
+      garantia: "Garantía artesanal Mates Río"
+    },
+    inStock: stock > 0,
+    stock: stock,
+    isCustom: true
+  };
+
+  // Add to PRODUCTS_DATA
+  if (typeof PRODUCTS_DATA !== 'undefined') {
+    PRODUCTS_DATA.unshift(newProd);
+  }
+
+  // Save to localStorage
+  try {
+    let customList = JSON.parse(localStorage.getItem('mates_rio_custom_products') || '[]');
+    customList.unshift(newProd);
+    localStorage.setItem('mates_rio_custom_products', JSON.stringify(customList));
+
+    // Update inventory storage as well
+    let inv = JSON.parse(localStorage.getItem('mates_rio_inventory') || '{}');
+    inv[newProd.id] = { price: newProd.price, stock: stock, inStock: stock > 0 };
+    localStorage.setItem('mates_rio_inventory', JSON.stringify(inv));
+  } catch (err) {
+    console.error('Error saving custom product:', err);
+  }
+
+  // Re-render products if on catalog or promos or index
+  if (typeof renderProducts === 'function') {
+    renderProducts();
+  }
+
+  closeAdminAddProductModal();
+  showToast(`¡"${newProd.name}" cargado al catálogo con éxito! 🎉`, 'fa-check-circle');
+
+  // Reset form
+  document.getElementById('admin-web-product-form')?.reset();
+}
+
+// ==========================================================================
+// PROMOS FILTERING ENHANCEMENT
+// ==========================================================================
+function setPromoSubfilter(subFilter, btnEl) {
+  state.promoSubfilter = subFilter;
+  document.querySelectorAll('.promos-filter-chips .filter-pill').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  if (btnEl) btnEl.classList.add('active');
+  if (typeof renderProducts === 'function') {
+    renderProducts();
+  }
+}
+
+function filterPromosLive() {
+  const input = document.getElementById('promos-search-input');
+  if (!input) return;
+  state.searchQuery = input.value.trim();
+  if (typeof renderProducts === 'function') {
+    renderProducts();
+  }
+}
+
+
