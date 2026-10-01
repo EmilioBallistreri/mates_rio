@@ -2287,138 +2287,97 @@ const GRAPHICS = {
     id: 'none',
     name: 'Sin escudo (Solo texto)',
     category: 'all',
-    svg: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`
+    svg: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`
   },
   'afa': {
     id: 'afa',
     name: 'AFA 3 Estrellas',
     category: 'escudos',
-    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
-      <path d="M50 5 L58 20 L76 20 L62 31 L67 48 L50 38 L33 48 L38 31 L24 20 L42 20 Z" transform="scale(0.35) translate(38, -10)" />
-      <path d="M50 5 L58 20 L76 20 L62 31 L67 48 L50 38 L33 48 L38 31 L24 20 L42 20 Z" transform="scale(0.35) translate(92, -10)" />
-      <path d="M50 5 L58 20 L76 20 L62 31 L67 48 L50 38 L33 48 L38 31 L24 20 L42 20 Z" transform="scale(0.35) translate(146, -10)" />
-      <path d="M22 28 L78 28 L74 74 C69 86 50 94 50 94 C50 94 31 86 26 74 Z" fill="none" stroke="currentColor" stroke-width="4"/>
-      <path d="M35 30 L35 78 M50 30 L50 85 M65 30 L65 78" stroke="currentColor" stroke-width="3"/>
-      <text x="50" y="60" font-family="'Cinzel', serif" font-weight="900" font-size="18" text-anchor="middle" fill="currentColor">AFA</text>
-    </svg>`
+    svg: `<img src="assets/images/designs/afa.svg" alt="AFA 3 Estrellas" class="graphic-crest-img" />`
   },
   'boca': {
     id: 'boca',
     name: 'Boca Juniors',
     category: 'escudos',
-    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
-      <path d="M22 22 L78 22 L74 70 C70 84 50 94 50 94 C50 94 30 84 26 70 Z" fill="none" stroke="currentColor" stroke-width="4"/>
-      <path d="M24 45 L76 45 L75 62 L25 62 Z" fill="currentColor" fill-opacity="0.3"/>
-      <text x="50" y="58" font-family="'Montserrat', sans-serif" font-weight="900" font-size="13" letter-spacing="1" text-anchor="middle" fill="currentColor">CABJ</text>
-      <circle cx="50" cy="32" r="2.5"/>
-      <circle cx="38" cy="36" r="2.5"/>
-      <circle cx="62" cy="36" r="2.5"/>
-      <circle cx="40" cy="74" r="2.5"/>
-      <circle cx="50" cy="78" r="2.5"/>
-      <circle cx="60" cy="74" r="2.5"/>
-    </svg>`
+    svg: `<img src="assets/images/designs/boca.svg" alt="Boca Juniors" class="graphic-crest-img" />`
   },
   'river': {
     id: 'river',
     name: 'River Plate',
     category: 'escudos',
-    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
-      <path d="M22 22 L78 22 L74 70 C70 84 50 94 50 94 C50 94 30 84 26 70 Z" fill="none" stroke="currentColor" stroke-width="4"/>
-      <path d="M22 22 L78 78 L74 70 L26 22 Z" fill="currentColor" fill-opacity="0.45"/>
-      <circle cx="50" cy="50" r="20" fill="none" stroke="currentColor" stroke-width="3"/>
-      <text x="50" y="55" font-family="'Cinzel', serif" font-weight="900" font-size="12" text-anchor="middle" fill="currentColor">CARP</text>
-    </svg>`
+    svg: `<img src="assets/images/designs/river.svg" alt="River Plate" class="graphic-crest-img" />`
   },
   'racing': {
     id: 'racing',
     name: 'Racing Club',
     category: 'escudos',
-    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
-      <path d="M22 22 L78 22 L74 70 C70 84 50 94 50 94 C50 94 30 84 26 70 Z" fill="none" stroke="currentColor" stroke-width="4"/>
-      <path d="M36 24 L36 82 M50 24 L50 88 M64 24 L64 82" stroke="currentColor" stroke-width="4"/>
-      <text x="50" y="56" font-family="'Cinzel', serif" font-weight="900" font-size="16" text-anchor="middle" fill="currentColor">RC</text>
-    </svg>`
+    svg: `<img src="assets/images/designs/racing.svg" alt="Racing Club" class="graphic-crest-img" />`
   },
   'independiente': {
     id: 'independiente',
     name: 'Independiente',
     category: 'escudos',
-    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
-      <rect x="22" y="22" width="56" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="4"/>
-      <line x1="22" y1="22" x2="78" y2="78" stroke="currentColor" stroke-width="4"/>
-      <text x="50" y="55" font-family="'Cinzel', serif" font-weight="900" font-size="14" text-anchor="middle" fill="currentColor">CAI</text>
-    </svg>`
+    svg: `<img src="assets/images/designs/independiente.svg" alt="Independiente" class="graphic-crest-img" />`
   },
   'sanlorenzo': {
     id: 'sanlorenzo',
     name: 'San Lorenzo',
     category: 'escudos',
-    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
-      <circle cx="50" cy="50" r="32" fill="none" stroke="currentColor" stroke-width="4"/>
-      <path d="M36 22 L36 78 M50 18 L50 82 M64 22 L64 78" stroke="currentColor" stroke-width="3"/>
-      <circle cx="50" cy="50" r="18" fill="currentColor" fill-opacity="0.18"/>
-      <text x="50" y="54" font-family="'Cinzel', serif" font-weight="900" font-size="10.5" text-anchor="middle" fill="currentColor">CASLA</text>
-    </svg>`
+    svg: `<img src="assets/images/designs/sanlorenzo.svg" alt="San Lorenzo" class="graphic-crest-img" />`
+  },
+  'belgrano': {
+    id: 'belgrano',
+    name: 'Belgrano',
+    category: 'escudos',
+    svg: `<img src="assets/images/designs/belgrano.svg" alt="Belgrano" class="graphic-crest-img" />`
+  },
+  'talleres': {
+    id: 'talleres',
+    name: 'Talleres',
+    category: 'escudos',
+    svg: `<img src="assets/images/designs/talleres.svg" alt="Talleres" class="graphic-crest-img" />`
+  },
+  'instituto': {
+    id: 'instituto',
+    name: 'Instituto',
+    category: 'escudos',
+    svg: `<img src="assets/images/designs/instituto.svg" alt="Instituto" class="graphic-crest-img" />`
+  },
+  'racingcordoba': {
+    id: 'racingcordoba',
+    name: 'Racing de Córdoba',
+    category: 'escudos',
+    svg: `<img src="assets/images/designs/racingcordoba.svg" alt="Racing de Córdoba" class="graphic-crest-img" />`
   },
   'soldemayo': {
     id: 'soldemayo',
     name: 'Sol de Mayo',
     category: 'criollo',
-    svg: `<svg viewBox="0 0 100 100" class="graphic-svg" fill="currentColor">
-      <circle cx="50" cy="50" r="18" fill="none" stroke="currentColor" stroke-width="3"/>
-      <line x1="50" y1="12" x2="50" y2="28" stroke="currentColor" stroke-width="3"/>
-      <line x1="50" y1="72" x2="50" y2="88" stroke="currentColor" stroke-width="3"/>
-      <line x1="12" y1="50" x2="28" y2="50" stroke="currentColor" stroke-width="3"/>
-      <line x1="72" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="3"/>
-      <line x1="23" y1="23" x2="35" y2="35" stroke="currentColor" stroke-width="3"/>
-      <line x1="65" y1="65" x2="77" y2="77" stroke="currentColor" stroke-width="3"/>
-      <line x1="77" y1="23" x2="65" y2="35" stroke="currentColor" stroke-width="3"/>
-      <line x1="23" y1="77" x2="35" y2="65" stroke="currentColor" stroke-width="3"/>
-      <circle cx="44" cy="46" r="2"/>
-      <circle cx="56" cy="46" r="2"/>
-      <path d="M44 57 Q50 62 56 57" fill="none" stroke="currentColor" stroke-width="2"/>
-    </svg>`
+    svg: `<img src="assets/images/designs/soldemayo.svg" alt="Sol de Mayo" class="graphic-crest-img" />`
   },
   'guardapampa': {
     id: 'guardapampa',
     name: 'Guarda Pampa',
     category: 'criollo',
-    svg: `<svg viewBox="0 0 100 50" class="graphic-svg" fill="currentColor">
-      <path d="M5 25 L20 10 L35 25 L50 10 L65 25 L80 10 L95 25 L80 40 L65 25 L50 40 L35 25 L20 40 Z" fill="none" stroke="currentColor" stroke-width="3.5"/>
-      <rect x="16" y="21" width="8" height="8" fill="currentColor"/>
-      <rect x="46" y="21" width="8" height="8" fill="currentColor"/>
-      <rect x="76" y="21" width="8" height="8" fill="currentColor"/>
-    </svg>`
+    svg: `<img src="assets/images/designs/guardapampa.svg" alt="Guarda Pampa" class="graphic-crest-img" />`
   },
   'malvinas': {
     id: 'malvinas',
     name: 'Islas Malvinas',
     category: 'criollo',
-    svg: `<svg viewBox="0 0 100 70" class="graphic-svg" fill="currentColor">
-      <path d="M22 25 C18 30 16 38 20 45 C24 52 32 55 35 48 C38 42 36 34 32 28 C28 22 24 20 22 25 Z" fill="none" stroke="currentColor" stroke-width="3"/>
-      <path d="M55 20 C50 24 48 35 52 42 C54 48 64 56 70 52 C76 48 78 38 75 30 C72 22 62 16 55 20 Z" fill="none" stroke="currentColor" stroke-width="3"/>
-      <path d="M28 36 L48 32" stroke="currentColor" stroke-width="2" stroke-dasharray="2,2"/>
-    </svg>`
+    svg: `<img src="assets/images/designs/malvinas.svg" alt="Islas Malvinas" class="graphic-crest-img" />`
   },
   'caballo': {
     id: 'caballo',
     name: 'Caballo Criollo',
     category: 'criollo',
-    svg: `<svg viewBox="0 0 100 80" class="graphic-svg" fill="currentColor">
-      <path d="M30 65 L36 45 C38 40 40 32 38 22 C37 18 42 12 46 15 C50 18 48 24 53 28 C58 32 68 30 74 36 C80 42 82 52 78 65" fill="none" stroke="currentColor" stroke-width="3.5"/>
-      <circle cx="43" cy="20" r="2"/>
-      <path d="M48 26 C53 22 60 22 65 24" fill="none" stroke="currentColor" stroke-width="2.5"/>
-      <path d="M20 50 C26 42 32 46 36 45" fill="none" stroke="currentColor" stroke-width="2.5"/>
-    </svg>`
+    svg: `<img src="assets/images/designs/caballo.svg" alt="Caballo Criollo" class="graphic-crest-img" />`
   },
   'mapa': {
     id: 'mapa',
     name: 'Silueta Argentina',
     category: 'criollo',
-    svg: `<svg viewBox="0 0 70 100" class="graphic-svg" fill="currentColor">
-      <path d="M35 12 L48 16 L52 24 L45 32 L46 45 L38 58 L36 72 L30 88 L25 82 L26 65 L28 48 L26 35 L28 22 Z" fill="none" stroke="currentColor" stroke-width="3"/>
-      <circle cx="36" cy="40" r="3" fill="currentColor"/>
-    </svg>`
+    svg: `<img src="assets/images/designs/mapa.svg" alt="Silueta Argentina" class="graphic-crest-img" />`
   }
 };
 

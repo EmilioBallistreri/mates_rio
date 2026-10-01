@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Preview Diseños y Escudos Mates Río</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    body { padding: 40px; background: #f0ede6; font-family: sans-serif; }
+    h2 { margin: 20px 0 10px; color: #333; }
+    .grid { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 30px; }
+    .card { background: white; border: 1px solid #ddd; border-radius: 10px; padding: 15px; width: 140px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .img-box { width: 64px; height: 64px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
+    .img-box img, .img-box svg { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .name { font-size: 0.8rem; font-weight: bold; color: #222; }
+    /* Virola Simulation Mockup */
+    .virola-mock { width: 300px; height: 70px; background: linear-gradient(180deg, #d8d8d8, #efefef 40%, #c4c4c4); border: 2px solid #aaa; border-radius: 6px; display: flex; align-items: center; justify-content: center; gap: 12px; margin: 20px 0; }
+    .virola-laser-graphic { width: 44px; height: 44px; filter: grayscale(100%) contrast(300%) drop-shadow(0 0.5px 0.5px rgba(0,0,0,0.5)); }
+    .virola-laser-graphic img { width: 100%; height: 100%; object-fit: contain; }
+    .virola-text { font-family: serif; font-size: 1.1rem; font-weight: bold; color: #111; letter-spacing: 2px; }
+  </style>
+</head>
+<body>
+  <h1>Validación de Diseños para Virola (Mates Río)</h1>
+
+  <h2>1. Diseños Criollos</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="img-box"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
+      <div class="name">Sin escudo (Solo texto)</div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/soldemayo.svg" alt="Sol de Mayo"></div>
+      <div class="name">Sol de Mayo</div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/guardapampa.svg" alt="Guarda Pampa"></div>
+      <div class="name">Guarda Pampa</div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/malvinas.svg" alt="Islas Malvinas"></div>
+      <div class="name">Islas Malvinas</div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/caballo.svg" alt="Caballo Criollo"></div>
+      <div class="name">Caballo Criollo</div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/mapa.svg" alt="Silueta Argentina"></div>
+      <div class="name">Silueta Argentina</div>
+    </div>
+  </div>
+
+  <h2>2. Escudos Oficiales Fútbol Argentino (Nacionales + 4 de Córdoba)</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/afa.svg" alt="AFA 3 Estrellas"></div>
+      <div class="name">AFA 3 Estrellas</div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/boca.svg" alt="Boca Juniors"></div>
+      <div class="name">Boca Juniors</div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/river.svg" alt="River Plate"></div>
+      <div class="name">River Plate</div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/racing.svg" alt="Racing Club"></div>
+      <div class="name">Racing Club</div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/independiente.svg" alt="Independiente"></div>
+      <div class="name">Independiente</div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="../assets/images/designs/sanlorenzo.svg" alt="San Lorenzo"></div>
+      <div class="name">San Lorenzo</div>
+    </div>
+    <div class="card" style="border: 2px solid #41B6E6;">
+      <div class="img-box"><img src="../assets/images/designs/belgrano.svg" alt="Belgrano"></div>
+      <div class="name">Belgrano (Córdoba)</div>
+    </div>
+    <div class="card" style="border: 2px solid #0A1172;">
+      <div class="img-box"><img src="../assets/images/designs/talleres.svg" alt="Talleres"></div>
+      <div class="name">Talleres (Córdoba)</div>
+    </div>
+    <div class="card" style="border: 2px solid #E30613;">
+      <div class="img-box"><img src="../assets/images/designs/instituto.svg" alt="Instituto"></div>
+      <div class="name">Instituto (Córdoba)</div>
+    </div>
+    <div class="card" style="border: 2px solid #5B9BD5;">
+      <div class="img-box"><img src="../assets/images/designs/racingcordoba.svg" alt="Racing de Córdoba"></div>
+      <div class="name">Racing de Córdoba</div>
+    </div>
+  </div>
+
+  <h2>3. Simulación de Grabado Láser en Virola de Alpaca</h2>
+  <div class="virola-mock">
+    <div class="virola-laser-graphic"><img src="../assets/images/designs/belgrano.svg"></div>
+    <div class="virola-text">JUAN MANUEL</div>
+  </div>
+  <div class="virola-mock">
+    <div class="virola-laser-graphic"><img src="../assets/images/designs/talleres.svg"></div>
+    <div class="virola-text">MATES RÍO</div>
+  </div>
+  <div class="virola-mock">
+    <div class="virola-laser-graphic"><img src="../assets/images/designs/soldemayo.svg"></div>
+    <div class="virola-text">ARGENTINA</div>
+  </div>
+</body>
+</html>
