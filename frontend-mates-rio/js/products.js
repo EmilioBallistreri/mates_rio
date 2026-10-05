@@ -492,17 +492,33 @@ const CATEGORIES_DATA = [
   { id: "equipos", name: "EQUIPOS DE MATE", label: "Mochilas & Canastas", image: "assets/images/cat_equipos.jpg", count: 3, badge: "Cuero Genuino" }
 ];
 
-// Carga automática de productos creados por administradores y sincronización con inventario
+// Carga automática de productos creados por administradores, sincronización con inventario y filtro de eliminados
 (function initCustomProducts() {
   if (typeof localStorage === 'undefined') return;
   try {
+    // 1. Filtrar productos eliminados por el administrador
+    const deletedRaw = localStorage.getItem('mates_rio_deleted_products');
+    if (deletedRaw) {
+      const deletedIds = new Set(JSON.parse(deletedRaw) || []);
+      if (deletedIds.size > 0) {
+        for (let i = PRODUCTS_DATA.length - 1; i >= 0; i--) {
+          if (deletedIds.has(PRODUCTS_DATA[i].id)) {
+            PRODUCTS_DATA.splice(i, 1);
+          }
+        }
+      }
+    }
+
+    // 2. Cargar productos personalizados (excluyendo eliminados)
     const raw = localStorage.getItem('mates_rio_custom_products');
     if (raw) {
       const customList = JSON.parse(raw);
       if (Array.isArray(customList) && customList.length > 0) {
+        const deletedRaw = localStorage.getItem('mates_rio_deleted_products');
+        const deletedIds = new Set(deletedRaw ? (JSON.parse(deletedRaw) || []) : []);
         const existingIds = new Set(PRODUCTS_DATA.map(p => p.id));
         customList.forEach(prod => {
-          if (prod && prod.id && !existingIds.has(prod.id)) {
+          if (prod && prod.id && !existingIds.has(prod.id) && !deletedIds.has(prod.id)) {
             PRODUCTS_DATA.push(prod);
             existingIds.add(prod.id);
           }
@@ -510,20 +526,35 @@ const CATEGORIES_DATA = [
       }
     }
 
-    // Sincronizar precios y stock actualizados en el panel
+    // 3. Sincronizar ediciones guardadas desde el panel de admin
+    const editsRaw = localStorage.getItem('mates_rio_edited_products');
+    if (editsRaw) {
+      const edits = JSON.parse(editsRaw) || {};
+      PRODUCTS_DATA.forEach(p => {
+        if (edits[p.id]) {
+          Object.assign(p, edits[p.id]);
+        }
+      });
+    }
+
+    // 4. Sincronizar precios y stock actualizados en el panel de inventario
     const invRaw = localStorage.getItem('mates_rio_inventory');
     if (invRaw) {
       const inv = JSON.parse(invRaw);
       PRODUCTS_DATA.forEach(p => {
         if (inv[p.id]) {
+          if (typeof inv[p.id].name === 'string' && inv[p.id].name) p.name = inv[p.id].name;
           if (typeof inv[p.id].price === 'number') p.price = inv[p.id].price;
           if (typeof inv[p.id].inStock === 'boolean') p.inStock = inv[p.id].inStock;
           if (typeof inv[p.id].stock === 'number') p.stock = inv[p.id].stock;
+          if (typeof inv[p.id].image === 'string' && inv[p.id].image) p.image = inv[p.id].image;
+          if (typeof inv[p.id].category === 'string') p.category = inv[p.id].category;
+          if (typeof inv[p.id].categoryName === 'string') p.categoryName = inv[p.id].categoryName;
         }
       });
     }
   } catch (e) {
-    console.warn('Error al cargar productos creados por administrador o sincronizar inventario:', e);
+    console.warn('Error al sincronizar productos de catálogo e inventario:', e);
   }
 })();
 

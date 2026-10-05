@@ -5786,40 +5786,9 @@ input, select, textarea {
   gap: 8px;
 }
 
-/* Floating Admin Add Button */
+/* Floating Admin Add Button (Disabled - Managed from Admin Panel) */
 .admin-floating-add-btn {
-  position: fixed;
-  bottom: 96px;
-  left: 24px;
-  z-index: 1050;
-  display: none;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 18px;
-  background: linear-gradient(135deg, var(--bg-dark), #2a1f18);
-  color: var(--accent-gold);
-  border: 1px solid var(--accent-gold);
-  border-radius: 30px;
-  font-size: 0.86rem;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.admin-floating-add-btn:hover {
-  transform: translateY(-3px) scale(1.03);
-  background: var(--accent-gold);
-  color: #121212;
-  box-shadow: 0 12px 30px rgba(197, 155, 39, 0.4);
-}
-@media (max-width: 768px) {
-  .admin-floating-add-btn {
-    bottom: 84px;
-    left: 14px;
-    padding: 10px 14px;
-    font-size: 0.8rem;
-  }
+  display: none !important;
 }
 
 
@@ -7551,39 +7520,7 @@ input, select, textarea {
   transform: translateY(-1px);
 }
 
-/* Floating Quick Add Button for Admins on Mobile & Desktop */
-.admin-floating-add-btn {
-  position: fixed;
-  bottom: 86px;
-  left: 20px;
-  z-index: 1050;
-  background: linear-gradient(135deg, var(--accent-gold) 0%, #a87e18 100%);
-  color: #121212;
-  font-weight: 800;
-  font-size: 0.82rem;
-  padding: 10px 16px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
-  display: none;
-  align-items: center;
-  gap: 8px;
-  border: 1.5px solid #ffffff;
-  cursor: pointer;
-  transition: transform var(--transition-fast);
-}
-
-.admin-floating-add-btn:hover {
-  transform: scale(1.05);
-}
-
-@media (max-width: 768px) {
-  .admin-floating-add-btn {
-    bottom: 80px;
-    left: 14px;
-    padding: 8px 14px;
-    font-size: 0.76rem;
-  }
-}
+/* Floating Admin Add Button is disabled */
 
 
 

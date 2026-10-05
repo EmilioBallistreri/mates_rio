@@ -334,12 +334,17 @@ function setPromoSubfilter(subfilter, btnEl) {
 function getAllProducts() {
   if (typeof PRODUCTS_DATA === 'undefined') return [];
   try {
+    const deletedRaw = localStorage.getItem('mates_rio_deleted_products');
+    const deletedIds = new Set(deletedRaw ? (JSON.parse(deletedRaw) || []) : []);
     const custom = JSON.parse(localStorage.getItem('mates_rio_custom_products')) || [];
+
+    let list = PRODUCTS_DATA.filter(p => !deletedIds.has(p.id));
     if (custom.length > 0) {
-      const existingIds = new Set(PRODUCTS_DATA.map(p => p.id));
-      const newItems = custom.filter(p => !existingIds.has(p.id));
-      return [...newItems, ...PRODUCTS_DATA];
+      const existingIds = new Set(list.map(p => p.id));
+      const newItems = custom.filter(p => !existingIds.has(p.id) && !deletedIds.has(p.id));
+      list = [...newItems, ...list];
     }
+    return list;
   } catch (e) {
     console.error("Error cargando productos personalizados:", e);
   }
@@ -1457,10 +1462,10 @@ function updateAuthUI() {
     }
   }
 
-  // Show/Hide floating quick add button for admins on web
+  // Floating quick add button is disabled (now managed exclusively from the admin panel)
   const floatingAddBtn = document.getElementById('admin-floating-add-btn');
   if (floatingAddBtn) {
-    floatingAddBtn.style.display = isAdmin ? 'inline-flex' : 'none';
+    floatingAddBtn.style.display = 'none';
   }
 
   if (state.currentUser) {
@@ -1901,13 +1906,9 @@ function handleMobileAuthClick() {
   }
 }
 
-// Admin Web Product Creator Modals
+// Admin Web Product Creator Modals (Redirects to Admin Panel)
 function openAdminAddProductModal() {
-  const modal = document.getElementById('admin-add-product-modal');
-  if (modal) {
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
+  window.location.href = 'admin.html#sec-inventory';
 }
 
 function closeAdminAddProductModal() {

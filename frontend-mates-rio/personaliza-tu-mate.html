@@ -1119,11 +1119,8 @@
           <span class="nav-badge-pill pill-gold" id="profile-admin-role-badge">STAFF</span>
         </div>
         <div style="display: flex; gap: 8px; margin-top: 8px;">
-          <button type="button" class="btn btn-primary" onclick="closeProfileModal(); openAdminAddProductModal();" style="flex: 1; font-size: 0.78rem; padding: 8px 10px; background: var(--accent-gold); color: #121212; border: none; font-weight: 800;">
-            <i class="fas fa-plus"></i> + Crear Producto
-          </button>
-          <a href="admin.html" class="btn btn-outline-light" style="flex: 1; font-size: 0.78rem; padding: 8px 10px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; color: #f5f5f7; border: 1px solid rgba(255,255,255,0.25);">
-            <i class="fas fa-cog"></i> Panel General
+          <a href="admin.html" class="btn btn-primary" style="flex: 1; font-size: 0.8rem; padding: 9px 12px; background: var(--accent-gold); color: #121212; border: none; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; gap: 6px;">
+            <i class="fas fa-shield-halved"></i> Abrir Panel de Control
           </a>
         </div>
       </div>
@@ -1442,115 +1439,7 @@
     </div>
   </div>
 
-  <!-- Floating Admin Quick-Add Product Button (Shown automatically for logged-in admins) -->
-  <button class="admin-floating-add-btn" id="admin-floating-add-btn" onclick="openAdminAddProductModal()" aria-label="Agregar producto al catálogo">
-    <i class="fas fa-plus-circle"></i> <span>+ Nuevo Producto</span>
-  </button>
 
-  <!-- ==========================================================================
-       MODAL: ADMIN PRODUCT CREATOR (DIRECTO DESDE LA WEB)
-       ========================================================================== -->
-  <div class="modal-overlay" id="admin-add-product-modal">
-    <div class="modal-box modal-box-padded" style="max-width: 650px;">
-      <button class="modal-close-icon" onclick="closeAdminAddProductModal()" aria-label="Cerrar modal">
-        <i class="fas fa-times"></i>
-      </button>
-
-      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-light);">
-        <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
-          <i class="fas fa-shield-halved"></i>
-        </div>
-        <div>
-          <h3 style="font-family: var(--font-heading); font-size: 1.3rem; margin: 0;">Agregar Producto al Catálogo</h3>
-          <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 2px 0 0;">Panel rápido para administradores (PC y Celular)</p>
-        </div>
-      </div>
-
-      <form id="admin-web-product-form" onsubmit="handleAdminCreateProductWeb(event)">
-        <div class="form-group">
-          <label class="form-label" for="admin-web-name">Nombre del Producto *</label>
-          <input type="text" id="admin-web-name" required class="form-input" placeholder="Ej: Mate Imperial Cuero Crudo Virola Lisa" />
-        </div>
-
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label class="form-label" for="admin-web-category">Categoría *</label>
-            <select id="admin-web-category" required class="form-input" style="height: 42px;">
-              <option value="mates">Mates Imperiales & Torpedos</option>
-              <option value="termos">Termos de Acero</option>
-              <option value="accesorios">Bombillas & Accesorios</option>
-              <option value="yerbas">Yerbas Seleccionadas</option>
-              <option value="equipos">Equipos de Mate</option>
-              <option value="promos">Promociones & Combos</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="admin-web-price">Precio Venta (ARS) *</label>
-            <input type="number" id="admin-web-price" required min="100" class="form-input" placeholder="Ej: 48500" />
-          </div>
-        </div>
-
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label class="form-label" for="admin-web-orig-price">Precio Anterior (Opcional tachado)</label>
-            <input type="number" id="admin-web-orig-price" min="100" class="form-input" placeholder="Ej: 56000" />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="admin-web-stock">Stock Disponible *</label>
-            <input type="number" id="admin-web-stock" value="10" min="0" class="form-input" />
-          </div>
-        </div>
-
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label class="form-label" for="admin-web-badge">Texto de Etiqueta (Badge)</label>
-            <input type="text" id="admin-web-badge" class="form-input" placeholder="Ej: NUEVO / 20% OFF / EDICIÓN LIMITADA" />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="admin-web-badge-type">Estilo de Etiqueta</label>
-            <select id="admin-web-badge-type" class="form-input" style="height: 42px;">
-              <option value="promo">Rojo (Promo / Oferta)</option>
-              <option value="featured">Dorado (Destacado / Edición Taller)</option>
-              <option value="bestseller">Negro (Más Vendido)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="admin-web-img-select">Imagen del Producto</label>
-          <select id="admin-web-img-select" class="form-input" style="height: 42px;" onchange="document.getElementById('admin-web-img-custom-wrap').style.display = (this.value === 'custom') ? 'block' : 'none';">
-            <option value="assets/images/prod_mate_imperial.jpg">Mate Imperial Negro (Foto estándar)</option>
-            <option value="assets/images/cat_mates.jpg">Mates Torpedo (Foto catálogo)</option>
-            <option value="assets/images/cat_promos.jpg">Combo Imperial (Foto combos)</option>
-            <option value="assets/images/prod_canasta_matera.jpg">Canasta / Matera de Cuero</option>
-            <option value="assets/images/cat_termos.jpg">Termo de Acero Inoxidable</option>
-            <option value="assets/images/cat_accesorios.jpg">Bombillas y Accesorios</option>
-            <option value="assets/images/cat_yerbas.jpg">Yerba Mate Artesanal</option>
-            <option value="assets/images/banner_2.jpg">Set Matero Completo</option>
-            <option value="custom">-- Ingresar URL personalizada o archivo --</option>
-          </select>
-        </div>
-
-        <div class="form-group" id="admin-web-img-custom-wrap" style="display: none;">
-          <label class="form-label" for="admin-web-img-custom">URL o ruta de imagen personalizada</label>
-          <input type="text" id="admin-web-img-custom" class="form-input" placeholder="assets/images/tu_imagen.jpg o https://..." />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="admin-web-desc">Descripción del Producto *</label>
-          <textarea id="admin-web-desc" required class="form-input" rows="3" placeholder="Detalle de materiales, confección y terminaciones artesanales..."></textarea>
-        </div>
-
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-          <button type="button" class="btn btn-outline-dark" onclick="closeAdminAddProductModal()" style="flex: 1;">Cancelar</button>
-          <button type="submit" class="btn btn-primary" style="flex: 2;"><i class="fas fa-plus-circle"></i> Publicar en la Web</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <!-- Back to Top Button -->
   <button class="back-to-top-btn" id="back-to-top-btn" aria-label="Volver arriba" title="Volver al inicio">
