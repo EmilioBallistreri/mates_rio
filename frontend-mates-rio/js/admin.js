@@ -393,6 +393,8 @@ function initLiveClock() {
 // ==========================================================================
 function initInventoryDB() {
   let inventory = JSON.parse(localStorage.getItem('mates_rio_inventory'));
+  const deletedRaw = localStorage.getItem('mates_rio_deleted_products');
+  const deletedIds = new Set(deletedRaw ? (JSON.parse(deletedRaw) || []) : []);
 
   if (!inventory || Object.keys(inventory).length === 0) {
     inventory = {};
@@ -423,16 +425,21 @@ function initInventoryDB() {
       };
 
       PRODUCTS_DATA.forEach(p => {
+        if (deletedIds.has(p.id)) return;
         inventory[p.id] = {
           id: p.id,
           name: p.name,
           category: p.category,
-          categoryName: p.categoryName,
+          categoryName: p.categoryName || (p.category ? p.category.toUpperCase() : 'GENERAL'),
           price: p.price,
+          originalPrice: p.originalPrice || null,
           image: p.image,
           stock: mockStocks[p.id] !== undefined ? mockStocks[p.id] : 10,
           minStock: 5,
           inStock: (mockStocks[p.id] !== undefined ? mockStocks[p.id] : 10) > 0,
+          badge: p.badge || '',
+          badgeType: p.badgeType || 'new',
+          description: p.description || '',
           isCustom: !!p.isCustom
         };
       });
@@ -440,10 +447,20 @@ function initInventoryDB() {
 
     localStorage.setItem('mates_rio_inventory', JSON.stringify(inventory));
   } else {
+    let changed = false;
+
+    // Quitar del inventario productos que hayan sido eliminados
+    deletedIds.forEach(id => {
+      if (inventory[id]) {
+        delete inventory[id];
+        changed = true;
+      }
+    });
+
     // Sincronizar productos nuevos o creados por el admin que falten en inventory
     if (typeof PRODUCTS_DATA !== 'undefined') {
-      let changed = false;
       PRODUCTS_DATA.forEach(p => {
+        if (deletedIds.has(p.id)) return;
         if (!inventory[p.id]) {
           inventory[p.id] = {
             id: p.id,
@@ -451,18 +468,22 @@ function initInventoryDB() {
             category: p.category,
             categoryName: p.categoryName || (p.category ? p.category.toUpperCase() : 'GENERAL'),
             price: p.price,
+            originalPrice: p.originalPrice || null,
             image: p.image,
             stock: p.stock !== undefined ? p.stock : 10,
             minStock: p.minStock !== undefined ? p.minStock : 5,
             inStock: (p.stock !== undefined ? p.stock : 10) > 0,
+            badge: p.badge || '',
+            badgeType: p.badgeType || 'new',
+            description: p.description || '',
             isCustom: !!p.isCustom
           };
           changed = true;
         }
       });
-      if (changed) {
-        localStorage.setItem('mates_rio_inventory', JSON.stringify(inventory));
-      }
+    }
+    if (changed) {
+      localStorage.setItem('mates_rio_inventory', JSON.stringify(inventory));
     }
   }
 }
@@ -585,16 +606,15 @@ function renderInventoryTable() {
         </td>
         <td>
           <div class="action-btn-cell">
-            <button type="button" class="btn-table-action" onclick="openEditProductModal('${item.id}')" title="Editar Producto">
+            <button type="button" class="btn-table-action btn-action-edit" onclick="openEditProductModal('${item.id}')" title="Editar Producto">
               <i class="fas fa-pen"></i>
             </button>
             <button type="button" class="btn-table-action" onclick="quickAdjustStock('${item.id}', 10)" title="Reabastecer +10">
               <i class="fas fa-truck-ramp-box"></i>
             </button>
-            ${item.isCustom ? `
-            <button type="button" class="btn-table-action" onclick="deleteCustomProduct('${item.id}')" title="Eliminar Producto del Catálogo" style="color: var(--admin-danger);">
+            <button type="button" class="btn-table-action btn-action-delete" onclick="deleteProduct('${item.id}')" title="Eliminar Producto del Catálogo">
               <i class="fas fa-trash-alt"></i>
-            </button>` : ''}
+            </button>
           </div>
         </td>
       </tr>
@@ -624,69 +644,276 @@ function quickAdjustStock(productId, delta) {
 
 function openEditProductModal(productId) {
   const inv = getInventory();
-  const prod = inv[productId];
+  let prod = inv[productId];
+
+  // Si no está en inventario, buscar en PRODUCTS_DATA
+  if (!prod && typeof PRODUCTS_DATA !== 'undefined') {
+    const p = PRODUCTS_DATA.find(x => x.id === productId);
+    if (p) {
+      prod = {
+        id: p.id,
+        name: p.name,
+        category: p.category,
+        categoryName: p.categoryName || (p.category ? p.category.toUpperCase() : 'GENERAL'),
+        price: p.price,
+        originalPrice: p.originalPrice || null,
+        stock: p.stock !== undefined ? p.stock : 10,
+        minStock: p.minStock || 5,
+        image: p.image || 'assets/images/prod_mate_imperial.jpg',
+        badge: p.badge || '',
+        badgeType: p.badgeType || 'new',
+        description: p.description || '',
+        specs: p.specs || {}
+      };
+    }
+  }
+
   if (!prod) return;
 
-  document.getElementById('edit-product-id').value = prod.id;
-  document.getElementById('edit-product-name').textContent = prod.name;
-  document.getElementById('edit-product-cat').textContent = `Categoría: ${prod.categoryName || prod.category.toUpperCase()}`;
-  document.getElementById('edit-product-img').src = prod.image;
-  document.getElementById('edit-product-stock').value = prod.stock;
-  document.getElementById('edit-product-price').value = prod.price;
-  document.getElementById('edit-product-min-stock').value = prod.minStock || 5;
+  const idEl = document.getElementById('edit-product-id');
+  if (idEl) idEl.value = prod.id;
 
-  document.getElementById('edit-product-modal').classList.add('active');
+  const skuEl = document.getElementById('edit-prod-sku-display');
+  if (skuEl) skuEl.textContent = `ID: ${prod.id}`;
+
+  const catBadgeEl = document.getElementById('edit-prod-cat-badge');
+  if (catBadgeEl) catBadgeEl.textContent = prod.categoryName || (prod.category ? prod.category.toUpperCase() : 'PRODUCTO');
+
+  const titleEl = document.getElementById('edit-prod-preview-title');
+  if (titleEl) titleEl.textContent = prod.name;
+
+  const pricePreviewEl = document.getElementById('edit-prod-preview-price');
+  if (pricePreviewEl) pricePreviewEl.textContent = formatARS(prod.price);
+
+  const thumbEl = document.getElementById('edit-prod-preview-thumb');
+  if (thumbEl) thumbEl.src = prod.image || 'assets/images/prod_mate_imperial.jpg';
+
+  const nameEl = document.getElementById('edit-prod-name');
+  if (nameEl) nameEl.value = prod.name;
+
+  const catEl = document.getElementById('edit-prod-category');
+  if (catEl) catEl.value = prod.category || 'mates';
+
+  const priceEl = document.getElementById('edit-prod-price');
+  if (priceEl) priceEl.value = prod.price;
+
+  const origPriceEl = document.getElementById('edit-prod-orig-price');
+  if (origPriceEl) origPriceEl.value = prod.originalPrice || '';
+
+  const badgeEl = document.getElementById('edit-prod-badge');
+  if (badgeEl) badgeEl.value = prod.badge || '';
+
+  const badgeTypeEl = document.getElementById('edit-prod-badge-type');
+  if (badgeTypeEl) badgeTypeEl.value = prod.badgeType || 'new';
+
+  const stockEl = document.getElementById('edit-prod-stock');
+  if (stockEl) stockEl.value = prod.stock !== undefined ? prod.stock : 10;
+
+  const minStockEl = document.getElementById('edit-prod-min-stock');
+  if (minStockEl) minStockEl.value = prod.minStock !== undefined ? prod.minStock : 5;
+
+  // Imagen
+  const imgSelect = document.getElementById('edit-prod-img-select');
+  const imgCustom = document.getElementById('edit-prod-img-custom');
+  if (imgSelect) {
+    const optionValues = Array.from(imgSelect.options).map(o => o.value);
+    if (optionValues.includes(prod.image)) {
+      imgSelect.value = prod.image;
+      if (imgCustom) {
+        imgCustom.style.display = 'none';
+        imgCustom.value = '';
+      }
+    } else {
+      imgSelect.value = 'custom';
+      if (imgCustom) {
+        imgCustom.style.display = 'block';
+        imgCustom.value = prod.image || '';
+      }
+    }
+  }
+
+  // Descripción y specs
+  let fullProd = (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA.find(p => p.id === prod.id) : null) || prod;
+  const descEl = document.getElementById('edit-prod-desc');
+  if (descEl) descEl.value = fullProd.description || prod.description || '';
+
+  const specMatEl = document.getElementById('edit-prod-spec-material');
+  if (specMatEl) specMatEl.value = (fullProd.specs && fullProd.specs.material) || '';
+
+  const specVirEl = document.getElementById('edit-prod-spec-virola');
+  if (specVirEl) specVirEl.value = (fullProd.specs && fullProd.specs.virola) || '';
+
+  const specExtraEl = document.getElementById('edit-prod-spec-extra');
+  if (specExtraEl) specExtraEl.value = (fullProd.specs && (fullProd.specs.garantia || fullProd.specs.extra)) || '';
+
+  const modal = document.getElementById('edit-product-modal');
+  if (modal) modal.classList.add('active');
 }
 
 function closeEditProductModal() {
-  document.getElementById('edit-product-modal').classList.remove('active');
+  const modal = document.getElementById('edit-product-modal');
+  if (modal) modal.classList.remove('active');
+}
+
+function onEditProductImageChange() {
+  const select = document.getElementById('edit-prod-img-select');
+  const customInput = document.getElementById('edit-prod-img-custom');
+  const preview = document.getElementById('edit-prod-preview-thumb');
+  if (!select || !preview) return;
+
+  if (select.value === 'custom') {
+    if (customInput) {
+      customInput.style.display = 'block';
+      if (customInput.value.trim()) {
+        preview.src = customInput.value.trim();
+      }
+    }
+  } else {
+    if (customInput) customInput.style.display = 'none';
+    preview.src = select.value;
+  }
+}
+
+function onEditProductCustomImgInput() {
+  const customInput = document.getElementById('edit-prod-img-custom');
+  const preview = document.getElementById('edit-prod-preview-thumb');
+  if (customInput && preview && customInput.value.trim()) {
+    preview.src = customInput.value.trim();
+  }
 }
 
 function saveProductEdits() {
-  const id = document.getElementById('edit-product-id').value;
-  const newStock = parseInt(document.getElementById('edit-product-stock').value, 10);
-  const newPrice = parseInt(document.getElementById('edit-product-price').value, 10);
-  const newMin = parseInt(document.getElementById('edit-product-min-stock').value, 10);
+  const id = document.getElementById('edit-product-id')?.value;
+  if (!id) return;
 
-  if (isNaN(newStock) || isNaN(newPrice) || newStock < 0 || newPrice < 0) {
-    alert('Por favor ingrese valores numéricos válidos.');
+  const name = document.getElementById('edit-prod-name')?.value.trim();
+  const category = document.getElementById('edit-prod-category')?.value;
+  const price = parseInt(document.getElementById('edit-prod-price')?.value, 10);
+  const origPriceVal = document.getElementById('edit-prod-orig-price')?.value;
+  const origPrice = origPriceVal ? parseInt(origPriceVal, 10) : null;
+  const badge = document.getElementById('edit-prod-badge')?.value.trim();
+  const badgeType = document.getElementById('edit-prod-badge-type')?.value || 'new';
+  const stock = parseInt(document.getElementById('edit-prod-stock')?.value, 10);
+  const minStock = parseInt(document.getElementById('edit-prod-min-stock')?.value, 10) || 5;
+
+  const imgSelect = document.getElementById('edit-prod-img-select')?.value;
+  const imgCustom = document.getElementById('edit-prod-img-custom')?.value.trim();
+  const image = (imgSelect === 'custom' && imgCustom) ? imgCustom : (imgSelect || 'assets/images/prod_mate_imperial.jpg');
+
+  const desc = document.getElementById('edit-prod-desc')?.value.trim();
+  const specMaterial = document.getElementById('edit-prod-spec-material')?.value.trim();
+  const specVirola = document.getElementById('edit-prod-spec-virola')?.value.trim();
+  const specExtra = document.getElementById('edit-prod-spec-extra')?.value.trim();
+
+  if (!name || !category || isNaN(price) || price <= 0 || isNaN(stock) || stock < 0) {
+    alert('Por favor completá los campos obligatorios con valores válidos (Nombre, Categoría, Precio y Stock).');
     return;
   }
 
-  const inv = getInventory();
-  if (!inv[id]) return;
+  const catNamesMap = {
+    'mates': 'MATES',
+    'promos': 'PROMOS',
+    'termos': 'TERMOS',
+    'accesorios': 'ACCESORIOS',
+    'yerbas': 'YERBAS',
+    'equipos': 'EQUIPOS DE MATE'
+  };
+  const categoryName = catNamesMap[category] || category.toUpperCase();
 
-  inv[id].stock = newStock;
-  inv[id].price = newPrice;
-  inv[id].minStock = isNaN(newMin) ? 5 : newMin;
-  inv[id].inStock = newStock > 0;
+  const inv = getInventory();
+  if (!inv[id]) {
+    inv[id] = { id: id };
+  }
+
+  inv[id].name = name;
+  inv[id].category = category;
+  inv[id].categoryName = categoryName;
+  inv[id].price = price;
+  inv[id].originalPrice = origPrice;
+  inv[id].stock = stock;
+  inv[id].minStock = minStock;
+  inv[id].inStock = stock > 0;
+  inv[id].image = image;
+  inv[id].badge = badge;
+  inv[id].badgeType = badgeType;
+  inv[id].description = desc;
 
   saveInventory(inv);
 
-  // Sync in-memory PRODUCTS_DATA
+  // Guardar en mates_rio_edited_products para persistir cambios en todo el sitio
+  try {
+    let edited = JSON.parse(localStorage.getItem('mates_rio_edited_products') || '{}');
+    edited[id] = {
+      name,
+      category,
+      categoryName,
+      price,
+      originalPrice,
+      stock,
+      minStock,
+      inStock: stock > 0,
+      image,
+      badge,
+      badgeType,
+      description: desc,
+      specs: {
+        material: specMaterial || 'Material artesanal de primera calidad',
+        virola: specVirola || 'Terminación artesanal',
+        garantia: specExtra || 'Garantía artesanal Mates Río'
+      }
+    };
+    localStorage.setItem('mates_rio_edited_products', JSON.stringify(edited));
+  } catch (e) {
+    console.warn('Error al guardar producto editado:', e);
+  }
+
+  // Actualizar en custom products si aplica
+  try {
+    let customProducts = JSON.parse(localStorage.getItem('mates_rio_custom_products')) || [];
+    const cp = customProducts.find(x => x.id === id);
+    if (cp) {
+      cp.name = name;
+      cp.category = category;
+      cp.categoryName = categoryName;
+      cp.price = price;
+      cp.originalPrice = origPrice;
+      cp.stock = stock;
+      cp.minStock = minStock;
+      cp.inStock = stock > 0;
+      cp.image = image;
+      cp.badge = badge;
+      cp.badgeType = badgeType;
+      cp.description = desc;
+      if (!cp.specs) cp.specs = {};
+      if (specMaterial) cp.specs.material = specMaterial;
+      if (specVirola) cp.specs.virola = specVirola;
+      if (specExtra) cp.specs.garantia = specExtra;
+      localStorage.setItem('mates_rio_custom_products', JSON.stringify(customProducts));
+    }
+  } catch (e) {}
+
+  // Sincronizar en memoria PRODUCTS_DATA
   if (typeof PRODUCTS_DATA !== 'undefined') {
     const p = PRODUCTS_DATA.find(x => x.id === id);
     if (p) {
-      p.price = newPrice;
-      p.inStock = newStock > 0;
-      p.stock = newStock;
+      p.name = name;
+      p.category = category;
+      p.categoryName = categoryName;
+      p.price = price;
+      p.originalPrice = origPrice;
+      p.stock = stock;
+      p.minStock = minStock;
+      p.inStock = stock > 0;
+      p.image = image;
+      p.badge = badge;
+      p.badgeType = badgeType;
+      if (desc) p.description = desc;
+      if (!p.specs) p.specs = {};
+      if (specMaterial) p.specs.material = specMaterial;
+      if (specVirola) p.specs.virola = specVirola;
+      if (specExtra) p.specs.garantia = specExtra;
     }
   }
-
-  // Update in custom products if applicable
-  try {
-    const raw = localStorage.getItem('mates_rio_custom_products');
-    if (raw) {
-      const customList = JSON.parse(raw);
-      const cp = customList.find(x => x.id === id);
-      if (cp) {
-        cp.price = newPrice;
-        cp.inStock = newStock > 0;
-        cp.stock = newStock;
-        localStorage.setItem('mates_rio_custom_products', JSON.stringify(customList));
-      }
-    }
-  } catch (e) {}
 
   closeEditProductModal();
   renderInventoryTable();
@@ -695,9 +922,12 @@ function saveProductEdits() {
   if (typeof renderProducts === 'function') {
     renderProducts();
   }
+  if (typeof renderCategoriesGrid === 'function') {
+    renderCategoriesGrid();
+  }
 
-  logAuditAction('Edición de Producto', `${inv[id].name}: Stock=${newStock}, Precio=${formatARS(newPrice)}.`);
-  showAdminToast(`Cambios guardados para "${inv[id].name}"`, 'fa-circle-check');
+  logAuditAction('Edición de Producto', `Producto "${name}" actualizado: ${formatARS(price)}, Stock: ${stock} un.`);
+  showAdminToast(`¡"${name}" actualizado exitosamente!`, 'fa-circle-check');
 }
 
 function restockAllProducts(qty = 10) {
@@ -876,25 +1106,45 @@ function handleCreateProduct() {
   showAdminToast(`¡"${newProduct.name}" publicado exitosamente!`, 'fa-circle-check');
 }
 
-function deleteCustomProduct(productId) {
+function deleteProduct(productId) {
   const inv = getInventory();
-  const prod = inv[productId];
+  const prod = inv[productId] || (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA.find(p => p.id === productId) : null);
   const prodName = prod ? prod.name : productId;
 
-  if (!confirm(`¿Estás seguro de que deseás eliminar "${prodName}" del catálogo y del inventario? Esta acción no se puede deshacer.`)) {
+  if (!confirm(`¿Estás seguro de que deseás eliminar permanentemente "${prodName}" del catálogo y del inventario? Esta acción no se puede deshacer.`)) {
     return;
   }
 
-  // 1. Eliminar de custom products en localStorage
+  // 1. Agregar a lista de productos eliminados para que no vuelva a cargarse
+  try {
+    let deleted = JSON.parse(localStorage.getItem('mates_rio_deleted_products') || '[]');
+    if (!deleted.includes(productId)) {
+      deleted.push(productId);
+      localStorage.setItem('mates_rio_deleted_products', JSON.stringify(deleted));
+    }
+  } catch (e) {
+    console.warn('Error al guardar producto eliminado:', e);
+  }
+
+  // 2. Eliminar de custom products en localStorage
   try {
     let customProducts = JSON.parse(localStorage.getItem('mates_rio_custom_products')) || [];
     customProducts = customProducts.filter(p => p.id !== productId);
     localStorage.setItem('mates_rio_custom_products', JSON.stringify(customProducts));
   } catch (e) {
-    console.warn('Error al eliminar producto custom:', e);
+    console.warn('Error al actualizar custom products:', e);
   }
 
-  // 2. Eliminar de PRODUCTS_DATA
+  // 3. Eliminar de edited products en localStorage si existía
+  try {
+    let edited = JSON.parse(localStorage.getItem('mates_rio_edited_products') || '{}');
+    if (edited[productId]) {
+      delete edited[productId];
+      localStorage.setItem('mates_rio_edited_products', JSON.stringify(edited));
+    }
+  } catch (e) {}
+
+  // 4. Eliminar de PRODUCTS_DATA en memoria
   if (typeof PRODUCTS_DATA !== 'undefined') {
     const idx = PRODUCTS_DATA.findIndex(p => p.id === productId);
     if (idx !== -1) {
@@ -902,11 +1152,14 @@ function deleteCustomProduct(productId) {
     }
   }
 
-  // 3. Eliminar de inventario
+  // 5. Eliminar de inventario
   delete inv[productId];
   saveInventory(inv);
 
-  // 4. Actualizar vistas
+  // 6. Cerrar modal de edición si estaba abierto
+  closeEditProductModal();
+
+  // 7. Actualizar vistas y KPIs
   renderInventoryTable();
   updateKPIs();
 
@@ -917,8 +1170,20 @@ function deleteCustomProduct(productId) {
     renderCategoriesGrid();
   }
 
-  logAuditAction('Eliminación de Producto', `Producto "${prodName}" eliminado del catálogo.`);
-  showAdminToast(`Producto "${prodName}" eliminado.`, 'fa-trash-alt');
+  logAuditAction('Eliminación de Producto', `Producto "${prodName}" eliminado permanentemente del catálogo.`);
+  showAdminToast(`Producto "${prodName}" eliminado del catálogo`, 'fa-trash-alt');
+}
+
+function deleteProductFromModal() {
+  const id = document.getElementById('edit-product-id')?.value;
+  if (id) {
+    deleteProduct(id);
+  }
+}
+
+// Compatibilidad con llamadas previas a deleteCustomProduct
+function deleteCustomProduct(productId) {
+  deleteProduct(productId);
 }
 
 // ==========================================================================

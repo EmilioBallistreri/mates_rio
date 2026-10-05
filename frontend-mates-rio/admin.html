@@ -622,45 +622,155 @@
 
 
   <!-- ==========================================================================
-       MODAL: EDIT PRODUCT STOCK & PRICE
+       MODAL: EDITAR PRODUCTO (PANEL DE CONTROL COMPLETO)
        ========================================================================== -->
   <div class="admin-modal-overlay" id="edit-product-modal">
-    <div class="admin-modal-card">
+    <div class="admin-modal-card admin-modal-lg">
       <div class="admin-modal-header">
-        <h3 class="admin-modal-title"><i class="fas fa-pen-to-square" style="color: var(--admin-gold);"></i> Editar Producto & Stock</h3>
-        <button class="admin-modal-close" onclick="closeEditProductModal()"><i class="fas fa-times"></i></button>
+        <h3 class="admin-modal-title">
+          <i class="fas fa-pen-to-square" style="color: var(--admin-gold);"></i> Editar Producto del Catálogo
+        </h3>
+        <button type="button" class="admin-modal-close" onclick="closeEditProductModal()"><i class="fas fa-times"></i></button>
       </div>
 
       <div class="admin-modal-body">
-        <input type="hidden" id="edit-product-id" />
-        
-        <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--admin-border);">
-          <img src="" id="edit-product-img" style="width: 58px; height: 58px; border-radius: 6px; object-fit: cover; border: 1px solid var(--admin-border);" />
-          <div>
-            <h4 id="edit-product-name" style="font-size: 0.95rem; font-weight: 800; color: var(--admin-text-main);"></h4>
-            <span id="edit-product-cat" style="font-size: 0.72rem; color: var(--admin-text-muted);"></span>
+        <form id="edit-product-form" onsubmit="event.preventDefault(); saveProductEdits();">
+          <input type="hidden" id="edit-product-id" />
+
+          <!-- Top preview row -->
+          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 18px; padding: 12px 16px; background: #faf8f4; border: 1.5px solid var(--admin-border); border-radius: var(--radius-md);">
+            <div style="width: 60px; height: 60px; border-radius: 8px; border: 1.5px solid var(--admin-gold); overflow: hidden; flex-shrink: 0; background: #fff; display: flex; align-items: center; justify-content: center;">
+              <img id="edit-prod-preview-thumb" src="assets/images/prod_mate_imperial.jpg" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" />
+            </div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span id="edit-prod-sku-display" style="font-size: 0.72rem; color: var(--admin-text-muted); font-family: monospace; font-weight: 700;"></span>
+                <span id="edit-prod-cat-badge" class="sidebar-badge badge-info" style="font-size: 0.65rem;"></span>
+              </div>
+              <h4 id="edit-prod-preview-title" style="font-size: 1rem; font-weight: 800; color: var(--admin-text-main); margin: 3px 0 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></h4>
+              <span id="edit-prod-preview-price" style="font-size: 0.88rem; font-weight: 800; color: var(--admin-leather);"></span>
+            </div>
           </div>
-        </div>
 
-        <div class="admin-form-group">
-          <label class="admin-form-label" for="edit-product-stock">Unidades en Stock</label>
-          <input type="number" id="edit-product-stock" class="admin-input" min="0" />
-        </div>
+          <div class="admin-form-grid-2">
+            <!-- Nombre -->
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="edit-prod-name">Nombre del Producto <span style="color: var(--admin-danger);">*</span></label>
+              <input type="text" id="edit-prod-name" class="admin-input modal-input" placeholder="Nombre visible en la tienda" required />
+            </div>
 
-        <div class="admin-form-group">
-          <label class="admin-form-label" for="edit-product-price">Precio de Venta ($ ARS)</label>
-          <input type="number" id="edit-product-price" class="admin-input" min="0" step="100" />
-        </div>
+            <!-- Categoría -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="edit-prod-category">Categoría <span style="color: var(--admin-danger);">*</span></label>
+              <select id="edit-prod-category" class="admin-select modal-input" required>
+                <option value="mates">Mates Imperiales & Torpedos</option>
+                <option value="promos">Combos & Promociones</option>
+                <option value="termos">Termos de Acero & Cuero</option>
+                <option value="accesorios">Bombillas & Accesorios</option>
+                <option value="yerbas">Yerbas Seleccionadas</option>
+                <option value="equipos">Equipos de Mate & Mochilas</option>
+              </select>
+            </div>
 
-        <div class="admin-form-group">
-          <label class="admin-form-label" for="edit-product-min-stock">Alerta de Stock Crítico (Unidades)</label>
-          <input type="number" id="edit-product-min-stock" class="admin-input" min="1" value="5" />
-        </div>
-      </div>
+            <!-- Precio de Venta -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="edit-prod-price">Precio de Venta ($ ARS) <span style="color: var(--admin-danger);">*</span></label>
+              <input type="number" id="edit-prod-price" class="admin-input modal-input" min="100" step="100" required />
+            </div>
 
-      <div class="admin-modal-footer">
-        <button type="button" class="btn-admin btn-admin-outline" onclick="closeEditProductModal()">Cancelar</button>
-        <button type="button" class="btn-admin btn-admin-primary" onclick="saveProductEdits()">Guardar Cambios</button>
+            <!-- Precio Original (Tachado) -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="edit-prod-orig-price">Precio Original / Tachado ($ ARS) <small style="color: var(--admin-text-muted);">(Opcional para promo)</small></label>
+              <input type="number" id="edit-prod-orig-price" class="admin-input modal-input" min="0" step="100" placeholder="Ej: 56000" />
+            </div>
+
+            <!-- Etiqueta / Badge -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="edit-prod-badge">Etiqueta Destacada <small style="color: var(--admin-text-muted);">(Opcional)</small></label>
+              <input type="text" id="edit-prod-badge" class="admin-input modal-input" placeholder="Ej: NUEVO, OFERTA, MÁS VENDIDO" />
+            </div>
+
+            <!-- Tipo de Badge -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="edit-prod-badge-type">Estilo de Etiqueta</label>
+              <select id="edit-prod-badge-type" class="admin-select modal-input">
+                <option value="new">Nuevo (Dorado suave)</option>
+                <option value="promo">Oferta (Rojo / Descuento)</option>
+                <option value="bestseller">Más Vendido (Dorado intenso)</option>
+                <option value="featured">Destacado (Verde esmeralda)</option>
+              </select>
+            </div>
+
+            <!-- Stock Actual & Mínimo -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="edit-prod-stock">Unidades en Stock <span style="color: var(--admin-danger);">*</span></label>
+              <input type="number" id="edit-prod-stock" class="admin-input modal-input" min="0" required />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="edit-prod-min-stock">Alerta de Stock Bajo (Unidades)</label>
+              <input type="number" id="edit-prod-min-stock" class="admin-input modal-input" min="1" value="5" />
+            </div>
+
+            <!-- Selector de Imagen -->
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="edit-prod-img-select">Imagen del Producto <span style="color: var(--admin-danger);">*</span></label>
+              <select id="edit-prod-img-select" class="admin-select modal-input" onchange="onEditProductImageChange()">
+                <option value="assets/images/prod_mate_imperial.jpg">Mate Imperial Cuero Negro</option>
+                <option value="assets/images/cat_mates.jpg">Mate Torpedo Uruguayo</option>
+                <option value="assets/images/banner_1.jpg">Mate Camionero Suela</option>
+                <option value="assets/images/cat_termos.jpg">Termo Media Manija Cuero</option>
+                <option value="assets/images/banner_3.jpg">Termo Adventure Acero 1.3L</option>
+                <option value="assets/images/cat_accesorios.jpg">Bombilla Alpaca Pico Loro</option>
+                <option value="assets/images/cat_yerbas.jpg">Yerba Barbaquá Seleccionada</option>
+                <option value="assets/images/cat_equipos.jpg">Mochila Matera Cuero</option>
+                <option value="assets/images/prod_canasta_matera.jpg">Canasta Matera Criolla</option>
+                <option value="assets/images/cat_promos.jpg">Combo Matero Imperial</option>
+                <option value="assets/images/banner_2.jpg">Set Matero Completo</option>
+                <option value="custom">-- Ingresar URL o ruta personalizada --</option>
+              </select>
+              <input type="text" id="edit-prod-img-custom" class="admin-input modal-input" placeholder="Ruta local o URL web (ej: assets/images/... o https://...)" style="margin-top: 8px; display: none;" oninput="onEditProductCustomImgInput()" />
+            </div>
+
+            <!-- Descripción -->
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="edit-prod-desc">Descripción del Producto <span style="color: var(--admin-danger);">*</span></label>
+              <textarea id="edit-prod-desc" class="admin-input modal-input" rows="3" style="height: auto; padding: 10px 14px; resize: vertical;" required></textarea>
+            </div>
+
+            <!-- Especificaciones Técnicas -->
+            <div class="admin-form-group" style="grid-column: span 2; margin-bottom: 2px;">
+              <label class="admin-form-label" style="font-weight: 800; color: var(--admin-gold);"><i class="fas fa-list-check"></i> Especificaciones Técnicas</label>
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="edit-prod-spec-material">Material / Elaboración</label>
+              <input type="text" id="edit-prod-spec-material" class="admin-input modal-input" placeholder="Ej: Calabaza gruesa y cuero vacuno legítimo" />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="edit-prod-spec-virola">Virola / Terminación</label>
+              <input type="text" id="edit-prod-spec-virola" class="admin-input modal-input" placeholder="Ej: Alpaca maciza cincelada a mano" />
+            </div>
+
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="edit-prod-spec-extra">Detalles adicionales / Garantía</label>
+              <input type="text" id="edit-prod-spec-extra" class="admin-input modal-input" placeholder="Ej: Garantía artesanal de 6 meses" />
+            </div>
+          </div>
+
+          <div class="admin-modal-footer" style="display: flex; justify-content: space-between; align-items: center; margin: 20px -20px -20px -20px;">
+            <button type="button" class="btn-admin btn-admin-danger" onclick="deleteProductFromModal()" title="Eliminar permanentemente este producto del catálogo">
+              <i class="fas fa-trash-alt"></i> Eliminar Producto
+            </button>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn-admin btn-admin-outline" onclick="closeEditProductModal()">Cancelar</button>
+              <button type="submit" class="btn-admin btn-admin-primary">
+                <i class="fas fa-save"></i> Guardar Cambios
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
