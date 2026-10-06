@@ -1363,35 +1363,37 @@ function renderOrdersTable() {
       statusClass = 'status-cancelled';
     }
 
-    const payLabel = order.paymentMethod === 'transferencia' ? '🏦 Transferencia (10% OFF)' : '💳 Tarjeta de Crédito';
+    const payLabel = order.paymentMethod === 'transferencia' 
+      ? '<span style="display:inline-block;">🏦 Transferencia</span> <span style="display:inline-block; font-size:0.67rem; color:var(--admin-gold); font-weight:700;">(10% OFF)</span>' 
+      : '💳 Tarjeta de Crédito';
 
     return `
       <tr>
-        <td>
+        <td class="col-order-id">
           <strong style="color: var(--admin-leather); font-family: var(--font-heading);">${order.id}</strong>
         </td>
-        <td style="color: var(--admin-text-muted); font-size: 0.76rem;">${order.date}</td>
-        <td>
-          <div style="font-weight: 700; color: var(--admin-text-main);">${order.customerName || 'Cliente Web'}</div>
-          <div style="font-size: 0.68rem; color: var(--admin-text-muted);">${order.customerPhone || '-'}</div>
+        <td class="col-order-date" style="color: var(--admin-text-muted); font-size: 0.74rem;">${order.date}</td>
+        <td class="col-order-customer">
+          <div style="font-weight: 700; color: var(--admin-text-main); font-size: 0.8rem; line-height: 1.25;">${order.customerName || 'Cliente Web'}</div>
+          <div style="font-size: 0.68rem; color: var(--admin-text-muted); margin-top: 2px;">${order.customerPhone || '-'}</div>
         </td>
-        <td>
-          <div style="max-width: 280px; line-height: 1.35;">${order.items}</div>
-          ${order.hasCustomEngraving ? `<span class="engraving-tag"><i class="fas fa-magic"></i> Grabado en Virola</span>` : ''}
+        <td class="col-order-items">
+          <div class="order-items-summary">${order.items}</div>
+          ${order.hasCustomEngraving ? `<span class="engraving-tag"><i class="fas fa-magic"></i> Grabado</span>` : ''}
         </td>
-        <td>
-          <strong style="font-size: 0.95rem; color: var(--admin-text-main);">${formatARS(order.total)}</strong>
+        <td class="col-order-total">
+          <strong style="font-size: 0.92rem; color: var(--admin-text-main);">${formatARS(order.total)}</strong>
         </td>
-        <td style="font-size: 0.74rem; color: var(--admin-text-muted);">${payLabel}</td>
-        <td>
-          <select class="order-status-select ${statusClass}" onchange="changeOrderStatus('${order.id}', this.value)">
-            <option value="Confirmado - En preparación artesanal" ${order.status.includes('preparación') ? 'selected' : ''}>⏳ En Taller / Preparación</option>
-            <option value="Enviado" ${order.status === 'Enviado' ? 'selected' : ''}>🚚 Despachado / Enviado</option>
+        <td class="col-order-payment">${payLabel}</td>
+        <td class="col-order-status">
+          <select class="order-status-select ${statusClass}" onchange="changeOrderStatus('${order.id}', this.value)" title="Cambiar estado del pedido">
+            <option value="Confirmado - En preparación artesanal" ${order.status.includes('preparación') ? 'selected' : ''}>⏳ En Taller / Prep.</option>
+            <option value="Enviado" ${order.status === 'Enviado' ? 'selected' : ''}>🚚 Despachado</option>
             <option value="Entregado" ${order.status === 'Entregado' ? 'selected' : ''}>✅ Entregado</option>
             <option value="Cancelado" ${order.status === 'Cancelado' ? 'selected' : ''}>❌ Cancelado</option>
           </select>
         </td>
-        <td>
+        <td class="col-order-actions">
           <div class="action-btn-cell">
             <button type="button" class="btn-table-action" onclick="openOrderDetailModal('${order.id}')" title="Ver Detalle / Remito">
               <i class="fas fa-eye"></i>

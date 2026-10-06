@@ -1117,30 +1117,53 @@ body.admin-body {
   border: 1px solid var(--admin-border);
   border-radius: var(--radius-md);
   box-shadow: var(--admin-shadow-sm);
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Custom sleek scrollbar for admin tables */
+.table-responsive-card::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-responsive-card::-webkit-scrollbar-track {
+  background: #f4efe8;
+  border-radius: 4px;
+}
+
+.table-responsive-card::-webkit-scrollbar-thumb {
+  background: #d4bc8b;
+  border-radius: 4px;
+}
+
+.table-responsive-card::-webkit-scrollbar-thumb:hover {
+  background: var(--admin-gold);
 }
 
 .admin-data-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
 }
 
 .admin-data-table th {
   background: #faf8f5;
-  padding: 12px 16px;
+  padding: 10px 10px;
   font-size: 0.72rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: var(--admin-text-muted);
   border-bottom: 1.5px solid var(--admin-border);
   white-space: nowrap;
 }
 
 .admin-data-table td {
-  padding: 14px 16px;
+  padding: 11px 10px;
   border-bottom: 1px solid #f0eae1;
   vertical-align: middle;
 }
@@ -1248,13 +1271,15 @@ body.admin-body {
 
 .action-btn-cell {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .btn-table-action {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--admin-border);
   background: #ffffff;
@@ -1263,8 +1288,9 @@ body.admin-body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   transition: var(--transition);
+  flex-shrink: 0;
 }
 
 .btn-table-action.btn-action-edit {
@@ -1292,13 +1318,76 @@ body.admin-body {
 /* ==========================================================================
    8. ORDERS MANAGEMENT
    ========================================================================== */
+.admin-orders-table {
+  min-width: 860px;
+}
+
+.admin-orders-table th,
+.admin-orders-table td {
+  padding: 10px 8px;
+}
+
+.col-th-order-id, .col-order-id {
+  width: 88px;
+  white-space: nowrap;
+}
+
+.col-th-order-date, .col-order-date {
+  width: 80px;
+  white-space: nowrap;
+}
+
+.col-th-order-customer, .col-order-customer {
+  max-width: 135px;
+  min-width: 100px;
+}
+
+.col-th-order-items, .col-order-items {
+  max-width: 210px;
+  min-width: 150px;
+}
+
+.order-items-summary {
+  font-size: 0.76rem;
+  line-height: 1.3;
+  color: var(--admin-text-main);
+  word-break: normal;
+}
+
+.col-th-order-total, .col-order-total {
+  width: 88px;
+  white-space: nowrap;
+}
+
+.col-th-order-payment, .col-order-payment {
+  width: 115px;
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+
+.col-th-order-status, .col-order-status {
+  width: 155px;
+}
+
+.col-th-order-actions, .col-order-actions {
+  width: 78px;
+  min-width: 78px;
+  text-align: center;
+}
+
 .order-status-select {
-  font-size: 0.74rem;
-  font-weight: 800;
-  padding: 4px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 6px;
   border-radius: var(--radius-full);
   border: 1px solid transparent;
   cursor: pointer;
+  max-width: 152px;
+  width: 100%;
+  text-overflow: ellipsis;
+  outline: none;
+  box-sizing: border-box;
+  transition: var(--transition);
 }
 
 .status-prep {
@@ -1458,6 +1547,10 @@ body.admin-body {
    11. RESPONSIVE DESIGN (TABLETS & PHONES)
    ========================================================================== */
 @media (max-width: 1200px) {
+  .admin-content-container {
+    padding: 18px 14px;
+  }
+
   .kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
