@@ -1823,3 +1823,366 @@ body.admin-body {
   }
 }
 
+/* ==========================================================================
+   DRAG AND DROP UNLIMITED IMAGE UPLOADER
+   ========================================================================== */
+.image-dropzone {
+  border: 2px dashed var(--admin-border);
+  border-radius: var(--radius-md);
+  padding: 24px 16px;
+  background: #faf8f5;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.image-dropzone.dragover {
+  border-color: var(--admin-gold);
+  background: rgba(197, 155, 39, 0.08);
+  transform: scale(1.01);
+}
+
+.image-dropzone-icon {
+  font-size: 2.2rem;
+  color: var(--admin-gold);
+  margin-bottom: 8px;
+}
+
+.image-dropzone-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--admin-text-main);
+  margin-bottom: 4px;
+}
+
+.image-dropzone-sub {
+  font-size: 0.78rem;
+  color: var(--admin-text-muted);
+}
+
+.image-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.preview-thumb-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--admin-border);
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.preview-thumb-card.primary {
+  border-color: var(--admin-gold);
+  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.35);
+}
+
+.preview-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-thumb-delete {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(231, 76, 60, 0.9);
+  color: #ffffff;
+  border: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.preview-thumb-delete:hover {
+  background: #c0392b;
+  transform: scale(1.1);
+}
+
+.preview-thumb-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  background: var(--admin-gold);
+  color: #121212;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   HOME DESIGN & SPECIAL OCCASIONS EDITOR
+   ========================================================================== */
+.home-design-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1.5px solid var(--admin-border);
+  padding-bottom: 8px;
+}
+
+.home-design-tab-btn {
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 700;
+  background: transparent;
+  color: var(--admin-text-secondary);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.home-design-tab-btn:hover {
+  color: var(--admin-text-main);
+  background: #faf8f5;
+}
+
+.home-design-tab-btn.active {
+  background: var(--admin-leather);
+  color: #ffffff;
+}
+
+.occasion-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.occasion-preset-card {
+  border: 2px solid var(--admin-border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.occasion-preset-card:hover {
+  border-color: var(--admin-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.occasion-preset-card.selected {
+  border-color: var(--admin-gold);
+  background: #fdfcf7;
+  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.25);
+}
+
+.occasion-preview-box {
+  border: 1.5px solid var(--admin-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-top: 16px;
+  background: #17110c;
+  color: #ffffff;
+}
+
+.badge-purchase {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.badge-purchase.received {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge-purchase.in-transit {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.badge-purchase.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* ==========================================================================
+   ADMIN THEME TOGGLE BUTTON (MODO CLARO / MODO OSCURO)
+   ========================================================================== */
+.admin-theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--admin-card-bg);
+  color: var(--admin-text-main);
+  border: 1px solid var(--admin-border);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.admin-theme-toggle-btn:hover {
+  border-color: var(--admin-gold);
+  color: var(--admin-gold);
+  transform: translateY(-1px);
+}
+
+.admin-theme-toggle-btn i {
+  color: var(--admin-gold);
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   ADMIN DARK MODE (Panel de Administración Nocturno)
+   ========================================================================== */
+body.admin-dark-mode {
+  --admin-bg-main: #14100c;
+  --admin-card-bg: #1c1611;
+  --admin-border: #2e241c;
+  --admin-border-focus: #dfb542;
+  --admin-text-main: #f5efe6;
+  --admin-text-muted: #9e9185;
+  background-color: var(--admin-bg-main);
+  color: var(--admin-text-main);
+}
+
+body.admin-dark-mode .admin-topbar {
+  background: #1c1611;
+  border-bottom-color: #2e241c;
+}
+
+body.admin-dark-mode .topbar-breadcrumb {
+  color: #c9bfb4;
+}
+
+body.admin-dark-mode .topbar-live-clock,
+body.admin-dark-mode .btn-store-preview,
+body.admin-dark-mode .admin-theme-toggle-btn {
+  background: #251e17;
+  border-color: #382c21;
+  color: #f5efe6;
+}
+
+body.admin-dark-mode .kpi-card {
+  background: #1c1611;
+  border-color: #2e241c;
+}
+
+body.admin-dark-mode .kpi-footer-sub {
+  color: #8c7e73;
+}
+
+body.admin-dark-mode .table-responsive-card {
+  background: #1c1611;
+  border-color: #2e241c;
+}
+
+body.admin-dark-mode .admin-data-table th {
+  background: #231b14;
+  color: #dfb542;
+  border-bottom-color: #2e241c;
+}
+
+body.admin-dark-mode .admin-data-table td {
+  border-bottom-color: #261e16;
+  color: #f5efe6;
+}
+
+body.admin-dark-mode .admin-data-table tbody tr:hover {
+  background: #251e17;
+}
+
+body.admin-dark-mode .admin-modal-card {
+  background: #1c1611;
+  color: #f5efe6;
+  border: 1px solid #382c21;
+}
+
+body.admin-dark-mode .admin-modal-header,
+body.admin-dark-mode .admin-modal-footer {
+  background: #231b14;
+  border-color: #2e241c;
+}
+
+body.admin-dark-mode .admin-modal-title {
+  color: #f5efe6;
+}
+
+body.admin-dark-mode .admin-input,
+body.admin-dark-mode .admin-select,
+body.admin-dark-mode .admin-search-input {
+  background: #251e17;
+  border-color: #382c21;
+  color: #f5efe6;
+}
+
+body.admin-dark-mode .admin-input:focus,
+body.admin-dark-mode .admin-select:focus,
+body.admin-dark-mode .admin-search-input:focus {
+  border-color: var(--admin-gold);
+}
+
+body.admin-dark-mode .home-design-tabs {
+  background: #1c1611;
+  border-color: #2e241c;
+}
+
+body.admin-dark-mode .home-design-tab-btn {
+  color: #9e9185;
+}
+
+body.admin-dark-mode .home-design-tab-btn.active {
+  background: #2a2017;
+  color: var(--admin-gold);
+}
+
+body.admin-dark-mode .occasion-preset-card {
+  background: #231b14;
+  border-color: #33271d;
+  color: #f5efe6;
+}
+
+body.admin-dark-mode .stat-box-card {
+  background: #1c1611;
+  border-color: #2e241c;
+}
+
+body.admin-dark-mode .section-page-title {
+  color: #f5efe6;
+}
+
+body.admin-dark-mode .section-page-desc {
+  color: #9e9185;
+}
+
+body.admin-dark-mode .image-dropzone {
+  background: #221a14;
+  border-color: #3d2f23;
+}
+
+body.admin-dark-mode .image-dropzone-title {
+  color: #f5efe6;
+}
+
+body.admin-dark-mode .image-dropzone-sub {
+  color: #9e9185;
+}
+

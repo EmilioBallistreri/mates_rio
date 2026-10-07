@@ -49,12 +49,15 @@
         <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" title="Instagram Oficial">
           <i class="fab fa-instagram"></i> @mates_rio_
         </a>
-        <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20hacer%20una%20consulta." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
+        <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20hacer%20una%20consulta." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
           <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
       </div>
     </div>
   </aside>
+
+  <!-- Banner Dinámico de Fechas Especiales (Gestionable desde Admin) -->
+  <aside id="special-occasion-banner" class="special-occasion-banner" style="display: none;"></aside>
 
   <!-- ==========================================================================
        STICKY HEADER & CLEAN BALANCED NAVIGATION (3 ZONES)
@@ -71,7 +74,6 @@
           <img src="assets/images/logo.jpg" alt="Logo de Mates Río" class="brand-logo-img" ondblclick="handleSecretAdminTrigger()" />
           <div class="brand-name-group">
             <span class="brand-name">MATES RÍO</span>
-            <span class="brand-tagline">Tradición & Estilo</span>
           </div>
         </a>
       </div>
@@ -155,13 +157,6 @@
             </a>
           </li>
 
-          <li class="nav-item-custom">
-            <a href="personaliza-tu-mate.html" class="nav-link nav-link-custom">
-              <i class="fas fa-magic" style="color: var(--accent-gold); margin-right: 4px;"></i> Personalizá tu Mate
-              <span class="nav-badge-pill pill-gold">VIROLA</span>
-            </a>
-          </li>
-
           <li>
             <a href="#comunidad" class="nav-link">Comunidad</a>
           </li>
@@ -174,6 +169,11 @@
 
       <!-- 3. RIGHT ZONE: Action Buttons -->
       <div class="header-right">
+        <!-- Selector Modo Claro / Modo Oscuro -->
+        <button class="action-btn theme-toggle-btn" id="theme-toggle-btn" onclick="toggleColorTheme()" title="Cambiar a Modo Claro / Modo Oscuro" aria-label="Cambiar tema de color">
+          <i class="fas fa-sun"></i>
+        </button>
+
         <!-- Direct Instagram Link -->
         <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="action-btn instagram-btn" title="Instagram Oficial @mates_rio_">
           <i class="fab fa-instagram"></i>
@@ -270,12 +270,6 @@
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
-      <li class="mobile-nav-item mobile-nav-highlight">
-        <a href="personaliza-tu-mate.html">
-          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Personalizá tu Mate</span>
-          <span class="nav-badge-pill pill-gold">VIROLA</span>
-        </a>
-      </li>
       <li class="mobile-nav-item">
         <a href="catalogo.html?categoria=termos" onclick="setCategoryFilter('termos'); closeMobileDrawer()">
           <span><i class="fas fa-temperature-high" style="width: 22px; color: var(--accent-gold);"></i> Termos de Acero</span>
@@ -301,6 +295,12 @@
         </a>
       </li>
       <li class="mobile-nav-item">
+        <a href="javascript:void(0)" onclick="toggleColorTheme(); closeMobileDrawer();">
+          <span><i class="fas fa-sun" id="mobile-theme-icon" style="width: 22px; color: var(--accent-gold);"></i> <span id="mobile-theme-label">Cambiar a Modo Claro</span></span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
         <a href="#contacto" onclick="closeMobileDrawer()">
           <span><i class="fas fa-envelope" style="width: 22px; color: var(--accent-gold);"></i> Contacto & Ubicación</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
@@ -309,9 +309,12 @@
     </ul>
 
     <div class="mobile-nav-footer">
-      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
-        <a href="https://wa.me/5493543600000" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="flex: 1; padding: 10px; font-size: 0.78rem;">
+      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+        <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="flex: 1; padding: 10px; font-size: 0.78rem;">
           <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok" style="flex: 1; padding: 10px; font-size: 0.78rem;">
+          <i class="fab fa-tiktok"></i> TikTok
         </a>
         <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="flex: 1; padding: 10px; font-size: 0.78rem;">
           <i class="fab fa-instagram"></i> Instagram
@@ -367,7 +370,7 @@
                 <a href="promos.html" class="btn btn-primary">
                   <i class="fas fa-fire"></i> Aprovechar Ofertas
                 </a>
-                <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20asesorarme%20sobre%20los%20combos%20materos." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+                <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20asesorarme%20sobre%20los%20combos%20materos." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
                   <i class="fab fa-whatsapp"></i> Armar Set por WhatsApp
                 </a>
               </div>
@@ -416,7 +419,33 @@
     </section>
 
     <!-- ==========================================================================
-         TRUST / VALUE PROPOSITION BAR
+         CATEGORIES SECTION ("PROMOS, MATES, TERMOS, ACCESORIOS, YERBAS Y EQUIPOS DE MATE")
+         ========================================================================== -->
+    <section class="categories-section" id="categorias">
+      <div class="container">
+        <!-- 6 Category Cards first, exactly as requested by client -->
+        <div class="categories-grid" id="categories-grid">
+          <!-- Rendered dynamically by js/app.js -->
+        </div>
+
+        <!-- Section title & description placed cleanly below the cards -->
+        <div class="categories-bottom-info">
+          <span class="section-tag">Colecciones Exclusivas</span>
+          <h2 class="section-title">Nuestras Categorías</h2>
+          <p class="section-subtitle">
+            Explorá nuestra selección artesanal pensada para cada estilo matero. Hacé clic en cualquier categoría para descubrir todos los modelos disponibles en el catálogo.
+          </p>
+          <div class="categories-bottom-action">
+            <a href="catalogo.html" class="btn btn-primary btn-catalog-link">
+              <i class="fas fa-th-large"></i> Ver Todo el Catálogo <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         TRUST / VALUE PROPOSITION BAR (UBICADA DEBAJO DE LAS CATEGORÍAS)
          ========================================================================== -->
     <section class="trust-bar" aria-label="Beneficios de comprar en Mates Río">
       <div class="container">
@@ -465,33 +494,7 @@
     </section>
 
     <!-- ==========================================================================
-         CATEGORIES SECTION ("PROMOS, MATES, TERMOS, ACCESORIOS, YERBAS Y EQUIPOS DE MATE")
-         ========================================================================== -->
-    <section class="categories-section" id="categorias">
-      <div class="container">
-        <!-- 6 Category Cards first, exactly as requested by client -->
-        <div class="categories-grid" id="categories-grid">
-          <!-- Rendered dynamically by js/app.js -->
-        </div>
-
-        <!-- Section title & description placed cleanly below the cards -->
-        <div class="categories-bottom-info">
-          <span class="section-tag">Colecciones Exclusivas</span>
-          <h2 class="section-title">Nuestras Categorías</h2>
-          <p class="section-subtitle">
-            Explorá nuestra selección artesanal pensada para cada estilo matero. Hacé clic en cualquier categoría para descubrir todos los modelos disponibles en el catálogo.
-          </p>
-          <div class="categories-bottom-action">
-            <a href="catalogo.html" class="btn btn-primary btn-catalog-link">
-              <i class="fas fa-th-large"></i> Ver Todo el Catálogo <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================================================
-         COMMUNITY SHOWCASE SECTION (INSTAGRAM, TIKTOK, FACEBOOK)
+         COMMUNITY SHOWCASE SECTION (INSTAGRAM, TIKTOK)
          ========================================================================== -->
     <section class="instagram-section" id="comunidad">
       <div class="container">
@@ -511,52 +514,16 @@
             <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" title="Seguinos en Instagram">
               <i class="fab fa-instagram"></i> Instagram
             </a>
-            <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok" title="Seguinos en TikTok">
+            <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok" title="Seguinos en TikTok @Mates_rio">
               <i class="fab fa-tiktok"></i> TikTok
             </a>
-            <a href="https://www.facebook.com/matesrio" target="_blank" rel="noopener noreferrer" class="btn btn-facebook" title="Seguinos en Facebook">
-              <i class="fab fa-facebook-f"></i> Facebook
+            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20sumarme%20a%20la%20comunidad." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" title="Escribinos a WhatsApp Oficial">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+            <a href="mailto:mates.rio6@gmail.com" class="btn btn-secondary" title="Contacto por correo electrónico">
+              <i class="fas fa-envelope"></i> Email Oficial
             </a>
           </div>
-        </div>
-
-        <!-- Community Feed Highlights -->
-        <div class="insta-feed-grid">
-          <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="insta-post-card">
-            <img src="assets/images/prod_mate_imperial.jpg" alt="Foto Instagram Mate Imperial Negro" class="insta-post-img" loading="lazy" />
-            <div class="insta-post-badge insta-badge-tag"><i class="fab fa-instagram"></i> Instagram</div>
-            <div class="insta-post-overlay">
-              <span><i class="fas fa-heart"></i> 482</span>
-              <span><i class="fas fa-comment"></i> 34</span>
-            </div>
-          </a>
-
-          <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="insta-post-card">
-            <img src="assets/images/banner_2.jpg" alt="Video TikTok Combo Matero" class="insta-post-img" loading="lazy" />
-            <div class="insta-post-badge tiktok-badge-tag"><i class="fab fa-tiktok"></i> TikTok Viral</div>
-            <div class="insta-post-overlay">
-              <span><i class="fas fa-play"></i> 14.2k</span>
-              <span><i class="fas fa-heart"></i> 1.2k</span>
-            </div>
-          </a>
-
-          <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="insta-post-card">
-            <img src="assets/images/banner_3.jpg" alt="Foto Instagram Mateando en el Sur" class="insta-post-img" loading="lazy" />
-            <div class="insta-post-badge insta-badge-tag"><i class="fab fa-instagram"></i> Reel</div>
-            <div class="insta-post-overlay">
-              <span><i class="fas fa-heart"></i> 894</span>
-              <span><i class="fas fa-comment"></i> 76</span>
-            </div>
-          </a>
-
-          <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="insta-post-card">
-            <img src="assets/images/prod_canasta_matera.jpg" alt="Video TikTok Canasta Matera" class="insta-post-img" loading="lazy" />
-            <div class="insta-post-badge tiktok-badge-tag"><i class="fab fa-tiktok"></i> TikTok Tips</div>
-            <div class="insta-post-overlay">
-              <span><i class="fas fa-play"></i> 8.6k</span>
-              <span><i class="fas fa-heart"></i> 740</span>
-            </div>
-          </a>
         </div>
       </div>
     </section>
@@ -586,14 +553,14 @@
             <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="social-icon-btn instagram" title="Instagram @mates_rio_">
               <i class="fab fa-instagram"></i>
             </a>
-            <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20la%20web." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
+            <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn tiktok" title="TikTok @Mates_rio">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20la%20web." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
               <i class="fab fa-whatsapp"></i>
             </a>
-            <a href="https://www.facebook.com/matesrio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Facebook @matesrio">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="TikTok @mates_rio">
-              <i class="fab fa-tiktok"></i>
+            <a href="mailto:mates.rio6@gmail.com" class="social-icon-btn email" title="Correo Oficial mates.rio6@gmail.com">
+              <i class="fas fa-envelope"></i>
             </a>
           </div>
         </div>
@@ -608,7 +575,6 @@
             <li><a href="catalogo.html?categoria=mates" class="footer-nav-link" onclick="setCategoryFilter('mates')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Mates Imperiales</a></li>
             <li><a href="catalogo.html?categoria=termos" class="footer-nav-link" onclick="setCategoryFilter('termos')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Termos de Acero</a></li>
             <li><a href="catalogo.html?categoria=accesorios" class="footer-nav-link" onclick="setCategoryFilter('accesorios')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Bombillas & Accesorios</a></li>
-            <li><a href="personaliza-tu-mate.html" class="footer-nav-link"><i class="fas fa-magic" style="font-size: 0.65rem; color: var(--accent-gold);"></i> Taller de Grabado</a></li>
           </ul>
         </div>
 
@@ -634,14 +600,14 @@
               <i class="fab fa-whatsapp"></i>
               <div>
                 <strong>WhatsApp Ventas:</strong><br />
-                <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 3543 60-0000</a>
+                <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 351 383-0111</a>
               </div>
             </li>
             <li class="contact-item">
               <i class="far fa-envelope"></i>
               <div>
                 <strong>Correo Electrónico:</strong><br />
-                <a href="mailto:contacto@matesrio.com.ar">contacto@matesrio.com.ar</a>
+                <a href="mailto:mates.rio6@gmail.com">mates.rio6@gmail.com</a>
               </div>
             </li>
             <li class="contact-item">
@@ -729,11 +695,23 @@
   </div>
 
   <!-- ==========================================================================
-       SLIDING CART DRAWER
+       FLOATING SHOPPING CART BUTTON (ACCESO RÁPIDO SIN SUBIR)
+       ========================================================================== -->
+  <!-- Botón Flotante de Carrito Profesional -->
+  <button class="floating-cart-btn" id="floating-cart-btn" onclick="openCartDrawer()" aria-label="Abrir Carrito de Compras" title="Ver Carrito de Compras">
+    <div class="floating-cart-icon-wrap">
+      <i class="fas fa-shopping-bag"></i>
+    </div>
+    <span class="floating-cart-label">Carrito</span>
+    <span class="floating-cart-badge" id="floating-cart-badge">0</span>
+  </button>
+
+  <!-- ==========================================================================
+       SLIDING CART DRAWER (SIMPLIFICADO Y FÁCIL DE USAR)
        ========================================================================== -->
   <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
 
-  <aside class="cart-drawer" id="cart-drawer" aria-label="Carrito de Compras">
+  <aside class="cart-drawer cart-drawer-simplified" id="cart-drawer" aria-label="Carrito de Compras">
     <!-- 1. Cart Header -->
     <div class="cart-header">
       <div class="cart-header-title-group">
@@ -750,87 +728,36 @@
       </button>
     </div>
 
-    <!-- 2. Newly Added Product Alert Banner -->
-    <div class="cart-added-banner" id="cart-added-banner">
-      <i class="fas fa-check-circle"></i>
-      <span id="cart-added-banner-text">¡Producto agregado con éxito!</span>
-    </div>
-
-    <!-- 3. Free Shipping Progress Meter -->
-    <div class="free-shipping-meter">
-      <div class="meter-text" id="free-shipping-text">
-        <i class="fas fa-truck-fast"></i> ¡Sumá más productos para tener <b>ENVÍO GRATIS</b>!
-      </div>
-      <div class="meter-bar-track">
-        <div class="meter-bar-fill" id="free-shipping-bar"></div>
-      </div>
-    </div>
-
-    <!-- 4. Items List -->
+    <!-- 2. Clean Items List -->
     <div class="cart-items-list" id="cart-items-container">
       <!-- Populated dynamically via JS -->
     </div>
 
-    <!-- 5. Cart Footer & Checkout -->
+    <!-- 3. Simplified Cart Footer -->
     <div class="cart-footer" id="cart-footer">
-      <!-- Collapsible Tools: Envío -->
-      <div class="cart-tools-bar">
-        <button type="button" class="cart-tool-btn" id="btn-toggle-shipping" onclick="toggleCartTool('shipping')" style="width: 100%;">
-          <i class="fas fa-truck"></i> <span>Calcular costo de envío por Código Postal</span>
-          <i class="fas fa-chevron-down tool-arrow" id="arrow-shipping"></i>
-        </button>
-      </div>
-
-      <!-- Collapsible Shipping Box -->
-      <div class="cart-tool-collapse" id="collapse-shipping">
-        <div class="shipping-calc-input-row">
-          <input type="text" id="cart-cp-input" class="shipping-calc-input" placeholder="Tu Código Postal (ej: 5111)" />
-          <button class="btn btn-outline-dark shipping-calc-btn" onclick="calculateShippingCP()">
-            Calcular
-          </button>
-        </div>
-        <div id="cart-cp-result"></div>
-      </div>
-
-      <!-- Summary Breakdown Card -->
       <div class="cart-summary-card">
-        <div class="cart-totals-row">
-          <span class="row-label">Subtotal</span>
-          <span class="row-val" id="cart-subtotal">$ 0</span>
-        </div>
-
-        <div class="cart-totals-row">
-          <span class="row-label">Envío</span>
-          <span class="row-val" id="cart-shipping-amount">A calcular</span>
-        </div>
-
         <div class="cart-totals-row total-final">
-          <div class="total-label-wrap">
-            <span class="row-label-total">Total estimado</span>
-            <small class="transfer-savings-hint"><i class="fas fa-bolt"></i> 10% OFF pagando por Transferencia</small>
-          </div>
+          <span class="row-label-total">Total a pagar</span>
           <span class="row-val-total" id="cart-total">$ 0</span>
         </div>
+        <small class="transfer-savings-hint" style="display: block; margin-top: 6px; font-size: 0.8rem; color: var(--accent-gold); text-align: right;">
+          <i class="fas fa-bolt"></i> 10% OFF pagando por Transferencia Bancaria
+        </small>
       </div>
 
       <!-- Clear Hierarchy Checkout Actions -->
       <div class="cart-checkout-actions">
-        <!-- Primary Action: Web Checkout (High Contrast) -->
         <button class="btn btn-primary btn-checkout-main" onclick="openWebCheckout()">
           <i class="fas fa-credit-card"></i> Iniciar Compra Online
         </button>
 
-        <!-- Secondary Action: WhatsApp Order (Elegant Clean Style) -->
         <button class="btn btn-whatsapp-secondary" onclick="checkoutWhatsApp()" title="Atención y pedido por WhatsApp">
-          <i class="fab fa-whatsapp"></i> O pedir y pagar por WhatsApp
+          <i class="fab fa-whatsapp"></i> Finalizar Pedido por WhatsApp
         </button>
       </div>
 
-      <!-- Trust & Safe Shopping Footer Notice -->
       <div class="cart-footer-security-row">
         <span><i class="fas fa-shield-alt"></i> Compra Segura</span>
-        <span>•</span>
-        <span><i class="fas fa-truck"></i> Envíos a todo el país</span>
         <span>•</span>
         <button onclick="confirmClearCart()" class="cart-clear-link" title="Vaciar todos los productos">
           Vaciar carrito
@@ -997,7 +924,7 @@
         </div>
       </div>
 
-      <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Acabo%20de%20realizar%20un%20pedido%20en%20la%20web." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="width: 100%; margin-bottom: 10px;">
+      <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Acabo%20de%20realizar%20un%20pedido%20en%20la%20web." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="width: 100%; margin-bottom: 10px;">
         <i class="fab fa-whatsapp"></i> Enviar Comprobante por WhatsApp
       </a>
 
@@ -1132,7 +1059,7 @@
         <div style="overflow: hidden;">
           <h3 style="font-family: var(--font-heading); font-size: 1.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-name-display">Usuario</h3>
           <p style="font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-email-display">email@ejemplo.com</p>
-          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 3543 ...</span>
+          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 351 383-0111</span>
         </div>
       </div>
 

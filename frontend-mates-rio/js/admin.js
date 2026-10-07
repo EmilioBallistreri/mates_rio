@@ -8,28 +8,10 @@
 // ==========================================================================
 const ADMIN_CREDENTIALS = [
   {
-    email: "admin@matesrio.com",
-    password: "admin123",
-    name: "Administrador General",
+    email: "mates.rio6@gmail.com",
+    password: "matesriomanavella6",
+    name: "Administrador General Mates Río",
     role: "Super Administrador"
-  },
-  {
-    email: "admin@matesrio.com",
-    password: "admin",
-    name: "Administrador General",
-    role: "Super Administrador"
-  },
-  {
-    email: "taller@matesrio.com",
-    password: "taller123",
-    name: "Encargado de Taller",
-    role: "Taller & Depósito"
-  },
-  {
-    email: "taller@matesrio.com",
-    password: "admin",
-    name: "Encargado de Taller",
-    role: "Taller & Depósito"
   }
 ];
 
@@ -68,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initInventoryDB();
   initOrdersDB();
   initUsersDB();
+  initDragAndDropZones();
+  onCategorySelectChange('new');
+  initAdminThemeMode();
   checkAdminSession();
 });
 
@@ -80,7 +65,7 @@ function checkAdminSession() {
     if (!u) return false;
     const r = (u.role || '').toLowerCase();
     const e = (u.email || '').toLowerCase();
-    return r.includes('admin') || r.includes('taller') || e === 'admin@matesrio.com' || e === 'taller@matesrio.com';
+    return r.includes('admin') || e === 'mates.rio6@gmail.com';
   };
 
   if (session) {
@@ -342,8 +327,10 @@ function switchAdminSection(sectionId) {
   const pageNames = {
     dashboard: 'Dashboard General',
     inventory: 'Control de Inventario & Stock',
+    purchases: 'Compras a Proveedores & Costos',
     orders: 'Ventas & Gestión de Pedidos',
     stats: 'Estadísticas & Rendimiento',
+    'home-design': 'Diseño & Inicio Web',
     users: 'Clientes & Accesos',
     audit: 'Registro de Actividad'
   };
@@ -354,8 +341,10 @@ function switchAdminSection(sectionId) {
   // 4. Refresh section data
   if (sectionId === 'dashboard') refreshDashboardData();
   if (sectionId === 'inventory') renderInventoryTable();
+  if (sectionId === 'purchases') renderPurchasesSection();
   if (sectionId === 'orders') renderOrdersTable();
   if (sectionId === 'stats') renderStatsSection();
+  if (sectionId === 'home-design') renderHomeDesignSection();
   if (sectionId === 'users') renderUsersTable();
   if (sectionId === 'audit') renderAuditTable();
 
@@ -642,6 +631,112 @@ function quickAdjustStock(productId, delta) {
   showAdminToast(`Stock de "${inv[productId].name}" actualizado a ${inv[productId].stock} un.`);
 }
 
+// ==========================================================================
+// 4.0 PRODUCT MULTI-IMAGE & SUBCATEGORY HELPERS
+// ==========================================================================
+let uploadedImagesNew = [];
+let uploadedImagesEdit = [];
+
+function onCategorySelectChange(mode) {
+  const catSelect = document.getElementById(mode === 'edit' ? 'edit-prod-category' : 'new-prod-category');
+  const subcatSelect = document.getElementById(mode === 'edit' ? 'edit-prod-subcategory' : 'new-prod-subcategory');
+  if (!catSelect || !subcatSelect) return;
+
+  const catId = catSelect.value;
+  const categories = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
+  const foundCat = categories.find(c => c.id === catId);
+  const subcats = (foundCat && foundCat.subcategories && foundCat.subcategories.length > 0)
+    ? foundCat.subcategories
+    : ['General'];
+
+  subcatSelect.innerHTML = subcats.map(sc => `<option value="${sc}">${sc}</option>`).join('');
+}
+
+function handleProductFilesSelect(event, mode) {
+  const files = event.target.files;
+  if (!files || files.length === 0) return;
+
+  const targetList = mode === 'edit' ? uploadedImagesEdit : uploadedImagesNew;
+
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      targetList.push(e.target.result);
+      renderUploadedImagesPreview(mode);
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+}
+
+function renderUploadedImagesPreview(mode) {
+  const container = document.getElementById(mode === 'edit' ? 'edit-prod-preview-grid' : 'new-prod-preview-grid');
+  if (!container) return;
+
+  const list = mode === 'edit' ? uploadedImagesEdit : uploadedImagesNew;
+  if (list.length === 0) {
+    container.innerHTML = '<p style="grid-column: 1/-1; font-size: 0.8rem; color: var(--admin-text-muted); text-align: center; margin: 6px 0;">Sin imágenes adicionales cargadas aún.</p>';
+    return;
+  }
+
+  container.innerHTML = list.map((imgSrc, idx) => `
+    <div class="preview-thumb-card ${idx === 0 ? 'is-primary' : ''}">
+      <img src="${imgSrc}" alt="Foto ${idx + 1}" />
+      ${idx === 0 ? '<span class="thumb-badge-primary">Portada</span>' : ''}
+      <button type="button" class="btn-remove-thumb" onclick="removeUploadedImage('${mode}', ${idx})" title="Eliminar foto">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  `).join('');
+
+  if (mode === 'edit') {
+    const previewThumb = document.getElementById('edit-prod-preview-thumb');
+    if (previewThumb && list.length > 0) previewThumb.src = list[0];
+  }
+}
+
+function removeUploadedImage(mode, idx) {
+  if (mode === 'edit') {
+    uploadedImagesEdit.splice(idx, 1);
+    renderUploadedImagesPreview('edit');
+  } else {
+    uploadedImagesNew.splice(idx, 1);
+    renderUploadedImagesPreview('new');
+  }
+}
+
+function initDragAndDropZones() {
+  ['new', 'edit'].forEach(mode => {
+    const dropzone = document.getElementById(mode === 'new' ? 'new-prod-dropzone' : 'edit-prod-dropzone');
+    if (!dropzone) return;
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('drag-over');
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('drag-over');
+      }, false);
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const files = dt ? dt.files : null;
+      if (files && files.length > 0) {
+        handleProductFilesSelect({ target: { files: files, value: '' } }, mode);
+      }
+    }, false);
+  });
+}
+
 function openEditProductModal(productId) {
   const inv = getInventory();
   let prod = inv[productId];
@@ -655,11 +750,13 @@ function openEditProductModal(productId) {
         name: p.name,
         category: p.category,
         categoryName: p.categoryName || (p.category ? p.category.toUpperCase() : 'GENERAL'),
+        subcategory: p.subcategory || '',
         price: p.price,
         originalPrice: p.originalPrice || null,
         stock: p.stock !== undefined ? p.stock : 10,
         minStock: p.minStock || 5,
         image: p.image || 'assets/images/prod_mate_imperial.jpg',
+        images: Array.isArray(p.images) ? p.images : [p.image || 'assets/images/prod_mate_imperial.jpg'],
         badge: p.badge || '',
         badgeType: p.badgeType || 'new',
         description: p.description || '',
@@ -692,7 +789,22 @@ function openEditProductModal(productId) {
   if (nameEl) nameEl.value = prod.name;
 
   const catEl = document.getElementById('edit-prod-category');
-  if (catEl) catEl.value = prod.category || 'mates';
+  if (catEl) {
+    catEl.value = prod.category || 'mates';
+    onCategorySelectChange('edit');
+  }
+
+  const subcatEl = document.getElementById('edit-prod-subcategory');
+  if (subcatEl && prod.subcategory) {
+    let exists = Array.from(subcatEl.options).some(o => o.value === prod.subcategory);
+    if (!exists) {
+      const opt = document.createElement('option');
+      opt.value = prod.subcategory;
+      opt.textContent = prod.subcategory;
+      subcatEl.appendChild(opt);
+    }
+    subcatEl.value = prod.subcategory;
+  }
 
   const priceEl = document.getElementById('edit-prod-price');
   if (priceEl) priceEl.value = prod.price;
@@ -712,25 +824,15 @@ function openEditProductModal(productId) {
   const minStockEl = document.getElementById('edit-prod-min-stock');
   if (minStockEl) minStockEl.value = prod.minStock !== undefined ? prod.minStock : 5;
 
-  // Imagen
-  const imgSelect = document.getElementById('edit-prod-img-select');
-  const imgCustom = document.getElementById('edit-prod-img-custom');
-  if (imgSelect) {
-    const optionValues = Array.from(imgSelect.options).map(o => o.value);
-    if (optionValues.includes(prod.image)) {
-      imgSelect.value = prod.image;
-      if (imgCustom) {
-        imgCustom.style.display = 'none';
-        imgCustom.value = '';
-      }
-    } else {
-      imgSelect.value = 'custom';
-      if (imgCustom) {
-        imgCustom.style.display = 'block';
-        imgCustom.value = prod.image || '';
-      }
-    }
+  // Cargar lista de imágenes
+  if (Array.isArray(prod.images) && prod.images.length > 0) {
+    uploadedImagesEdit = [...prod.images];
+  } else if (prod.image) {
+    uploadedImagesEdit = [prod.image];
+  } else {
+    uploadedImagesEdit = ['assets/images/prod_mate_imperial.jpg'];
   }
+  renderUploadedImagesPreview('edit');
 
   // Descripción y specs
   let fullProd = (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA.find(p => p.id === prod.id) : null) || prod;
@@ -755,31 +857,9 @@ function closeEditProductModal() {
   if (modal) modal.classList.remove('active');
 }
 
-function onEditProductImageChange() {
-  const select = document.getElementById('edit-prod-img-select');
-  const customInput = document.getElementById('edit-prod-img-custom');
-  const preview = document.getElementById('edit-prod-preview-thumb');
-  if (!select || !preview) return;
-
-  if (select.value === 'custom') {
-    if (customInput) {
-      customInput.style.display = 'block';
-      if (customInput.value.trim()) {
-        preview.src = customInput.value.trim();
-      }
-    }
-  } else {
-    if (customInput) customInput.style.display = 'none';
-    preview.src = select.value;
-  }
-}
-
-function onEditProductCustomImgInput() {
-  const customInput = document.getElementById('edit-prod-img-custom');
-  const preview = document.getElementById('edit-prod-preview-thumb');
-  if (customInput && preview && customInput.value.trim()) {
-    preview.src = customInput.value.trim();
-  }
+function deleteProductFromModal() {
+  const id = document.getElementById('edit-product-id')?.value;
+  if (id) deleteProduct(id);
 }
 
 function saveProductEdits() {
@@ -788,6 +868,7 @@ function saveProductEdits() {
 
   const name = document.getElementById('edit-prod-name')?.value.trim();
   const category = document.getElementById('edit-prod-category')?.value;
+  const subcategory = document.getElementById('edit-prod-subcategory')?.value || '';
   const price = parseInt(document.getElementById('edit-prod-price')?.value, 10);
   const origPriceVal = document.getElementById('edit-prod-orig-price')?.value;
   const origPrice = origPriceVal ? parseInt(origPriceVal, 10) : null;
@@ -796,9 +877,8 @@ function saveProductEdits() {
   const stock = parseInt(document.getElementById('edit-prod-stock')?.value, 10);
   const minStock = parseInt(document.getElementById('edit-prod-min-stock')?.value, 10) || 5;
 
-  const imgSelect = document.getElementById('edit-prod-img-select')?.value;
-  const imgCustom = document.getElementById('edit-prod-img-custom')?.value.trim();
-  const image = (imgSelect === 'custom' && imgCustom) ? imgCustom : (imgSelect || 'assets/images/prod_mate_imperial.jpg');
+  const mainImage = uploadedImagesEdit.length > 0 ? uploadedImagesEdit[0] : 'assets/images/prod_mate_imperial.jpg';
+  const allImages = uploadedImagesEdit.length > 0 ? [...uploadedImagesEdit] : [mainImage];
 
   const desc = document.getElementById('edit-prod-desc')?.value.trim();
   const specMaterial = document.getElementById('edit-prod-spec-material')?.value.trim();
@@ -828,12 +908,14 @@ function saveProductEdits() {
   inv[id].name = name;
   inv[id].category = category;
   inv[id].categoryName = categoryName;
+  inv[id].subcategory = subcategory;
   inv[id].price = price;
   inv[id].originalPrice = origPrice;
   inv[id].stock = stock;
   inv[id].minStock = minStock;
   inv[id].inStock = stock > 0;
-  inv[id].image = image;
+  inv[id].image = mainImage;
+  inv[id].images = allImages;
   inv[id].badge = badge;
   inv[id].badgeType = badgeType;
   inv[id].description = desc;
@@ -847,12 +929,14 @@ function saveProductEdits() {
       name,
       category,
       categoryName,
+      subcategory,
       price,
       originalPrice,
       stock,
       minStock,
       inStock: stock > 0,
-      image,
+      image: mainImage,
+      images: allImages,
       badge,
       badgeType,
       description: desc,
@@ -875,12 +959,14 @@ function saveProductEdits() {
       cp.name = name;
       cp.category = category;
       cp.categoryName = categoryName;
+      cp.subcategory = subcategory;
       cp.price = price;
       cp.originalPrice = origPrice;
       cp.stock = stock;
       cp.minStock = minStock;
       cp.inStock = stock > 0;
-      cp.image = image;
+      cp.image = mainImage;
+      cp.images = allImages;
       cp.badge = badge;
       cp.badgeType = badgeType;
       cp.description = desc;
@@ -899,12 +985,14 @@ function saveProductEdits() {
       p.name = name;
       p.category = category;
       p.categoryName = categoryName;
+      p.subcategory = subcategory;
       p.price = price;
       p.originalPrice = origPrice;
       p.stock = stock;
       p.minStock = minStock;
       p.inStock = stock > 0;
-      p.image = image;
+      p.image = mainImage;
+      p.images = allImages;
       p.badge = badge;
       p.badgeType = badgeType;
       if (desc) p.description = desc;
@@ -962,11 +1050,9 @@ function openCreateProductModal() {
   const form = document.getElementById('new-product-form');
   if (form) form.reset();
 
-  const preview = document.getElementById('new-prod-img-preview');
-  if (preview) preview.src = 'assets/images/prod_mate_imperial.jpg';
-
-  const customInput = document.getElementById('new-prod-img-custom');
-  if (customInput) customInput.style.display = 'none';
+  uploadedImagesNew = [];
+  renderUploadedImagesPreview('new');
+  onCategorySelectChange('new');
 
   modal.classList.add('active');
 }
@@ -976,44 +1062,19 @@ function closeCreateProductModal() {
   if (modal) modal.classList.remove('active');
 }
 
-function onNewProductImageChange() {
-  const select = document.getElementById('new-prod-img-select');
-  const customInput = document.getElementById('new-prod-img-custom');
-  const preview = document.getElementById('new-prod-img-preview');
-  if (!select || !preview) return;
-
-  if (select.value === 'custom') {
-    if (customInput) {
-      customInput.style.display = 'block';
-      if (customInput.value.trim()) {
-        preview.src = customInput.value.trim();
-      }
-    }
-  } else {
-    if (customInput) customInput.style.display = 'none';
-    preview.src = select.value;
-  }
-}
-
-function onNewProductCustomImgInput() {
-  const customInput = document.getElementById('new-prod-img-custom');
-  const preview = document.getElementById('new-prod-img-preview');
-  if (customInput && preview && customInput.value.trim()) {
-    preview.src = customInput.value.trim();
-  }
-}
-
 function handleCreateProduct() {
   const name = document.getElementById('new-prod-name')?.value.trim();
   const category = document.getElementById('new-prod-category')?.value;
+  const subcategory = document.getElementById('new-prod-subcategory')?.value || '';
   const price = parseInt(document.getElementById('new-prod-price')?.value, 10);
   const origPriceVal = document.getElementById('new-prod-orig-price')?.value;
   const origPrice = origPriceVal ? parseInt(origPriceVal, 10) : null;
   const badge = document.getElementById('new-prod-badge')?.value.trim();
   const badgeType = document.getElementById('new-prod-badge-type')?.value || 'new';
-  const imgSelect = document.getElementById('new-prod-img-select')?.value;
-  const imgCustom = document.getElementById('new-prod-img-custom')?.value.trim();
-  const image = (imgSelect === 'custom' && imgCustom) ? imgCustom : (imgSelect || 'assets/images/prod_mate_imperial.jpg');
+
+  const mainImage = uploadedImagesNew.length > 0 ? uploadedImagesNew[0] : 'assets/images/prod_mate_imperial.jpg';
+  const allImages = uploadedImagesNew.length > 0 ? [...uploadedImagesNew] : [mainImage];
+
   const desc = document.getElementById('new-prod-desc')?.value.trim();
   const specMaterial = document.getElementById('new-prod-spec-material')?.value.trim();
   const specVirola = document.getElementById('new-prod-spec-virola')?.value.trim();
@@ -1041,13 +1102,13 @@ function handleCreateProduct() {
     name: name,
     category: category,
     categoryName: catNamesMap[category] || category.toUpperCase(),
+    subcategory: subcategory,
     price: price,
     originalPrice: origPrice && origPrice > price ? origPrice : null,
     badge: badge || (origPrice && origPrice > price ? 'OFERTA' : 'NUEVO'),
     badgeType: badgeType,
-    rating: 5.0,
-    reviewsCount: 1,
-    image: image,
+    image: mainImage,
+    images: allImages,
     description: desc,
     specs: {
       material: specMaterial || 'Material artesanal de primera calidad',
@@ -1081,8 +1142,10 @@ function handleCreateProduct() {
     name: newProduct.name,
     category: newProduct.category,
     categoryName: newProduct.categoryName,
+    subcategory: newProduct.subcategory,
     price: newProduct.price,
     image: newProduct.image,
+    images: newProduct.images,
     stock: stock,
     minStock: minStock,
     inStock: stock > 0,
@@ -1102,7 +1165,7 @@ function handleCreateProduct() {
     renderCategoriesGrid();
   }
 
-  logAuditAction('Carga de Producto', `Nuevo producto creado: "${newProduct.name}" (${newProduct.categoryName}) con ${stock} un.`);
+  logAuditAction('Carga de Producto', `Nuevo producto creado: "${newProduct.name}" (${newProduct.categoryName} - ${subcategory || 'General'}) con ${stock} un.`);
   showAdminToast(`¡"${newProduct.name}" publicado exitosamente!`, 'fa-circle-check');
 }
 
@@ -1398,7 +1461,7 @@ function renderOrdersTable() {
             <button type="button" class="btn-table-action" onclick="openOrderDetailModal('${order.id}')" title="Ver Detalle / Remito">
               <i class="fas fa-eye"></i>
             </button>
-            <button type="button" class="btn-table-action" onclick="contactCustomerWhatsApp('${order.customerPhone || '5493543600000'}', '${order.id}', '${order.customerName || 'Cliente'}', '${order.status}')" title="Contactar por WhatsApp">
+            <button type="button" class="btn-table-action" onclick="contactCustomerWhatsApp('${order.customerPhone || '5493513830111'}', '${order.id}', '${order.customerName || 'Cliente'}', '${order.status}')" title="Contactar por WhatsApp">
               <i class="fab fa-whatsapp" style="color: #27ae60;"></i>
             </button>
           </div>
@@ -1498,7 +1561,7 @@ function openOrderDetailModal(orderId) {
   // Set WhatsApp button handler
   const btnWa = document.getElementById('btn-modal-whatsapp-contact');
   if (btnWa) {
-    btnWa.onclick = () => contactCustomerWhatsApp(order.customerPhone || '5493543600000', order.id, order.customerName || 'Cliente', order.status);
+    btnWa.onclick = () => contactCustomerWhatsApp(order.customerPhone || '5493513830111', order.id, order.customerName || 'Cliente', order.status);
   }
 
   document.getElementById('order-detail-modal').classList.add('active');
@@ -1509,7 +1572,7 @@ function closeOrderDetailModal() {
 }
 
 function contactCustomerWhatsApp(phone, orderId, name, status) {
-  const cleanPhone = (phone || '').replace(/\D/g, '') || '5493543600000';
+  const cleanPhone = (phone || '').replace(/\D/g, '') || '5493513830111';
   const msg = `¡Hola ${name}! Te escribimos desde *Mates Río* respecto a tu pedido *#${orderId}*. Tu orden se encuentra en estado: *${status}*. Si necesitás realizar alguna consulta o requerimiento para el taller, estamos a tu disposición. ¡Muchas gracias!`;
   const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
@@ -1748,17 +1811,10 @@ function initUsersDB() {
   if (!users) {
     users = [
       {
-        name: "Administrador Mates Río",
-        email: "admin@matesrio.com",
-        phone: "1134567890",
-        password: "admin",
-        role: "admin"
-      },
-      {
-        name: "Taller & Grabados",
-        email: "taller@matesrio.com",
-        phone: "1134567891",
-        password: "admin",
+        name: "Administrador General Mates Río",
+        email: "mates.rio6@gmail.com",
+        phone: "3513830111",
+        password: "matesriomanavella6",
         role: "admin"
       },
       {
@@ -1932,4 +1988,682 @@ function showAdminToast(message, icon = 'fa-info-circle') {
     toast.style.transition = 'all 0.3s ease';
     setTimeout(() => toast.remove(), 300);
   }, 3000);
+}
+
+// ==========================================================================
+// 12. COMPRAS A PROVEEDORES (COSTOS & TALLER)
+// ==========================================================================
+function renderPurchasesSection() {
+  const purchases = typeof getSupplierPurchases === 'function' ? getSupplierPurchases() : [];
+  const tbody = document.getElementById('purchases-table-tbody');
+  
+  // Calculate KPIs
+  let totalCost = 0;
+  let totalUnits = 0;
+  let pendingCount = 0;
+
+  purchases.forEach(p => {
+    totalCost += Number(p.totalCost || (p.quantity * p.unitCost) || 0);
+    totalUnits += Number(p.quantity || 0);
+    if (p.status !== 'Recibido') pendingCount++;
+  });
+
+  const kpiTotal = document.getElementById('kpi-purchases-total');
+  const kpiUnits = document.getElementById('kpi-purchases-units');
+  const kpiPending = document.getElementById('kpi-purchases-pending');
+
+  if (kpiTotal) kpiTotal.textContent = formatARS(totalCost);
+  if (kpiUnits) kpiUnits.textContent = `${totalUnits} un.`;
+  if (kpiPending) kpiPending.textContent = `${pendingCount} lotes`;
+
+  if (!tbody) return;
+
+  if (purchases.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 28px; color: var(--admin-text-muted);">Sin compras a proveedores registradas. Hacé clic en "Registrar Nueva Compra".</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = purchases.map(p => {
+    const statusClass = (p.status || '').toLowerCase().includes('recibido') ? 'status-recibido' : ((p.status || '').toLowerCase().includes('camino') ? 'status-camino' : 'status-pendiente');
+    return `
+      <tr>
+        <td style="font-weight: 700; font-family: monospace; font-size: 0.8rem; color: var(--admin-leather);">${p.id}</td>
+        <td style="font-size: 0.78rem; color: var(--admin-text-muted);">${p.date}</td>
+        <td><strong>${p.supplier}</strong></td>
+        <td>${p.item}</td>
+        <td><span class="badge-stock stock-good" style="font-size: 0.7rem;">${p.category}</span></td>
+        <td style="font-weight: 700;">${p.quantity} un.</td>
+        <td style="font-size: 0.82rem;">${formatARS(p.unitCost)}</td>
+        <td style="font-weight: 800; color: var(--admin-text-main); font-size: 0.92rem;">${formatARS(p.totalCost)}</td>
+        <td><span class="badge-purchase ${statusClass}">${p.status}</span></td>
+        <td>
+          <button type="button" class="btn-admin-icon" onclick="deletePurchase('${p.id}')" title="Eliminar registro" style="color: var(--admin-danger);">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function openCreatePurchaseModal() {
+  const modal = document.getElementById('new-purchase-modal');
+  if (!modal) return;
+  const form = document.getElementById('new-purchase-form');
+  if (form) form.reset();
+  calculatePurchaseTotal();
+  modal.classList.add('active');
+}
+
+function closeCreatePurchaseModal() {
+  const modal = document.getElementById('new-purchase-modal');
+  if (!modal) return;
+  modal.classList.remove('active');
+}
+
+function calculatePurchaseTotal() {
+  const qty = parseInt(document.getElementById('purchase-qty')?.value, 10) || 0;
+  const cost = parseInt(document.getElementById('purchase-unit-cost')?.value, 10) || 0;
+  const totalDisplay = document.getElementById('purchase-total-display');
+  if (totalDisplay) {
+    totalDisplay.textContent = formatARS(qty * cost);
+  }
+}
+
+function handleCreatePurchase() {
+  const supplier = document.getElementById('purchase-supplier')?.value.trim();
+  const item = document.getElementById('purchase-item')?.value.trim();
+  const category = document.getElementById('purchase-category')?.value;
+  const status = document.getElementById('purchase-status')?.value;
+  const qty = parseInt(document.getElementById('purchase-qty')?.value, 10);
+  const unitCost = parseInt(document.getElementById('purchase-unit-cost')?.value, 10);
+  const notes = document.getElementById('purchase-notes')?.value.trim();
+
+  if (!supplier || !item || isNaN(qty) || qty <= 0 || isNaN(unitCost) || unitCost <= 0) {
+    alert('Por favor completá los campos obligatorios de la compra con valores válidos.');
+    return;
+  }
+
+  const purchases = typeof getSupplierPurchases === 'function' ? getSupplierPurchases() : [];
+  const newPurchase = {
+    id: `COM-${Date.now().toString().slice(-4)}`,
+    date: new Date().toISOString().slice(0, 10),
+    supplier,
+    item,
+    category,
+    quantity: qty,
+    unitCost,
+    totalCost: qty * unitCost,
+    status,
+    notes: notes || ''
+  };
+
+  purchases.unshift(newPurchase);
+  if (typeof saveSupplierPurchases === 'function') {
+    saveSupplierPurchases(purchases);
+  }
+
+  closeCreatePurchaseModal();
+  renderPurchasesSection();
+  logAuditAction('Registro de Compra', `Compra ${newPurchase.id} a ${supplier}: ${qty} un. de ${item} (${formatARS(newPurchase.totalCost)})`);
+  showAdminToast(`¡Compra registrada con éxito!`, 'fa-truck-ramp-box');
+}
+
+function deletePurchase(purchaseId) {
+  if (!confirm(`¿Deseás eliminar la compra ${purchaseId}?`)) return;
+  let purchases = typeof getSupplierPurchases === 'function' ? getSupplierPurchases() : [];
+  purchases = purchases.filter(p => p.id !== purchaseId);
+  if (typeof saveSupplierPurchases === 'function') {
+    saveSupplierPurchases(purchases);
+  }
+  renderPurchasesSection();
+  showAdminToast(`Registro de compra eliminado`, 'fa-trash-alt');
+}
+
+// ==========================================================================
+// 13. DISEÑO & GESTIÓN DEL INICIO WEB (BANNERS, CATEGORÍAS & ANUNCIOS)
+// ==========================================================================
+let currentDesignTab = 'slides';
+
+function switchDesignTab(tabName) {
+  currentDesignTab = tabName;
+
+  document.querySelectorAll('.home-design-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.id === `tab-btn-${tabName}`);
+  });
+
+  const panels = ['slides', 'categories', 'occasions'];
+  panels.forEach(p => {
+    const panel = document.getElementById(`design-panel-${p}`);
+    if (panel) {
+      if (p === tabName) {
+        panel.style.display = 'block';
+        panel.classList.add('active');
+      } else {
+        panel.style.display = 'none';
+        panel.classList.remove('active');
+      }
+    }
+  });
+
+  if (tabName === 'slides') renderAdminSlidesList();
+  if (tabName === 'categories') renderAdminCategoriesGrid();
+  if (tabName === 'occasions') renderOccasionSettings();
+}
+
+function renderHomeDesignSection() {
+  switchDesignTab(currentDesignTab || 'slides');
+}
+
+// --- 13.1 HERO BANNERS ---
+function renderAdminSlidesList() {
+  const container = document.getElementById('admin-slides-list');
+  if (!container) return;
+
+  const slides = typeof getActiveHomeSlides === 'function' ? getActiveHomeSlides() : [];
+
+  if (slides.length === 0) {
+    container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--admin-text-muted);">Sin slides configurados. Hacé clic en "Agregar Nuevo Banner".</p>`;
+    return;
+  }
+
+  container.innerHTML = slides.map(slide => `
+    <div style="background: #ffffff; border: 1.5px solid var(--admin-border); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;">
+      <div style="height: 140px; position: relative; overflow: hidden; background: #222;">
+        <img src="${slide.image}" alt="${slide.title}" style="width: 100%; height: 100%; object-fit: cover;" />
+        <span style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #c5a059; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800;">
+          ${slide.tag || 'Slide'}
+        </span>
+      </div>
+      <div style="padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <h4 style="font-size: 0.95rem; font-weight: 800; margin-bottom: 6px; color: var(--admin-text-main);">${slide.title}</h4>
+          <p style="font-size: 0.78rem; color: var(--admin-text-muted); line-height: 1.4; margin-bottom: 8px;">${slide.subtitle || ''}</p>
+          <div style="font-size: 0.74rem; color: var(--admin-leather); font-weight: 700;">
+            <i class="fas fa-link"></i> ${slide.btnText || 'Ver Más'} (${slide.btnLink || 'index.html'})
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--admin-border);">
+          <button type="button" class="btn-admin btn-admin-outline" style="padding: 6px 12px; font-size: 0.78rem;" onclick="openEditSlideModal('${slide.id}')">
+            <i class="fas fa-edit"></i> Editar
+          </button>
+          <button type="button" class="btn-admin btn-admin-danger" style="padding: 6px 12px; font-size: 0.78rem;" onclick="deleteSlide('${slide.id}')" title="Eliminar banner">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openAddSlideModal() {
+  const modal = document.getElementById('slide-modal');
+  if (!modal) return;
+  const form = document.getElementById('slide-editor-form');
+  if (form) form.reset();
+  const idEl = document.getElementById('slide-id');
+  if (idEl) idEl.value = '';
+  const preview = document.getElementById('slide-img-preview');
+  if (preview) preview.src = 'assets/images/banner_1.jpg';
+  modal.classList.add('active');
+}
+
+function openEditSlideModal(slideId) {
+  const slides = typeof getActiveHomeSlides === 'function' ? getActiveHomeSlides() : [];
+  const slide = slides.find(s => s.id === slideId);
+  if (!slide) return;
+
+  const idEl = document.getElementById('slide-id');
+  if (idEl) idEl.value = slide.id;
+
+  const titleEl = document.getElementById('slide-title-input');
+  if (titleEl) titleEl.value = slide.title || '';
+
+  const subtitleEl = document.getElementById('slide-subtitle-input');
+  if (subtitleEl) subtitleEl.value = slide.subtitle || '';
+
+  const tagEl = document.getElementById('slide-tag-input');
+  if (tagEl) tagEl.value = slide.tag || '';
+
+  const btnTextEl = document.getElementById('slide-btn-text');
+  if (btnTextEl) btnTextEl.value = slide.btnText || '';
+
+  const btnLinkEl = document.getElementById('slide-btn-link');
+  if (btnLinkEl) btnLinkEl.value = slide.btnLink || '';
+
+  const imgUrlEl = document.getElementById('slide-img-url');
+  if (imgUrlEl) imgUrlEl.value = slide.image || '';
+
+  const preview = document.getElementById('slide-img-preview');
+  if (preview) preview.src = slide.image || 'assets/images/banner_1.jpg';
+
+  const modal = document.getElementById('slide-modal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeSlideModal() {
+  const modal = document.getElementById('slide-modal');
+  if (!modal) return;
+  modal.classList.remove('active');
+}
+
+function handleSlideFileSelect(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const url = e.target.result;
+    const preview = document.getElementById('slide-img-preview');
+    const input = document.getElementById('slide-img-url');
+    if (preview) preview.src = url;
+    if (input) input.value = url;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveSlideForm() {
+  const id = document.getElementById('slide-id')?.value;
+  const title = document.getElementById('slide-title-input')?.value.trim();
+  const subtitle = document.getElementById('slide-subtitle-input')?.value.trim();
+  const tag = document.getElementById('slide-tag-input')?.value.trim();
+  const btnText = document.getElementById('slide-btn-text')?.value.trim();
+  const btnLink = document.getElementById('slide-btn-link')?.value.trim();
+  const imgUrl = document.getElementById('slide-img-url')?.value.trim() || document.getElementById('slide-img-preview')?.src;
+
+  if (!title) {
+    alert('Por favor completá el título del banner.');
+    return;
+  }
+
+  let slides = typeof getActiveHomeSlides === 'function' ? getActiveHomeSlides() : [];
+
+  if (id) {
+    const s = slides.find(x => x.id === id);
+    if (s) {
+      s.title = title;
+      s.subtitle = subtitle;
+      s.tag = tag;
+      s.btnText = btnText;
+      s.btnLink = btnLink;
+      if (imgUrl) s.image = imgUrl;
+    }
+  } else {
+    slides.push({
+      id: `slide-${Date.now()}`,
+      title,
+      subtitle,
+      tag: tag || 'Novedad',
+      badge: '',
+      btnText: btnText || 'Ver Catálogo',
+      btnLink: btnLink || 'catalogo.html',
+      image: imgUrl || 'assets/images/banner_1.jpg'
+    });
+  }
+
+  if (typeof saveActiveHomeSlides === 'function') {
+    saveActiveHomeSlides(slides);
+  }
+
+  closeSlideModal();
+  renderAdminSlidesList();
+  showAdminToast('¡Banner del carrusel guardado con éxito!', 'fa-images');
+  logAuditAction('Diseño Web', `Banner de inicio "${title}" actualizado/creado.`);
+}
+
+function deleteSlide(slideId) {
+  let slides = typeof getActiveHomeSlides === 'function' ? getActiveHomeSlides() : [];
+  if (slides.length <= 1) {
+    alert('Debe quedar al menos 1 banner en el carrusel de inicio.');
+    return;
+  }
+  if (!confirm('¿Deseás eliminar este banner del inicio?')) return;
+  slides = slides.filter(s => s.id !== slideId);
+  if (typeof saveActiveHomeSlides === 'function') {
+    saveActiveHomeSlides(slides);
+  }
+  renderAdminSlidesList();
+  showAdminToast('Banner eliminado del carrusel', 'fa-trash-alt');
+}
+
+// --- 13.2 CATEGORÍAS & SUBCATEGORÍAS ---
+let currentEditingCatId = null;
+let currentEditingSubcats = [];
+
+function renderAdminCategoriesGrid() {
+  const container = document.getElementById('admin-categories-editor-grid');
+  if (!container) return;
+
+  const categories = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
+
+  container.innerHTML = categories.map(cat => {
+    const subcats = Array.isArray(cat.subcategories) ? cat.subcategories : [];
+    return `
+      <div style="background: #ffffff; border: 1.5px solid var(--admin-border); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;">
+        <div style="height: 120px; position: relative; overflow: hidden; background: #333;">
+          <img src="${cat.image}" alt="${cat.name}" style="width: 100%; height: 100%; object-fit: cover;" />
+          ${cat.badge ? `<span style="position: absolute; top: 10px; right: 10px; background: var(--admin-gold); color: #121212; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 0.68rem;">${cat.badge}</span>` : ''}
+          <div style="position: absolute; bottom: 8px; left: 10px; color: #fff; font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">
+            ${cat.name}
+          </div>
+        </div>
+        <div style="padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 8px;">
+              <i class="fas fa-layer-group"></i> ${cat.label || ''}
+            </div>
+            <div style="font-size: 0.76rem; font-weight: 700; color: var(--admin-leather); margin-bottom: 6px;">
+              Subcategorías activas (${subcats.length}):
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px;">
+              ${subcats.map(sc => `<span style="background: #faf8f5; border: 1px solid var(--admin-border); padding: 3px 8px; border-radius: 12px; font-size: 0.72rem; color: var(--admin-text-main); font-weight: 600;">${sc}</span>`).join('')}
+            </div>
+          </div>
+          <button type="button" class="btn-admin btn-admin-gold" style="width: 100%; justify-content: center; font-size: 0.82rem;" onclick="openCategoryModal('${cat.id}')">
+            <i class="fas fa-pen-to-square"></i> Modificar Categoría & Subcategorías
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openCategoryModal(catId) {
+  currentEditingCatId = catId;
+  const categories = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
+  const cat = categories.find(c => c.id === catId);
+  if (!cat) return;
+
+  const idEl = document.getElementById('cat-edit-id');
+  if (idEl) idEl.value = cat.id;
+
+  const nameEl = document.getElementById('cat-edit-name');
+  if (nameEl) nameEl.value = cat.name || '';
+
+  const badgeEl = document.getElementById('cat-edit-badge');
+  if (badgeEl) badgeEl.value = cat.badge || '';
+
+  const labelEl = document.getElementById('cat-edit-label');
+  if (labelEl) labelEl.value = cat.label || '';
+
+  currentEditingSubcats = Array.isArray(cat.subcategories) ? [...cat.subcategories] : [];
+  renderCatSubcatsChips();
+
+  const modal = document.getElementById('category-editor-modal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeCategoryModal() {
+  const modal = document.getElementById('category-editor-modal');
+  if (!modal) return;
+  modal.classList.remove('active');
+}
+
+function renderCatSubcatsChips() {
+  const container = document.getElementById('cat-edit-subcats-container');
+  if (!container) return;
+
+  if (currentEditingSubcats.length === 0) {
+    container.innerHTML = '<span style="font-size: 0.78rem; color: var(--admin-text-muted);">Sin subcategorías cargadas. Agregá una arriba.</span>';
+    return;
+  }
+
+  container.innerHTML = currentEditingSubcats.map((sc, idx) => `
+    <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid var(--admin-border); padding: 4px 10px; border-radius: 14px; font-size: 0.76rem; font-weight: 700; color: var(--admin-text-main);">
+      ${sc}
+      <button type="button" onclick="removeSubcatChip(${idx})" style="background: none; border: none; cursor: pointer; color: var(--admin-danger); padding: 0; line-height: 1;">
+        <i class="fas fa-times"></i>
+      </button>
+    </span>
+  `).join('');
+}
+
+function addNewSubcatChip() {
+  const input = document.getElementById('new-subcat-input');
+  if (!input) return;
+  const val = input.value.trim();
+  if (!val) return;
+  if (!currentEditingSubcats.includes(val)) {
+    currentEditingSubcats.push(val);
+    renderCatSubcatsChips();
+  }
+  input.value = '';
+}
+
+function removeSubcatChip(idx) {
+  currentEditingSubcats.splice(idx, 1);
+  renderCatSubcatsChips();
+}
+
+function saveCategoryEdits() {
+  if (!currentEditingCatId) return;
+
+  const name = document.getElementById('cat-edit-name')?.value.trim();
+  const badge = document.getElementById('cat-edit-badge')?.value.trim();
+  const label = document.getElementById('cat-edit-label')?.value.trim();
+
+  if (!name) {
+    alert('El nombre de la categoría es obligatorio.');
+    return;
+  }
+
+  let categories = typeof getActiveCategories === 'function' ? [...getActiveCategories()] : [...CATEGORIES_DATA];
+  const cat = categories.find(c => c.id === currentEditingCatId);
+
+  if (cat) {
+    cat.name = name;
+    cat.badge = badge;
+    cat.label = label;
+    cat.subcategories = [...currentEditingSubcats];
+
+    if (typeof saveActiveCategories === 'function') {
+      saveActiveCategories(categories);
+    }
+  }
+
+  closeCategoryModal();
+  renderAdminCategoriesGrid();
+  showAdminToast(`Categoría "${name}" actualizada correctamente`, 'fa-tags');
+  logAuditAction('Diseño Web', `Categoría "${name}" y sus subcategorías fueron modificadas.`);
+}
+
+// --- 13.3 ANUNCIO DE FECHAS ESPECIALES ---
+const OCCASION_PRESETS = {
+  mother: {
+    theme: 'mother',
+    badge: '🌸 DÍA DE LA MADRE',
+    title: '¡Especial Día de la Madre! Grabado personalizado de regalo',
+    subtitle: 'Hasta 3 cuotas sin interés y 10% OFF extra con transferencia',
+    btnText: 'Ver Regalos Materos 👉',
+    btnLink: 'promos.html'
+  },
+  father: {
+    theme: 'father',
+    badge: '🎩 DÍA DEL PADRE',
+    title: '¡Homenajeá a Papá con un Mate Imperial de Colección!',
+    subtitle: 'Envíos express a todo el país y caja de regalo incluida',
+    btnText: 'Elegir su Mate 👉',
+    btnLink: 'catalogo.html'
+  },
+  christmas: {
+    theme: 'christmas',
+    badge: '🎄 NAVIDAD & AÑO NUEVO',
+    title: '¡Celebrá las Fiestas con Mates Río! 15% OFF en Combos',
+    subtitle: 'Regalos únicos hechos a mano en las Sierras Chicas de Córdoba',
+    btnText: 'Ver Promociones 👉',
+    btnLink: 'promos.html'
+  },
+  halloween: {
+    theme: 'halloween',
+    badge: '🎃 HALLOWEEN MATERO',
+    title: '¡Edición Noche Criolla! Descuentos embrujados en Mates Seleccionados',
+    subtitle: 'Aprovechá hasta agotar stock de lotes especiales',
+    btnText: 'Aprovechar Ofertas 👉',
+    btnLink: 'catalogo.html'
+  },
+  cyber: {
+    theme: 'cyber',
+    badge: '⚡ BLACK FRIDAY MATERO',
+    title: '¡Cyber & Black Days! Hasta 30% OFF y 3 cuotas sin interés',
+    subtitle: 'La mejor orfebrería criolla con precios irrepetibles',
+    btnText: 'Comprar Ahora 👉',
+    btnLink: 'catalogo.html'
+  },
+  custom: {
+    theme: 'custom',
+    badge: '⭐ EDICIÓN ESPECIAL',
+    title: '¡Nueva Colección 2026 de Mates Río!',
+    subtitle: 'Calabaza gruesa, cuero legítimo y orfebrería de alpaca',
+    btnText: 'Descubrir Novedades 👉',
+    btnLink: 'catalogo.html'
+  }
+};
+
+function renderOccasionSettings() {
+  const config = typeof getSpecialOccasionConfig === 'function' ? getSpecialOccasionConfig() : null;
+  const activeToggle = document.getElementById('occasion-active-toggle');
+  const statusLabel = document.getElementById('occasion-status-label');
+
+  const def = config || OCCASION_PRESETS.mother;
+
+  if (activeToggle) {
+    activeToggle.checked = !!(config && config.active);
+    if (statusLabel) {
+      statusLabel.textContent = activeToggle.checked ? 'Anuncio Activado en la Web' : 'Anuncio Desactivado';
+      statusLabel.style.color = activeToggle.checked ? 'var(--admin-success)' : 'var(--admin-text-muted)';
+    }
+  }
+
+  const badgeIn = document.getElementById('occasion-badge-input');
+  if (badgeIn) badgeIn.value = def.badge || '';
+
+  const themeIn = document.getElementById('occasion-theme-select');
+  if (themeIn) themeIn.value = def.theme || 'mother';
+
+  const titleIn = document.getElementById('occasion-title-input');
+  if (titleIn) titleIn.value = def.title || '';
+
+  const subIn = document.getElementById('occasion-subtitle-input');
+  if (subIn) subIn.value = def.subtitle || '';
+
+  const btnTextIn = document.getElementById('occasion-btn-text');
+  if (btnTextIn) btnTextIn.value = def.btnText || '';
+
+  const btnLinkIn = document.getElementById('occasion-btn-link');
+  if (btnLinkIn) btnLinkIn.value = def.btnLink || '';
+
+  updateOccasionLivePreview();
+}
+
+function selectOccasionPreset(presetKey) {
+  const preset = OCCASION_PRESETS[presetKey];
+  if (!preset) return;
+
+  const badgeIn = document.getElementById('occasion-badge-input');
+  if (badgeIn) badgeIn.value = preset.badge;
+
+  const themeIn = document.getElementById('occasion-theme-select');
+  if (themeIn) themeIn.value = preset.theme;
+
+  const titleIn = document.getElementById('occasion-title-input');
+  if (titleIn) titleIn.value = preset.title;
+
+  const subIn = document.getElementById('occasion-subtitle-input');
+  if (subIn) subIn.value = preset.subtitle;
+
+  const btnTextIn = document.getElementById('occasion-btn-text');
+  if (btnTextIn) btnTextIn.value = preset.btnText;
+
+  const btnLinkIn = document.getElementById('occasion-btn-link');
+  if (btnLinkIn) btnLinkIn.value = preset.btnLink;
+
+  updateOccasionLivePreview();
+  showAdminToast(`Plantilla "${preset.badge}" cargada`, 'fa-wand-magic-sparkles');
+}
+
+function toggleOccasionActive(checked) {
+  const statusLabel = document.getElementById('occasion-status-label');
+  if (statusLabel) {
+    statusLabel.textContent = checked ? 'Anuncio Activado en la Web' : 'Anuncio Desactivado';
+    statusLabel.style.color = checked ? 'var(--admin-success)' : 'var(--admin-text-muted)';
+  }
+}
+
+function updateOccasionLivePreview() {
+  const previewBox = document.getElementById('occasion-preview-container');
+  const badgeEl = document.getElementById('preview-occasion-badge');
+  const titleEl = document.getElementById('preview-occasion-title');
+  const subEl = document.getElementById('preview-occasion-subtitle');
+  const btnEl = document.getElementById('preview-occasion-btn');
+
+  const theme = document.getElementById('occasion-theme-select')?.value || 'mother';
+  const badge = document.getElementById('occasion-badge-input')?.value || 'ANUNCIO';
+  const title = document.getElementById('occasion-title-input')?.value || 'Título del Anuncio';
+  const sub = document.getElementById('occasion-subtitle-input')?.value || '';
+  const btnText = document.getElementById('occasion-btn-text')?.value || 'Ver Más';
+
+  if (previewBox) {
+    previewBox.className = `special-occasion-banner occasion-theme-${theme}`;
+  }
+  if (badgeEl) badgeEl.textContent = badge;
+  if (titleEl) titleEl.textContent = title;
+  if (subEl) subEl.textContent = sub;
+  if (btnEl) btnEl.textContent = btnText;
+}
+
+function saveOccasionSettings() {
+  const active = !!document.getElementById('occasion-active-toggle')?.checked;
+  const theme = document.getElementById('occasion-theme-select')?.value || 'mother';
+  const badge = document.getElementById('occasion-badge-input')?.value.trim() || 'ANUNCIO';
+  const title = document.getElementById('occasion-title-input')?.value.trim() || '¡Aprovechá la fecha especial!';
+  const subtitle = document.getElementById('occasion-subtitle-input')?.value.trim() || '';
+  const btnText = document.getElementById('occasion-btn-text')?.value.trim() || 'Ver Promociones';
+  const btnLink = document.getElementById('occasion-btn-link')?.value.trim() || 'promos.html';
+
+  const config = {
+    active,
+    theme,
+    badge,
+    title,
+    subtitle,
+    btnText,
+    btnLink
+  };
+
+  if (typeof saveSpecialOccasionConfig === 'function') {
+    saveSpecialOccasionConfig(config);
+  }
+
+  logAuditAction('Diseño Web', `Anuncio de Fecha Especial (${badge}) ${active ? 'ACTIVADO' : 'desactivado'}.`);
+  showAdminToast(`Configuración de anuncio guardada (${active ? 'Activo' : 'Inactivo'})`, 'fa-circle-check');
+}
+
+// ==========================================================================
+// 14. ADMIN THEME MODE (MODO CLARO / MODO OSCURO)
+// ==========================================================================
+function initAdminThemeMode() {
+  const saved = localStorage.getItem('mates_rio_admin_theme') || 'light';
+  applyAdminThemeMode(saved, false);
+}
+
+function applyAdminThemeMode(mode, notify = false) {
+  const isDark = mode === 'dark';
+  document.body.classList.toggle('admin-dark-mode', isDark);
+  localStorage.setItem('mates_rio_admin_theme', mode);
+
+  const icon = document.getElementById('admin-theme-icon');
+  const label = document.getElementById('admin-theme-label');
+  const btn = document.getElementById('admin-theme-toggle-btn');
+
+  if (icon) icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+  if (label) label.textContent = isDark ? 'Modo Claro' : 'Modo Oscuro';
+  if (btn) btn.setAttribute('title', isDark ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro');
+
+  if (notify && typeof showAdminToast === 'function') {
+    showAdminToast(isDark ? 'Panel en Modo Oscuro 🌙' : 'Panel en Modo Claro ☀️', isDark ? 'fa-moon' : 'fa-sun');
+  }
+}
+
+function toggleAdminThemeMode() {
+  const isCurrentlyDark = document.body.classList.contains('admin-dark-mode');
+  applyAdminThemeMode(isCurrentlyDark ? 'light' : 'dark', true);
 }

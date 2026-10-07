@@ -482,15 +482,219 @@ const PRODUCTS_DATA = [
   }
 ];
 
-// Categorías del sitio exactamente como lo pidió el cliente
+// Categorías del sitio con soporte de subcategorías configurables
 const CATEGORIES_DATA = [
-  { id: "promos", name: "PROMOS", label: "Combos & Ofertas", image: "assets/images/cat_promos.jpg", count: 3, badge: "Hasta 25% OFF" },
-  { id: "mates", name: "MATES", label: "Imperiales & Torpedos", image: "assets/images/cat_mates.jpg", count: 4, badge: "Más Vendidos" },
-  { id: "termos", name: "TERMOS", label: "Acero Inox & Cuero", image: "assets/images/cat_termos.jpg", count: 3, badge: "Térmicos 24hs" },
-  { id: "accesorios", name: "ACCESORIOS", label: "Bombillas & Yerberas", image: "assets/images/cat_accesorios.jpg", count: 4, badge: "Alpaca Pura" },
-  { id: "yerbas", name: "YERBAS", label: "Barbaquá & Orgánicas", image: "assets/images/cat_yerbas.jpg", count: 3, badge: "Selección Autor" },
-  { id: "equipos", name: "EQUIPOS DE MATE", label: "Mochilas & Canastas", image: "assets/images/cat_equipos.jpg", count: 3, badge: "Cuero Genuino" }
+  { 
+    id: "promos", 
+    name: "PROMOS", 
+    label: "Combos & Ofertas", 
+    image: "assets/images/cat_promos.jpg", 
+    count: 5, 
+    badge: "Hasta 25% OFF",
+    subcategories: ["Combos Completos", "Sets con Matera", "Dúos Materos", "Ediciones Especiales"]
+  },
+  { 
+    id: "mates", 
+    name: "MATES", 
+    label: "Imperiales & Torpedos", 
+    image: "assets/images/cat_mates.jpg", 
+    count: 4, 
+    badge: "Más Vendidos",
+    subcategories: ["Imperiales", "Torpedos", "Camioneros", "Algarrobo", "Pampa / Silicona"]
+  },
+  { 
+    id: "termos", 
+    name: "TERMOS", 
+    label: "Acero Inox & Cuero", 
+    image: "assets/images/cat_termos.jpg", 
+    count: 3, 
+    badge: "Térmicos 24hs",
+    subcategories: ["Media Manija 1L", "Termos de Cuero", "Adventure Gran Capacidad", "Repuestos & Tapones"]
+  },
+  { 
+    id: "accesorios", 
+    name: "ACCESORIOS", 
+    label: "Bombillas & Yerberas", 
+    image: "assets/images/cat_accesorios.jpg", 
+    count: 4, 
+    badge: "Alpaca Pura",
+    subcategories: ["Bombillas de Alpaca", "Bombillas de Acero", "Yerberas de Cuero", "Despolvilladores"]
+  },
+  { 
+    id: "yerbas", 
+    name: "YERBAS", 
+    label: "Barbaquá & Orgánicas", 
+    image: "assets/images/cat_yerbas.jpg", 
+    count: 3, 
+    badge: "Selección Autor",
+    subcategories: ["Barbaquá Artesanal", "Orgánicas Certificadas", "Compuestas & Hierbas", "Edición Especial"]
+  },
+  { 
+    id: "equipos", 
+    name: "EQUIPOS DE MATE", 
+    label: "Mochilas & Canastas", 
+    image: "assets/images/cat_equipos.jpg", 
+    count: 3, 
+    badge: "Cuero Genuino",
+    subcategories: ["Mochilas Materas", "Canastas de Cuero", "Bolsos Materos", "Maderas & Accesorios"]
+  }
 ];
+
+// Slides iniciales para el Carrusel / Hero del Inicio Web
+const DEFAULT_HOME_SLIDES = [
+  {
+    id: "slide-1",
+    tag: "Colección 2026 • Sierras Chicas",
+    title: "Mates Artesanales con Alma Criolla",
+    subtitle: "Calabaza gruesa seleccionada, forrado a mano en cuero vacuno y virolas en alpaca maciza cinceladas en nuestro taller de Córdoba.",
+    badge: "HASTA 3 CUOTAS SIN INTERÉS",
+    image: "assets/images/banner_1.jpg",
+    btnText: "Ver Catálogo Completo",
+    btnLink: "catalogo.html"
+  },
+  {
+    id: "slide-2",
+    tag: "Orfebrería Exclusiva",
+    title: "Grabados Láser & Cincelados Únicos",
+    subtitle: "Personalizá la virola de tu mate con iniciales, fechas especiales, escudos de fútbol o el logo de tu empresa.",
+    badge: "10% OFF EXTRA CON TRANSFERENCIA",
+    image: "assets/images/banner_2.jpg",
+    btnText: "Diseñar mi Mate",
+    btnLink: "personaliza-tu-mate.html"
+  },
+  {
+    id: "slide-3",
+    tag: "Equipamiento Completo",
+    title: "Termos Térmicos 24hs & Mochilas de Cuero",
+    subtitle: "Llevá tu ritual a todos lados con nuestra línea de termos de acero doble pared y mochilas de cuero genuino.",
+    badge: "ENVÍOS A TODO EL PAÍS",
+    image: "assets/images/banner_3.jpg",
+    btnText: "Ver Equipos & Combos",
+    btnLink: "catalogo.html?categoria=equipos"
+  }
+];
+
+// Helper para obtener y guardar categorías (con soporte de personalización en Admin)
+function getActiveCategories() {
+  if (typeof localStorage === 'undefined') return CATEGORIES_DATA;
+  try {
+    const raw = localStorage.getItem('mates_rio_categories');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {
+    console.warn('Error leyendo categorías de localStorage', e);
+  }
+  return CATEGORIES_DATA;
+}
+
+function saveActiveCategories(categories) {
+  if (typeof localStorage === 'undefined') return;
+  localStorage.setItem('mates_rio_categories', JSON.stringify(categories));
+}
+
+// Helper para obtener y guardar Slides del Inicio
+function getActiveHomeSlides() {
+  if (typeof localStorage === 'undefined') return DEFAULT_HOME_SLIDES;
+  try {
+    const raw = localStorage.getItem('mates_rio_home_slides');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (e) {
+    console.warn('Error leyendo slides de localStorage', e);
+  }
+  return DEFAULT_HOME_SLIDES;
+}
+
+function saveActiveHomeSlides(slides) {
+  if (typeof localStorage === 'undefined') return;
+  localStorage.setItem('mates_rio_home_slides', JSON.stringify(slides));
+}
+
+// Helper para Anuncios de Fechas Especiales (Día de la Madre, Padre, Navidad, Halloween, etc.)
+function getSpecialOccasionConfig() {
+  if (typeof localStorage === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem('mates_rio_special_occasion');
+    if (raw) {
+      return JSON.parse(raw);
+    }
+  } catch (e) {
+    console.warn('Error leyendo anuncio de fecha especial', e);
+  }
+  return null;
+}
+
+function saveSpecialOccasionConfig(config) {
+  if (typeof localStorage === 'undefined') return;
+  if (!config) {
+    localStorage.removeItem('mates_rio_special_occasion');
+  } else {
+    localStorage.setItem('mates_rio_special_occasion', JSON.stringify(config));
+  }
+}
+
+// Helper para Compras a Proveedores (Gestión de Costos del Dueño)
+const DEFAULT_SUPPLIER_PURCHASES = [
+  {
+    id: "COM-101",
+    date: "2026-09-28",
+    supplier: "Orfebrería Don Juan (Córdoba)",
+    item: "Lote de 30 Virolas de Alpaca Cinceladas",
+    category: "Mates / Insumos",
+    quantity: 30,
+    unitCost: 12500,
+    totalCost: 375000,
+    status: "Recibido",
+    notes: "Calidad excelente, listas para ensamble."
+  },
+  {
+    id: "COM-102",
+    date: "2026-10-01",
+    supplier: "Calabazas del Litoral (Misiones)",
+    item: "50 Calabazas gruesas seleccionadas tipo Imperial",
+    category: "Mates / Insumos",
+    quantity: 50,
+    unitCost: 5800,
+    totalCost: 290000,
+    status: "Recibido",
+    notes: "Maduradas y lijadas."
+  },
+  {
+    id: "COM-103",
+    date: "2026-10-04",
+    supplier: "Termos Acero Inox Import (CABA)",
+    item: "20 Termos Media Manija 1L Doble Pared",
+    category: "Termos",
+    quantity: 20,
+    unitCost: 21000,
+    totalCost: 420000,
+    status: "En Camino",
+    notes: "Factura A #00342."
+  }
+];
+
+function getSupplierPurchases() {
+  if (typeof localStorage === 'undefined') return DEFAULT_SUPPLIER_PURCHASES;
+  try {
+    const raw = localStorage.getItem('mates_rio_supplier_purchases');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (e) {
+    console.warn('Error leyendo compras de proveedores', e);
+  }
+  return DEFAULT_SUPPLIER_PURCHASES;
+}
+
+function saveSupplierPurchases(purchases) {
+  if (typeof localStorage === 'undefined') return;
+  localStorage.setItem('mates_rio_supplier_purchases', JSON.stringify(purchases));
+}
 
 // Carga automática de productos creados por administradores, sincronización con inventario y filtro de eliminados
 (function initCustomProducts() {
@@ -550,6 +754,7 @@ const CATEGORIES_DATA = [
           if (typeof inv[p.id].image === 'string' && inv[p.id].image) p.image = inv[p.id].image;
           if (typeof inv[p.id].category === 'string') p.category = inv[p.id].category;
           if (typeof inv[p.id].categoryName === 'string') p.categoryName = inv[p.id].categoryName;
+          if (typeof inv[p.id].subcategory === 'string') p.subcategory = inv[p.id].subcategory;
         }
       });
     }

@@ -7,6 +7,7 @@
 const state = {
   cart: JSON.parse(localStorage.getItem('mates_rio_cart')) || [],
   activeCategory: 'all',
+  activeSubcategory: 'all',
   searchQuery: '',
   priceRange: 'all',
   sortBy: 'featured',
@@ -21,17 +22,10 @@ const state = {
       role: "customer"
     },
     {
-      name: "Administrador Mates Río",
-      email: "admin@matesrio.com",
-      phone: "1134567890",
-      password: "admin",
-      role: "admin"
-    },
-    {
-      name: "Taller & Grabados",
-      email: "taller@matesrio.com",
-      phone: "1134567891",
-      password: "admin",
+      name: "Administrador General Mates Río",
+      email: "mates.rio6@gmail.com",
+      phone: "3513830111",
+      password: "matesriomanavella6",
       role: "admin"
     }
   ],
@@ -52,13 +46,13 @@ const CONFIG = {
   freeShippingThreshold: 60000,
   shippingCost: 3800,
   transferDiscountRate: 0.10, // 10% OFF
-  whatsappNumber: "5493543600000", // Mates Río WhatsApp (Río Ceballos, Córdoba)
-  whatsappDisplay: "+54 9 3543 60-0000",
+  whatsappNumber: "5493513830111", // WhatsApp Oficial Mates Río (3513830111)
+  whatsappDisplay: "+54 9 351 383-0111",
+  email: "mates.rio6@gmail.com",
   instagramUrl: "https://www.instagram.com/mates_rio_/",
   instagramHandle: "@mates_rio_",
-  facebookUrl: "https://www.facebook.com/matesrio",
-  tiktokUrl: "https://www.tiktok.com/@mates_rio",
-  tiktokHandle: "@mates_rio",
+  tiktokUrl: "https://www.tiktok.com/@Mates_rio",
+  tiktokHandle: "@Mates_rio",
   originCity: "Río Ceballos",
   originProvince: "Córdoba",
   locationDisplay: "Río Ceballos, Sierras Chicas, Córdoba, Argentina"
@@ -145,12 +139,136 @@ function showToast(message, icon = 'fa-check-circle') {
 }
 
 // ==========================================================================
+// COLOR INVERSION / THEME TOGGLE (MODO CLARO / MODO OSCURO)
+// ==========================================================================
+function getPreferredThemeMode() {
+  const saved = localStorage.getItem('mates_rio_theme_mode');
+  if (saved) return saved;
+  const legacyInverted = localStorage.getItem('mates_rio_theme_inverted');
+  if (legacyInverted === 'true') return 'light';
+  return 'dark'; // Modo oscuro artesanal original de Mates Río
+}
+
+function initThemeMode() {
+  const currentMode = getPreferredThemeMode();
+  applyThemeMode(currentMode, false);
+}
+
+function applyThemeMode(mode, showNotification = false) {
+  const isLight = mode === 'light';
+  document.body.classList.toggle('theme-light', isLight);
+  document.body.classList.toggle('theme-dark', !isLight);
+  document.body.classList.toggle('theme-inverted', isLight);
+  localStorage.setItem('mates_rio_theme_mode', mode);
+  localStorage.setItem('mates_rio_theme_inverted', isLight ? 'true' : 'false');
+
+  updateThemeToggleIcons(isLight);
+
+  if (showNotification) {
+    showToast(isLight ? 'Modo Claro activado ☀️' : 'Modo Oscuro activado 🌙', isLight ? 'fa-sun' : 'fa-moon');
+  }
+}
+
+function toggleColorTheme() {
+  const isLightNow = document.body.classList.contains('theme-light') || document.body.classList.contains('theme-inverted');
+  const newMode = isLightNow ? 'dark' : 'light';
+  applyThemeMode(newMode, true);
+}
+
+function updateThemeToggleIcons(isLight) {
+  document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+    btn.innerHTML = isLight 
+      ? '<i class="fas fa-moon"></i>' 
+      : '<i class="fas fa-sun"></i>';
+    btn.setAttribute('title', isLight ? 'Cambiar a Modo Oscuro' : 'Cambiar a Modo Claro');
+    btn.setAttribute('aria-label', isLight ? 'Cambiar a Modo Oscuro' : 'Cambiar a Modo Claro');
+  });
+
+  const mobileIcon = document.getElementById('mobile-theme-icon');
+  const mobileLabel = document.getElementById('mobile-theme-label');
+  if (mobileIcon) mobileIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+  if (mobileLabel) mobileLabel.textContent = isLight ? 'Cambiar a Modo Oscuro' : 'Cambiar a Modo Claro';
+}
+
+// ==========================================================================
+// SPECIAL OCCASION ANNOUNCEMENT BANNER
+// ==========================================================================
+function renderSpecialOccasionBanner() {
+  const container = document.getElementById('special-occasion-banner');
+  if (!container) return;
+
+  const config = typeof getSpecialOccasionConfig === 'function' ? getSpecialOccasionConfig() : null;
+  if (!config || !config.active) {
+    container.style.display = 'none';
+    container.innerHTML = '';
+    return;
+  }
+
+  container.className = `special-occasion-banner occasion-theme-${config.theme || 'custom'}`;
+  container.style.display = 'block';
+  container.innerHTML = `
+    <div class="container occasion-inner">
+      <div class="occasion-content">
+        <span class="occasion-badge">${config.badge || 'FECHA ESPECIAL'}</span>
+        <div class="occasion-texts">
+          <strong class="occasion-title">${config.title || ''}</strong>
+          <span class="occasion-subtitle">${config.subtitle || ''}</span>
+        </div>
+      </div>
+      ${config.btnLink ? `
+        <a href="${config.btnLink}" class="btn-occasion-cta">
+          ${config.btnText || 'Aprovechar Promo'} <i class="fas fa-arrow-right"></i>
+        </a>
+      ` : ''}
+    </div>
+  `;
+}
+
+// ==========================================================================
 // BANNER SLIDER (HERO CAROUSEL)
 // ==========================================================================
 let currentSlide = 0;
 let slideInterval = null;
 
+function renderHeroSlides() {
+  const slider = document.querySelector('.hero-slider');
+  const dotsContainer = document.getElementById('slider-dots');
+  if (!slider || typeof getActiveHomeSlides !== 'function') return;
+
+  const slidesData = getActiveHomeSlides();
+  if (!slidesData || !slidesData.length) return;
+
+  slider.innerHTML = slidesData.map((s, idx) => `
+    <div class="hero-slide ${idx === 0 ? 'active' : ''}" data-slide-index="${idx}">
+      <img src="${s.image}" alt="${s.title}" class="hero-slide-bg" />
+      <div class="hero-overlay"></div>
+      <div class="container">
+        <div class="hero-content">
+          ${s.tag ? `<span class="hero-tag"><i class="fas fa-sparkles"></i> ${s.tag}</span>` : ''}
+          <h2 class="hero-title">${s.title}</h2>
+          <p class="hero-description">${s.subtitle || ''}</p>
+          <div class="hero-cta-group">
+            <a href="${s.btnLink || 'catalogo.html'}" class="btn btn-primary">
+              <i class="fas fa-shopping-bag"></i> ${s.btnText || 'Ver Catálogo'}
+            </a>
+            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20consultar%20por%20este%20producto." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  if (dotsContainer) {
+    dotsContainer.innerHTML = slidesData.map((_, idx) => `
+      <button class="slider-dot ${idx === 0 ? 'active' : ''}" data-slide="${idx}" aria-label="Ir al banner ${idx + 1}"></button>
+    `).join('');
+  }
+}
+
 function initSlider() {
+  renderHeroSlides();
   const slides = document.querySelectorAll('.hero-slide');
   const dots = document.querySelectorAll('.slider-dot');
   const prevBtn = document.getElementById('slider-prev-btn');
@@ -235,17 +353,18 @@ function initSlider() {
 // ==========================================================================
 function renderCategoriesGrid() {
   const container = document.getElementById('categories-grid');
-  if (!container || typeof CATEGORIES_DATA === 'undefined') return;
+  if (!container) return;
+  const cats = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
 
-  container.innerHTML = CATEGORIES_DATA.map(cat => `
+  container.innerHTML = cats.map(cat => `
     <div class="category-card" data-category="${cat.id}">
       <img src="${cat.image}" alt="${cat.name}" class="category-card-bg" loading="lazy" />
       <div class="category-card-overlay"></div>
       <div class="category-card-content">
-        <span class="category-badge">${cat.badge}</span>
+        <span class="category-badge">${cat.badge || ''}</span>
         <h3 class="category-name">${cat.name}</h3>
         <div class="category-footer-row">
-          <span class="category-sub">${cat.label}</span>
+          <span class="category-sub">${cat.label || ''}</span>
           <div class="category-arrow-icon">
             <i class="fas fa-arrow-right"></i>
           </div>
@@ -276,8 +395,50 @@ function renderCategoriesGrid() {
   });
 }
 
+function renderSubcategoriesFilterBar(categoryId) {
+  const container = document.getElementById('subcategory-filter-bar');
+  if (!container) return;
+
+  if (!categoryId || categoryId === 'all') {
+    container.style.display = 'none';
+    container.innerHTML = '';
+    return;
+  }
+
+  const allCats = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
+  const currentCat = allCats.find(c => c.id.toLowerCase() === categoryId.toLowerCase());
+
+  if (!currentCat || !currentCat.subcategories || !currentCat.subcategories.length) {
+    container.style.display = 'none';
+    container.innerHTML = '';
+    return;
+  }
+
+  container.style.display = 'flex';
+  const subcats = currentCat.subcategories;
+
+  container.innerHTML = `
+    <span class="subcat-label"><i class="fas fa-filter"></i> Subcategorías:</span>
+    <button type="button" class="subcat-chip ${(!state.activeSubcategory || state.activeSubcategory === 'all') ? 'active' : ''}" onclick="setSubcategoryFilter('all')">
+      Todas
+    </button>
+    ${subcats.map(sub => `
+      <button type="button" class="subcat-chip ${state.activeSubcategory === sub ? 'active' : ''}" onclick="setSubcategoryFilter('${sub}')">
+        ${sub}
+      </button>
+    `).join('')}
+  `;
+}
+
+function setSubcategoryFilter(subcat) {
+  state.activeSubcategory = subcat;
+  renderSubcategoriesFilterBar(state.activeCategory);
+  renderProducts();
+}
+
 function setCategoryFilter(categoryId) {
   state.activeCategory = categoryId;
+  state.activeSubcategory = 'all';
 
   const productsGrid = document.getElementById('products-grid');
   if (!productsGrid) {
@@ -299,6 +460,7 @@ function setCategoryFilter(categoryId) {
     }
   });
 
+  renderSubcategoriesFilterBar(categoryId);
   renderProducts();
 }
 
@@ -360,6 +522,11 @@ function getFilteredProducts() {
     list = list.filter(p => p.category.toLowerCase() === state.activeCategory.toLowerCase());
   }
 
+  // 1.2. Filter by subcategory
+  if (state.activeSubcategory && state.activeSubcategory !== 'all') {
+    list = list.filter(p => p.subcategory && p.subcategory.toLowerCase() === state.activeSubcategory.toLowerCase());
+  }
+
   // 1.5. Subfilter for Promos (Combos categorization)
   const activePromoFilter = promoCurrentSubfilter !== 'all' ? promoCurrentSubfilter : state.promoSubfilter;
   if ((state.activeCategory === 'promos' || window.location.pathname.includes('promos')) && activePromoFilter && activePromoFilter !== 'all') {
@@ -381,6 +548,7 @@ function getFilteredProducts() {
       cleanStr(p.name).includes(q) ||
       cleanStr(p.description).includes(q) ||
       cleanStr(p.categoryName).includes(q) ||
+      cleanStr(p.subcategory).includes(q) ||
       cleanStr(p.badge).includes(q)
     );
   }
@@ -422,6 +590,7 @@ function renderProducts() {
   }
 
   const isFiltered = state.activeCategory !== 'all' || 
+                     (state.activeSubcategory && state.activeSubcategory !== 'all') ||
                      (state.searchQuery && state.searchQuery.trim().length > 0) || 
                      state.priceRange !== 'all';
                      
@@ -448,6 +617,7 @@ function renderProducts() {
   container.innerHTML = products.map(prod => {
     const installmentPrice = Math.round(prod.price / 3);
     const transferPrice = Math.round(prod.price * (1 - CONFIG.transferDiscountRate));
+    const subcatDisplay = prod.subcategory ? ` • <span style="color: var(--accent-gold);">${prod.subcategory}</span>` : '';
 
     return `
       <div class="product-card" data-id="${prod.id}">
@@ -462,13 +632,8 @@ function renderProducts() {
         </div>
 
         <div class="product-info">
-          <span class="product-category-meta">${prod.categoryName}</span>
+          <span class="product-category-meta">${prod.categoryName}${subcatDisplay}</span>
           <h4 class="product-title" onclick="openQuickView('${prod.id}')" title="${prod.name}">${prod.name}</h4>
-          
-          <div class="product-rating">
-            ${getStarRatingHtml(prod.rating)}
-            <span class="reviews-num">(${prod.reviewsCount})</span>
-          </div>
 
           <div class="product-pricing">
             <div class="product-price-row">
@@ -678,6 +843,8 @@ function updateCartUI() {
   // Total items count
   const totalCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
   if (badge) badge.textContent = totalCount;
+  const floatingCount = document.getElementById('floating-cart-badge') || document.getElementById('floating-cart-count');
+  if (floatingCount) floatingCount.textContent = totalCount;
   if (countTitle) countTitle.textContent = `(${totalCount} ${totalCount === 1 ? 'producto' : 'productos'})`;
 
   // Subtotal calculation
@@ -1295,9 +1462,7 @@ function isUserAdmin(user) {
   const email = (user.email || '').toLowerCase();
   return (
     role.includes('admin') ||
-    role.includes('taller') ||
-    email === 'admin@matesrio.com' ||
-    email === 'taller@matesrio.com'
+    email === 'mates.rio6@gmail.com'
   );
 }
 
@@ -1312,26 +1477,17 @@ function handleLogin(e) {
   }
 
   const emailLower = email.toLowerCase();
-  const isSuperAdminCred = emailLower === 'admin@matesrio.com' && (password === 'admin123' || password === 'admin');
-  const isTallerCred = emailLower === 'taller@matesrio.com' && (password === 'taller123' || password === 'admin');
+  const isSuperAdminCred = emailLower === 'mates.rio6@gmail.com' && password === 'matesriomanavella6';
 
   let user = null;
 
   if (isSuperAdminCred) {
     user = {
-      name: "Administrador General",
-      email: "admin@matesrio.com",
-      phone: "1134567890",
+      name: "Administrador General Mates Río",
+      email: "mates.rio6@gmail.com",
+      phone: "3513830111",
       password: password,
       role: "Super Administrador"
-    };
-  } else if (isTallerCred) {
-    user = {
-      name: "Encargado de Taller",
-      email: "taller@matesrio.com",
-      phone: "1134567891",
-      password: password,
-      role: "Taller & Depósito"
     };
   } else {
     user = state.usersDb.find(u => u.email.toLowerCase() === emailLower && u.password === password);
@@ -2039,11 +2195,20 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn('URL params parsing error:', err);
   }
 
+  // 0.5. Init Theme Mode & Special Occasion Banner
+  initThemeMode();
+  renderSpecialOccasionBanner();
+
   // 1. Init Hero Banner Slider
   initSlider();
 
   // 2. Render Categories
   renderCategoriesGrid();
+
+  // 2.5. Render Subcategory filter bar if category active
+  if (state.activeCategory && state.activeCategory !== 'all') {
+    renderSubcategoriesFilterBar(state.activeCategory);
+  }
 
   // 3. Render Catalog
   renderProducts();

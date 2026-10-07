@@ -1,16 +1,10 @@
 [
   {
-    "id": "usr-1",
-    "email": "admin@matesrio.com",
-    "password": "admin",
-    "name": "Administrador General",
+    "id": "usr-admin-rio",
+    "email": "mates.rio6@gmail.com",
+    "password": "matesriomanavella6",
+    "name": "Administrador General Mates Río",
     "role": "Super Administrador"
-  },
-  {
-    "id": "usr-2",
-    "email": "taller@matesrio.com",
-    "password": "admin",
-    "name": "Encargado de Taller",
-    "role": "Taller & Depósito"
   }
 ]
+

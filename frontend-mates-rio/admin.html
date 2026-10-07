@@ -47,7 +47,7 @@
             <label class="admin-form-label" for="admin-email">Correo Electrónico de Administrador</label>
             <div class="admin-input-wrap">
               <i class="fas fa-envelope admin-input-icon"></i>
-              <input type="email" id="admin-email" class="admin-input" placeholder="admin@matesrio.com" required autocomplete="email" />
+              <input type="email" id="admin-email" class="admin-input" placeholder="mates.rio6@gmail.com" required autocomplete="email" />
             </div>
           </div>
 
@@ -67,17 +67,13 @@
           </button>
         </form>
 
-        <!-- Quick Demo Access (for easy testing) -->
+        <!-- Acceso Directo de Administrador Oficial -->
         <div class="admin-demo-accounts">
-          <p class="admin-demo-title"><i class="fas fa-bolt"></i> Cuentas Demo para Prueba Rápida</p>
-          <div class="admin-demo-grid">
-            <button type="button" class="btn-demo-quick" onclick="fillAdminDemo('admin@matesrio.com', 'admin123')">
-              <span class="demo-role-name">👑 Super Admin</span>
-              <span class="demo-role-cred">admin@matesrio.com</span>
-            </button>
-            <button type="button" class="btn-demo-quick" onclick="fillAdminDemo('taller@matesrio.com', 'taller123')">
-              <span class="demo-role-name">🔨 Taller & Stock</span>
-              <span class="demo-role-cred">taller@matesrio.com</span>
+          <p class="admin-demo-title"><i class="fas fa-key"></i> Administrador General Oficial</p>
+          <div class="admin-demo-grid" style="grid-template-columns: 1fr;">
+            <button type="button" class="btn-demo-quick" onclick="fillAdminDemo('mates.rio6@gmail.com', 'matesriomanavella6')">
+              <span class="demo-role-name">👑 Administrador General</span>
+              <span class="demo-role-cred">mates.rio6@gmail.com</span>
             </button>
           </div>
         </div>
@@ -127,12 +123,20 @@
           <span>Ventas & Pedidos</span>
           <span class="sidebar-badge badge-info" id="sidebar-orders-badge">0</span>
         </a>
+        <a class="sidebar-nav-item" data-section="purchases" onclick="switchAdminSection('purchases')">
+          <i class="fas fa-truck-ramp-box"></i>
+          <span>Compras a Proveedores</span>
+        </a>
         <a class="sidebar-nav-item" data-section="stats" onclick="switchAdminSection('stats')">
           <i class="fas fa-chart-line"></i>
           <span>Estadísticas de Taller</span>
         </a>
 
-        <div class="sidebar-nav-group-title">Administración</div>
+        <div class="sidebar-nav-group-title">Administración & Diseño</div>
+        <a class="sidebar-nav-item" data-section="home-design" onclick="switchAdminSection('home-design')">
+          <i class="fas fa-palette"></i>
+          <span>Diseño & Inicio Web</span>
+        </a>
         <a class="sidebar-nav-item" data-section="users" onclick="switchAdminSection('users')">
           <i class="fas fa-users-gear"></i>
           <span>Clientes & Accesos</span>
@@ -182,6 +186,12 @@
           <div class="topbar-live-clock" id="topbar-live-clock">
             <i class="fas fa-clock"></i> <span id="clock-display">--:--:--</span> (Bs. As.)
           </div>
+
+          <!-- Selector Modo Claro / Modo Oscuro en Admin -->
+          <button type="button" class="admin-theme-toggle-btn" id="admin-theme-toggle-btn" onclick="toggleAdminThemeMode()" title="Cambiar a Modo Oscuro / Modo Claro" aria-label="Cambiar Tema de Panel">
+            <i class="fas fa-moon" id="admin-theme-icon"></i>
+            <span class="admin-theme-label" id="admin-theme-label">Modo Oscuro</span>
+          </button>
 
           <a href="personaliza-tu-mate.html" target="_blank" class="btn-store-preview" title="Ir al Estudio de Grabado">
             <i class="fas fa-magic" style="color: var(--admin-gold);"></i> <span class="preview-btn-text">Taller de Grabado</span>
@@ -616,6 +626,247 @@
           </div>
         </section>
 
+
+        <!-- ==================================================================
+             SECTION 7: COMPRAS A PROVEEDORES (COSTOS & STOCK DE TALLER)
+             ================================================================== -->
+        <section class="admin-section" id="sec-purchases">
+          <div class="section-head-bar">
+            <div>
+              <h2 class="section-page-title">Control de Compras a Proveedores</h2>
+              <p class="section-page-desc">Seguimiento de compras de insumos para el taller (mates, termos, bombillas, virolas, etc.) y control de costos de fabricación.</p>
+            </div>
+            <div class="section-actions">
+              <button type="button" class="btn-admin btn-admin-gold" onclick="openCreatePurchaseModal()">
+                <i class="fas fa-plus-circle"></i> Registrar Nueva Compra
+              </button>
+            </div>
+          </div>
+
+          <!-- KPIs de Compras -->
+          <div class="kpi-grid">
+            <div class="kpi-card kpi-leather">
+              <div class="kpi-top-row">
+                <span class="kpi-title">Inversión Total en Insumos</span>
+                <div class="kpi-icon-wrap icon-wrap-leather">
+                  <i class="fas fa-money-bill-wave"></i>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpi-purchases-total">$ 0</div>
+              <div class="kpi-footer-sub">Costos acumulados de compras</div>
+            </div>
+
+            <div class="kpi-card kpi-gold">
+              <div class="kpi-top-row">
+                <span class="kpi-title">Unidades Adquiridas</span>
+                <div class="kpi-icon-wrap icon-wrap-gold">
+                  <i class="fas fa-boxes-packing"></i>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpi-purchases-units">0</div>
+              <div class="kpi-footer-sub">Piezas ingresadas al taller</div>
+            </div>
+
+            <div class="kpi-card kpi-success">
+              <div class="kpi-top-row">
+                <span class="kpi-title">En Camino / Pendientes</span>
+                <div class="kpi-icon-wrap icon-wrap-success">
+                  <i class="fas fa-truck-ramp-box"></i>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpi-purchases-pending">0</div>
+              <div class="kpi-footer-sub">Lotes esperando recepción</div>
+            </div>
+          </div>
+
+          <!-- Tabla de Compras -->
+          <div class="table-responsive-card" style="margin-top: 18px;">
+            <table class="admin-data-table">
+              <thead>
+                <tr>
+                  <th>Cód. Compra</th>
+                  <th>Fecha</th>
+                  <th>Proveedor</th>
+                  <th>Artículo / Insumo</th>
+                  <th>Categoría</th>
+                  <th>Cantidad</th>
+                  <th>Costo Unitario</th>
+                  <th>Costo Total</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="purchases-table-tbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+
+        <!-- ==================================================================
+             SECTION 8: DISEÑO & GESTIÓN DEL INICIO WEB
+             ================================================================== -->
+        <section class="admin-section" id="sec-home-design">
+          <div class="section-head-bar">
+            <div>
+              <h2 class="section-page-title">Diseño & Sección de Inicio Web</h2>
+              <p class="section-page-desc">Personalizá las imágenes del inicio, renombrá categorías y subcategorías, y publicá anuncios de fechas especiales.</p>
+            </div>
+            <div class="section-actions">
+              <a href="index.html" target="_blank" class="btn-admin btn-admin-outline">
+                <i class="fas fa-eye"></i> Previsualizar Inicio
+              </a>
+            </div>
+          </div>
+
+          <!-- Subtabs de Diseño -->
+          <div class="home-design-tabs">
+            <button type="button" class="home-design-tab-btn active" id="tab-btn-slides" onclick="switchDesignTab('slides')">
+              <i class="fas fa-images"></i> Banners del Carrusel
+            </button>
+            <button type="button" class="home-design-tab-btn" id="tab-btn-categories" onclick="switchDesignTab('categories')">
+              <i class="fas fa-tags"></i> Categorías & Subcategorías
+            </button>
+            <button type="button" class="home-design-tab-btn" id="tab-btn-occasions" onclick="switchDesignTab('occasions')">
+              <i class="fas fa-bullhorn"></i> Fechas Especiales & Promos
+            </button>
+          </div>
+
+          <!-- TAB 1: Banners del Carrusel -->
+          <div id="design-panel-slides" class="design-panel active">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+              <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--admin-text-main);">Slides Activos en el Inicio</h3>
+              <button type="button" class="btn-admin btn-admin-gold" onclick="openAddSlideModal()">
+                <i class="fas fa-plus"></i> Agregar Nuevo Banner
+              </button>
+            </div>
+            <div id="admin-slides-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- TAB 2: Categorías & Subcategorías -->
+          <div id="design-panel-categories" class="design-panel" style="display: none;">
+            <div style="margin-bottom: 14px;">
+              <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--admin-text-main);">Personalización de Categorías y Subcategorías</h3>
+              <p style="font-size: 0.82rem; color: var(--admin-text-muted);">Renombrá las 6 categorías principales, cambiá sus etiquetas y administrá las subcategorías que aparecen en los filtros del catálogo.</p>
+            </div>
+            <div id="admin-categories-editor-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- TAB 3: Anuncios de Fechas Especiales -->
+          <div id="design-panel-occasions" class="design-panel" style="display: none;">
+            <div style="background: #ffffff; border: 1.5px solid var(--admin-border); border-radius: var(--radius-md); padding: 20px;">
+              
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--admin-border);">
+                <div>
+                  <h3 style="font-size: 1.1rem; font-weight: 800;">Anuncio de Barra Superior (Fecha Especial)</h3>
+                  <p style="font-size: 0.82rem; color: var(--admin-text-muted);">Activá un anuncio destacado en la parte superior de la página principal y promos para fechas clave.</p>
+                </div>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; font-size: 0.9rem;">
+                  <input type="checkbox" id="occasion-active-toggle" onchange="toggleOccasionActive(this.checked)" style="width: 18px; height: 18px; accent-color: var(--admin-gold);" />
+                  <span id="occasion-status-label">Anuncio Desactivado</span>
+                </label>
+              </div>
+
+              <h4 style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; color: var(--admin-gold); margin-bottom: 8px;">
+                <i class="fas fa-wand-magic-sparkles"></i> Diseños Pre-Configurados Listos para Usar:
+              </h4>
+              
+              <div class="occasion-presets-grid">
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('mother')">
+                  <strong>🌸 Día de la Madre</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Tono rosa / rubí con grabado de regalo</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('father')">
+                  <strong>🎩 Día del Padre</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Azul profundo con envíos gratis</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('christmas')">
+                  <strong>🎄 Navidad & Año Nuevo</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Verde y dorado con 15% OFF extra</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('halloween')">
+                  <strong>🎃 Halloween Matero</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Naranja y negro con ofertas nocturnas</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('cyber')">
+                  <strong>⚡ Black Friday / Cyber</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Negro y morado con 3 cuotas sin interés</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('custom')">
+                  <strong>🎨 Personalizado</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Configurá texto, enlace y colores propios</span>
+                </div>
+              </div>
+
+              <!-- Formulario de Configuración del Anuncio -->
+              <div class="admin-form-grid-2" style="margin-top: 18px;">
+                <div class="admin-form-group">
+                  <label class="admin-form-label" for="occasion-badge-input">Texto de la Etiqueta</label>
+                  <input type="text" id="occasion-badge-input" class="admin-input modal-input" placeholder="Ej: DÍA DE LA MADRE" oninput="updateOccasionLivePreview()" />
+                </div>
+                <div class="admin-form-group">
+                  <label class="admin-form-label" for="occasion-theme-select">Estilo de Color</label>
+                  <select id="occasion-theme-select" class="admin-select modal-input" onchange="updateOccasionLivePreview()">
+                    <option value="mother">Día de la Madre (Rosa / Rubí)</option>
+                    <option value="father">Día del Padre (Azul Elegante)</option>
+                    <option value="christmas">Navidad (Verde & Dorado)</option>
+                    <option value="halloween">Halloween (Calabaza & Noche)</option>
+                    <option value="cyber">Black Friday / Cyber (Oscuro Eléctrico)</option>
+                    <option value="custom">Mates Río Clásico (Cuero & Oro)</option>
+                  </select>
+                </div>
+                <div class="admin-form-group" style="grid-column: span 2;">
+                  <label class="admin-form-label" for="occasion-title-input">Título del Anuncio</label>
+                  <input type="text" id="occasion-title-input" class="admin-input modal-input" placeholder="Ej: ¡Especial Día de la Madre! Grabado personalizado de regalo" oninput="updateOccasionLivePreview()" />
+                </div>
+                <div class="admin-form-group" style="grid-column: span 2;">
+                  <label class="admin-form-label" for="occasion-subtitle-input">Subtítulo / Detalle</label>
+                  <input type="text" id="occasion-subtitle-input" class="admin-input modal-input" placeholder="Ej: Hasta 3 cuotas sin interés y 10% OFF extra con transferencia" oninput="updateOccasionLivePreview()" />
+                </div>
+                <div class="admin-form-group">
+                  <label class="admin-form-label" for="occasion-btn-text">Texto del Botón</label>
+                  <input type="text" id="occasion-btn-text" class="admin-input modal-input" placeholder="Ej: Ver Combos en Promo" oninput="updateOccasionLivePreview()" />
+                </div>
+                <div class="admin-form-group">
+                  <label class="admin-form-label" for="occasion-btn-link">Enlace de Destino</label>
+                  <input type="text" id="occasion-btn-link" class="admin-input modal-input" placeholder="Ej: promos.html o catalogo.html" oninput="updateOccasionLivePreview()" />
+                </div>
+              </div>
+
+              <!-- Vista Previa en Vivo -->
+              <div style="margin-top: 20px;">
+                <label class="admin-form-label" style="font-weight: 800;">Vista Previa en Tiempo Real:</label>
+                <div id="occasion-preview-container" class="special-occasion-banner occasion-theme-mother" style="border-radius: var(--radius-sm); margin-top: 6px;">
+                  <div class="occasion-inner" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                    <div class="occasion-content" style="display: flex; align-items: center; gap: 10px;">
+                      <span class="occasion-badge" id="preview-occasion-badge" style="background: #fff; color: #121212; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 0.72rem;">DÍA DE LA MADRE</span>
+                      <div>
+                        <strong id="preview-occasion-title" style="display: block; font-size: 0.92rem; color: #fff;">¡Especial Día de la Madre! Grabado personalizado de regalo</strong>
+                        <span id="preview-occasion-subtitle" style="font-size: 0.78rem; color: rgba(255,255,255,0.9);">Hasta 3 cuotas sin interés y 10% OFF extra</span>
+                      </div>
+                    </div>
+                    <span id="preview-occasion-btn" style="background: #fff; color: #121212; padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;">
+                      Ver Combos 👉
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                <button type="button" class="btn-admin btn-admin-gold" onclick="saveOccasionSettings()">
+                  <i class="fas fa-save"></i> Guardar y Aplicar en la Web
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
       </div>
     </main>
   </div>
@@ -661,14 +912,22 @@
 
             <!-- Categoría -->
             <div class="admin-form-group">
-              <label class="admin-form-label" for="edit-prod-category">Categoría <span style="color: var(--admin-danger);">*</span></label>
-              <select id="edit-prod-category" class="admin-select modal-input" required>
+              <label class="admin-form-label" for="edit-prod-category">Categoría Principal <span style="color: var(--admin-danger);">*</span></label>
+              <select id="edit-prod-category" class="admin-select modal-input" onchange="onCategorySelectChange('edit')" required>
                 <option value="mates">Mates Imperiales & Torpedos</option>
                 <option value="promos">Combos & Promociones</option>
                 <option value="termos">Termos de Acero & Cuero</option>
                 <option value="accesorios">Bombillas & Accesorios</option>
                 <option value="yerbas">Yerbas Seleccionadas</option>
                 <option value="equipos">Equipos de Mate & Mochilas</option>
+              </select>
+            </div>
+
+            <!-- Subcategoría -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="edit-prod-subcategory">Subcategoría</label>
+              <select id="edit-prod-subcategory" class="admin-select modal-input">
+                <!-- Dynamically populated -->
               </select>
             </div>
 
@@ -712,24 +971,25 @@
               <input type="number" id="edit-prod-min-stock" class="admin-input modal-input" min="1" value="5" />
             </div>
 
-            <!-- Selector de Imagen -->
+            <!-- Selector / Cargador de Imágenes -->
             <div class="admin-form-group" style="grid-column: span 2;">
-              <label class="admin-form-label" for="edit-prod-img-select">Imagen del Producto <span style="color: var(--admin-danger);">*</span></label>
-              <select id="edit-prod-img-select" class="admin-select modal-input" onchange="onEditProductImageChange()">
-                <option value="assets/images/prod_mate_imperial.jpg">Mate Imperial Cuero Negro</option>
-                <option value="assets/images/cat_mates.jpg">Mate Torpedo Uruguayo</option>
-                <option value="assets/images/banner_1.jpg">Mate Camionero Suela</option>
-                <option value="assets/images/cat_termos.jpg">Termo Media Manija Cuero</option>
-                <option value="assets/images/banner_3.jpg">Termo Adventure Acero 1.3L</option>
-                <option value="assets/images/cat_accesorios.jpg">Bombilla Alpaca Pico Loro</option>
-                <option value="assets/images/cat_yerbas.jpg">Yerba Barbaquá Seleccionada</option>
-                <option value="assets/images/cat_equipos.jpg">Mochila Matera Cuero</option>
-                <option value="assets/images/prod_canasta_matera.jpg">Canasta Matera Criolla</option>
-                <option value="assets/images/cat_promos.jpg">Combo Matero Imperial</option>
-                <option value="assets/images/banner_2.jpg">Set Matero Completo</option>
-                <option value="custom">-- Ingresar URL o ruta personalizada --</option>
-              </select>
-              <input type="text" id="edit-prod-img-custom" class="admin-input modal-input" placeholder="Ruta local o URL web (ej: assets/images/... o https://...)" style="margin-top: 8px; display: none;" oninput="onEditProductCustomImgInput()" />
+              <label class="admin-form-label">Fotos del Producto (Ilimitadas • Arrastrá o Seleccioná) <span style="color: var(--admin-danger);">*</span></label>
+              
+              <div class="image-dropzone" id="edit-prod-dropzone" onclick="document.getElementById('edit-prod-file-input').click()">
+                <input type="file" id="edit-prod-file-input" multiple accept="image/*" style="display: none;" onchange="handleProductFilesSelect(event, 'edit')" />
+                <div class="image-dropzone-icon">
+                  <i class="fas fa-cloud-arrow-up"></i>
+                </div>
+                <div class="image-dropzone-title">Hacé clic para subir fotos o arrastralas acá</div>
+                <div class="image-dropzone-sub">Podés subir imágenes ilimitadas (3, 4, 5 fotos por producto). La primera será la foto de portada.</div>
+                <button type="button" class="btn-admin btn-admin-gold" style="margin-top: 10px; pointer-events: none;">
+                  <i class="fas fa-camera"></i> Subir Fotos del Producto
+                </button>
+              </div>
+
+              <div id="edit-prod-preview-grid" class="image-preview-grid">
+                <!-- Preview thumbnails -->
+              </div>
             </div>
 
             <!-- Descripción -->
@@ -824,14 +1084,22 @@
 
             <!-- Categoría -->
             <div class="admin-form-group">
-              <label class="admin-form-label" for="new-prod-category">Categoría <span style="color: var(--admin-danger);">*</span></label>
-              <select id="new-prod-category" class="admin-select modal-input" required>
+              <label class="admin-form-label" for="new-prod-category">Categoría Principal <span style="color: var(--admin-danger);">*</span></label>
+              <select id="new-prod-category" class="admin-select modal-input" onchange="onCategorySelectChange('new')" required>
                 <option value="mates">Mates Imperiales & Torpedos</option>
                 <option value="promos">Combos & Promociones</option>
                 <option value="termos">Termos de Acero & Cuero</option>
                 <option value="accesorios">Bombillas & Accesorios</option>
                 <option value="yerbas">Yerbas Seleccionadas</option>
                 <option value="equipos">Equipos de Mate & Mochilas</option>
+              </select>
+            </div>
+
+            <!-- Subcategoría -->
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="new-prod-subcategory">Subcategoría</label>
+              <select id="new-prod-subcategory" class="admin-select modal-input">
+                <!-- Dynamically populated -->
               </select>
             </div>
 
@@ -864,30 +1132,24 @@
               </select>
             </div>
 
-            <!-- Imagen Selector & Preview -->
+            <!-- Selector / Cargador de Imágenes -->
             <div class="admin-form-group" style="grid-column: span 2;">
-              <label class="admin-form-label">Imagen del Producto <span style="color: var(--admin-danger);">*</span></label>
-              <div style="display: flex; gap: 14px; align-items: flex-start;">
-                <div style="width: 80px; height: 80px; border-radius: 8px; border: 1.5px solid var(--admin-border); overflow: hidden; flex-shrink: 0; background: #faf8f5; display: flex; align-items: center; justify-content: center;">
-                  <img id="new-prod-img-preview" src="assets/images/prod_mate_imperial.jpg" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" />
+              <label class="admin-form-label">Fotos del Producto (Ilimitadas • Arrastrá o Seleccioná) <span style="color: var(--admin-danger);">*</span></label>
+              
+              <div class="image-dropzone" id="new-prod-dropzone" onclick="document.getElementById('new-prod-file-input').click()">
+                <input type="file" id="new-prod-file-input" multiple accept="image/*" style="display: none;" onchange="handleProductFilesSelect(event, 'new')" />
+                <div class="image-dropzone-icon">
+                  <i class="fas fa-cloud-arrow-up"></i>
                 </div>
-                <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                  <select id="new-prod-img-select" class="admin-select modal-input" onchange="onNewProductImageChange()">
-                    <option value="assets/images/prod_mate_imperial.jpg">Mate Imperial Cuero Negro</option>
-                    <option value="assets/images/cat_mates.jpg">Mate Torpedo Uruguayo</option>
-                    <option value="assets/images/banner_1.jpg">Mate Camionero Suela</option>
-                    <option value="assets/images/cat_termos.jpg">Termo Media Manija Cuero</option>
-                    <option value="assets/images/banner_3.jpg">Termo Adventure Acero 1.3L</option>
-                    <option value="assets/images/cat_accesorios.jpg">Bombilla Alpaca Pico Loro</option>
-                    <option value="assets/images/cat_yerbas.jpg">Yerba Barbaquá Seleccionada</option>
-                    <option value="assets/images/cat_equipos.jpg">Mochila Matera Cuero</option>
-                    <option value="assets/images/prod_canasta_matera.jpg">Canasta Matera Criolla</option>
-                    <option value="assets/images/cat_promos.jpg">Combo Matero Imperial</option>
-                    <option value="assets/images/banner_2.jpg">Set Matero Completo</option>
-                    <option value="custom">-- Ingresar URL o ruta personalizada --</option>
-                  </select>
-                  <input type="text" id="new-prod-img-custom" class="admin-input modal-input" placeholder="Ruta local o URL web (ej: assets/images/banner_2.jpg o https://...)" style="display: none;" oninput="onNewProductCustomImgInput()" />
-                </div>
+                <div class="image-dropzone-title">Hacé clic para subir fotos o arrastralas acá</div>
+                <div class="image-dropzone-sub">Podés subir imágenes ilimitadas (3, 4, 5 fotos por producto). La primera será la foto de portada.</div>
+                <button type="button" class="btn-admin btn-admin-gold" style="margin-top: 10px; pointer-events: none;">
+                  <i class="fas fa-camera"></i> Subir Fotos del Producto
+                </button>
+              </div>
+
+              <div id="new-prod-preview-grid" class="image-preview-grid">
+                <!-- Preview thumbnails -->
               </div>
             </div>
 
@@ -934,6 +1196,227 @@
             <button type="button" class="btn-admin btn-admin-outline" onclick="closeCreateProductModal()">Cancelar</button>
             <button type="submit" class="btn-admin btn-admin-primary">
               <i class="fas fa-check"></i> Publicar en Catálogo
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       MODAL: REGISTRAR COMPRA A PROVEEDOR (ADMIN)
+       ========================================================================== -->
+  <div class="admin-modal-overlay" id="new-purchase-modal">
+    <div class="admin-modal-card" style="max-width: 600px;">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title">
+          <i class="fas fa-truck-ramp-box" style="color: var(--admin-gold);"></i> Registrar Compra a Proveedor
+        </h3>
+        <button type="button" class="admin-modal-close" onclick="closeCreatePurchaseModal()"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="admin-modal-body">
+        <form id="new-purchase-form" onsubmit="event.preventDefault(); handleCreatePurchase();">
+          <div class="admin-form-grid-2">
+            
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="purchase-supplier">Proveedor / Taller Origen <span style="color: var(--admin-danger);">*</span></label>
+              <input type="text" id="purchase-supplier" class="admin-input modal-input" placeholder="Ej: Orfebrería Don Juan (Córdoba)" required />
+            </div>
+
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="purchase-item">Artículo / Insumo Comprado <span style="color: var(--admin-danger);">*</span></label>
+              <input type="text" id="purchase-item" class="admin-input modal-input" placeholder="Ej: Lote de 40 Virolas de Alpaca Cinceladas a Mano" required />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="purchase-category">Categoría del Insumo</label>
+              <select id="purchase-category" class="admin-select modal-input">
+                <option value="Mates / Insumos">Mates / Insumos (Calabazas, Cuero, Virolas)</option>
+                <option value="Termos">Termos & Botellas Térmicas</option>
+                <option value="Bombillas">Bombillas de Alpaca & Acero</option>
+                <option value="Yerbas">Yerba Mate a Granel / Paquetes</option>
+                <option value="Equipos">Mochilas & Canastas Materas</option>
+                <option value="Packaging">Cajas, Bolsas & Packaging</option>
+              </select>
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="purchase-status">Estado de Recepción</label>
+              <select id="purchase-status" class="admin-select modal-input">
+                <option value="Recibido">Recibido en Taller</option>
+                <option value="En Camino">En Camino / En Envío</option>
+                <option value="Pendiente">Pedido Confirmado (Pendiente)</option>
+              </select>
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="purchase-qty">Cantidad de Unidades <span style="color: var(--admin-danger);">*</span></label>
+              <input type="number" id="purchase-qty" class="admin-input modal-input" min="1" value="20" oninput="calculatePurchaseTotal()" required />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="purchase-unit-cost">Costo Unitario ($ ARS) <span style="color: var(--admin-danger);">*</span></label>
+              <input type="number" id="purchase-unit-cost" class="admin-input modal-input" min="1" step="100" placeholder="Ej: 8500" oninput="calculatePurchaseTotal()" required />
+            </div>
+
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: #faf8f5; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+                <span style="font-weight: 700; font-size: 0.88rem;">Costo Total Estimado:</span>
+                <strong id="purchase-total-display" style="font-size: 1.25rem; color: var(--admin-leather); font-family: var(--font-heading);">$ 0</strong>
+              </div>
+            </div>
+
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="purchase-notes">Notas / Nro. de Factura / Remito</label>
+              <input type="text" id="purchase-notes" class="admin-input modal-input" placeholder="Ej: Factura A #00342 - Pago 50% anticipo" />
+            </div>
+
+          </div>
+
+          <div class="admin-modal-footer" style="margin: 20px -20px -20px -20px;">
+            <button type="button" class="btn-admin btn-admin-outline" onclick="closeCreatePurchaseModal()">Cancelar</button>
+            <button type="submit" class="btn-admin btn-admin-primary">
+              <i class="fas fa-check"></i> Registrar Compra
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       MODAL: AGREGAR / EDITAR BANNER DEL INICIO (ADMIN)
+       ========================================================================== -->
+  <div class="admin-modal-overlay" id="slide-modal">
+    <div class="admin-modal-card" style="max-width: 620px;">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title">
+          <i class="fas fa-image" style="color: var(--admin-gold);"></i> Configurar Banner del Carrusel
+        </h3>
+        <button type="button" class="admin-modal-close" onclick="closeSlideModal()"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="admin-modal-body">
+        <form id="slide-editor-form" onsubmit="event.preventDefault(); saveSlideForm();">
+          <input type="hidden" id="slide-id" />
+
+          <div class="admin-form-grid-2">
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="slide-title-input">Título del Banner <span style="color: var(--admin-danger);">*</span></label>
+              <input type="text" id="slide-title-input" class="admin-input modal-input" placeholder="Ej: Mates Artesanales con Alma Criolla" required />
+            </div>
+
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="slide-subtitle-input">Subtítulo / Bajada</label>
+              <input type="text" id="slide-subtitle-input" class="admin-input modal-input" placeholder="Ej: Calabaza gruesa seleccionada, forrado a mano en cuero vacuno..." />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="slide-tag-input">Etiqueta Superior</label>
+              <input type="text" id="slide-tag-input" class="admin-input modal-input" placeholder="Ej: Colección 2026 • Sierras Chicas" />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="slide-btn-text">Texto del Botón</label>
+              <input type="text" id="slide-btn-text" class="admin-input modal-input" placeholder="Ej: Ver Catálogo Completo" />
+            </div>
+
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="slide-btn-link">Enlace de Destino</label>
+              <input type="text" id="slide-btn-link" class="admin-input modal-input" placeholder="Ej: catalogo.html o promos.html" />
+            </div>
+
+            <!-- Imagen del Banner -->
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label">Imagen de Fondo del Banner <span style="color: var(--admin-danger);">*</span></label>
+              
+              <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 8px;">
+                <div style="width: 100px; height: 60px; border-radius: 6px; border: 1px solid var(--admin-border); overflow: hidden; background: #eee;">
+                  <img id="slide-img-preview" src="assets/images/banner_1.jpg" alt="Preview Banner" style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+                <div style="flex: 1;">
+                  <input type="file" id="slide-file-input" accept="image/*" style="display: none;" onchange="handleSlideFileSelect(event)" />
+                  <button type="button" class="btn-admin btn-admin-gold" onclick="document.getElementById('slide-file-input').click()">
+                    <i class="fas fa-upload"></i> Subir Nueva Foto para este Banner
+                  </button>
+                </div>
+              </div>
+              <input type="text" id="slide-img-url" class="admin-input modal-input" placeholder="O ingresá ruta local (ej: assets/images/banner_2.jpg) o URL web" oninput="document.getElementById('slide-img-preview').src = this.value" />
+            </div>
+
+          </div>
+
+          <div class="admin-modal-footer" style="margin: 20px -20px -20px -20px;">
+            <button type="button" class="btn-admin btn-admin-outline" onclick="closeSlideModal()">Cancelar</button>
+            <button type="submit" class="btn-admin btn-admin-primary">
+              <i class="fas fa-save"></i> Guardar Banner
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       MODAL: EDITAR CATEGORÍA & SUBCATEGORÍAS (ADMIN)
+       ========================================================================== -->
+  <div class="admin-modal-overlay" id="category-editor-modal">
+    <div class="admin-modal-card" style="max-width: 620px;">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title">
+          <i class="fas fa-pen-to-square" style="color: var(--admin-gold);"></i> Modificar Categoría & Subcategorías
+        </h3>
+        <button type="button" class="admin-modal-close" onclick="closeCategoryModal()"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="admin-modal-body">
+        <form id="category-editor-form" onsubmit="event.preventDefault(); saveCategoryEdits();">
+          <input type="hidden" id="cat-edit-id" />
+
+          <div class="admin-form-grid-2">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="cat-edit-name">Nombre de la Categoría <span style="color: var(--admin-danger);">*</span></label>
+              <input type="text" id="cat-edit-name" class="admin-input modal-input" required />
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="cat-edit-badge">Etiqueta Destacada</label>
+              <input type="text" id="cat-edit-badge" class="admin-input modal-input" placeholder="Ej: Más Vendidos, 20% OFF" />
+            </div>
+
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" for="cat-edit-label">Subtítulo / Modelos Incluidos</label>
+              <input type="text" id="cat-edit-label" class="admin-input modal-input" placeholder="Ej: Imperiales & Torpedos" />
+            </div>
+
+            <!-- Subcategorías Management -->
+            <div class="admin-form-group" style="grid-column: span 2;">
+              <label class="admin-form-label" style="font-weight: 800; color: var(--admin-gold);">
+                <i class="fas fa-tags"></i> Subcategorías para Filtros de Productos:
+              </label>
+              
+              <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <input type="text" id="new-subcat-input" class="admin-input modal-input" placeholder="Escribí una nueva subcategoría (ej: Camioneros)..." />
+                <button type="button" class="btn-admin btn-admin-gold" onclick="addNewSubcatChip()" style="flex-shrink: 0;">
+                  <i class="fas fa-plus"></i> Agregar
+                </button>
+              </div>
+
+              <div id="cat-edit-subcats-container" style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: #faf8f5; border: 1px solid var(--admin-border); border-radius: var(--radius-sm); min-height: 44px;">
+                <!-- Chips rendered via JS -->
+              </div>
+            </div>
+
+          </div>
+
+          <div class="admin-modal-footer" style="margin: 20px -20px -20px -20px;">
+            <button type="button" class="btn-admin btn-admin-outline" onclick="closeCategoryModal()">Cancelar</button>
+            <button type="submit" class="btn-admin btn-admin-primary">
+              <i class="fas fa-save"></i> Guardar Cambios de Categoría
             </button>
           </div>
         </form>
