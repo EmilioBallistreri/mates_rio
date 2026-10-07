@@ -218,12 +218,15 @@
         <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" title="Instagram Oficial">
           <i class="fab fa-instagram"></i> @mates_rio_
         </a>
-        <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20consultar%20sobre%20las%20promociones." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
+        <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20consultar%20sobre%20las%20promociones." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
           <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
       </div>
     </div>
   </aside>
+
+  <!-- Banner Dinámico de Fechas Especiales -->
+  <aside id="special-occasion-banner" class="special-occasion-banner" style="display: none;"></aside>
 
   <!-- Sticky Header with Navigation -->
   <header class="site-header" id="main-header">
@@ -256,6 +259,11 @@
 
       <!-- Right Zone: Volver a la Tienda & Cart Trigger -->
       <div class="header-right">
+        <!-- Selector Modo Claro / Modo Oscuro -->
+        <button class="action-btn theme-toggle-btn" id="theme-toggle-btn" onclick="toggleColorTheme()" title="Cambiar a Modo Claro / Modo Oscuro" aria-label="Cambiar tema de color">
+          <i class="fas fa-sun"></i>
+        </button>
+
         <!-- Desktop Back to Store -->
         <a href="index.html" class="btn btn-outline-dark btn-header-back" title="Explorar todo el catálogo">
           <i class="fas fa-arrow-left"></i> <span>Volver a la Tienda</span>
@@ -381,6 +389,12 @@
         </a>
       </li>
       <li class="mobile-nav-item">
+        <a href="javascript:void(0)" onclick="toggleColorTheme(); closeMobileDrawer();">
+          <span><i class="fas fa-sun" id="mobile-theme-icon" style="width: 22px; color: var(--accent-gold);"></i> <span id="mobile-theme-label">Cambiar a Modo Claro</span></span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
         <a href="index.html#contacto">
           <span><i class="fas fa-envelope" style="width: 22px; color: var(--accent-gold);"></i> Contacto & Ubicación</span>
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
@@ -389,8 +403,11 @@
     </ul>
 
     <div class="mobile-drawer-socials">
-      <a href="https://wa.me/5493543600000" target="_blank" rel="noopener noreferrer" class="btn-social-mobile wa">
+      <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="btn-social-mobile wa">
         <i class="fab fa-whatsapp"></i> WhatsApp
+      </a>
+      <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="btn-social-mobile" style="color: #fff; background: #000;">
+        <i class="fab fa-tiktok"></i> TikTok
       </a>
       <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn-social-mobile ig">
         <i class="fab fa-instagram"></i> Instagram
@@ -605,14 +622,14 @@
             <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="social-icon-btn instagram" title="Instagram @mates_rio_">
               <i class="fab fa-instagram"></i>
             </a>
-            <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20la%20web." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
+            <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn tiktok" title="TikTok @Mates_rio">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20la%20web." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
               <i class="fab fa-whatsapp"></i>
             </a>
-            <a href="https://www.facebook.com/matesrio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Facebook @matesrio">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="TikTok @mates_rio">
-              <i class="fab fa-tiktok"></i>
+            <a href="mailto:mates.rio6@gmail.com" class="social-icon-btn email" title="Correo mates.rio6@gmail.com">
+              <i class="fas fa-envelope"></i>
             </a>
           </div>
         </div>
@@ -626,7 +643,6 @@
             <li><a href="promos.html" class="footer-nav-link active" style="color: var(--accent-gold); font-weight: 700;"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Promociones & Combos</a></li>
             <li><a href="catalogo.html?categoria=mates" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Mates Imperiales</a></li>
             <li><a href="catalogo.html?categoria=termos" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Termos de Acero</a></li>
-            <li><a href="personaliza-tu-mate.html" class="footer-nav-link"><i class="fas fa-magic" style="font-size: 0.65rem; color: var(--accent-gold);"></i> Taller de Grabado</a></li>
           </ul>
         </div>
 
@@ -651,13 +667,13 @@
             <li class="contact-item">
               <i class="fab fa-whatsapp"></i>
               <div>
-                <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 3543 60-0000</a>
+                <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 351 383-0111</a>
               </div>
             </li>
             <li class="contact-item">
               <i class="far fa-envelope"></i>
               <div>
-                <a href="mailto:contacto@matesrio.com.ar">contacto@matesrio.com.ar</a>
+                <a href="mailto:mates.rio6@gmail.com">mates.rio6@gmail.com</a>
               </div>
             </li>
             <li class="contact-item">
@@ -678,90 +694,68 @@
     </div>
   </footer>
 
+  <!-- Botón Flotante de Carrito Profesional -->
+  <button class="floating-cart-btn" id="floating-cart-btn" onclick="openCartDrawer()" aria-label="Abrir Carrito de Compras" title="Ver Carrito de Compras">
+    <div class="floating-cart-icon-wrap">
+      <i class="fas fa-shopping-bag"></i>
+    </div>
+    <span class="floating-cart-label">Carrito</span>
+    <span class="floating-cart-badge" id="floating-cart-badge">0</span>
+  </button>
+
   <!-- ==========================================================================
-       SHOPPING CART DRAWER (FULL SLIDE-OVER)
+       SHOPPING CART DRAWER (SIMPLIFICADO)
        ========================================================================== -->
   <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
-  <aside class="cart-drawer" id="cart-drawer" aria-label="Carrito de Compras">
-    <div class="cart-drawer-header">
-      <div class="cart-drawer-title-group">
-        <i class="fas fa-shopping-bag cart-title-icon"></i>
-        <h3 class="cart-drawer-title">Tu Carrito</h3>
-        <span class="cart-items-count-tag" id="cart-count-title">(0 productos)</span>
+  <aside class="cart-drawer cart-drawer-simplified" id="cart-drawer" aria-label="Carrito de Compras">
+    <div class="cart-header">
+      <div class="cart-header-title-group">
+        <div class="cart-header-icon-box">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <div>
+          <h3 class="cart-header-title">Mi Carrito</h3>
+          <span class="cart-items-counter-sub" id="cart-count-title">(0 productos)</span>
+        </div>
       </div>
       <button class="cart-close-btn" onclick="closeCartDrawer()" aria-label="Cerrar carrito" title="Cerrar">
         <i class="fas fa-times"></i>
       </button>
     </div>
 
-    <!-- Free Shipping Progress Meter -->
-    <div class="cart-shipping-meter">
-      <div class="shipping-meter-text" id="free-shipping-text">
-        <i class="fas fa-truck-fast"></i> ¡Sumá <b>$ 60.000</b> para tener <b>ENVÍO GRATIS</b>!
-      </div>
-      <div class="shipping-progress-track">
-        <div class="shipping-progress-bar" id="free-shipping-bar" style="width: 0%;"></div>
-      </div>
+    <!-- Items List -->
+    <div class="cart-items-list" id="cart-items-container">
+      <!-- Populated dynamically via JS -->
     </div>
 
-    <!-- Alert Banner inside Drawer -->
-    <div class="cart-drawer-alert" id="cart-added-banner">
-      <div id="cart-added-banner-text">¡Producto agregado al carrito!</div>
-    </div>
-
-    <!-- Scrollable Items List -->
-    <div class="cart-drawer-body" id="cart-items-container">
-      <!-- Injected via app.js -->
-    </div>
-
-    <!-- Drawer Footer & Checkout Controls -->
-    <div class="cart-drawer-footer">
-      <div class="cart-tools-accordion">
-        <button type="button" class="cart-tool-btn" id="btn-toggle-shipping" onclick="toggleCartTool('shipping')">
-          <span><i class="fas fa-truck"></i> Calcular costo de envío por Código Postal</span>
-          <i class="fas fa-chevron-down arrow" id="arrow-shipping"></i>
-        </button>
-      </div>
-
-      <div class="cart-tool-collapse" id="collapse-shipping">
-        <div class="shipping-calc-wrap">
-          <input type="text" id="cart-cp-input" placeholder="Tu Código Postal (ej: 5111)" maxlength="8" />
-          <button class="btn btn-outline-dark shipping-calc-btn" onclick="calculateShippingCP()">Calcular</button>
+    <!-- Simplified Footer -->
+    <div class="cart-footer" id="cart-footer">
+      <div class="cart-summary-card">
+        <div class="cart-totals-row total-final">
+          <span class="row-label-total">Total a pagar</span>
+          <span class="row-val-total" id="cart-total">$ 0</span>
         </div>
-        <div id="cart-cp-result" class="tool-feedback-msg"></div>
-      </div>
-
-      <div class="cart-summary-totals">
-        <div class="summary-line">
-          <span>Subtotal</span>
-          <span class="value" id="cart-subtotal">$ 0</span>
-        </div>
-        <div class="summary-line">
-          <span>Costo de envío</span>
-          <span class="value" id="cart-shipping-amount">A calcular</span>
-        </div>
-        <div class="summary-line total">
-          <div style="display: flex; flex-direction: column;">
-            <span>Total a pagar</span>
-            <small style="font-size: 0.72rem; color: #27ae60; font-weight: 600;"><i class="fas fa-bolt"></i> 10% OFF extra con transferencia</small>
-          </div>
-          <span class="value" id="cart-total">$ 0</span>
-        </div>
+        <small class="transfer-savings-hint" style="display: block; margin-top: 6px; font-size: 0.8rem; color: var(--accent-gold); text-align: right;">
+          <i class="fas fa-bolt"></i> 10% OFF pagando por Transferencia Bancaria
+        </small>
       </div>
 
       <div class="cart-checkout-actions">
         <button class="btn btn-primary btn-checkout-main" onclick="openWebCheckout()">
-          <i class="fas fa-lock"></i> Iniciar Compra Online
+          <i class="fas fa-credit-card"></i> Iniciar Compra Online
         </button>
+
         <button class="btn btn-whatsapp-secondary" onclick="checkoutWhatsApp()" title="Atención y pedido por WhatsApp">
           <i class="fab fa-whatsapp"></i> Finalizar Pedido por WhatsApp
         </button>
       </div>
 
-      <div class="cart-footer-links">
-        <button onclick="closeCartDrawer()" class="cart-continue-link">Continuar mirando combos</button>
-        <span class="sep">•</span>
-        <button onclick="confirmClearCart()" class="cart-clear-link">Vaciar carrito</button>
+      <div class="cart-footer-security-row">
+        <span><i class="fas fa-shield-alt"></i> Compra Segura</span>
+        <span>•</span>
+        <button onclick="confirmClearCart()" class="cart-clear-link" title="Vaciar todos los productos">
+          Vaciar carrito
+        </button>
       </div>
     </div>
   </aside>
@@ -888,7 +882,7 @@
         <div style="overflow: hidden;">
           <h3 style="font-family: var(--font-heading); font-size: 1.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-name-display">Usuario</h3>
           <p style="font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-email-display">email@ejemplo.com</p>
-          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 3543 ...</span>
+          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 351 383-0111</span>
         </div>
       </div>
 

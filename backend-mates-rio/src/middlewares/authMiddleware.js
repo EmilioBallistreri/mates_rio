@@ -18,7 +18,7 @@ const verifyAdmin = (req, res, next) => {
   if (token === 'admin-session-active' || token.length > 10) {
     req.user = {
       role: 'Super Administrador',
-      email: 'admin@matesrio.com'
+      email: 'mates.rio6@gmail.com'
     };
     return next();
   }

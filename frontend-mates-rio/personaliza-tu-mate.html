@@ -46,7 +46,7 @@
         <a href="index.html" title="Ir a la Tienda Principal">
           <i class="fas fa-store"></i> Volver a la Tienda
         </a>
-        <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20consultar%20sobre%20la%20personalizaci%C3%B3n%20de%20un%20mate." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
+        <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20consultar%20sobre%20la%20personalizaci%C3%B3n%20de%20un%20mate." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
           <i class="fab fa-whatsapp"></i> Asesoría WhatsApp
         </a>
       </div>
@@ -84,6 +84,11 @@
 
       <!-- 3. Right Zone: Back to Store & Cart Trigger -->
       <div class="header-right">
+        <!-- Selector Modo Claro / Modo Oscuro -->
+        <button class="action-btn theme-toggle-btn" id="theme-toggle-btn" onclick="toggleColorTheme()" title="Cambiar a Modo Claro / Modo Oscuro" aria-label="Cambiar tema de color">
+          <i class="fas fa-sun"></i>
+        </button>
+
         <!-- Desktop Back to Store -->
         <a href="index.html" class="btn btn-outline-dark btn-header-back" title="Explorar otros productos">
           <i class="fas fa-arrow-left"></i> <span>Volver a la Tienda</span>
@@ -222,9 +227,12 @@
     </ul>
 
     <div class="mobile-nav-footer">
-      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
-        <a href="https://wa.me/5493543600000" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="flex: 1; padding: 10px; font-size: 0.78rem;">
+      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+        <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="flex: 1; padding: 10px; font-size: 0.78rem;">
           <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok" style="flex: 1; padding: 10px; font-size: 0.78rem;">
+          <i class="fab fa-tiktok"></i> TikTok
         </a>
         <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="flex: 1; padding: 10px; font-size: 0.78rem;">
           <i class="fab fa-instagram"></i> Instagram
@@ -763,14 +771,14 @@
             <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="social-icon-btn instagram" title="Instagram @mates_rio_">
               <i class="fab fa-instagram"></i>
             </a>
-            <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20taller%20de%20personalizaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
+            <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn tiktok" title="TikTok @Mates_rio">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20taller%20de%20personalizaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
               <i class="fab fa-whatsapp"></i>
             </a>
-            <a href="https://www.facebook.com/matesrio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Facebook matesrio">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="TikTok @mates_rio">
-              <i class="fab fa-tiktok"></i>
+            <a href="mailto:mates.rio6@gmail.com" class="social-icon-btn email" title="Correo mates.rio6@gmail.com">
+              <i class="fas fa-envelope"></i>
             </a>
           </div>
         </div>
@@ -809,13 +817,13 @@
             <li class="contact-item">
               <i class="fab fa-whatsapp"></i>
               <div>
-                <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 3543 60-0000</a>
+                <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 351 383-0111</a>
               </div>
             </li>
             <li class="contact-item">
               <i class="far fa-envelope"></i>
               <div>
-                <a href="mailto:contacto@matesrio.com.ar">contacto@matesrio.com.ar</a>
+                <a href="mailto:mates.rio6@gmail.com">mates.rio6@gmail.com</a>
               </div>
             </li>
             <li class="contact-item">
@@ -835,6 +843,15 @@
       </div>
     </div>
   </footer>
+
+  <!-- Botón Flotante de Carrito Profesional -->
+  <button class="floating-cart-btn" id="floating-cart-btn" onclick="openCartDrawer()" aria-label="Abrir Carrito de Compras" title="Ver Carrito de Compras">
+    <div class="floating-cart-icon-wrap">
+      <i class="fas fa-shopping-bag"></i>
+    </div>
+    <span class="floating-cart-label">Carrito</span>
+    <span class="floating-cart-badge" id="floating-cart-badge">0</span>
+  </button>
 
   <!-- ==========================================================================
        MODAL: FINALIZAR PERSONALIZACIÓN (COMPRA ONLINE O WHATSAPP O CONTINUAR)
@@ -1106,7 +1123,7 @@
         <div style="overflow: hidden;">
           <h3 style="font-family: var(--font-heading); font-size: 1.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-name-display">Usuario</h3>
           <p style="font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-email-display">email@ejemplo.com</p>
-          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 3543 ...</span>
+          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 351 383-0111</span>
         </div>
       </div>
 
@@ -1375,7 +1392,7 @@
         </div>
       </div>
 
-      <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Acabo%20de%20realizar%20un%20pedido%20en%20el%20personalizador%20web." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="width: 100%; margin-top: 10px;">
+      <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Acabo%20de%20realizar%20un%20pedido%20en%20el%20personalizador%20web." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="width: 100%; margin-top: 10px;">
         <i class="fab fa-whatsapp"></i> Enviar Comprobante por WhatsApp
       </a>
 
@@ -1467,17 +1484,17 @@
         </div>
 
         <div class="chat-quick-options">
-          <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20consultar%20sobre%20un%20grabado%20especial." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
+          <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20consultar%20sobre%20un%20grabado%20especial." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
             Consultar por grabado de logo
           </a>
-          <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Tengo%20dudas%20con%20el%20simulador%20de%20mates." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
+          <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Tengo%20dudas%20con%20el%20simulador%20de%20mates." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
             Ayuda con el simulador
           </a>
         </div>
       </div>
 
       <div class="chat-popup-footer">
-        <a href="https://wa.me/5493543600000?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20personalizador%20web." target="_blank" rel="noopener noreferrer" class="btn-chat-send">
+        <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20personalizador%20web." target="_blank" rel="noopener noreferrer" class="btn-chat-send">
           <i class="fab fa-whatsapp"></i> Iniciar Chat en WhatsApp
         </a>
       </div>
