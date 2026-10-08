@@ -5941,7 +5941,7 @@ input, select, textarea {
 
 .form-input:focus {
   border-color: var(--accent-gold);
-  background-color: #ffffff;
+  background-color: var(--bg-surface-elevated);
 }
 
 /* Payment Selection Radio Card */
@@ -6082,7 +6082,7 @@ input, select, textarea {
   padding: 0 16px 0 38px;
   font-size: 0.86rem;
   outline: none;
-  background: #ffffff;
+  background: var(--bg-surface-elevated);
   box-sizing: border-box;
   color: var(--text-main);
   transition: border-color var(--transition-fast);
@@ -8259,11 +8259,52 @@ body:not(.theme-light):not(.theme-inverted) .nav-link.active,
 body.theme-dark .nav-link.active {
   color: var(--accent-gold);
 }
-body:not(.theme-light):not(.theme-inverted) .nav-dropdown-panel,
-body.theme-dark .nav-dropdown-panel {
-  background: #1a1512;
-  border: 1px solid rgba(197, 155, 39, 0.3);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+body:not(.theme-light):not(.theme-inverted) .nav-dropdown-menu,
+body.theme-dark .nav-dropdown-menu,
+body:not(.theme-light):not(.theme-inverted) .user-dropdown-menu,
+body.theme-dark .user-dropdown-menu {
+  background: #1c1511 !important;
+  border: 1px solid rgba(197, 155, 39, 0.35) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75) !important;
+  color: #f5f2ec !important;
+}
+body:not(.theme-light):not(.theme-inverted) .nav-dropdown-menu::before,
+body.theme-dark .nav-dropdown-menu::before {
+  background: #1c1511 !important;
+  border-top: 1px solid rgba(197, 155, 39, 0.35) !important;
+  border-left: 1px solid rgba(197, 155, 39, 0.35) !important;
+}
+body:not(.theme-light):not(.theme-inverted) .dropdown-cat-icon,
+body.theme-dark .dropdown-cat-icon {
+  background: #251d17 !important;
+  border-color: rgba(197, 155, 39, 0.25) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+body:not(.theme-light):not(.theme-inverted) .dropdown-cat-card:hover,
+body.theme-dark .dropdown-cat-card:hover {
+  background: #251d17 !important;
+  border-color: rgba(197, 155, 39, 0.3) !important;
+}
+body:not(.theme-light):not(.theme-inverted) .dropdown-cat-name,
+body.theme-dark .dropdown-cat-name {
+  color: #ffffff !important;
+}
+body:not(.theme-light):not(.theme-inverted) .dropdown-cat-desc,
+body.theme-dark .dropdown-cat-desc {
+  color: #a89f94 !important;
+}
+body:not(.theme-light):not(.theme-inverted) .dropdown-footer,
+body.theme-dark .dropdown-footer {
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+body:not(.theme-light):not(.theme-inverted) .user-dropdown-item,
+body.theme-dark .user-dropdown-item {
+  color: #ded8ce !important;
+}
+body:not(.theme-light):not(.theme-inverted) .user-dropdown-item:hover,
+body.theme-dark .user-dropdown-item:hover {
+  background: #251d17 !important;
+  color: var(--accent-gold) !important;
 }
 body:not(.theme-light):not(.theme-inverted) .dropdown-category-title,
 body.theme-dark .dropdown-category-title {
@@ -8557,6 +8598,598 @@ body.theme-inverted .subcat-chip:hover {
 .occasion-theme-custom {
   background: linear-gradient(90deg, #2b1b12 0%, #5a3821 100%);
 }
+
+/* ==========================================================================
+   BANNER PERSONALIZADO (ENTRE BENEFICIOS Y COMUNIDAD)
+   ========================================================================== */
+.banner-personalizado-section {
+  padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-personalizado-card {
+  position: relative;
+  background: linear-gradient(135deg, #1f1610 0%, #150f0b 60%, #0d0907 100%);
+  border: 1.5px solid rgba(197, 155, 39, 0.4);
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  align-items: center;
+  gap: 40px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+body.theme-light .banner-personalizado-card,
+body.theme-inverted .banner-personalizado-card {
+  background: linear-gradient(135deg, #2b1f16 0%, #1c140d 100%);
+  border-color: rgba(197, 155, 39, 0.5);
+  box-shadow: 0 16px 40px rgba(44, 30, 20, 0.2);
+}
+
+.banner-personalizado-card::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(197, 155, 39, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.banner-pers-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(197, 155, 39, 0.18);
+  color: var(--accent-gold);
+  border: 1px solid rgba(197, 155, 39, 0.4);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 14px;
+}
+
+.banner-pers-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.banner-pers-desc {
+  font-size: 0.98rem;
+  color: #d6cdc4;
+  line-height: 1.65;
+  margin-bottom: 22px;
+  max-width: 580px;
+}
+
+.banner-pers-perks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.pers-perk-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f0ebe1;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pers-perk-item i {
+  color: var(--accent-gold);
+}
+
+.banner-pers-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-pers-main {
+  padding: 13px 28px;
+  font-size: 0.94rem;
+  font-weight: 800;
+  box-shadow: 0 6px 20px rgba(197, 155, 39, 0.4);
+}
+
+.btn-pers-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(197, 155, 39, 0.6);
+}
+
+.btn-pers-wsp {
+  padding: 12px 22px;
+  font-size: 0.9rem;
+}
+
+.banner-pers-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-pers-img-wrap {
+  position: relative;
+  max-width: 380px;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 2px solid rgba(197, 155, 39, 0.35);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+  transition: transform 0.4s ease;
+}
+
+.banner-pers-card:hover .banner-pers-img-wrap {
+  transform: scale(1.02);
+}
+
+.banner-pers-img {
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+.banner-pers-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(13, 9, 7, 0.85) 100%);
+  pointer-events: none;
+}
+
+.banner-pers-floating-tag {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(18, 14, 11, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 991px) {
+  .banner-personalizado-card {
+    grid-template-columns: 1fr;
+    padding: 34px 24px;
+    text-align: center;
+    gap: 30px;
+  }
+  .banner-pers-desc {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .banner-pers-perks {
+    justify-content: center;
+  }
+  .banner-pers-cta-group {
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   COMMUNITY SOCIAL BUTTONS: PROLIJOS & CENTRADOS
+   ========================================================================== */
+.community-social-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.community-social-group .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 26px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  min-width: 140px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: all var(--transition-fast);
+}
+
+@media (max-width: 768px) {
+  .community-social-group {
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+  }
+  .community-social-group .btn {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+/* ==========================================================================
+   DARK MODE ENHANCEMENTS & NO-WHITE-LEAKS
+   ========================================================================== */
+
+/* 1. Catalog Filter Pills Dark Mode */
+body:not(.theme-light):not(.theme-inverted) .filter-pill,
+body.theme-dark .filter-pill {
+  background: #1b1613 !important;
+  border-color: rgba(197, 155, 39, 0.25) !important;
+  color: #ded8ce !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .filter-pill:hover,
+body.theme-dark .filter-pill:hover {
+  background: #2a2018 !important;
+  border-color: var(--accent-gold) !important;
+  color: #ffffff !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .filter-pill.active,
+body.theme-dark .filter-pill.active {
+  background: var(--accent-gold) !important;
+  color: #121212 !important;
+  border-color: var(--accent-gold) !important;
+}
+
+/* 2. Personalizer Studio Dark Mode */
+body:not(.theme-light):not(.theme-inverted).page-customizer,
+body.theme-dark.page-customizer,
+body:not(.theme-light):not(.theme-inverted) .page-customizer,
+body.theme-dark .page-customizer {
+  background-color: #120f0d !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .customizer-main-container,
+body.theme-dark .customizer-main-container {
+  background-color: #120f0d !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .studio-page-title,
+body.theme-dark .studio-page-title {
+  color: #ffffff !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .studio-page-subtitle,
+body.theme-dark .studio-page-subtitle {
+  color: #b5aba0 !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .studio-badge-pill,
+body.theme-dark .studio-badge-pill {
+  background: rgba(197, 155, 39, 0.18) !important;
+  border-color: rgba(197, 155, 39, 0.4) !important;
+  color: var(--accent-gold) !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .virola-notice-card,
+body.theme-dark .virola-notice-card {
+  background: #1c1611 !important;
+  border-color: rgba(197, 155, 39, 0.35) !important;
+  border-left-color: var(--accent-gold) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .virola-notice-icon,
+body.theme-dark .virola-notice-icon {
+  background: rgba(197, 155, 39, 0.18) !important;
+  border-color: var(--accent-gold) !important;
+  color: var(--accent-gold) !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .virola-notice-title,
+body.theme-dark .virola-notice-title {
+  color: #ffffff !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .customizer-form-card,
+body.theme-dark .customizer-form-card {
+  background: #1c1611 !important;
+  border-color: rgba(197, 155, 39, 0.25) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .custom-step-block,
+body.theme-dark .custom-step-block {
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .step-title,
+body.theme-dark .step-title {
+  color: #ffffff !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .step-desc,
+body.theme-dark .step-desc {
+  color: #a89f94 !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .custom-mate-card,
+body.theme-dark .custom-mate-card {
+  background: #241c16 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .custom-mate-card:hover,
+body.theme-dark .custom-mate-card:hover {
+  background: #2b211a !important;
+  border-color: rgba(197, 155, 39, 0.5) !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .custom-mate-card.active,
+body.theme-dark .custom-mate-card.active {
+  background: #2c2016 !important;
+  border-color: var(--accent-gold) !important;
+  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.4) !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .custom-finish-card,
+body.theme-dark .custom-finish-card,
+body:not(.theme-light):not(.theme-inverted) .custom-tech-card,
+body.theme-dark .custom-tech-card,
+body:not(.theme-light):not(.theme-inverted) .custom-tip-card,
+body.theme-dark .custom-tip-card {
+  background: #241c16 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .custom-finish-card.active,
+body.theme-dark .custom-finish-card.active,
+body:not(.theme-light):not(.theme-inverted) .custom-tech-card.active,
+body.theme-dark .custom-tech-card.active {
+  border-color: var(--accent-gold) !important;
+  background: #2c2016 !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .customizer-summary-card,
+body.theme-dark .customizer-summary-card {
+  background: #1c1611 !important;
+  border-color: rgba(197, 155, 39, 0.3) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .engraving-input-box,
+body.theme-dark .engraving-input-box,
+body:not(.theme-light):not(.theme-inverted) .custom-engraving-input,
+body.theme-dark .custom-engraving-input {
+  background: #16110d !important;
+  border-color: rgba(197, 155, 39, 0.3) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .btn-header-back,
+body.theme-dark .btn-header-back {
+  background: #221a14 !important;
+  border-color: rgba(197, 155, 39, 0.3) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .custom-sim-box,
+body.theme-dark .custom-sim-box {
+  background: #181310 !important;
+  border-color: rgba(197, 155, 39, 0.25) !important;
+}
+
+/* 3. Bank Alias Code Badge */
+.bank-alias-code {
+  font-family: monospace;
+  background: rgba(197, 155, 39, 0.15);
+  color: var(--accent-gold);
+  border: 1px solid rgba(197, 155, 39, 0.35);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+body.theme-light .bank-alias-code,
+body.theme-inverted .bank-alias-code {
+  background: #fdf6e7;
+  color: #8c6815;
+  border-color: rgba(197, 155, 39, 0.4);
+}
+
+/* 4. Mobile Nav Item Styling */
+.mobile-nav-admin {
+  background: rgba(197, 155, 39, 0.12) !important;
+  border-left: 4px solid var(--accent-gold) !important;
+}
+
+body.theme-light .mobile-nav-admin,
+body.theme-inverted .mobile-nav-admin {
+  background: #fffdf9 !important;
+  border-left-color: var(--accent-gold) !important;
+}
+
+.mobile-nav-promo-active {
+  background: rgba(192, 57, 43, 0.12) !important;
+  border-left: 4px solid var(--badge-promo) !important;
+}
+
+body.theme-light .mobile-nav-promo-active,
+body.theme-inverted .mobile-nav-promo-active {
+  background: #fff8f5 !important;
+  border-left-color: var(--badge-promo) !important;
+}
+
+/* 5. Cart Drawer Dark Mode Polish */
+body:not(.theme-light):not(.theme-inverted) .cart-item-img-wrap,
+body.theme-dark .cart-item-img-wrap {
+  background-color: #241c16 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .cart-tool-btn,
+body.theme-dark .cart-tool-btn {
+  background: #221a14 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ded8ce !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .cart-tool-btn:hover,
+body.theme-dark .cart-tool-btn:hover,
+body:not(.theme-light):not(.theme-inverted) .cart-tool-btn.active,
+body.theme-dark .cart-tool-btn.active {
+  background: #2b211a !important;
+  border-color: var(--accent-gold) !important;
+  color: var(--accent-gold) !important;
+}
+
+/* 6. Auth Modal Tabs Dark Mode */
+body:not(.theme-light):not(.theme-inverted) .auth-tab-btn,
+body.theme-dark .auth-tab-btn {
+  background-color: #140f0c !important;
+  color: #a89f94 !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .auth-tab-btn.active,
+body.theme-dark .auth-tab-btn.active {
+  background-color: #1a1512 !important;
+  color: var(--accent-gold) !important;
+  border-bottom-color: var(--accent-gold) !important;
+}
+
+/* 7. Profile Modal Tabs & Location Dark Mode */
+body:not(.theme-light):not(.theme-inverted) .profile-modal-tabs,
+body.theme-dark .profile-modal-tabs {
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .profile-tab-btn,
+body.theme-dark .profile-tab-btn {
+  color: #a89f94 !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .profile-tab-btn.active,
+body.theme-dark .profile-tab-btn.active {
+  color: var(--accent-gold) !important;
+  background: #251d17 !important;
+  box-shadow: inset 0 -2px 0 var(--accent-gold) !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .profile-tab-btn:hover:not(.active),
+body.theme-dark .profile-tab-btn:hover:not(.active) {
+  background: #1c1511 !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .location-box,
+body.theme-dark .location-box {
+  background: #16110d !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* 8. Payment Selection Radio Cards Dark Mode */
+body:not(.theme-light):not(.theme-inverted) .payment-radio-card,
+body.theme-dark .payment-radio-card {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: #191410 !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .payment-radio-card:hover,
+body.theme-dark .payment-radio-card:hover {
+  border-color: var(--accent-gold) !important;
+  background-color: #241c16 !important;
+}
+
+/* 9. Customizer Completion Modal Dark Mode */
+body:not(.theme-light):not(.theme-inverted) .comp-engraving-badge,
+body.theme-dark .comp-engraving-badge {
+  background: #181310 !important;
+  border-color: rgba(197, 155, 39, 0.3) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .btn-completion-choice,
+body.theme-dark .btn-completion-choice,
+body:not(.theme-light):not(.theme-inverted) .btn-choice-continue,
+body.theme-dark .btn-choice-continue {
+  background: #221a14 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .btn-choice-checkout,
+body.theme-dark .btn-choice-checkout {
+  background: linear-gradient(135deg, #2c2016 0%, #38291c 100%) !important;
+  border-color: var(--accent-gold) !important;
+  color: #ffffff !important;
+}
+
+/* 10. Cart Customize CTA, Mobile Back & Modal Close Icon Dark Mode */
+body:not(.theme-light):not(.theme-inverted) .btn-cart-customize,
+body.theme-dark .btn-cart-customize {
+  background: rgba(197, 155, 39, 0.12) !important;
+  color: var(--accent-gold) !important;
+  border-color: rgba(197, 155, 39, 0.5) !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .modal-close-icon,
+body.theme-dark .modal-close-icon {
+  background: #251d17 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ded8ce !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .btn-header-back-mobile,
+body.theme-dark .btn-header-back-mobile {
+  background: #221a14 !important;
+  border-color: rgba(197, 155, 39, 0.3) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .promo-img-badge,
+body.theme-dark .promo-img-badge {
+  background: #1c1611 !important;
+  color: #f5f2ec !important;
+  border-color: var(--accent-gold) !important;
+}
+
+/* 11. Outline Dark Button High Contrast in Dark Mode */
+body:not(.theme-light):not(.theme-inverted) .btn-outline-dark,
+body.theme-dark .btn-outline-dark {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #f5f2ec !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .btn-outline-dark:hover,
+body.theme-dark .btn-outline-dark:hover {
+  background-color: var(--accent-gold) !important;
+  border-color: var(--accent-gold) !important;
+  color: #121212 !important;
+}
+
 
 
 

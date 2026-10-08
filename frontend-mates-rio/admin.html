@@ -679,6 +679,34 @@
             </div>
           </div>
 
+          <!-- Barra de Búsqueda y Filtros de Compras -->
+          <div class="admin-filter-bar" style="margin-top: 18px;">
+            <div class="admin-search-wrap">
+              <i class="fas fa-search admin-search-icon"></i>
+              <input type="text" id="purchases-search-input" class="admin-search-input" placeholder="Buscar por proveedor, artículo o remito..." oninput="handlePurchasesFilterChange()" />
+            </div>
+            <div class="admin-filter-actions">
+              <select id="purchases-category-filter" class="admin-filter-select" onchange="handlePurchasesFilterChange()">
+                <option value="all">Todas las Categorías</option>
+                <option value="Mates / Insumos">Mates / Insumos</option>
+                <option value="Termos">Termos</option>
+                <option value="Bombillas">Bombillas</option>
+                <option value="Yerbas">Yerbas</option>
+                <option value="Equipos">Equipos</option>
+                <option value="Packaging">Packaging</option>
+              </select>
+              <select id="purchases-status-filter" class="admin-filter-select" onchange="handlePurchasesFilterChange()">
+                <option value="all">Todos los Estados</option>
+                <option value="Recibido">Recibido en Taller</option>
+                <option value="En Camino">En Camino</option>
+                <option value="Pendiente">Pendiente</option>
+              </select>
+              <button type="button" class="btn-admin btn-admin-outline" onclick="resetPurchasesFilters()" title="Limpiar Filtros">
+                <i class="fas fa-undo"></i>
+              </button>
+            </div>
+          </div>
+
           <!-- Tabla de Compras -->
           <div class="table-responsive-card" style="margin-top: 18px;">
             <table class="admin-data-table">
@@ -759,7 +787,7 @@
 
           <!-- TAB 3: Anuncios de Fechas Especiales -->
           <div id="design-panel-occasions" class="design-panel" style="display: none;">
-            <div style="background: #ffffff; border: 1.5px solid var(--admin-border); border-radius: var(--radius-md); padding: 20px;">
+            <div class="admin-card occasion-config-card" style="padding: 24px;">
               
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--admin-border);">
                 <div>
@@ -889,8 +917,8 @@
           <input type="hidden" id="edit-product-id" />
 
           <!-- Top preview row -->
-          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 18px; padding: 12px 16px; background: #faf8f4; border: 1.5px solid var(--admin-border); border-radius: var(--radius-md);">
-            <div style="width: 60px; height: 60px; border-radius: 8px; border: 1.5px solid var(--admin-gold); overflow: hidden; flex-shrink: 0; background: #fff; display: flex; align-items: center; justify-content: center;">
+          <div class="admin-modal-top-preview">
+            <div class="admin-preview-avatar">
               <img id="edit-prod-preview-thumb" src="assets/images/prod_mate_imperial.jpg" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" />
             </div>
             <div style="flex: 1; min-width: 0;">
@@ -1262,7 +1290,7 @@
             </div>
 
             <div class="admin-form-group" style="grid-column: span 2;">
-              <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: #faf8f5; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+              <div class="purchase-cost-summary-box">
                 <span style="font-weight: 700; font-size: 0.88rem;">Costo Total Estimado:</span>
                 <strong id="purchase-total-display" style="font-size: 1.25rem; color: var(--admin-leather); font-family: var(--font-heading);">$ 0</strong>
               </div>
@@ -1334,7 +1362,7 @@
               <label class="admin-form-label">Imagen de Fondo del Banner <span style="color: var(--admin-danger);">*</span></label>
               
               <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 8px;">
-                <div style="width: 100px; height: 60px; border-radius: 6px; border: 1px solid var(--admin-border); overflow: hidden; background: #eee;">
+                <div class="slide-thumb-box">
                   <img id="slide-img-preview" src="assets/images/banner_1.jpg" alt="Preview Banner" style="width: 100%; height: 100%; object-fit: cover;" />
                 </div>
                 <div style="flex: 1;">
@@ -1406,7 +1434,7 @@
                 </button>
               </div>
 
-              <div id="cat-edit-subcats-container" style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: #faf8f5; border: 1px solid var(--admin-border); border-radius: var(--radius-sm); min-height: 44px;">
+              <div id="cat-edit-subcats-container" class="admin-subcats-box">
                 <!-- Chips rendered via JS -->
               </div>
             </div>

@@ -124,7 +124,7 @@
       gap: 8px;
     }
     .promo-filter-chip {
-      background: #ffffff;
+      background: var(--bg-card);
       border: 1.5px solid var(--border-light);
       padding: 8px 18px;
       border-radius: var(--radius-full);
@@ -139,15 +139,15 @@
     }
     .promo-filter-chip:hover,
     .promo-filter-chip.active {
-      background: var(--bg-dark);
-      color: #ffffff;
-      border-color: var(--bg-dark);
+      background: var(--accent-gold);
+      color: #121212;
+      border-color: var(--accent-gold);
     }
     .promo-filter-chip.active i {
-      color: var(--accent-gold);
+      color: #121212;
     }
     .why-combo-section {
-      background: #ffffff;
+      background: var(--bg-surface);
       border-top: 1px solid var(--border-light);
       border-bottom: 1px solid var(--border-light);
       padding: 60px 0;
@@ -160,8 +160,8 @@
       margin-top: 30px;
     }
     .why-combo-card {
-      background: var(--bg-main);
-      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
       padding: 24px;
       text-align: center;
@@ -176,9 +176,9 @@
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      background: #fdfaf2;
-      border: 1.5px solid var(--accent-gold-light);
-      color: var(--accent-leather);
+      background: rgba(197, 155, 39, 0.15);
+      border: 1.5px solid var(--accent-gold);
+      color: var(--accent-gold);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -328,7 +328,7 @@
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
-      <li class="mobile-nav-item" id="mobile-nav-admin-item" style="display: none; background: #fffdf9; border-left: 4px solid var(--accent-gold);">
+      <li class="mobile-nav-item mobile-nav-admin" id="mobile-nav-admin-item" style="display: none;">
         <a href="admin.html" onclick="closeMobileDrawer();">
           <span><i class="fas fa-shield-halved" style="width: 22px; color: var(--accent-gold);"></i> <b style="color: var(--accent-leather);">Panel Admin</b></span>
           <span class="nav-badge-pill pill-gold">STAFF</span>
@@ -346,7 +346,7 @@
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
-      <li class="mobile-nav-item active" style="background: #fff8f5; border-left: 4px solid var(--badge-promo);">
+      <li class="mobile-nav-item active mobile-nav-promo-active">
         <a href="promos.html" onclick="closeMobileDrawer()">
           <span><i class="fas fa-fire" style="width: 22px; color: var(--badge-promo);"></i> <b>PROMOS & COMBOS</b></span>
           <span class="nav-badge-pill">Hasta 25% OFF</span>
@@ -1144,7 +1144,7 @@
         <div style="font-size: 0.82rem; line-height: 1.5; color: var(--text-secondary);">
           <div>Banco: <b>Banco Santander</b></div>
           <div>Titular: <b>Mates Río S.R.L.</b></div>
-          <div>Alias: <code style="background: #fff; padding: 2px 6px; border: 1px solid #ddd; border-radius: 4px; font-weight: bold;">MATES.RIO.OFICIAL</code></div>
+          <div>Alias: <code class="bank-alias-code">MATES.RIO.OFICIAL</code></div>
           <button class="btn btn-outline-dark" onclick="copyCBU('MATES.RIO.OFICIAL')" style="padding: 6px 14px; font-size: 0.76rem; width: 100%; margin-top: 8px;">
             <i class="fas fa-copy"></i> Copiar Alias Bancario
           </button>
