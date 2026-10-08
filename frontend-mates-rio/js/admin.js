@@ -2537,7 +2537,7 @@ function saveCategoryEdits() {
   logAuditAction('Diseño Web', `Categoría "${name}" y sus subcategorías fueron modificadas.`);
 }
 
-// --- 13.3 ANUNCIO DE FECHAS ESPECIALES ---
+// --- 13.3 ANUNCIO DE FECHAS ESPECIALES & UBICACIÓN WEB ---
 const OCCASION_PRESETS = {
   mother: {
     theme: 'mother',
@@ -2545,7 +2545,8 @@ const OCCASION_PRESETS = {
     title: '¡Especial Día de la Madre! Grabado personalizado de regalo',
     subtitle: 'Hasta 3 cuotas sin interés y 10% OFF extra con transferencia',
     btnText: 'Ver Regalos Materos 👉',
-    btnLink: 'promos.html'
+    btnLink: 'promos.html',
+    position: 'top-bar'
   },
   father: {
     theme: 'father',
@@ -2553,15 +2554,62 @@ const OCCASION_PRESETS = {
     title: '¡Homenajeá a Papá con un Mate Imperial de Colección!',
     subtitle: 'Envíos express a todo el país y caja de regalo incluida',
     btnText: 'Elegir su Mate 👉',
-    btnLink: 'catalogo.html'
+    btnLink: 'catalogo.html',
+    position: 'top-bar'
   },
-  christmas: {
-    theme: 'christmas',
-    badge: '🎄 NAVIDAD & AÑO NUEVO',
-    title: '¡Celebrá las Fiestas con Mates Río! 15% OFF en Combos',
-    subtitle: 'Regalos únicos hechos a mano en las Sierras Chicas de Córdoba',
-    btnText: 'Ver Promociones 👉',
-    btnLink: 'promos.html'
+  revolucion: {
+    theme: 'patria',
+    badge: '☀️ 25 DE MAYO • REVOLUCIÓN',
+    title: '¡Viva la Patria! Edición Especial con Virolas del Sol de Mayo',
+    subtitle: 'Mates artesanales en alpaca maciza con grabado patriótico bonificado',
+    btnText: 'Ver Colección Criolla 👉',
+    btnLink: 'catalogo.html',
+    position: 'after-hero'
+  },
+  independencia: {
+    theme: 'patria',
+    badge: '🇦🇷 9 DE JULIO • INDEPENDENCIA',
+    title: '¡Celebrá la Independencia Argentina con Mates Río!',
+    subtitle: 'Hasta 3 cuotas sin interés y envíos a todo el territorio nacional',
+    btnText: 'Ver Mates Patrios 👉',
+    btnLink: 'catalogo.html',
+    position: 'after-hero'
+  },
+  diamate: {
+    theme: 'mate',
+    badge: '🧉 30 DE NOVIEMBRE • DÍA DEL MATE',
+    title: '¡Día Nacional del Mate! Homenaje al Ritual más Grande de Argentina',
+    subtitle: 'Descuentos exclusivos en Mates Imperiales, Torpedos y Termos de Colección',
+    btnText: 'Festejar con Mates Río 👉',
+    btnLink: 'promos.html',
+    position: 'before-custom'
+  },
+  tradicion: {
+    theme: 'mate',
+    badge: '🐎 10 DE NOVIEMBRE • TRADICIÓN',
+    title: '¡Día de la Tradición Gauchesca! Platería Criolla & Cuero Vacuno',
+    subtitle: 'Piezas únicas cinceladas por maestros artesanos cordobeses',
+    btnText: 'Descubrir Tradición 👉',
+    btnLink: 'catalogo.html',
+    position: 'after-hero'
+  },
+  campeones: {
+    theme: 'seleccion',
+    badge: '⭐⭐⭐ CAMPEONES DEL MUNDO',
+    title: '¡Pasión Albiceleste! Grabado de las 3 Estrellas y Escudo AFA',
+    subtitle: 'Llevá la gloria eterna en la virola de tu mate imperial',
+    btnText: 'Personalizar con Estrellas 👉',
+    btnLink: 'personaliza-tu-mate.html',
+    position: 'before-custom'
+  },
+  primavera: {
+    theme: 'primavera',
+    badge: '🌸 21 DE SEPTIEMBRE • PRIMAVERA',
+    title: '¡Llegó la Primavera & Día del Estudiante! Salí a la plaza bien equipado',
+    subtitle: 'Combos con termo, mate y bolso matero con 20% OFF',
+    btnText: 'Ver Combos de Primavera 👉',
+    btnLink: 'promos.html',
+    position: 'after-hero'
   },
   halloween: {
     theme: 'halloween',
@@ -2569,7 +2617,17 @@ const OCCASION_PRESETS = {
     title: '¡Edición Noche Criolla! Descuentos embrujados en Mates Seleccionados',
     subtitle: 'Aprovechá hasta agotar stock de lotes especiales',
     btnText: 'Aprovechar Ofertas 👉',
-    btnLink: 'catalogo.html'
+    btnLink: 'catalogo.html',
+    position: 'top-bar'
+  },
+  christmas: {
+    theme: 'christmas',
+    badge: '🎄 NAVIDAD & AÑO NUEVO',
+    title: '¡Celebrá las Fiestas con Mates Río! 15% OFF en Combos',
+    subtitle: 'Regalos únicos hechos a mano en las Sierras Chicas de Córdoba',
+    btnText: 'Ver Promociones 👉',
+    btnLink: 'promos.html',
+    position: 'top-bar'
   },
   cyber: {
     theme: 'cyber',
@@ -2577,7 +2635,8 @@ const OCCASION_PRESETS = {
     title: '¡Cyber & Black Days! Hasta 30% OFF y 3 cuotas sin interés',
     subtitle: 'La mejor orfebrería criolla con precios irrepetibles',
     btnText: 'Comprar Ahora 👉',
-    btnLink: 'catalogo.html'
+    btnLink: 'catalogo.html',
+    position: 'top-bar'
   },
   custom: {
     theme: 'custom',
@@ -2585,16 +2644,98 @@ const OCCASION_PRESETS = {
     title: '¡Nueva Colección 2026 de Mates Río!',
     subtitle: 'Calabaza gruesa, cuero legítimo y orfebrería de alpaca',
     btnText: 'Descubrir Novedades 👉',
-    btnLink: 'catalogo.html'
+    btnLink: 'catalogo.html',
+    position: 'top-bar'
   }
 };
+
+const OCCASION_EMOJIS = {
+  halloween: ['🎃', '👻', '🦇', '🕷️', '🕸️', '🍬', '🧙', '🕯️', '🔮', '💀', '🌙', '🍂', '🍁', '🧟'],
+  christmas: ['🎄', '🎅', '🎁', '⭐', '❄️', '🍾', '🥂', '🔔', '🦌', '✨', '☃️', '🌟', '🎊', '🎉'],
+  patria:    ['🇦🇷', '☀️', '🧉', '🐎', '🥩', '🎸', '🏆', '⭐', '🎖️', '🌾', '⛰️', '🦅', '🥇', '📜'],
+  mate:      ['🧉', '🌿', '🪵', '🔥', '🫖', '🍃', '☀️', '🤠', '🐴', '🐄', '🏡', '🇦🇷', '💧', '🌾'],
+  mother:    ['🌸', '💐', '🌷', '🌹', '🌺', '💖', '👑', '💝', '🌼', '🌻', '🎁', '✨', '❤️', '🎀'],
+  father:    ['🎩', '👔', '💼', '👑', '🕶️', '🧔', '🎯', '🛠️', '🏆', '⌚', '👞', '⭐', '☕', '🍺'],
+  cyber:     ['⚡', '🔥', '💥', '🏷️', '🛍️', '💰', '🚀', '⏰', '🛒', '💯', '💳', '🎁', '📦', '💸']
+};
+
+let currentEmojiCategory = 'halloween';
+
+function renderOccasionEmojiPalette(catKey = 'halloween') {
+  currentEmojiCategory = catKey;
+  const container = document.getElementById('occasion-emoji-grid');
+  if (!container) return;
+
+  const list = OCCASION_EMOJIS[catKey] || OCCASION_EMOJIS.halloween;
+  container.innerHTML = list.map(emoji => `
+    <button type="button" class="occasion-emoji-item" onclick="insertOccasionEmoji('${emoji}')" title="Insertar ${emoji}">
+      ${emoji}
+    </button>
+  `).join('');
+
+  // Update category buttons active state
+  document.querySelectorAll('.occasion-emoji-cat-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('onclick')?.includes(catKey));
+  });
+}
+
+function switchEmojiCategory(catKey) {
+  renderOccasionEmojiPalette(catKey);
+}
+
+function insertOccasionEmoji(emoji) {
+  const badgeIn = document.getElementById('occasion-badge-input');
+  const titleIn = document.getElementById('occasion-title-input');
+
+  if (badgeIn) {
+    // If badge already has emoji at beginning, prepend or append
+    if (!badgeIn.value.includes(emoji)) {
+      badgeIn.value = `${emoji} ${badgeIn.value.trim()}`.trim();
+    }
+  }
+
+  if (titleIn && !titleIn.value.includes(emoji)) {
+    titleIn.value = `${titleIn.value.trim()} ${emoji}`.trim();
+  }
+
+  updateOccasionLivePreview();
+  if (typeof showAdminToast === 'function') {
+    showAdminToast(`Emoji ${emoji} insertado en el anuncio`, 'fa-icons');
+  }
+}
+
+function selectOccasionPosition(posKey) {
+  const validPositions = ['top-bar', 'after-hero', 'before-custom', 'bottom'];
+  const pos = validPositions.includes(posKey) ? posKey : 'top-bar';
+
+  const hiddenInput = document.getElementById('occasion-position-input');
+  if (hiddenInput) hiddenInput.value = pos;
+
+  document.querySelectorAll('.occasion-position-card').forEach(card => {
+    card.classList.toggle('active', card.getAttribute('data-pos') === pos);
+  });
+
+  const positionLabels = {
+    'top-bar': 'Barra Superior (Arriba de todo)',
+    'after-hero': 'Debajo del Hero / Portada',
+    'before-custom': 'Antes del Taller de Grabado',
+    'bottom': 'Sobre el Footer (Final)'
+  };
+
+  const tag = document.getElementById('occasion-preview-position-tag');
+  if (tag) {
+    tag.textContent = `📍 Sector: ${positionLabels[pos] || pos}`;
+  }
+
+  updateOccasionLivePreview();
+}
 
 function renderOccasionSettings() {
   const config = typeof getSpecialOccasionConfig === 'function' ? getSpecialOccasionConfig() : null;
   const activeToggle = document.getElementById('occasion-active-toggle');
   const statusLabel = document.getElementById('occasion-status-label');
 
-  const def = config || OCCASION_PRESETS.mother;
+  const def = config || OCCASION_PRESETS.revolucion;
 
   if (activeToggle) {
     activeToggle.checked = !!(config && config.active);
@@ -2608,7 +2749,7 @@ function renderOccasionSettings() {
   if (badgeIn) badgeIn.value = def.badge || '';
 
   const themeIn = document.getElementById('occasion-theme-select');
-  if (themeIn) themeIn.value = def.theme || 'mother';
+  if (themeIn) themeIn.value = def.theme || 'patria';
 
   const titleIn = document.getElementById('occasion-title-input');
   if (titleIn) titleIn.value = def.title || '';
@@ -2621,6 +2762,12 @@ function renderOccasionSettings() {
 
   const btnLinkIn = document.getElementById('occasion-btn-link');
   if (btnLinkIn) btnLinkIn.value = def.btnLink || '';
+
+  // Select position
+  selectOccasionPosition(def.position || 'top-bar');
+
+  // Render emoji palette
+  renderOccasionEmojiPalette('halloween');
 
   updateOccasionLivePreview();
 }
@@ -2647,8 +2794,31 @@ function selectOccasionPreset(presetKey) {
   const btnLinkIn = document.getElementById('occasion-btn-link');
   if (btnLinkIn) btnLinkIn.value = preset.btnLink;
 
+  if (preset.position) {
+    selectOccasionPosition(preset.position);
+  }
+
+  // Switch emoji category automatically based on preset
+  if (['revolucion', 'independencia', 'campeones'].includes(presetKey)) {
+    switchEmojiCategory('patria');
+  } else if (['diamate', 'tradicion'].includes(presetKey)) {
+    switchEmojiCategory('mate');
+  } else if (presetKey === 'mother' || presetKey === 'primavera') {
+    switchEmojiCategory('mother');
+  } else if (presetKey === 'father') {
+    switchEmojiCategory('father');
+  } else if (presetKey === 'halloween') {
+    switchEmojiCategory('halloween');
+  } else if (presetKey === 'christmas') {
+    switchEmojiCategory('christmas');
+  } else if (presetKey === 'cyber') {
+    switchEmojiCategory('cyber');
+  }
+
   updateOccasionLivePreview();
-  showAdminToast(`Plantilla "${preset.badge}" cargada`, 'fa-wand-magic-sparkles');
+  if (typeof showAdminToast === 'function') {
+    showAdminToast(`Plantilla "${preset.badge}" cargada`, 'fa-wand-magic-sparkles');
+  }
 }
 
 function toggleOccasionActive(checked) {
@@ -2683,12 +2853,13 @@ function updateOccasionLivePreview() {
 
 function saveOccasionSettings() {
   const active = !!document.getElementById('occasion-active-toggle')?.checked;
-  const theme = document.getElementById('occasion-theme-select')?.value || 'mother';
+  const theme = document.getElementById('occasion-theme-select')?.value || 'patria';
   const badge = document.getElementById('occasion-badge-input')?.value.trim() || 'ANUNCIO';
   const title = document.getElementById('occasion-title-input')?.value.trim() || '¡Aprovechá la fecha especial!';
   const subtitle = document.getElementById('occasion-subtitle-input')?.value.trim() || '';
   const btnText = document.getElementById('occasion-btn-text')?.value.trim() || 'Ver Promociones';
   const btnLink = document.getElementById('occasion-btn-link')?.value.trim() || 'promos.html';
+  const position = document.getElementById('occasion-position-input')?.value || 'top-bar';
 
   const config = {
     active,
@@ -2697,15 +2868,18 @@ function saveOccasionSettings() {
     title,
     subtitle,
     btnText,
-    btnLink
+    btnLink,
+    position
   };
 
   if (typeof saveSpecialOccasionConfig === 'function') {
     saveSpecialOccasionConfig(config);
   }
 
-  logAuditAction('Diseño Web', `Anuncio de Fecha Especial (${badge}) ${active ? 'ACTIVADO' : 'desactivado'}.`);
-  showAdminToast(`Configuración de anuncio guardada (${active ? 'Activo' : 'Inactivo'})`, 'fa-circle-check');
+  logAuditAction('Diseño Web', `Anuncio de Fecha Especial (${badge}) [Ubicación: ${position}] ${active ? 'ACTIVADO' : 'desactivado'}.`);
+  if (typeof showAdminToast === 'function') {
+    showAdminToast(`Configuración guardada (${active ? 'Activo' : 'Inactivo'}) en sector "${position}"`, 'fa-circle-check');
+  }
 }
 
 // ==========================================================================

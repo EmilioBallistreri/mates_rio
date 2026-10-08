@@ -4874,6 +4874,593 @@ input, select, textarea {
 }
 
 /* ==========================================================================
+   MATES RÍO: ESTUDIO DE PERSONALIZACIÓN Y VIROLA CIRCULAR VIRTUAL (NUEVO)
+   ========================================================================== */
+.studio-layout-grid {
+  display: grid;
+  grid-template-columns: 460px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+/* Sidebar Stepper Card */
+.studio-sidebar {
+  background: #ffffff;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 32px rgba(43, 24, 16, 0.06);
+  padding: 24px;
+  position: relative;
+}
+
+body.theme-dark .studio-sidebar {
+  background: #191410;
+  border-color: #382c20;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* 3 Step Navigation Tabs */
+.studio-step-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+  border-bottom: 2px solid var(--border-light);
+  padding-bottom: 12px;
+}
+
+body.theme-dark .studio-step-tabs {
+  border-bottom-color: #382c20;
+}
+
+.studio-step-tab {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  background: transparent;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.studio-step-tab:hover {
+  color: var(--accent-leather);
+  background: rgba(197, 155, 39, 0.08);
+}
+
+.studio-step-tab.active {
+  background: #fdf5e6;
+  border-color: var(--accent-gold);
+  color: var(--accent-leather);
+  box-shadow: 0 2px 8px rgba(197, 155, 39, 0.2);
+}
+
+body.theme-dark .studio-step-tab.active {
+  background: rgba(197, 155, 39, 0.15);
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+}
+
+/* Panels */
+.studio-panel-step {
+  display: none;
+  animation: panelFade 0.3s ease;
+}
+
+.studio-panel-step.active {
+  display: block;
+}
+
+@keyframes panelFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.studio-step-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.studio-step-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+  line-height: 1.45;
+}
+
+/* 1. PLANTILLAS PRE-CONFIGURADAS */
+.templates-list-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.template-choice-card {
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-surface);
+  position: relative;
+}
+
+body.theme-dark .template-choice-card {
+  background: #231c15;
+  border-color: #382c20;
+}
+
+.template-choice-card:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.template-choice-card.active {
+  border-color: var(--accent-gold);
+  background: rgba(197, 155, 39, 0.1);
+  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.3);
+}
+
+.tpl-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(197, 155, 39, 0.15);
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.tpl-info strong {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.tpl-info span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  display: block;
+}
+
+/* 2. DISEÑO - SUB-SECCIONES */
+.design-sub-section {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+  background: var(--bg-surface);
+}
+
+body.theme-dark .design-sub-section {
+  background: #231c15;
+  border-color: #382c20;
+}
+
+.sub-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.sub-section-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* Tipografías Grid */
+.fonts-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+  max-height: 210px;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.font-choice-card {
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 8px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: #ffffff;
+}
+
+body.theme-dark .font-choice-card {
+  background: #191410;
+  border-color: #382c20;
+}
+
+.font-choice-card:hover {
+  border-color: var(--accent-gold);
+}
+
+.font-choice-card.active {
+  border-color: var(--accent-gold);
+  background: rgba(197, 155, 39, 0.12);
+  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.35);
+}
+
+.font-preview-sample {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+
+.font-meta strong {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.font-meta span {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+/* Categorías y Grilla de Vectores */
+.vector-cat-pills {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+  scrollbar-width: thin;
+}
+
+.vector-cat-pill {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+}
+
+body.theme-dark .vector-cat-pill {
+  background: #191410;
+  border-color: #382c20;
+}
+
+.vector-cat-pill:hover,
+.vector-cat-pill.active {
+  background: var(--accent-leather);
+  color: #ffffff;
+  border-color: var(--accent-leather);
+}
+
+.vector-icons-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.vector-card-item {
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 10px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+}
+
+body.theme-dark .vector-card-item {
+  background: #191410;
+  border-color: #382c20;
+}
+
+.vector-card-item:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.vector-card-preview {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vector-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.vector-thumb-inline svg {
+  width: 36px;
+  height: 36px;
+  color: var(--text-main);
+}
+
+.vector-card-name {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.vector-add-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  color: #1a1008;
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.vector-card-item:hover .vector-add-badge {
+  opacity: 1;
+}
+
+/* Líneas Circulares (Segmented Pills) */
+.lines-pill-group {
+  display: flex;
+  gap: 8px;
+}
+
+.lines-pill-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-light);
+  background: #ffffff;
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+body.theme-dark .lines-pill-btn {
+  background: #191410;
+  border-color: #382c20;
+}
+
+.lines-pill-btn.active {
+  background: var(--accent-gold);
+  color: #17110c;
+  border-color: var(--accent-gold);
+  box-shadow: 0 2px 8px rgba(197, 155, 39, 0.25);
+}
+
+/* Selector Compra Web / Compra Local */
+.purchase-types-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.purchase-type-card {
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  background: var(--bg-surface);
+}
+
+body.theme-dark .purchase-type-card {
+  background: #231c15;
+  border-color: #382c20;
+}
+
+.purchase-type-card.active {
+  border-color: var(--accent-gold);
+  background: rgba(197, 155, 39, 0.1);
+  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.3);
+}
+
+.purchase-type-card i {
+  font-size: 1.3rem;
+  color: var(--accent-gold);
+  margin-bottom: 6px;
+}
+
+.purchase-type-card strong {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--text-main);
+}
+
+.purchase-type-card span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+/* 4. ÁREA CENTRAL: STAGE DEL CANVAS DE LA VIROLA */
+.studio-canvas-stage {
+  position: sticky;
+  top: 92px;
+  background: radial-gradient(circle at center, #261f18 0%, #15110d 65%, #0a0806 100%);
+  border: 1.5px solid rgba(197, 155, 39, 0.45);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.45);
+  min-height: 590px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stage-header-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(197, 155, 39, 0.15);
+  border: 1px solid rgba(197, 155, 39, 0.35);
+  color: var(--accent-gold);
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  z-index: 5;
+}
+
+.virola-studio-svg {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  touch-action: none;
+  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.7));
+  z-index: 2;
+  user-select: none;
+}
+
+/* Floating Canvas Toolbar */
+.canvas-bottom-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  z-index: 5;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.canvas-tool-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f5ede4;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(8px);
+}
+
+.canvas-tool-btn:hover {
+  background: var(--accent-gold);
+  color: #17110c;
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
+}
+
+/* Handles interactivos de sticker SVG */
+.virola-handle {
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.virola-handle:hover {
+  transform: scale(1.3);
+}
+
+.handle-rotate {
+  cursor: grab;
+}
+
+.handle-rotate:active {
+  cursor: grabbing;
+}
+
+.handle-scale {
+  cursor: nwse-resize;
+}
+
+.handle-delete {
+  cursor: pointer;
+}
+
+/* Responsivo */
+@media (max-width: 1024px) {
+  .studio-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .studio-canvas-stage {
+    position: static;
+    min-height: auto;
+    padding: 24px 16px;
+  }
+}
+
+/* ==========================================================================
+
+/* ==========================================================================
    6. COMPLETION CHOICE MODAL (CONTINUAR COMPRA / FINALIZAR / WHATSAPP)
    ========================================================================== */
 .modal-completion-box {
@@ -8507,6 +9094,16 @@ body.theme-inverted .subcat-chip:hover {
   animation: bannerFadeDown 0.4s ease;
 }
 
+.special-occasion-banner.occasion-pos-after-hero,
+.special-occasion-banner.occasion-pos-before-custom,
+.special-occasion-banner.occasion-pos-bottom {
+  border-top: 1px solid rgba(197, 155, 39, 0.45);
+  border-bottom: 2px solid var(--accent-gold);
+  padding: 16px 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  margin: 0;
+}
+
 @keyframes bannerFadeDown {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -8597,6 +9194,24 @@ body.theme-inverted .subcat-chip:hover {
 
 .occasion-theme-custom {
   background: linear-gradient(90deg, #2b1b12 0%, #5a3821 100%);
+}
+
+.occasion-theme-patria {
+  background: linear-gradient(90deg, #0b2545 0%, #134074 45%, #75aadb 100%);
+  border-bottom: 2px solid #fcbf49;
+}
+
+.occasion-theme-mate {
+  background: linear-gradient(90deg, #283618 0%, #606c38 50%, #bc6c25 100%);
+}
+
+.occasion-theme-seleccion {
+  background: linear-gradient(90deg, #0d1b2a 0%, #1b263b 40%, #415a77 80%, #c59b27 100%);
+  border-bottom: 2px solid #c59b27;
+}
+
+.occasion-theme-primavera {
+  background: linear-gradient(90deg, #2d6a4f 0%, #52b788 50%, #d87d4a 100%);
 }
 
 /* ==========================================================================

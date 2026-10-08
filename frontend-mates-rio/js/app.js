@@ -204,7 +204,35 @@ function renderSpecialOccasionBanner() {
     return;
   }
 
-  container.className = `special-occasion-banner occasion-theme-${config.theme || 'custom'}`;
+  // Ubicación independiente configurada por el Administrador
+  const pos = config.position || 'top-bar';
+  try {
+    if (pos === 'top-bar') {
+      const siteHeader = document.getElementById('site-header') || document.querySelector('.site-header');
+      if (siteHeader && container.nextElementSibling !== siteHeader) {
+        siteHeader.parentNode.insertBefore(container, siteHeader);
+      }
+    } else if (pos === 'after-hero') {
+      const heroSection = document.getElementById('inicio') || document.querySelector('.hero-slider-section');
+      if (heroSection && heroSection.nextSibling !== container) {
+        heroSection.parentNode.insertBefore(container, heroSection.nextSibling);
+      }
+    } else if (pos === 'before-custom') {
+      const customSection = document.getElementById('banner-personalizado') || document.querySelector('.banner-personalizado-section');
+      if (customSection && container.nextElementSibling !== customSection) {
+        customSection.parentNode.insertBefore(container, customSection);
+      }
+    } else if (pos === 'bottom') {
+      const footer = document.querySelector('footer.site-footer') || document.getElementById('contacto');
+      if (footer && container.nextElementSibling !== footer) {
+        footer.parentNode.insertBefore(container, footer);
+      }
+    }
+  } catch (err) {
+    console.warn('Error reposicionando banner especial:', err);
+  }
+
+  container.className = `special-occasion-banner occasion-theme-${config.theme || 'custom'} occasion-pos-${pos}`;
   container.style.display = 'block';
   container.innerHTML = `
     <div class="container occasion-inner">
