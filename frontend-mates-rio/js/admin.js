@@ -1503,7 +1503,7 @@ function openOrderDetailModal(orderId) {
   const payLabel = order.paymentMethod === 'transferencia' ? 'Transferencia Bancaria Directa (-10% OFF aplicado)' : 'Tarjeta de Crédito / Débito (3 Cuotas)';
 
   body.innerHTML = `
-    <div style="background: #faf8f5; border: 1.5px solid var(--admin-border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px;">
+    <div class="admin-modal-order-header">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <span style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--admin-leather);">${order.id}</span>
         <span class="badge-stock stock-good" style="font-size: 0.75rem;">${order.status}</span>
@@ -1512,14 +1512,14 @@ function openOrderDetailModal(orderId) {
     </div>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
-      <div style="background: var(--admin-bg-main); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+      <div class="admin-modal-info-box">
         <strong style="display: block; font-size: 0.78rem; color: var(--admin-leather); margin-bottom: 4px;">Datos del Cliente</strong>
         <div style="font-size: 0.84rem; font-weight: 700;">${order.customerName || 'Cliente de la Tienda'}</div>
         <div style="font-size: 0.74rem; color: var(--admin-text-muted);"><i class="fas fa-phone"></i> ${order.customerPhone || 'Sin teléfono'}</div>
         <div style="font-size: 0.74rem; color: var(--admin-text-muted);"><i class="fas fa-envelope"></i> ${order.customerEmail || 'Sin email'}</div>
       </div>
 
-      <div style="background: var(--admin-bg-main); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+      <div class="admin-modal-info-box">
         <strong style="display: block; font-size: 0.78rem; color: var(--admin-leather); margin-bottom: 4px;">Envío & Entrega</strong>
         <div style="font-size: 0.82rem; font-weight: 700;"><i class="fas fa-location-dot" style="color: var(--admin-gold);"></i> ${order.address || 'Taller Río Ceballos, Córdoba'}</div>
         <div style="font-size: 0.74rem; color: var(--admin-text-muted); margin-top: 4px;">Método de Pago: <b>${payLabel}</b></div>
@@ -1528,19 +1528,19 @@ function openOrderDetailModal(orderId) {
 
     <div style="margin-bottom: 16px;">
       <h4 style="font-size: 0.88rem; font-weight: 800; margin-bottom: 8px;">Artículos incluidos en el remito:</h4>
-      <div style="background: #ffffff; border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 12px; font-size: 0.84rem; line-height: 1.5;">
+      <div class="admin-modal-items-box">
         ${order.items}
       </div>
     </div>
 
     ${order.hasCustomEngraving && order.engravingDetails ? `
-      <div style="background: #fdfaf2; border: 1.5px solid var(--admin-gold); border-radius: var(--radius-md); padding: 14px; margin-bottom: 16px;">
+      <div class="admin-modal-engraving-box">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
           <i class="fas fa-magic" style="color: var(--admin-gold); font-size: 1.1rem;"></i>
           <strong style="color: var(--admin-leather); font-size: 0.9rem;">Instrucciones para el Taller de Grabado en Virola:</strong>
         </div>
         <ul style="font-size: 0.8rem; list-style: none; padding-left: 0; line-height: 1.6;">
-          ${order.engravingDetails.text ? `<li>• <b>Texto a Grabar:</b> <span style="font-family: monospace; background: #fff; padding: 2px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; font-weight: bold;">"${order.engravingDetails.text}"</span></li>` : ''}
+          ${order.engravingDetails.text ? `<li>• <b>Texto a Grabar:</b> <span class="admin-modal-engraving-badge">"${order.engravingDetails.text}"</span></li>` : ''}
           ${order.engravingDetails.technique ? `<li>• <b>Técnica en Virola:</b> ${order.engravingDetails.technique}</li>` : ''}
           ${order.engravingDetails.metalFinish ? `<li>• <b>Terminación Virola:</b> ${order.engravingDetails.metalFinish}</li>` : ''}
           ${order.engravingDetails.font ? `<li>• <b>Tipografía:</b> ${order.engravingDetails.font}</li>` : ''}
@@ -1552,7 +1552,7 @@ function openOrderDetailModal(orderId) {
       </div>
     ` : ''}
 
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: #faf8f5; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+    <div class="purchase-cost-summary-box">
       <span style="font-weight: 700;">Monto Total Facturado:</span>
       <strong style="font-size: 1.3rem; color: var(--admin-leather); font-family: var(--font-heading);">${formatARS(order.total)}</strong>
     </div>
@@ -1993,16 +1993,58 @@ function showAdminToast(message, icon = 'fa-info-circle') {
 // ==========================================================================
 // 12. COMPRAS A PROVEEDORES (COSTOS & TALLER)
 // ==========================================================================
-function renderPurchasesSection() {
+let purchasesSearchQuery = '';
+let purchasesCategoryFilter = 'all';
+let purchasesStatusFilter = 'all';
+
+function handlePurchasesFilterChange() {
+  purchasesSearchQuery = (document.getElementById('purchases-search-input')?.value || '').toLowerCase().trim();
+  purchasesCategoryFilter = document.getElementById('purchases-category-filter')?.value || 'all';
+  purchasesStatusFilter = document.getElementById('purchases-status-filter')?.value || 'all';
+  renderPurchasesSection();
+}
+
+function resetPurchasesFilters() {
+  purchasesSearchQuery = '';
+  purchasesCategoryFilter = 'all';
+  purchasesStatusFilter = 'all';
+  const searchIn = document.getElementById('purchases-search-input');
+  if (searchIn) searchIn.value = '';
+  const catIn = document.getElementById('purchases-category-filter');
+  if (catIn) catIn.value = 'all';
+  const statIn = document.getElementById('purchases-status-filter');
+  if (statIn) statIn.value = 'all';
+  renderPurchasesSection();
+}
+
+function togglePurchaseStatus(id) {
   const purchases = typeof getSupplierPurchases === 'function' ? getSupplierPurchases() : [];
+  const p = purchases.find(item => item.id === id);
+  if (!p) return;
+
+  if (p.status === 'Recibido') {
+    p.status = 'Pendiente';
+  } else if (p.status === 'Pendiente') {
+    p.status = 'En Camino';
+  } else {
+    p.status = 'Recibido';
+  }
+
+  saveSupplierPurchases(purchases);
+  renderPurchasesSection();
+  showAdminToast(`Estado de compra ${p.id}: ${p.status}`, 'fa-truck-ramp-box');
+}
+
+function renderPurchasesSection() {
+  const allPurchases = typeof getSupplierPurchases === 'function' ? getSupplierPurchases() : [];
   const tbody = document.getElementById('purchases-table-tbody');
   
-  // Calculate KPIs
+  // Calculate KPIs over all purchases
   let totalCost = 0;
   let totalUnits = 0;
   let pendingCount = 0;
 
-  purchases.forEach(p => {
+  allPurchases.forEach(p => {
     totalCost += Number(p.totalCost || (p.quantity * p.unitCost) || 0);
     totalUnits += Number(p.quantity || 0);
     if (p.status !== 'Recibido') pendingCount++;
@@ -2018,26 +2060,56 @@ function renderPurchasesSection() {
 
   if (!tbody) return;
 
-  if (purchases.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 28px; color: var(--admin-text-muted);">Sin compras a proveedores registradas. Hacé clic en "Registrar Nueva Compra".</td></tr>`;
+  // Filter purchases
+  const filtered = allPurchases.filter(p => {
+    const matchesSearch = !purchasesSearchQuery || 
+      (p.supplier || '').toLowerCase().includes(purchasesSearchQuery) ||
+      (p.item || '').toLowerCase().includes(purchasesSearchQuery) ||
+      (p.id || '').toLowerCase().includes(purchasesSearchQuery) ||
+      (p.notes || '').toLowerCase().includes(purchasesSearchQuery);
+      
+    const matchesCategory = purchasesCategoryFilter === 'all' || p.category === purchasesCategoryFilter;
+    const matchesStatus = purchasesStatusFilter === 'all' || p.status === purchasesStatusFilter;
+    
+    return matchesSearch && matchesCategory && matchesStatus;
+  });
+
+  if (allPurchases.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 32px; color: var(--admin-text-muted);"><i class="fas fa-boxes-packing" style="font-size: 2rem; display: block; margin-bottom: 8px; opacity: 0.4;"></i>Sin compras a proveedores registradas. Hacé clic en "Registrar Nueva Compra".</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = purchases.map(p => {
-    const statusClass = (p.status || '').toLowerCase().includes('recibido') ? 'status-recibido' : ((p.status || '').toLowerCase().includes('camino') ? 'status-camino' : 'status-pendiente');
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 32px; color: var(--admin-text-muted);"><i class="fas fa-search" style="font-size: 1.8rem; display: block; margin-bottom: 8px; opacity: 0.4;"></i>No se encontraron compras con los filtros seleccionados.<br><button type="button" class="btn-admin btn-admin-outline" onclick="resetPurchasesFilters()" style="margin-top: 10px; font-size: 0.78rem;">Restablecer Filtros</button></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(p => {
+    const isRecibido = (p.status || '').toLowerCase().includes('recibido');
+    const isCamino = (p.status || '').toLowerCase().includes('camino');
+    const statusClass = isRecibido ? 'received status-recibido' : (isCamino ? 'in-transit status-camino' : 'pending status-pendiente');
+    const statusIcon = isRecibido ? 'fa-check' : (isCamino ? 'fa-truck' : 'fa-clock');
+
     return `
       <tr>
         <td style="font-weight: 700; font-family: monospace; font-size: 0.8rem; color: var(--admin-leather);">${p.id}</td>
         <td style="font-size: 0.78rem; color: var(--admin-text-muted);">${p.date}</td>
-        <td><strong>${p.supplier}</strong></td>
-        <td>${p.item}</td>
+        <td><strong style="color: var(--admin-text-main);">${p.supplier}</strong></td>
+        <td>
+          <div style="font-weight: 600;">${p.item}</div>
+          ${p.notes ? `<div style="font-size: 0.72rem; color: var(--admin-text-muted); margin-top: 2px;"><i class="fas fa-file-invoice" style="opacity: 0.7;"></i> ${p.notes}</div>` : ''}
+        </td>
         <td><span class="badge-stock stock-good" style="font-size: 0.7rem;">${p.category}</span></td>
         <td style="font-weight: 700;">${p.quantity} un.</td>
         <td style="font-size: 0.82rem;">${formatARS(p.unitCost)}</td>
         <td style="font-weight: 800; color: var(--admin-text-main); font-size: 0.92rem;">${formatARS(p.totalCost)}</td>
-        <td><span class="badge-purchase ${statusClass}">${p.status}</span></td>
         <td>
-          <button type="button" class="btn-admin-icon" onclick="deletePurchase('${p.id}')" title="Eliminar registro" style="color: var(--admin-danger);">
+          <button type="button" class="badge-purchase ${statusClass}" onclick="togglePurchaseStatus('${p.id}')" title="Clic para cambiar estado (Pendiente ➔ En Camino ➔ Recibido)">
+            <i class="fas ${statusIcon}" style="font-size: 0.65rem; margin-right: 4px;"></i>${p.status}
+          </button>
+        </td>
+        <td>
+          <button type="button" class="btn-admin-icon" onclick="deletePurchase('${p.id}')" title="Eliminar registro de compra" style="color: var(--admin-danger);">
             <i class="fas fa-trash-alt"></i>
           </button>
         </td>
@@ -2167,24 +2239,23 @@ function renderAdminSlidesList() {
     return;
   }
 
-  container.innerHTML = slides.map(slide => `
-    <div style="background: #ffffff; border: 1.5px solid var(--admin-border); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;">
-      <div style="height: 140px; position: relative; overflow: hidden; background: #222;">
-        <img src="${slide.image}" alt="${slide.title}" style="width: 100%; height: 100%; object-fit: cover;" />
-        <span style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); color: #c5a059; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800;">
-          ${slide.tag || 'Slide'}
-        </span>
+  container.innerHTML = slides.map((slide, idx) => `
+    <div class="admin-slide-card">
+      <div class="admin-slide-img-wrap">
+        <img src="${slide.image}" alt="${slide.title}" class="admin-slide-img" />
+        <span class="admin-slide-order-badge">Banner #${idx + 1}</span>
+        ${slide.tag ? `<span class="admin-slide-tag-pill">${slide.tag}</span>` : ''}
       </div>
-      <div style="padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+      <div class="admin-slide-body">
         <div>
-          <h4 style="font-size: 0.95rem; font-weight: 800; margin-bottom: 6px; color: var(--admin-text-main);">${slide.title}</h4>
-          <p style="font-size: 0.78rem; color: var(--admin-text-muted); line-height: 1.4; margin-bottom: 8px;">${slide.subtitle || ''}</p>
-          <div style="font-size: 0.74rem; color: var(--admin-leather); font-weight: 700;">
-            <i class="fas fa-link"></i> ${slide.btnText || 'Ver Más'} (${slide.btnLink || 'index.html'})
+          <h4 class="admin-slide-title">${slide.title}</h4>
+          <p class="admin-slide-desc">${slide.subtitle || ''}</p>
+          <div class="admin-slide-link-pill">
+            <i class="fas fa-link"></i> ${slide.btnText || 'Ver Más'} <span>(${slide.btnLink || 'index.html'})</span>
           </div>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--admin-border);">
-          <button type="button" class="btn-admin btn-admin-outline" style="padding: 6px 12px; font-size: 0.78rem;" onclick="openEditSlideModal('${slide.id}')">
+        <div class="admin-slide-actions">
+          <button type="button" class="btn-admin btn-admin-outline" style="padding: 6px 14px; font-size: 0.78rem;" onclick="openEditSlideModal('${slide.id}')">
             <i class="fas fa-edit"></i> Editar
           </button>
           <button type="button" class="btn-admin btn-admin-danger" style="padding: 6px 12px; font-size: 0.78rem;" onclick="deleteSlide('${slide.id}')" title="Eliminar banner">
@@ -2338,27 +2409,27 @@ function renderAdminCategoriesGrid() {
   container.innerHTML = categories.map(cat => {
     const subcats = Array.isArray(cat.subcategories) ? cat.subcategories : [];
     return `
-      <div style="background: #ffffff; border: 1.5px solid var(--admin-border); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;">
-        <div style="height: 120px; position: relative; overflow: hidden; background: #333;">
-          <img src="${cat.image}" alt="${cat.name}" style="width: 100%; height: 100%; object-fit: cover;" />
-          ${cat.badge ? `<span style="position: absolute; top: 10px; right: 10px; background: var(--admin-gold); color: #121212; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 0.68rem;">${cat.badge}</span>` : ''}
-          <div style="position: absolute; bottom: 8px; left: 10px; color: #fff; font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">
+      <div class="admin-category-card">
+        <div class="admin-cat-img-wrap">
+          <img src="${cat.image}" alt="${cat.name}" class="admin-cat-img" />
+          ${cat.badge ? `<span class="admin-cat-badge-pill">${cat.badge}</span>` : ''}
+          <div class="admin-cat-overlay-title">
             ${cat.name}
           </div>
         </div>
-        <div style="padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+        <div class="admin-cat-body">
           <div>
-            <div style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 8px;">
+            <div class="admin-cat-label-sub">
               <i class="fas fa-layer-group"></i> ${cat.label || ''}
             </div>
-            <div style="font-size: 0.76rem; font-weight: 700; color: var(--admin-leather); margin-bottom: 6px;">
+            <div class="admin-cat-subcats-count">
               Subcategorías activas (${subcats.length}):
             </div>
-            <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px;">
-              ${subcats.map(sc => `<span style="background: #faf8f5; border: 1px solid var(--admin-border); padding: 3px 8px; border-radius: 12px; font-size: 0.72rem; color: var(--admin-text-main); font-weight: 600;">${sc}</span>`).join('')}
+            <div class="admin-cat-chips-list">
+              ${subcats.map(sc => `<span class="admin-subcat-chip">${sc}</span>`).join('')}
             </div>
           </div>
-          <button type="button" class="btn-admin btn-admin-gold" style="width: 100%; justify-content: center; font-size: 0.82rem;" onclick="openCategoryModal('${cat.id}')">
+          <button type="button" class="btn-admin btn-admin-gold" style="width: 100%; justify-content: center; font-size: 0.82rem; margin-top: 10px;" onclick="openCategoryModal('${cat.id}')">
             <i class="fas fa-pen-to-square"></i> Modificar Categoría & Subcategorías
           </button>
         </div>
@@ -2408,9 +2479,9 @@ function renderCatSubcatsChips() {
   }
 
   container.innerHTML = currentEditingSubcats.map((sc, idx) => `
-    <span style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid var(--admin-border); padding: 4px 10px; border-radius: 14px; font-size: 0.76rem; font-weight: 700; color: var(--admin-text-main);">
+    <span class="admin-subcat-chip-interactive">
       ${sc}
-      <button type="button" onclick="removeSubcatChip(${idx})" style="background: none; border: none; cursor: pointer; color: var(--admin-danger); padding: 0; line-height: 1;">
+      <button type="button" onclick="removeSubcatChip(${idx})" aria-label="Eliminar subcategoría">
         <i class="fas fa-times"></i>
       </button>
     </span>

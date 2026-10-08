@@ -4,8 +4,8 @@
   "description": "Frontend web de Mates Río (Tienda oficial, personalizador y panel administrativo)",
   "main": "index.html",
   "scripts": {
-    "dev": "serve -l 5005",
-    "start": "serve -l 5005"
+    "dev": "npx -y serve -l 5005",
+    "start": "npx -y serve -l 5005"
   },
   "keywords": [
     "mates",
