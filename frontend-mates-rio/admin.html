@@ -785,108 +785,243 @@
             </div>
           </div>
 
-          <!-- TAB 3: Anuncios de Fechas Especiales -->
+          <!-- TAB 3: Anuncios de Fechas Especiales & Ubicación -->
           <div id="design-panel-occasions" class="design-panel" style="display: none;">
             <div class="admin-card occasion-config-card" style="padding: 24px;">
               
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--admin-border);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--admin-border); flex-wrap: wrap; gap: 12px;">
                 <div>
-                  <h3 style="font-size: 1.1rem; font-weight: 800;">Anuncio de Barra Superior (Fecha Especial)</h3>
-                  <p style="font-size: 0.82rem; color: var(--admin-text-muted);">Activá un anuncio destacado en la parte superior de la página principal y promos para fechas clave.</p>
+                  <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--admin-text-main);">
+                    <i class="fas fa-bullhorn" style="color: var(--admin-gold); margin-right: 6px;"></i> Banner de Campaña y Fechas Especiales
+                  </h3>
+                  <p style="font-size: 0.82rem; color: var(--admin-text-muted);">Activá un anuncio destacado, elegí en qué sector de la tienda querés ubicarlo libremente y personalizá los textos, enlaces y emojis.</p>
                 </div>
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 700; font-size: 0.9rem;">
-                  <input type="checkbox" id="occasion-active-toggle" onchange="toggleOccasionActive(this.checked)" style="width: 18px; height: 18px; accent-color: var(--admin-gold);" />
-                  <span id="occasion-status-label">Anuncio Desactivado</span>
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 700; font-size: 0.92rem; background: var(--admin-bg-soft); padding: 8px 16px; border-radius: var(--radius-md); border: 1.5px solid var(--admin-border);">
+                  <input type="checkbox" id="occasion-active-toggle" onchange="toggleOccasionActive(this.checked)" style="width: 20px; height: 20px; accent-color: var(--admin-gold); cursor: pointer;" />
+                  <span id="occasion-status-label" style="color: var(--admin-text-muted);">Anuncio Desactivado</span>
                 </label>
               </div>
 
-              <h4 style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; color: var(--admin-gold); margin-bottom: 8px;">
-                <i class="fas fa-wand-magic-sparkles"></i> Diseños Pre-Configurados Listos para Usar:
+              <!-- 1. SELECCIÓN DE UBICACIÓN INDEPENDIENTE EN LA WEB -->
+              <div style="margin-bottom: 24px;">
+                <h4 style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; color: var(--admin-gold); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                  <i class="fas fa-arrows-up-down-left-right"></i> 1. Ubicación del Banner en la Tienda Principal:
+                </h4>
+                <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 12px;">
+                  Tenés total libertad de ubicar el anuncio en el sector de la web que prefieras. Hacé clic para elegir dónde se mostrará:
+                </p>
+
+                <input type="hidden" id="occasion-position-input" value="top-bar" />
+
+                <div class="occasion-positions-grid" id="occasion-positions-grid">
+                  <div class="occasion-position-card active" data-pos="top-bar" onclick="selectOccasionPosition('top-bar')">
+                    <div class="occasion-position-icon"><i class="fas fa-arrow-up-from-bracket"></i></div>
+                    <div class="occasion-position-info">
+                      <strong>Barra Superior 📌</strong>
+                      <span>Arriba de todo, inmediatamente sobre el encabezado y navegación.</span>
+                    </div>
+                  </div>
+
+                  <div class="occasion-position-card" data-pos="after-hero" onclick="selectOccasionPosition('after-hero')">
+                    <div class="occasion-position-icon"><i class="fas fa-images"></i></div>
+                    <div class="occasion-position-info">
+                      <strong>Debajo del Hero / Portada 🖼️</strong>
+                      <span>Entre el carrusel principal de banners y la grilla de categorías.</span>
+                    </div>
+                  </div>
+
+                  <div class="occasion-position-card" data-pos="before-custom" onclick="selectOccasionPosition('before-custom')">
+                    <div class="occasion-position-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                    <div class="occasion-position-info">
+                      <strong>Antes del Taller de Grabado ✨</strong>
+                      <span>Destacado inmediatamente sobre el banner del personalizador láser.</span>
+                    </div>
+                  </div>
+
+                  <div class="occasion-position-card" data-pos="bottom" onclick="selectOccasionPosition('bottom')">
+                    <div class="occasion-position-icon"><i class="fas fa-arrow-down"></i></div>
+                    <div class="occasion-position-info">
+                      <strong>Sobre el Footer (Final) ⚓</strong>
+                      <span>Al pie de la página principal, sobre los datos de contacto y taller.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. DISEÑOS PRE-CONFIGURADOS (INCLUYENDO CELEBRACIONES PATRIAS ARGENTINAS) -->
+              <h4 style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; color: var(--admin-gold); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                <i class="fas fa-wand-magic-sparkles"></i> 2. Diseños Pre-Configurados Listos para Usar:
               </h4>
+              <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 10px;">
+                Elegí una festividad para autocompletar colores, textos y emojis acordes:
+              </p>
               
               <div class="occasion-presets-grid">
                 <div class="occasion-preset-card" onclick="selectOccasionPreset('mother')">
                   <strong>🌸 Día de la Madre</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Tono rosa / rubí con grabado de regalo</span>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Tono rubí con grabado de regalo</span>
                 </div>
                 <div class="occasion-preset-card" onclick="selectOccasionPreset('father')">
                   <strong>🎩 Día del Padre</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Azul profundo con envíos gratis</span>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Azul profundo con envíos express</span>
                 </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('christmas')">
-                  <strong>🎄 Navidad & Año Nuevo</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Verde y dorado con 15% OFF extra</span>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('revolucion')">
+                  <strong>☀️ 25 de Mayo (Revolución)</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Celeste patrio y virolas con Sol de Mayo</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('independencia')">
+                  <strong>🇦🇷 9 de Julio (Independencia)</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Patria & Tradición en 3 cuotas sin interés</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('diamate')">
+                  <strong>🧉 30 de Noviembre (Día del Mate)</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Verde yerba y platería criolla cordobesa</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('tradicion')">
+                  <strong>🐎 10 de Noviembre (Tradición)</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Cuero vacuno legítimo y costura gauchesca</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('campeones')">
+                  <strong>⭐⭐⭐ 3 Estrellas / Campeones</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Pasión de Selección y escudo AFA</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('primavera')">
+                  <strong>🌸 Primavera & Estudiante</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Combos de mate al aire libre con descuento</span>
                 </div>
                 <div class="occasion-preset-card" onclick="selectOccasionPreset('halloween')">
                   <strong>🎃 Halloween Matero</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Naranja y negro con ofertas nocturnas</span>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Naranja y noche con ofertas especiales</span>
+                </div>
+                <div class="occasion-preset-card" onclick="selectOccasionPreset('christmas')">
+                  <strong>🎄 Navidad & Año Nuevo</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Verde y dorado con 15% OFF en combos</span>
                 </div>
                 <div class="occasion-preset-card" onclick="selectOccasionPreset('cyber')">
-                  <strong>⚡ Black Friday / Cyber</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Negro y morado con 3 cuotas sin interés</span>
+                  <strong>⚡ Cyber & Black Friday</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Descuentos flash y cuotas sin interés</span>
                 </div>
                 <div class="occasion-preset-card" onclick="selectOccasionPreset('custom')">
-                  <strong>🎨 Personalizado</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Configurá texto, enlace y colores propios</span>
+                  <strong>🎨 Personalizado Libre</strong>
+                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Configuración libre de colores y textos</span>
                 </div>
               </div>
 
-              <!-- Formulario de Configuración del Anuncio -->
-              <div class="admin-form-grid-2" style="margin-top: 18px;">
-                <div class="admin-form-group">
-                  <label class="admin-form-label" for="occasion-badge-input">Texto de la Etiqueta</label>
-                  <input type="text" id="occasion-badge-input" class="admin-input modal-input" placeholder="Ej: DÍA DE LA MADRE" oninput="updateOccasionLivePreview()" />
+              <!-- 3. SELECTOR INTERACTIVO DE EMOJIS POR CATEGORÍA -->
+              <div class="occasion-emoji-box">
+                <div class="occasion-emoji-header">
+                  <span style="font-size: 0.82rem; font-weight: 800; color: var(--admin-text-main); display: flex; align-items: center; gap: 6px;">
+                    <i class="fas fa-icons" style="color: var(--admin-gold);"></i> Selector Rápido de Emojis por Categoría:
+                  </span>
+                  <div class="occasion-emoji-cat-tabs" id="occasion-emoji-cat-tabs">
+                    <button type="button" class="occasion-emoji-cat-btn active" onclick="switchEmojiCategory('halloween')">🎃 Halloween</button>
+                    <button type="button" class="occasion-emoji-cat-btn" onclick="switchEmojiCategory('christmas')">🎄 Navidad</button>
+                    <button type="button" class="occasion-emoji-cat-btn" onclick="switchEmojiCategory('patria')">🇦🇷 Patrios & Tradición</button>
+                    <button type="button" class="occasion-emoji-cat-btn" onclick="switchEmojiCategory('mate')">🧉 Materos</button>
+                    <button type="button" class="occasion-emoji-cat-btn" onclick="switchEmojiCategory('mother')">🌸 Madre/Primavera</button>
+                    <button type="button" class="occasion-emoji-cat-btn" onclick="switchEmojiCategory('father')">🎩 Padre/Elegancia</button>
+                    <button type="button" class="occasion-emoji-cat-btn" onclick="switchEmojiCategory('cyber')">⚡ Cyber/Ofertas</button>
+                  </div>
                 </div>
-                <div class="admin-form-group">
-                  <label class="admin-form-label" for="occasion-theme-select">Estilo de Color</label>
-                  <select id="occasion-theme-select" class="admin-select modal-input" onchange="updateOccasionLivePreview()">
-                    <option value="mother">Día de la Madre (Rosa / Rubí)</option>
-                    <option value="father">Día del Padre (Azul Elegante)</option>
-                    <option value="christmas">Navidad (Verde & Dorado)</option>
-                    <option value="halloween">Halloween (Calabaza & Noche)</option>
-                    <option value="cyber">Black Friday / Cyber (Oscuro Eléctrico)</option>
-                    <option value="custom">Mates Río Clásico (Cuero & Oro)</option>
+                <div class="occasion-emoji-grid" id="occasion-emoji-grid">
+                  <!-- Populated by JS -->
+                </div>
+                <span style="font-size: 0.72rem; color: var(--admin-text-muted); display: block; margin-top: 4px;">
+                  💡 <b>Consejo:</b> Al tocar cualquier emoji se agregará automáticamente al texto de la etiqueta y al título.
+                </span>
+              </div>
+
+              <!-- 4. FORMULARIO DE CONFIGURACIÓN DEL ANUNCIO (PROLIJO Y SIN CASILLAS SUPERPUESTAS) -->
+              <div class="occasion-form-grid">
+                <div class="occasion-field-group">
+                  <label class="occasion-field-label" for="occasion-badge-input">
+                    <span><i class="fas fa-tag" style="color: var(--admin-gold); margin-right: 4px;"></i> Texto de la Etiqueta</span>
+                    <small style="text-transform: none; font-weight: 500; color: var(--admin-text-muted);">Pill destacado</small>
+                  </label>
+                  <input type="text" id="occasion-badge-input" class="occasion-clean-input" placeholder="Ej: 🎃 HALLOWEEN MATERO" oninput="updateOccasionLivePreview()" />
+                </div>
+
+                <div class="occasion-field-group">
+                  <label class="occasion-field-label" for="occasion-theme-select">
+                    <span><i class="fas fa-palette" style="color: var(--admin-gold); margin-right: 4px;"></i> Estilo de Color</span>
+                    <small style="text-transform: none; font-weight: 500; color: var(--admin-text-muted);">Gradiente de fondo</small>
+                  </label>
+                  <select id="occasion-theme-select" class="occasion-clean-select" onchange="updateOccasionLivePreview()">
+                    <option value="patria">🇦🇷 Celeste & Blanco Patrio (25 de Mayo / 9 de Julio)</option>
+                    <option value="seleccion">⭐⭐⭐ Albiceleste & Oro (3 Estrellas AFA)</option>
+                    <option value="mate">🧉 Verde Yerba & Cuero Criollo (Día del Mate / Tradición)</option>
+                    <option value="primavera">🌸 Verde Fresco & Flores (Primavera / Estudiante)</option>
+                    <option value="mother">🌸 Rosa & Rubí (Día de la Madre)</option>
+                    <option value="father">🎩 Azul Imperial Profundo (Día del Padre)</option>
+                    <option value="christmas">🎄 Verde Pino & Rojo Festivo (Navidad & Fiestas)</option>
+                    <option value="halloween">🎃 Calabaza & Noche Misteriosa (Halloween)</option>
+                    <option value="cyber">⚡ Negro Carbón & Morado Neón (Black Friday / Cyber)</option>
+                    <option value="custom">🪵 Cuero Río & Oro Tradicional (Mates Río Clásico)</option>
                   </select>
                 </div>
-                <div class="admin-form-group" style="grid-column: span 2;">
-                  <label class="admin-form-label" for="occasion-title-input">Título del Anuncio</label>
-                  <input type="text" id="occasion-title-input" class="admin-input modal-input" placeholder="Ej: ¡Especial Día de la Madre! Grabado personalizado de regalo" oninput="updateOccasionLivePreview()" />
+
+                <div class="occasion-field-group full-width">
+                  <label class="occasion-field-label" for="occasion-title-input">
+                    <span><i class="fas fa-heading" style="color: var(--admin-gold); margin-right: 4px;"></i> Título del Anuncio</span>
+                  </label>
+                  <input type="text" id="occasion-title-input" class="occasion-clean-input" placeholder="Ej: ¡Edición Noche Criolla! Descuentos embrujados en Mates Seleccionados" oninput="updateOccasionLivePreview()" />
                 </div>
-                <div class="admin-form-group" style="grid-column: span 2;">
-                  <label class="admin-form-label" for="occasion-subtitle-input">Subtítulo / Detalle</label>
-                  <input type="text" id="occasion-subtitle-input" class="admin-input modal-input" placeholder="Ej: Hasta 3 cuotas sin interés y 10% OFF extra con transferencia" oninput="updateOccasionLivePreview()" />
+
+                <div class="occasion-field-group full-width">
+                  <label class="occasion-field-label" for="occasion-subtitle-input">
+                    <span><i class="fas fa-align-left" style="color: var(--admin-gold); margin-right: 4px;"></i> Subtítulo / Detalle de la Promo</span>
+                  </label>
+                  <input type="text" id="occasion-subtitle-input" class="occasion-clean-input" placeholder="Ej: Hasta 3 cuotas sin interés y 10% OFF extra abonando con transferencia" oninput="updateOccasionLivePreview()" />
                 </div>
-                <div class="admin-form-group">
-                  <label class="admin-form-label" for="occasion-btn-text">Texto del Botón</label>
-                  <input type="text" id="occasion-btn-text" class="admin-input modal-input" placeholder="Ej: Ver Combos en Promo" oninput="updateOccasionLivePreview()" />
+
+                <div class="occasion-field-group">
+                  <label class="occasion-field-label" for="occasion-btn-text">
+                    <span><i class="fas fa-mouse-pointer" style="color: var(--admin-gold); margin-right: 4px;"></i> Texto del Botón</span>
+                  </label>
+                  <input type="text" id="occasion-btn-text" class="occasion-clean-input" placeholder="Ej: Ver Combos en Promo 👉" oninput="updateOccasionLivePreview()" />
                 </div>
-                <div class="admin-form-group">
-                  <label class="admin-form-label" for="occasion-btn-link">Enlace de Destino</label>
-                  <input type="text" id="occasion-btn-link" class="admin-input modal-input" placeholder="Ej: promos.html o catalogo.html" oninput="updateOccasionLivePreview()" />
+
+                <div class="occasion-field-group">
+                  <label class="occasion-field-label" for="occasion-btn-link">
+                    <span><i class="fas fa-link" style="color: var(--admin-gold); margin-right: 4px;"></i> Enlace de Destino</span>
+                  </label>
+                  <input type="text" id="occasion-btn-link" class="occasion-clean-input" placeholder="Ej: promos.html" oninput="updateOccasionLivePreview()" />
                 </div>
               </div>
 
-              <!-- Vista Previa en Vivo -->
-              <div style="margin-top: 20px;">
-                <label class="admin-form-label" style="font-weight: 800;">Vista Previa en Tiempo Real:</label>
-                <div id="occasion-preview-container" class="special-occasion-banner occasion-theme-mother" style="border-radius: var(--radius-sm); margin-top: 6px;">
-                  <div class="occasion-inner" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                    <div class="occasion-content" style="display: flex; align-items: center; gap: 10px;">
-                      <span class="occasion-badge" id="preview-occasion-badge" style="background: #fff; color: #121212; padding: 2px 8px; border-radius: 4px; font-weight: 800; font-size: 0.72rem;">DÍA DE LA MADRE</span>
+              <!-- 5. VISTA PREVIA EN TIEMPO REAL -->
+              <div style="margin-top: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                  <label class="admin-form-label" style="font-weight: 800; margin-bottom: 0;">
+                    <i class="fas fa-eye" style="color: var(--admin-gold);"></i> Vista Previa en Tiempo Real:
+                  </label>
+                  <span id="occasion-preview-position-tag" style="font-size: 0.74rem; font-weight: 700; background: var(--admin-bg-soft); color: var(--admin-gold); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--admin-border);">
+                    📍 Sector: Barra Superior (Arriba de todo)
+                  </span>
+                </div>
+
+                <div id="occasion-preview-container" class="special-occasion-banner occasion-theme-mother" style="border-radius: var(--radius-sm); margin-top: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);">
+                  <div class="occasion-inner" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 12px 18px;">
+                    <div class="occasion-content" style="display: flex; align-items: center; gap: 12px;">
+                      <span class="occasion-badge" id="preview-occasion-badge" style="background: #fff; color: #121212; padding: 3px 10px; border-radius: 4px; font-weight: 800; font-size: 0.75rem; letter-spacing: 0.5px;">DÍA DE LA MADRE</span>
                       <div>
-                        <strong id="preview-occasion-title" style="display: block; font-size: 0.92rem; color: #fff;">¡Especial Día de la Madre! Grabado personalizado de regalo</strong>
-                        <span id="preview-occasion-subtitle" style="font-size: 0.78rem; color: rgba(255,255,255,0.9);">Hasta 3 cuotas sin interés y 10% OFF extra</span>
+                        <strong id="preview-occasion-title" style="display: block; font-size: 0.95rem; color: #fff;">¡Especial Día de la Madre! Grabado personalizado de regalo</strong>
+                        <span id="preview-occasion-subtitle" style="font-size: 0.8rem; color: rgba(255,255,255,0.92);">Hasta 3 cuotas sin interés y 10% OFF extra</span>
                       </div>
                     </div>
-                    <span id="preview-occasion-btn" style="background: #fff; color: #121212; padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;">
-                      Ver Combos 👉
+                    <span id="preview-occasion-btn" style="background: #fff; color: #121212; padding: 7px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; cursor: default;">
+                      Ver Regalos Materos 👉
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
-                <button type="button" class="btn-admin btn-admin-gold" onclick="saveOccasionSettings()">
+              <!-- BOTÓN DE GUARDAR -->
+              <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px; align-items: center;">
+                <span id="occasion-save-hint" style="font-size: 0.78rem; color: var(--admin-text-muted);">
+                  Los cambios se reflejarán instantáneamente en la tienda principal
+                </span>
+                <button type="button" class="btn-admin btn-admin-gold" onclick="saveOccasionSettings()" style="padding: 12px 24px; font-size: 0.92rem;">
                   <i class="fas fa-save"></i> Guardar y Aplicar en la Web
                 </button>
               </div>
