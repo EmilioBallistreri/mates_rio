@@ -15,10 +15,10 @@
   <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
 
-  <!-- Google Fonts: Montserrat, Outfit, Cinzel, Dancing Script, Playfair Display -->
+  <!-- Google Fonts: Complete Luxury Engraving Suite -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cinzel:wght@600;700;800;900&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Lato:wght@400;700;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Oswald:wght@500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Bebas+Neue&family=Cinzel:wght@600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Lato:wght@400;700;900&family=Lora:ital,wght@0,600;0,700;1,600&family=Marck+Script&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Oswald:wght@500;600;700&family=Outfit:wght@400;600;700;800;900&family=Pirata+One&family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;600;700;800&family=Rye&family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
 
   <!-- Font Awesome Icons 6.5.1 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -347,102 +347,169 @@
             </div>
           </div>
 
-          <!-- PASO 2: DISEÑO (TEXTO, ICONOS, LÍNEAS CIRCULARES, SUBIR LOGO) -->
+          <!-- PASO 2: DISEÑO (4 CATEGORÍAS COLAPSABLES CON FLECHA) -->
           <div class="studio-panel-step" data-step-panel="2" id="step-panel-2">
             <h3 class="studio-step-title"><i class="fas fa-palette" style="color: var(--accent-gold);"></i> Personalizá tu Diseño</h3>
-            <p class="studio-step-sub">Editá el texto curvo, agregá escudos y símbolos vectorizados y configurá las ranuras:</p>
+            <p class="studio-step-sub">Editá cada una de las 4 secciones para componer tu grabado personalizado en la virola:</p>
 
-            <!-- 2.1 TEXTO CURVO EN LA VIROLA -->
-            <div class="design-sub-section">
-              <div class="sub-section-header">
-                <span class="sub-section-title"><i class="fas fa-font"></i> 1. Texto Curvo de la Virola</span>
-                <span id="studio-text-counter" style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">10/35</span>
+            <!-- 1. CATEGORÍA: COLOCAR TEXTO (PROLIJO Y PROFESIONAL) -->
+            <div class="studio-accordion-card open" id="accordion-section-text">
+              <div class="studio-accordion-header" onclick="toggleStudioAccordion('text')" role="button" aria-expanded="true" tabindex="0">
+                <div class="accordion-header-left">
+                  <div class="accordion-icon-box"><i class="fas fa-font"></i></div>
+                  <div>
+                    <strong class="accordion-title">1. Texto de la Virola</strong>
+                    <span class="accordion-subtitle">Escribí tus nombres, fechas o dedicatorias</span>
+                  </div>
+                </div>
+                <div class="accordion-chevron-wrap">
+                  <i class="fas fa-chevron-down accordion-chevron"></i>
+                </div>
               </div>
+              <div class="studio-accordion-body" id="accordion-body-text">
+                <div class="text-editor-pro-box">
+                  <label class="sub-label" style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span>Contenido del grabado:</span>
+                    <span id="studio-text-counter" class="text-counter-pill">10/35</span>
+                  </label>
+                  <div class="input-with-action text-input-pro">
+                    <input type="text" 
+                           id="studio-text-input" 
+                           class="studio-input studio-input-pro" 
+                           value="MATES RÍO" 
+                           maxlength="35"
+                           placeholder="Escribí nombres, fechas o frases..."
+                           oninput="onStudioTextInput(this.value)" />
+                    <button type="button" class="input-action-btn" onclick="clearStudioText()" title="Borrar texto">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
 
-              <div class="input-with-action">
-                <input type="text" 
-                       id="studio-text-input" 
-                       class="studio-input" 
-                       value="MATES RÍO" 
-                       maxlength="35"
-                       placeholder="Escribí nombres, fechas o frases..."
-                       oninput="onStudioTextInput(this.value)" />
-                <button type="button" class="input-action-btn" onclick="document.getElementById('studio-text-input').value=''; onStudioTextInput('');" title="Borrar texto">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
+                  <!-- Ubicación en Curva (Segmented Control Prolijo) -->
+                  <label class="sub-label" style="margin-top: 14px; margin-bottom: 6px;">Ubicación en el arco:</label>
+                  <div class="arc-selector-segmented">
+                    <button type="button" class="arc-segment-btn active" data-pos="top" onclick="toggleArcPosition('top')">
+                      <i class="fas fa-arrow-up"></i> Curva Superior
+                    </button>
+                    <button type="button" class="arc-segment-btn" data-pos="bottom" onclick="toggleArcPosition('bottom')">
+                      <i class="fas fa-arrow-down"></i> Curva Inferior
+                    </button>
+                  </div>
 
-              <!-- Posición de Curva -->
-              <div style="display: flex; gap: 8px; margin-top: 8px; margin-bottom: 12px;">
-                <button type="button" class="btn btn-sm btn-outline-dark arc-pos-btn active" data-pos="top" onclick="toggleArcPosition('top')" style="flex: 1; font-size: 0.76rem;">
-                  <i class="fas fa-arrow-up"></i> Curva Superior
-                </button>
-                <button type="button" class="btn btn-sm btn-outline-dark arc-pos-btn" data-pos="bottom" onclick="toggleArcPosition('bottom')" style="flex: 1; font-size: 0.76rem;">
-                  <i class="fas fa-arrow-down"></i> Curva Inferior
-                </button>
-              </div>
+                  <!-- Selector de Tipografías (Sólo nombre escrito con su propia tipografía) -->
+                  <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 14px; margin-bottom: 6px;">
+                    <label class="sub-label" style="margin: 0;">Tipografía orfebre:</label>
+                    <span id="selected-font-name-pill" class="selected-font-name-pill">Cinzel</span>
+                  </div>
+                  <div class="fonts-selector-grid" id="fonts-selector-grid">
+                    <!-- Rendered dynamically via customizer-studio.js -->
+                  </div>
 
-              <!-- Selector de Tipografías Google Fonts -->
-              <label class="sub-label" style="margin-top: 10px;">Tipografía en Google Fonts:</label>
-              <div class="fonts-selector-grid" id="fonts-selector-grid">
-                <!-- Rendered dynamically via customizer-studio.js -->
-              </div>
-
-              <button type="button" class="btn btn-outline-dark btn-sm" onclick="applyTextToVirola()" style="width: 100%; margin-top: 10px; font-weight: 700;">
-                <i class="fas fa-check"></i> Aplicar / Agregar Texto a la Virola
-              </button>
-            </div>
-
-            <!-- 2.2 ÍCONOS & DISEÑOS PREDETERMINADOS -->
-            <div class="design-sub-section">
-              <div class="sub-section-header">
-                <span class="sub-section-title"><i class="fas fa-icons"></i> 2. Íconos y Diseños Vectoriales</span>
-              </div>
-              <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">
-                Hacé clic en cualquier diseño para insertarlo en la virola circular:
-              </p>
-
-              <!-- Categorías Pills -->
-              <div class="vector-cat-pills" id="vector-cat-pills">
-                <!-- Populated via JS -->
-              </div>
-
-              <!-- Grid de Íconos -->
-              <div class="vector-icons-grid" id="vector-icons-grid">
-                <!-- Populated via JS -->
-              </div>
-            </div>
-
-            <!-- 2.3 LÍNEAS CIRCULARES (CINCELADO) -->
-            <div class="design-sub-section">
-              <div class="sub-section-header">
-                <span class="sub-section-title"><i class="fas fa-circle-notch"></i> 3. Líneas Circulares en Virola</span>
-              </div>
-              <div class="lines-pill-group">
-                <button type="button" class="lines-pill-btn" data-lines="no" onclick="selectCircularLines('no')">
-                  No
-                </button>
-                <button type="button" class="lines-pill-btn" data-lines="simple" onclick="selectCircularLines('simple')">
-                  Simple
-                </button>
-                <button type="button" class="lines-pill-btn active" data-lines="doble" onclick="selectCircularLines('doble')">
-                  Doble
-                </button>
+                  <button type="button" class="btn btn-primary btn-apply-text-pro" onclick="applyTextToVirola()">
+                    <i class="fas fa-check"></i> Aplicar / Agregar Texto a la Virola
+                  </button>
+                </div>
               </div>
             </div>
 
-            <!-- 2.4 SUBIR LOGO PROPIO / VECTORIZAR -->
-            <div class="design-sub-section">
-              <div class="sub-section-header">
-                <span class="sub-section-title"><i class="fas fa-cloud-arrow-up"></i> 4. Subir Imagen Propia o Logo</span>
+            <!-- 2. CATEGORÍA: ÍCONOS Y DISEÑOS (MUESTRA CATEGORÍAS PRIMERO) -->
+            <div class="studio-accordion-card open" id="accordion-section-icons">
+              <div class="studio-accordion-header" onclick="toggleStudioAccordion('icons')" role="button" aria-expanded="true" tabindex="0">
+                <div class="accordion-header-left">
+                  <div class="accordion-icon-box"><i class="fas fa-icons"></i></div>
+                  <div>
+                    <strong class="accordion-title">2. Íconos y Diseños</strong>
+                    <span class="accordion-subtitle">Escudos originales, patria, fauna y símbolos</span>
+                  </div>
+                </div>
+                <div class="accordion-chevron-wrap">
+                  <i class="fas fa-chevron-down accordion-chevron"></i>
+                </div>
               </div>
-              <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 8px;">
-                ¿Tenés tu marca de ganado, escudo de club o logo de empresa? Subilo en PNG, JPG o SVG:
-              </p>
-              <input type="file" id="studio-custom-file-upload" accept="image/png, image/jpeg, image/svg+xml" style="display: none;" onchange="handleCustomImageUpload(event)" />
-              <button type="button" class="btn btn-outline-dark" onclick="document.getElementById('studio-custom-file-upload').click()" style="width: 100%; padding: 8px; font-size: 0.8rem; font-weight: 700;">
-                <i class="fas fa-upload"></i> Seleccionar Imagen / Vector
-              </button>
+              <div class="studio-accordion-body" id="accordion-body-icons">
+                <!-- Vista Inicial: Menú de Categorías -->
+                <div id="vector-categories-view" class="vector-categories-view">
+                  <p style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 10px;">
+                    Hacé clic en una categoría para explorar sus diseños:
+                  </p>
+                  <div class="vector-category-cards-grid" id="vector-category-cards-grid">
+                    <!-- Populated dynamically via customizer-studio.js -->
+                  </div>
+                </div>
+
+                <!-- Vista de Diseños de la Categoría Seleccionada -->
+                <div id="vector-items-view" class="vector-items-view" style="display: none;">
+                  <div class="vector-sub-header">
+                    <button type="button" class="btn-back-categories" onclick="showVectorCategoriesView()">
+                      <i class="fas fa-arrow-left"></i> Categorías
+                    </button>
+                    <span id="active-category-title-badge" class="active-category-title-badge">🏆 Escudos Deportivos</span>
+                  </div>
+                  <div class="vector-icons-grid" id="vector-icons-grid">
+                    <!-- Populated via JS -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. CATEGORÍA: LÍNEAS CIRCULARES EN VIROLA -->
+            <div class="studio-accordion-card open" id="accordion-section-lines">
+              <div class="studio-accordion-header" onclick="toggleStudioAccordion('lines')" role="button" aria-expanded="true" tabindex="0">
+                <div class="accordion-header-left">
+                  <div class="accordion-icon-box"><i class="fas fa-circle-notch"></i></div>
+                  <div>
+                    <strong class="accordion-title">3. Líneas Circulares en Virola</strong>
+                    <span class="accordion-subtitle">Cincelado ranurado perimetral</span>
+                  </div>
+                </div>
+                <div class="accordion-chevron-wrap">
+                  <i class="fas fa-chevron-down accordion-chevron"></i>
+                </div>
+              </div>
+              <div class="studio-accordion-body" id="accordion-body-lines">
+                <p style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 10px;">
+                  Elegí las ranuras cinceladas concéntricas sobre el metal:
+                </p>
+                <div class="lines-pill-group">
+                  <button type="button" class="lines-pill-btn" data-lines="no" onclick="selectCircularLines('no')">
+                    No
+                  </button>
+                  <button type="button" class="lines-pill-btn" data-lines="simple" onclick="selectCircularLines('simple')">
+                    Simple
+                  </button>
+                  <button type="button" class="lines-pill-btn active" data-lines="doble" onclick="selectCircularLines('doble')">
+                    Doble
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. CATEGORÍA: SUBIR IMAGEN PROPIA (VECTORIZADA SIN FONDO) -->
+            <div class="studio-accordion-card open" id="accordion-section-upload">
+              <div class="studio-accordion-header" onclick="toggleStudioAccordion('upload')" role="button" aria-expanded="true" tabindex="0">
+                <div class="accordion-header-left">
+                  <div class="accordion-icon-box"><i class="fas fa-cloud-arrow-up"></i></div>
+                  <div>
+                    <strong class="accordion-title">4. Subir Imagen Propia</strong>
+                    <span class="accordion-subtitle">Subí tu logo o foto (vectorizada y sin fondo)</span>
+                  </div>
+                </div>
+                <div class="accordion-chevron-wrap">
+                  <i class="fas fa-chevron-down accordion-chevron"></i>
+                </div>
+              </div>
+              <div class="studio-accordion-body" id="accordion-body-upload">
+                <div class="custom-upload-pro-card">
+                  <div class="upload-magic-badge"><i class="fas fa-wand-magic-sparkles"></i> Vectorización Láser HD</div>
+                  <p style="font-size: 0.76rem; color: var(--text-muted); margin: 8px 0 12px 0; line-height: 1.45;">
+                    Subí tu escudo, marca de ganado o imagen propia. El simulador <b>elimina el fondo automáticamente</b> y lo convierte a grabado láser negro transparente.
+                  </p>
+                  <input type="file" id="studio-custom-file-upload" accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml" style="display: none;" onchange="handleCustomImageUpload(event)" />
+                  <button type="button" class="btn btn-outline-dark btn-upload-file-pro" onclick="document.getElementById('studio-custom-file-upload').click()">
+                    <i class="fas fa-upload" style="color: var(--accent-gold);"></i> Seleccionar Imagen / Vector
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div style="display: flex; gap: 8px; margin-top: 16px;">
@@ -546,9 +613,23 @@
             <!-- Rendered dynamically by customizer-studio.js -->
           </svg>
 
+          <!-- Barra Flotante de Herramientas para el Elemento Seleccionado (Fija y Estable) -->
+          <div id="virola-active-item-controls" class="virola-active-item-controls" style="display: none;">
+            <div class="active-item-status">
+              <span id="active-item-name-badge" class="active-item-name-badge">Elemento Seleccionado</span>
+            </div>
+            <div class="active-item-actions">
+              <button type="button" class="item-quick-btn" onclick="stepItemScale(-0.1)" title="Achicar tamaño"><i class="fas fa-minus"></i></button>
+              <button type="button" class="item-quick-btn" onclick="stepItemScale(0.1)" title="Agrandar tamaño"><i class="fas fa-plus"></i></button>
+              <button type="button" class="item-quick-btn" onclick="stepItemRotation(-15)" title="Girar a la izquierda"><i class="fas fa-rotate-left"></i></button>
+              <button type="button" class="item-quick-btn" onclick="stepItemRotation(15)" title="Girar a la derecha"><i class="fas fa-rotate-right"></i></button>
+              <button type="button" class="item-quick-btn btn-delete-item" onclick="deleteActiveVirolaItem()" title="Eliminar de la virola"><i class="fas fa-trash-can"></i></button>
+            </div>
+          </div>
+
           <!-- Floating Canvas Controls -->
           <div class="canvas-bottom-toolbar">
-            <button type="button" class="canvas-tool-btn" onclick="renderVirolaCanvas()" title="Centrar / Refrescar">
+            <button type="button" class="canvas-tool-btn" onclick="autoCenterAndBalanceVirola()" title="Centrar y distribuir profesionalmente de forma automática">
               <i class="fas fa-crosshairs"></i> Centrar
             </button>
             <button type="button" class="canvas-tool-btn" onclick="studio.activeItemId = null; renderVirolaCanvas();" title="Deseleccionar">
@@ -563,7 +644,7 @@
           </div>
 
           <div style="margin-top: 14px; font-size: 0.72rem; color: rgba(255,255,255,0.6); text-align: center;">
-            💡 <i>Podés arrastrar los íconos alrededor de la corona, escalarlos (verde), rotarlos (azul) o eliminarlos (rojo).</i>
+            💡 <i>Podés arrastrar tanto los textos como los diseños alrededor de la virola, o usar el botón <b>Centrar</b> para alinearlos automáticamente.</i>
           </div>
 
         </section>

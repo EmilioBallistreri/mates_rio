@@ -2883,10 +2883,10 @@ function saveOccasionSettings() {
 }
 
 // ==========================================================================
-// 14. ADMIN THEME MODE (MODO CLARO / MODO OSCURO)
+// 14. ADMIN THEME MODE (MODO CLARO / MODO OSCURO SINCRONIZADO CON LA WEB)
 // ==========================================================================
 function initAdminThemeMode() {
-  const saved = localStorage.getItem('mates_rio_admin_theme') || 'light';
+  const saved = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
   applyAdminThemeMode(saved, false);
 }
 
@@ -2894,6 +2894,8 @@ function applyAdminThemeMode(mode, notify = false) {
   const isDark = mode === 'dark';
   document.body.classList.toggle('admin-dark-mode', isDark);
   localStorage.setItem('mates_rio_admin_theme', mode);
+  localStorage.setItem('mates_rio_theme_mode', mode); // Sincronizado con Web principal
+  localStorage.setItem('mates_rio_theme_inverted', isDark ? 'false' : 'true');
 
   const icon = document.getElementById('admin-theme-icon');
   const label = document.getElementById('admin-theme-label');
@@ -2908,7 +2910,40 @@ function applyAdminThemeMode(mode, notify = false) {
   }
 }
 
+// Sincronización bidireccional en tiempo real entre la Web y el Panel de Administración
+window.addEventListener('storage', (e) => {
+  if (e.key === 'mates_rio_theme_mode' || e.key === 'mates_rio_admin_theme') {
+    if (e.newValue && (e.newValue === 'light' || e.newValue === 'dark')) {
+      const isCurrentDark = document.body.classList.contains('admin-dark-mode');
+      const targetIsDark = e.newValue === 'dark';
+      if (isCurrentDark !== targetIsDark) {
+        applyAdminThemeMode(e.newValue, false);
+      }
+    }
+  }
+});
+
 function toggleAdminThemeMode() {
   const isCurrentlyDark = document.body.classList.contains('admin-dark-mode');
   applyAdminThemeMode(isCurrentlyDark ? 'light' : 'dark', true);
+}
+
+// ==========================================================================
+// 15. SECCIÓN DISEÑO: ACORDEÓN DESPLEGABLE CON FLECHA
+// ==========================================================================
+function toggleAdminDesignSection(sectionKey) {
+  const body = document.getElementById(`admin-section-${sectionKey}-body`);
+  const arrow = document.getElementById(`admin-chevron-${sectionKey}`);
+  if (!body) return;
+
+  const isCollapsed = body.classList.contains('collapsed') || body.style.display === 'none';
+  if (isCollapsed) {
+    body.classList.remove('collapsed');
+    body.style.display = 'block';
+    if (arrow) arrow.classList.remove('collapsed');
+  } else {
+    body.classList.add('collapsed');
+    body.style.display = 'none';
+    if (arrow) arrow.classList.add('collapsed');
+  }
 }

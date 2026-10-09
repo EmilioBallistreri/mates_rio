@@ -1,6 +1,6 @@
 // ==========================================================================
 // MATES RÍO: ESTUDIO DE PERSONALIZACIÓN VIRTUAL (MOTOR DE VIROLA CIRCULAR)
-// Inspirado fielmente en el taller interactivo de orfebrería y grabado láser
+// Taller interactivo de orfebrería, cincelado y grabado láser de alta definición
 // ==========================================================================
 
 const STUDIO_CONFIG = {
@@ -20,9 +20,9 @@ const studio = {
   purchaseType: 'web', // 'web' | 'local'
   circularLines: 'doble', // 'no' | 'simple' | 'doble'
   
-  // Elementos activos en la virola
+  // Elementos activos en la virola (textos, escudos, logos)
   activeItemId: null,
-  items: [], // Array de { id, type, text, font, fontSize, graphicId, svgUrl, svgContent, angle, radius, rotation, scale, arcPosition, isUpper }
+  items: [], // Array de { id, type, text, font, fontSize, offset, graphicId, file, angle, radius, rotation, scale, arcPosition }
 
   // Configuración de texto actual
   textInput: 'MATES RÍO',
@@ -37,12 +37,12 @@ const studio = {
   notes: '',
 
   // Estado de arrastre interactivo
-  dragMode: null, // 'move' | 'scale' | 'rotate'
+  dragMode: null, // 'move' | 'scale' | 'rotate' | 'text_move'
   dragItemId: null,
-  dragStart: { x: 0, y: 0, angle: 0, itemAngle: 0, itemRotation: 0, itemScale: 1 }
+  dragStart: { x: 0, y: 0, angle: 0, itemAngle: 0, itemRotation: 0, itemScale: 1, itemOffset: 50 }
 };
 
-// BIBLIOTECA DE DISEÑOS VECTORIALES CATEGORIZADOS
+// BIBLIOTECA DE DISEÑOS VECTORIALES ORIGINALES CATEGORIZADOS
 const VECTOR_CATEGORIES = {
   deportes: {
     name: '🏆 Escudos Deportivos',
@@ -50,110 +50,93 @@ const VECTOR_CATEGORIES = {
       { id: 'afa', name: 'AFA 3 Estrellas', file: 'assets/images/designs/afa.svg' },
       { id: 'boca', name: 'Boca Juniors', file: 'assets/images/designs/boca.svg' },
       { id: 'river', name: 'River Plate', file: 'assets/images/designs/river.svg' },
+      { id: 'central', name: 'Rosario Central (Oficial)', file: 'assets/images/designs/central.svg' },
+      { id: 'newells', name: "Newell's Old Boys (Oficial)", file: 'assets/images/designs/newells.svg' },
       { id: 'racing', name: 'Racing Club', file: 'assets/images/designs/racing.svg' },
       { id: 'independiente', name: 'Independiente', file: 'assets/images/designs/independiente.svg' },
       { id: 'sanlorenzo', name: 'San Lorenzo', file: 'assets/images/designs/sanlorenzo.svg' },
       { id: 'belgrano', name: 'Belgrano de Córdoba', file: 'assets/images/designs/belgrano.svg' },
       { id: 'talleres', name: 'Talleres de Córdoba', file: 'assets/images/designs/talleres.svg' },
       { id: 'instituto', name: 'Instituto ACC', file: 'assets/images/designs/instituto.svg' },
-      { id: 'racingcordoba', name: 'Racing de Córdoba', file: 'assets/images/designs/racingcordoba.svg' },
-      { id: 'central', name: 'Rosario Central', inline: 'central' },
-      { id: 'newells', name: "Newell's Old Boys", inline: 'newells' }
+      { id: 'racingcordoba', name: 'Racing de Córdoba', file: 'assets/images/designs/racingcordoba.svg' }
     ]
   },
   criollo: {
     name: '🇦🇷 Motivos Criollos & Tradición',
     items: [
       { id: 'soldemayo', name: 'Sol de Mayo', file: 'assets/images/designs/soldemayo.svg' },
+      { id: 'escarapela', name: 'Escarapela Argentina (Original)', file: 'assets/images/designs/escarapela.svg' },
+      { id: 'ceibo', name: 'Flor de Ceibo Nacional (Original)', file: 'assets/images/designs/ceibo.svg' },
+      { id: 'mate_icono', name: 'Mate Tradicional Imperial (Original)', file: 'assets/images/designs/mate.svg' },
+      { id: 'cruz', name: 'Cruz Criolla Gauchesca (Original)', file: 'assets/images/designs/cruz.svg' },
       { id: 'caballo', name: 'Caballo Criollo', file: 'assets/images/designs/caballo.svg' },
       { id: 'guardapampa', name: 'Guarda Pampa', file: 'assets/images/designs/guardapampa.svg' },
       { id: 'malvinas', name: 'Islas Malvinas', file: 'assets/images/designs/malvinas.svg' },
-      { id: 'mapa', name: 'Silueta Argentina', file: 'assets/images/designs/mapa.svg' },
-      { id: 'escarapela', name: 'Escarapela Argentina', inline: 'escarapela' },
-      { id: 'ceibo', name: 'Flor de Ceibo', inline: 'ceibo' },
-      { id: 'cruz', name: 'Cruz Criolla', inline: 'cruz' },
-      { id: 'mate_icono', name: 'Mate Tradicional', inline: 'mate' }
+      { id: 'mapa', name: 'Silueta Argentina', file: 'assets/images/designs/mapa.svg' }
     ]
   },
   fauna: {
     name: '🦅 Fauna & Naturaleza',
     items: [
-      { id: 'condor', name: 'Cóndor Andino', inline: 'condor' },
-      { id: 'hornero', name: 'Hornero Nacional', inline: 'hornero' },
-      { id: 'carpincho', name: 'Carpincho / Capibara', inline: 'carpincho' },
-      { id: 'guanaco', name: 'Guanaco Criollo', inline: 'guanaco' },
-      { id: 'ciervo', name: 'Ciervo de los Pantanos', inline: 'ciervo' }
+      { id: 'condor', name: 'Cóndor Andino (Original)', file: 'assets/images/designs/condor.svg' },
+      { id: 'hornero', name: 'Hornero Nacional (Original)', file: 'assets/images/designs/hornero.svg' },
+      { id: 'carpincho', name: 'Carpincho / Capibara (Original)', file: 'assets/images/designs/carpincho.svg' },
+      { id: 'guanaco', name: 'Guanaco Criollo (Original)', file: 'assets/images/designs/guanaco.svg' },
+      { id: 'ciervo', name: 'Ciervo de los Pantanos (Original)', file: 'assets/images/designs/ciervo.svg' }
     ]
   },
   frases: {
     name: '💬 Frases & Pasión',
     items: [
-      { id: 'frase_gloria', name: 'Coronados de Gloria', inline: 'frase_gloria' },
-      { id: 'frase_mate', name: 'El Amor por el Mate', inline: 'frase_mate' },
-      { id: 'frase_costumbres', name: 'Costumbres Argentinas', inline: 'frase_costumbres' },
-      { id: 'frase_pasion', name: 'Pasión & Tradición', inline: 'frase_pasion' },
-      { id: 'frase_amistad', name: 'Amistad Criolla', inline: 'frase_amistad' }
+      { id: 'frase_gloria', name: 'CORONADOS DE GLORIA', text: 'CORONADOS DE GLORIA' },
+      { id: 'frase_mate', name: 'EL AMOR POR EL MATE', text: 'EL AMOR POR EL MATE' },
+      { id: 'frase_costumbres', name: 'COSTUMBRES ARGENTINAS', text: 'COSTUMBRES ARGENTINAS' },
+      { id: 'frase_pasion', name: 'PASIÓN & TRADICIÓN', text: 'PASIÓN & TRADICIÓN' },
+      { id: 'frase_amistad', name: 'AMISTAD CRIOLLA', text: 'AMISTAD CRIOLLA' },
+      { id: 'frase_campeon', name: 'CAMPEONES DEL MUNDO', text: 'CAMPEONES DEL MUNDO' },
+      { id: 'frase_siempre', name: 'SIEMPRE CON VOS', text: 'SIEMPRE CON VOS' }
     ]
   },
   simbolos: {
     name: '✨ Símbolos & Formas',
     items: [
-      { id: 'corona', name: 'Corona Imperial', inline: 'corona' },
-      { id: 'laurel', name: 'Corona de Laureles', inline: 'laurel' },
-      { id: 'estrella_fed', name: 'Estrella Federal', inline: 'estrella_fed' },
-      { id: 'infinito', name: 'Infinito Eterno', inline: 'infinito' },
-      { id: 'corazon', name: 'Corazón Gaucho', inline: 'corazon' }
+      { id: 'corona', name: 'Corona Imperial (Original)', file: 'assets/images/designs/corona.svg' },
+      { id: 'laurel', name: 'Corona de Laureles (Original)', file: 'assets/images/designs/laurel.svg' },
+      { id: 'estrella_fed', name: 'Estrella Federal (Original)', file: 'assets/images/designs/estrella_fed.svg' },
+      { id: 'infinito', name: 'Infinito Eterno (Original)', file: 'assets/images/designs/infinito.svg' },
+      { id: 'corazon', name: 'Corazón de Gaucho (Original)', file: 'assets/images/designs/corazon.svg' }
     ]
   }
 };
 
-// DEFINICIONES DE SVGS INLINE VECTORIALES DE ALTA DEFINICIÓN
-const INLINE_SVGS = {
-  central: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 5 L85 20 L85 60 C85 80 50 95 50 95 C50 95 15 80 15 60 L15 20 Z" fill="none" stroke="currentColor" stroke-width="4"/><path d="M25 35 L75 35 M25 50 L75 50 M25 65 L75 65" stroke="currentColor" stroke-width="3"/><text x="50" y="28" font-size="12" font-weight="900" text-anchor="middle" fill="currentColor">CARC</text></svg>`,
-  newells: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 5 L85 20 L85 60 C85 80 50 95 50 95 C50 95 15 80 15 60 L15 20 Z" fill="none" stroke="currentColor" stroke-width="4"/><line x1="50" y1="5" x2="50" y2="95" stroke="currentColor" stroke-width="3"/><text x="50" y="55" font-size="16" font-weight="900" text-anchor="middle" fill="currentColor">NOB</text></svg>`,
-  escarapela: `<svg viewBox="0 0 100 100" fill="currentColor"><circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="6"/><circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" stroke-width="6"/><circle cx="50" cy="50" r="16" fill="currentColor"/><circle cx="50" cy="50" r="6" fill="#fff"/></svg>`,
-  ceibo: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 15 C40 30 30 50 50 85 C70 50 60 30 50 15 Z" fill="none" stroke="currentColor" stroke-width="4"/><path d="M50 25 C45 35 40 45 50 65 C60 45 55 35 50 25 Z" fill="currentColor"/><path d="M35 50 C20 60 25 75 40 70 M65 50 C80 60 75 75 60 70" fill="none" stroke="currentColor" stroke-width="3"/></svg>`,
-  cruz: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M42 10 H58 V35 H85 V51 H58 V90 H42 V51 H15 V35 H42 Z" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="50" cy="43" r="6" fill="currentColor"/></svg>`,
-  mate: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M30 40 C30 25 70 25 70 40 C75 55 72 80 50 85 C28 80 25 55 30 40 Z" fill="none" stroke="currentColor" stroke-width="4"/><ellipse cx="50" cy="38" rx="18" ry="6" fill="none" stroke="currentColor" stroke-width="3"/><line x1="62" y1="40" x2="80" y2="12" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><circle cx="80" cy="12" r="3" fill="currentColor"/></svg>`,
-  condor: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 35 Q30 15 10 25 Q25 45 42 45 Q50 65 50 85 Q50 65 58 45 Q75 45 90 25 Q70 15 50 35 Z" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="50" cy="25" r="5" fill="currentColor"/></svg>`,
-  hornero: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M20 65 Q30 40 55 42 Q75 35 85 45 Q70 60 55 60 Q40 75 20 65 Z" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="70" cy="42" r="2.5" fill="currentColor"/><path d="M85 45 L95 47 L85 50 Z" fill="currentColor"/><path d="M45 60 L40 85 M55 60 L58 85" stroke="currentColor" stroke-width="3"/></svg>`,
-  carpincho: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M25 60 C25 45 35 35 55 35 C70 35 82 42 85 55 C82 70 65 72 45 72 C30 72 25 68 25 60 Z" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="75" cy="46" r="2.5" fill="currentColor"/><path d="M60 35 Q62 28 66 35" stroke="currentColor" stroke-width="3"/><path d="M35 72 L35 84 M45 72 L45 84 M70 70 L70 84 M78 68 L78 84" stroke="currentColor" stroke-width="3"/></svg>`,
-  guanaco: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M35 70 Q45 65 65 65 Q70 50 68 35 Q65 20 72 15 Q78 18 75 28 Q78 45 75 65 Q80 75 75 85 M40 70 L35 85 M65 65 L65 85" fill="none" stroke="currentColor" stroke-width="3.5"/></svg>`,
-  ciervo: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M40 70 Q50 65 65 65 Q70 50 68 40 Q62 25 70 20 M68 32 Q60 15 52 20 M70 28 Q78 12 85 18" fill="none" stroke="currentColor" stroke-width="3.5"/><path d="M42 70 L40 85 M62 65 L60 85 M68 65 L70 85" stroke="currentColor" stroke-width="3"/></svg>`,
-  frase_gloria: `<svg viewBox="0 0 100 50" fill="currentColor"><text x="50" y="24" font-size="9" font-family="'Cinzel', serif" font-weight="900" text-anchor="middle" fill="currentColor">CORONADOS</text><text x="50" y="38" font-size="8" font-family="'Cinzel', serif" font-weight="700" text-anchor="middle" fill="currentColor">DE GLORIA</text></svg>`,
-  frase_mate: `<svg viewBox="0 0 100 50" fill="currentColor"><text x="50" y="22" font-size="8" font-family="'Dancing Script', cursive" font-weight="700" text-anchor="middle" fill="currentColor">El Amor por</text><text x="50" y="38" font-size="10" font-family="'Cinzel', serif" font-weight="900" text-anchor="middle" fill="currentColor">EL MATE</text></svg>`,
-  frase_costumbres: `<svg viewBox="0 0 100 50" fill="currentColor"><text x="50" y="24" font-size="8.5" font-family="'Montserrat', sans-serif" font-weight="800" text-anchor="middle" fill="currentColor">COSTUMBRES</text><text x="50" y="38" font-size="7.5" font-family="'Montserrat', sans-serif" font-weight="600" text-anchor="middle" fill="currentColor">ARGENTINAS</text></svg>`,
-  frase_pasion: `<svg viewBox="0 0 100 50" fill="currentColor"><text x="50" y="24" font-size="9" font-family="'Cinzel', serif" font-weight="900" text-anchor="middle" fill="currentColor">PASIÓN &amp;</text><text x="50" y="38" font-size="8.5" font-family="'Cinzel', serif" font-weight="700" text-anchor="middle" fill="currentColor">TRADICIÓN</text></svg>`,
-  frase_amistad: `<svg viewBox="0 0 100 50" fill="currentColor"><text x="50" y="24" font-size="8.5" font-family="'Dancing Script', cursive" font-weight="700" text-anchor="middle" fill="currentColor">Amistad</text><text x="50" y="38" font-size="9" font-family="'Montserrat', sans-serif" font-weight="800" text-anchor="middle" fill="currentColor">CRIOLLA</text></svg>`,
-  corona: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M15 70 L20 35 L40 55 L50 20 L60 55 L80 35 L85 70 Z" fill="none" stroke="currentColor" stroke-width="4"/><rect x="15" y="70" width="70" height="10" rx="3" fill="currentColor"/><circle cx="50" cy="18" r="4" fill="currentColor"/><circle cx="20" cy="32" r="3.5" fill="currentColor"/><circle cx="80" cy="32" r="3.5" fill="currentColor"/></svg>`,
-  laurel: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M30 80 C15 50 25 25 50 15 C75 25 85 50 70 80" fill="none" stroke="currentColor" stroke-width="3.5"/><path d="M30 75 Q20 65 28 55 Q35 65 30 75 M25 55 Q15 45 25 35 Q32 45 25 55 M32 35 Q25 25 35 18 Q40 28 32 35" fill="currentColor"/><path d="M70 75 Q80 65 72 55 Q65 65 70 75 M75 55 Q85 45 75 35 Q68 45 75 55 M68 35 Q75 25 65 18 Q60 28 68 35" fill="currentColor"/></svg>`,
-  estrella_fed: `<svg viewBox="0 0 100 100" fill="currentColor"><polygon points="50,5 64,36 98,36 71,57 81,91 50,70 19,91 29,57 2,36 36,36" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="50" cy="50" r="10" fill="currentColor"/></svg>`,
-  infinito: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M30 35 C15 35 15 65 30 65 C45 65 55 35 70 35 C85 35 85 65 70 65 C55 65 45 35 30 35 Z" fill="none" stroke="currentColor" stroke-width="5"/></svg>`,
-  corazon: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 82 C20 60 12 40 22 26 C32 14 46 20 50 30 C54 20 68 14 78 26 C88 40 80 60 50 82 Z" fill="none" stroke="currentColor" stroke-width="4.5"/><path d="M50 72 C30 52 24 38 30 29 C36 21 46 25 50 34 C54 25 64 21 70 29 C76 38 70 52 50 72 Z" fill="currentColor"/></svg>`
-};
-
-// TIPOGRAFÍAS DISPONIBLES EN GOOGLE FONTS
+// TIPOGRAFÍAS DE GRABADO DISPONIBLES EN GOOGLE FONTS (AMPLIADAS Y PROFESIONALES)
 const GOOGLE_FONTS = [
-  { id: 'Cinzel', name: 'Cinzel', style: 'Romana Orfebre', sample: 'CLÁSICA' },
-  { id: 'Playfair Display', name: 'Playfair Display', style: 'Serif Elegante', sample: 'Elegancia' },
-  { id: 'Montserrat', name: 'Montserrat', style: 'Moderna Premium', sample: 'MODERNA' },
-  { id: 'Dancing Script', name: 'Dancing Script', style: 'Cursiva Artesanal', sample: 'Tradición' },
-  { id: 'Bebas Neue', name: 'Bebas Neue', style: 'Impacto / Tribuna', sample: 'PASIÓN' },
-  { id: 'Outfit', name: 'Outfit', style: 'Geométrica Limpia', sample: 'Geométrica' },
-  { id: 'Great Vibes', name: 'Great Vibes', style: 'Caligráfica Gala', sample: 'Recuerdo' },
-  { id: 'Poppins', name: 'Poppins', style: 'Moderna Suave', sample: 'Minimal' },
-  { id: 'Oswald', name: 'Oswald', style: 'Condensada Fuerte', sample: 'POTENCIA' }
+  { id: 'Cinzel', name: 'Cinzel' },
+  { id: 'Playfair Display', name: 'Playfair Display' },
+  { id: 'Cormorant Garamond', name: 'Cormorant Garamond' },
+  { id: 'Lora', name: 'Lora' },
+  { id: 'Montserrat', name: 'Montserrat' },
+  { id: 'Dancing Script', name: 'Dancing Script' },
+  { id: 'Great Vibes', name: 'Great Vibes' },
+  { id: 'Alex Brush', name: 'Alex Brush' },
+  { id: 'Marck Script', name: 'Marck Script' },
+  { id: 'Bebas Neue', name: 'Bebas Neue' },
+  { id: 'Outfit', name: 'Outfit' },
+  { id: 'Poppins', name: 'Poppins' },
+  { id: 'Oswald', name: 'Oswald' },
+  { id: 'Rye', name: 'Rye' },
+  { id: 'Pirata One', name: 'Pirata One' },
+  { id: 'UnifrakturMaguntia', name: 'UnifrakturMaguntia' }
 ];
 
-// INICIALIZACIÓN
+// INICIALIZACIÓN DEL ESTUDIO
 document.addEventListener('DOMContentLoaded', () => {
   initStudioEngine();
 });
 
 function initStudioEngine() {
-  // Renderizar las categorías y tipografías
-  renderCategoryPills();
-  renderVectorLibrary('deportes');
+  // Renderizar vistas de categorías, tipografías y modelos
+  renderVectorCategoriesView();
   renderFontCards();
   renderMatesDropdown();
 
@@ -201,7 +184,22 @@ function switchStudioStep(stepNum) {
 }
 
 // ==========================================================================
-// 2. PLANTILLAS PRE-CONFIGURADAS
+// 2. SISTEMA DE ACORDEONES (4 CATEGORÍAS COLAPSABLES)
+// ==========================================================================
+function toggleStudioAccordion(sectionKey) {
+  const card = document.getElementById(`accordion-section-${sectionKey}`);
+  if (!card) return;
+  const isOpen = card.classList.contains('open');
+  card.classList.toggle('open', !isOpen);
+
+  const header = card.querySelector('.studio-accordion-header');
+  if (header) {
+    header.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+  }
+}
+
+// ==========================================================================
+// 3. PLANTILLAS PRE-CONFIGURADAS
 // ==========================================================================
 function applyTemplate(templateKey) {
   studio.items = [];
@@ -216,12 +214,14 @@ function applyTemplate(templateKey) {
       text: 'MATES RÍO',
       font: 'Cinzel',
       fontSize: 22,
-      arcPosition: 'top'
+      arcPosition: 'top',
+      offset: 50
     });
     studio.items.push({
       id: 'item_icon_left',
       type: 'icon',
       graphicId: 'soldemayo',
+      name: 'Sol de Mayo',
       file: 'assets/images/designs/soldemayo.svg',
       angle: 180, // Izquierda
       radius: STUDIO_CONFIG.rRing,
@@ -232,6 +232,7 @@ function applyTemplate(templateKey) {
       id: 'item_icon_right',
       type: 'icon',
       graphicId: 'afa',
+      name: 'AFA 3 Estrellas',
       file: 'assets/images/designs/afa.svg',
       angle: 0, // Derecha
       radius: STUDIO_CONFIG.rRing,
@@ -247,14 +248,16 @@ function applyTemplate(templateKey) {
       text: 'TRADICIÓN & NOBLEZA',
       font: 'Cinzel',
       fontSize: 20,
-      arcPosition: 'top'
+      arcPosition: 'top',
+      offset: 50
     });
     studio.items.push({
       id: 'item_icon_left',
       type: 'icon',
       graphicId: 'soldemayo',
+      name: 'Sol de Mayo',
       file: 'assets/images/designs/soldemayo.svg',
-      angle: 160,
+      angle: 150,
       radius: STUDIO_CONFIG.rRing,
       rotation: 0,
       scale: 0.95
@@ -263,6 +266,7 @@ function applyTemplate(templateKey) {
       id: 'item_icon_bottom',
       type: 'icon',
       graphicId: 'caballo',
+      name: 'Caballo Criollo',
       file: 'assets/images/designs/caballo.svg',
       angle: 90, // Abajo
       radius: STUDIO_CONFIG.rRing,
@@ -273,8 +277,9 @@ function applyTemplate(templateKey) {
       id: 'item_icon_right',
       type: 'icon',
       graphicId: 'afa',
+      name: 'AFA 3 Estrellas',
       file: 'assets/images/designs/afa.svg',
-      angle: 20,
+      angle: 30,
       radius: STUDIO_CONFIG.rRing,
       rotation: 0,
       scale: 0.95
@@ -288,12 +293,14 @@ function applyTemplate(templateKey) {
       text: 'EDICIÓN IMPERIAL',
       font: 'Playfair Display',
       fontSize: 22,
-      arcPosition: 'top'
+      arcPosition: 'top',
+      offset: 50
     });
     studio.items.push({
       id: 'item_icon_bottom',
       type: 'icon',
       graphicId: 'soldemayo',
+      name: 'Sol de Mayo',
       file: 'assets/images/designs/soldemayo.svg',
       angle: 90,
       radius: STUDIO_CONFIG.rRing,
@@ -315,14 +322,11 @@ function applyTemplate(templateKey) {
 
   // Re-renderizar canvas SVG
   renderVirolaCanvas();
-
-  if (typeof showAdminToast === 'function') {
-    showAdminToast('Plantilla aplicada a la virola', 'fa-wand-magic-sparkles');
-  }
+  updateActiveItemFloatingBar();
 }
 
 // ==========================================================================
-// 3. CONTROL DE LÍNEAS CIRCULARES (NO / SIMPLE / DOBLE)
+// 4. CONTROL DE LÍNEAS CIRCULARES (NO / SIMPLE / DOBLE)
 // ==========================================================================
 function selectCircularLines(mode, render = true) {
   studio.circularLines = mode;
@@ -333,7 +337,7 @@ function selectCircularLines(mode, render = true) {
 }
 
 // ==========================================================================
-// 4. EDICIÓN DE TEXTO CURVO
+// 5. EDICIÓN DE TEXTO CURVO EN LA VIROLA (PROFESIONAL Y PROLIJO)
 // ==========================================================================
 function renderFontCards() {
   const container = document.getElementById('fonts-selector-grid');
@@ -343,12 +347,9 @@ function renderFontCards() {
     <div class="font-choice-card ${studio.selectedFont === f.id ? 'active' : ''}" 
          data-font="${f.id}" 
          onclick="selectStudioFont('${f.id}')"
-         style="font-family: '${f.id}', sans-serif;">
-      <div class="font-preview-sample">${f.sample}</div>
-      <div class="font-meta">
-        <strong>${f.name}</strong>
-        <span>${f.style}</span>
-      </div>
+         style="font-family: '${f.id}', serif;"
+         title="${f.name}">
+      <span class="font-name-only">${f.name}</span>
     </div>
   `).join('');
 }
@@ -359,11 +360,21 @@ function selectStudioFont(fontId) {
     c.classList.toggle('active', c.getAttribute('data-font') === fontId);
   });
 
+  const fontPill = document.getElementById('selected-font-name-pill');
+  if (fontPill) fontPill.textContent = fontId;
+
   // Si hay un texto seleccionado, actualizarlo directamente
   const activeItem = studio.items.find(i => i.id === studio.activeItemId);
   if (activeItem && activeItem.type === 'text') {
     activeItem.font = fontId;
     renderVirolaCanvas();
+  } else {
+    // Actualizar el primer texto existente si no hay activo
+    const firstText = studio.items.find(i => i.type === 'text');
+    if (firstText) {
+      firstText.font = fontId;
+      renderVirolaCanvas();
+    }
   }
 }
 
@@ -372,17 +383,24 @@ function onStudioTextInput(val) {
   const counter = document.getElementById('studio-text-counter');
   if (counter) counter.textContent = `${val.length}/35`;
 
-  // Si hay un elemento de texto activo o solo uno en la virola, actualizarlo en vivo
+  // Si hay un elemento de texto activo o en la posición actual, actualizar en vivo
   let textItem = studio.items.find(i => i.id === studio.activeItemId && i.type === 'text');
   if (!textItem) {
     textItem = studio.items.find(i => i.type === 'text' && i.arcPosition === studio.arcPosition);
   }
 
   if (textItem) {
-    textItem.text = val.trim();
+    textItem.text = val;
     textItem.font = studio.selectedFont;
     renderVirolaCanvas();
+    updateActiveItemFloatingBar();
   }
+}
+
+function clearStudioText() {
+  const input = document.getElementById('studio-text-input');
+  if (input) input.value = '';
+  onStudioTextInput('');
 }
 
 function applyTextToVirola() {
@@ -398,6 +416,7 @@ function applyTextToVirola() {
     existing.text = text;
     existing.font = studio.selectedFont;
     existing.fontSize = studio.fontSize;
+    existing.offset = 50;
     studio.activeItemId = existing.id;
   } else {
     const newItem = {
@@ -406,19 +425,21 @@ function applyTextToVirola() {
       text: text,
       font: studio.selectedFont,
       fontSize: studio.fontSize,
-      arcPosition: studio.arcPosition
+      arcPosition: studio.arcPosition,
+      offset: 50
     };
     studio.items.push(newItem);
     studio.activeItemId = newItem.id;
   }
 
   renderVirolaCanvas();
+  updateActiveItemFloatingBar();
   showNotificationToast('Texto aplicado en la curvatura de la virola', 'fa-check');
 }
 
 function toggleArcPosition(pos) {
   studio.arcPosition = pos;
-  document.querySelectorAll('.arc-pos-btn').forEach(b => {
+  document.querySelectorAll('.arc-segment-btn').forEach(b => {
     b.classList.toggle('active', b.getAttribute('data-pos') === pos);
   });
 
@@ -427,29 +448,65 @@ function toggleArcPosition(pos) {
   if (existing && textInput) {
     textInput.value = existing.text;
     studio.textInput = existing.text;
+    const counter = document.getElementById('studio-text-counter');
+    if (counter) counter.textContent = `${existing.text.length}/35`;
+    studio.activeItemId = existing.id;
+    updateActiveItemFloatingBar();
   }
 }
 
 // ==========================================================================
-// 5. BIBLIOTECA DE VECTORES & CATEGORÍAS
+// 6. CATEGORÍAS DE DISEÑOS (VISTA DE CATEGORÍAS PRIMERO)
 // ==========================================================================
-function renderCategoryPills() {
-  const container = document.getElementById('vector-cat-pills');
+function renderVectorCategoriesView() {
+  const container = document.getElementById('vector-category-cards-grid');
   if (!container) return;
 
-  container.innerHTML = Object.entries(VECTOR_CATEGORIES).map(([key, cat]) => `
-    <button type="button" 
-            class="vector-cat-pill ${studio.activeCategory === key ? 'active' : ''}" 
-            onclick="switchVectorCategory('${key}')">
-      ${cat.name}
-    </button>
-  `).join('');
+  const catMeta = {
+    deportes: { icon: 'fa-trophy', label: 'Escudos Deportivos', count: '12 clubes oficiales' },
+    criollo: { icon: 'fa-sun', label: 'Tradición & Patria', count: '9 motivos patrios' },
+    fauna: { icon: 'fa-feather-pointed', label: 'Fauna & Naturaleza', count: '5 animales autóctonos' },
+    frases: { icon: 'fa-comment-dots', label: 'Frases & Pasión', count: '7 frases listas' },
+    simbolos: { icon: 'fa-shapes', label: 'Símbolos & Formas', count: '5 figuras orfebres' }
+  };
+
+  container.innerHTML = Object.entries(VECTOR_CATEGORIES).map(([key, cat]) => {
+    const meta = catMeta[key] || { icon: 'fa-shapes', label: cat.name, count: `${cat.items.length} diseños` };
+    return `
+      <div class="vector-cat-card" onclick="selectVectorCategory('${key}')">
+        <div class="vector-cat-card-icon"><i class="fas ${meta.icon}"></i></div>
+        <div class="vector-cat-card-info">
+          <strong>${meta.label}</strong>
+          <span>${meta.count}</span>
+        </div>
+        <i class="fas fa-chevron-right vector-cat-card-arrow"></i>
+      </div>
+    `;
+  }).join('');
 }
 
-function switchVectorCategory(catKey) {
+function selectVectorCategory(catKey) {
   studio.activeCategory = catKey;
-  renderCategoryPills();
+  const categoriesView = document.getElementById('vector-categories-view');
+  const itemsView = document.getElementById('vector-items-view');
+  const titleBadge = document.getElementById('active-category-title-badge');
+
+  if (categoriesView) categoriesView.style.display = 'none';
+  if (itemsView) itemsView.style.display = 'block';
+
+  const cat = VECTOR_CATEGORIES[catKey];
+  if (titleBadge && cat) {
+    titleBadge.textContent = cat.name;
+  }
+
   renderVectorLibrary(catKey);
+}
+
+function showVectorCategoriesView() {
+  const categoriesView = document.getElementById('vector-categories-view');
+  const itemsView = document.getElementById('vector-items-view');
+  if (categoriesView) categoriesView.style.display = 'block';
+  if (itemsView) itemsView.style.display = 'none';
 }
 
 function renderVectorLibrary(catKey) {
@@ -459,13 +516,22 @@ function renderVectorLibrary(catKey) {
   const cat = VECTOR_CATEGORIES[catKey];
   if (!cat) return;
 
+  // Si es la categoría de Frases, renderizar como tarjetas tipográficas interactivas
+  if (catKey === 'frases') {
+    container.innerHTML = cat.items.map(item => `
+      <div class="phrase-card-item" onclick="applyPhraseToVirola('${escapeHtml(item.text)}')" title="Hacé clic para aplicar esta frase a la virola">
+        <div class="phrase-card-text">${item.name}</div>
+        <button type="button" class="phrase-add-btn">
+          <i class="fas fa-plus"></i> Aplicar al arco
+        </button>
+      </div>
+    `).join('');
+    return;
+  }
+
+  // Para las demás categorías, mostrar grilla de íconos vectoriales
   container.innerHTML = cat.items.map(item => {
-    let previewHtml = '';
-    if (item.file) {
-      previewHtml = `<img src="${item.file}" alt="${item.name}" class="vector-thumb-img" />`;
-    } else if (item.inline && INLINE_SVGS[item.inline]) {
-      previewHtml = `<div class="vector-thumb-inline">${INLINE_SVGS[item.inline]}</div>`;
-    }
+    let previewHtml = `<img src="${item.file}" alt="${item.name}" class="vector-thumb-img" loading="lazy" />`;
 
     return `
       <div class="vector-card-item" onclick="addVectorToVirola('${item.id}', '${catKey}')" title="${item.name}">
@@ -482,14 +548,14 @@ function addVectorToVirola(itemId, catKey) {
   const itemDef = cat?.items.find(i => i.id === itemId);
   if (!itemDef) return;
 
-  // Calcular un ángulo disponible para que no caigan todos encimados
+  // Calcular un ángulo disponible para evitar encimar elementos
   const existingAngles = studio.items.filter(i => i.type === 'icon').map(i => i.angle);
   let newAngle = 90; // Abajo por defecto
   if (existingAngles.includes(90)) {
     if (!existingAngles.includes(180)) newAngle = 180;
     else if (!existingAngles.includes(0)) newAngle = 0;
-    else if (!existingAngles.includes(135)) newAngle = 135;
-    else if (!existingAngles.includes(45)) newAngle = 45;
+    else if (!existingAngles.includes(150)) newAngle = 150;
+    else if (!existingAngles.includes(30)) newAngle = 30;
     else newAngle = (existingAngles[existingAngles.length - 1] + 45) % 360;
   }
 
@@ -498,8 +564,7 @@ function addVectorToVirola(itemId, catKey) {
     type: 'icon',
     graphicId: itemId,
     name: itemDef.name,
-    file: itemDef.file || null,
-    inlineKey: itemDef.inline || null,
+    file: itemDef.file,
     angle: newAngle,
     radius: STUDIO_CONFIG.rRing,
     rotation: 0,
@@ -509,40 +574,182 @@ function addVectorToVirola(itemId, catKey) {
   studio.items.push(newItem);
   studio.activeItemId = newItem.id;
   renderVirolaCanvas();
+  updateActiveItemFloatingBar();
 
-  showNotificationToast(`Diseño "${itemDef.name}" agregado a la virola`, 'fa-circle-check');
+  showNotificationToast(`"${itemDef.name}" agregado a la virola`, 'fa-circle-check');
 }
 
-// Subir logo o imagen propia
+// Aplicar Frase a la virola de forma curva y limpia
+function applyPhraseToVirola(phraseText) {
+  studio.textInput = phraseText;
+  const textInput = document.getElementById('studio-text-input');
+  if (textInput) textInput.value = phraseText;
+  const counter = document.getElementById('studio-text-counter');
+  if (counter) counter.textContent = `${phraseText.length}/35`;
+
+  // Buscar si ya existe texto curvo
+  let existing = studio.items.find(i => i.type === 'text' && i.arcPosition === studio.arcPosition);
+  if (existing) {
+    existing.text = phraseText;
+    existing.offset = 50;
+    studio.activeItemId = existing.id;
+  } else {
+    const newItem = {
+      id: 'text_' + Date.now(),
+      type: 'text',
+      text: phraseText,
+      font: studio.selectedFont,
+      fontSize: studio.fontSize,
+      arcPosition: studio.arcPosition,
+      offset: 50
+    };
+    studio.items.push(newItem);
+    studio.activeItemId = newItem.id;
+  }
+
+  renderVirolaCanvas();
+  updateActiveItemFloatingBar();
+  showNotificationToast(`Frase "${phraseText}" aplicada al arco`, 'fa-font');
+}
+
+// ==========================================================================
+// 7. SUBIR IMAGEN PROPIA (VECTORIZACIÓN AUTOMÁTICA Y REMOCIÓN DE FONDO)
+// ==========================================================================
 function handleCustomImageUpload(e) {
   const file = e.target.files?.[0];
   if (!file) return;
 
+  showNotificationToast('Procesando y vectorizando diseño...', 'fa-wand-magic-sparkles');
+
   const reader = new FileReader();
   reader.onload = (event) => {
-    const dataUrl = event.target?.result;
-    const newItem = {
-      id: 'icon_custom_' + Date.now(),
-      type: 'icon',
-      graphicId: 'custom',
-      name: file.name,
-      file: dataUrl,
-      angle: 90,
-      radius: STUDIO_CONFIG.rRing,
-      rotation: 0,
-      scale: 1.1
-    };
+    const rawData = event.target?.result;
 
-    studio.items.push(newItem);
-    studio.activeItemId = newItem.id;
-    renderVirolaCanvas();
-    showNotificationToast(`Imagen "${file.name}" cargada en la virola`, 'fa-upload');
+    // Si ya es un archivo vectorial SVG, usar directamente
+    if (file.type === 'image/svg+xml') {
+      const newItem = {
+        id: 'icon_custom_' + Date.now(),
+        type: 'icon',
+        graphicId: 'custom',
+        name: file.name.replace(/\.[^/.]+$/, ''),
+        file: rawData,
+        angle: 90,
+        radius: STUDIO_CONFIG.rRing,
+        rotation: 0,
+        scale: 1.05
+      };
+      studio.items.push(newItem);
+      studio.activeItemId = newItem.id;
+      renderVirolaCanvas();
+      updateActiveItemFloatingBar();
+      showNotificationToast(`Vector "${newItem.name}" cargado en la virola`, 'fa-circle-check');
+      return;
+    }
+
+    // Para imágenes rasterizadas (PNG, JPG, WebP), vectorizar y remover fondo via Canvas
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const maxDim = 600;
+      let w = img.width;
+      let h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+
+      const imgData = ctx.getImageData(0, 0, w, h);
+      const data = imgData.data;
+
+      // Muestrear las esquinas para determinar color de fondo predominante
+      const corners = [0, (w - 1) * 4, ((h - 1) * w) * 4, ((h - 1) * w + (w - 1)) * 4];
+      let bgR = 0, bgG = 0, bgB = 0, count = 0;
+      corners.forEach(idx => {
+        if (data[idx + 3] > 40) {
+          bgR += data[idx];
+          bgG += data[idx + 1];
+          bgB += data[idx + 2];
+          count++;
+        }
+      });
+      if (count > 0) {
+        bgR /= count; bgG /= count; bgB /= count;
+      } else {
+        bgR = 255; bgG = 255; bgB = 255;
+      }
+      const bgLum = 0.299 * bgR + 0.587 * bgG + 0.114 * bgB;
+      const isLightBg = bgLum > 120;
+
+      // Binarización inteligente y recorte de fondo para grabado láser orfebre
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const a = data[i + 3];
+
+        if (a < 30) {
+          data[i + 3] = 0;
+          continue;
+        }
+
+        const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+        const distToBg = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
+
+        // Si es fondo (cercano al tono del fondo o blanco en fondos claros)
+        if (distToBg < 55 || (isLightBg && lum > 200) || (!isLightBg && lum < 40)) {
+          data[i + 3] = 0; // Transparencia total
+        } else {
+          // Motivo gráfico: convertir a grabado láser negro orfebre (#120e0a)
+          let edgeAlpha = 255;
+          if (distToBg < 80) {
+            edgeAlpha = Math.min(255, Math.max(0, Math.round(((distToBg - 55) / 25) * 255)));
+          }
+          data[i] = 18;
+          data[i + 1] = 14;
+          data[i + 2] = 10;
+          data[i + 3] = Math.min(a, edgeAlpha);
+        }
+      }
+
+      ctx.putImageData(imgData, 0, 0);
+      const vectorizedDataUrl = canvas.toDataURL('image/png');
+
+      const newItem = {
+        id: 'icon_custom_' + Date.now(),
+        type: 'icon',
+        graphicId: 'custom',
+        name: file.name.replace(/\.[^/.]+$/, ''),
+        file: vectorizedDataUrl,
+        angle: 90,
+        radius: STUDIO_CONFIG.rRing,
+        rotation: 0,
+        scale: 1.1
+      };
+
+      studio.items.push(newItem);
+      studio.activeItemId = newItem.id;
+      renderVirolaCanvas();
+      updateActiveItemFloatingBar();
+      showNotificationToast(`"${newItem.name}" vectorizado y listo sin fondo ✨`, 'fa-circle-check');
+    };
+    img.src = rawData;
   };
   reader.readAsDataURL(file);
 }
 
 // ==========================================================================
-// 6. RENDERIZADO DEL CANVAS SVG DE LA VIROLA CIRCULAR INTERACTIVA
+// 8. RENDERIZADO DEL CANVAS SVG DE LA VIROLA CIRCULAR INTERACTIVA
 // ==========================================================================
 function renderVirolaCanvas() {
   const svg = document.getElementById('virola-studio-svg');
@@ -573,36 +780,42 @@ function renderVirolaCanvas() {
   let circularLinesHtml = '';
   if (studio.circularLines === 'simple') {
     circularLinesHtml = `
-      <circle cx="${cx}" cy="${cy}" r="${rRing + 32}" fill="none" stroke="rgba(30, 20, 15, 0.55)" stroke-width="1.8" stroke-dasharray="none" />
+      <circle cx="${cx}" cy="${cy}" r="${rRing + 32}" fill="none" stroke="rgba(30, 20, 15, 0.6)" stroke-width="1.8" />
     `;
   } else if (studio.circularLines === 'doble') {
     circularLinesHtml = `
       <circle cx="${cx}" cy="${cy}" r="${rRing + 38}" fill="none" stroke="rgba(30, 20, 15, 0.65)" stroke-width="1.8" />
-      <circle cx="${cx}" cy="${cy}" r="${rRing + 26}" fill="none" stroke="rgba(30, 20, 15, 0.45)" stroke-width="1.4" />
+      <circle cx="${cx}" cy="${cy}" r="${rRing + 26}" fill="none" stroke="rgba(30, 20, 15, 0.5)" stroke-width="1.4" />
     `;
   }
 
-  // Trazados de textos
+  // Trazados de textos curvos (con soporte drag polar y offset)
   let textsHtml = '';
   const textItems = studio.items.filter(i => i.type === 'text');
   textItems.forEach(t => {
     const isTop = t.arcPosition === 'top';
     const pathId = isTop ? 'arc-top-path' : 'arc-bottom-path';
     const isActive = t.id === studio.activeItemId;
+    const offsetVal = t.offset !== undefined ? t.offset : 50;
 
     textsHtml += `
-      <text font-family="'${t.font}', serif" 
-            font-size="${t.fontSize || 22}" 
-            font-weight="800" 
-            letter-spacing="2px"
-            fill="#120e0a"
-            class="virola-curved-text ${isActive ? 'active-text-element' : ''}"
-            data-item-id="${t.id}"
-            onclick="selectVirolaItem('${t.id}', event)">
-        <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">
-          ${escapeHtml(t.text)}
-        </textPath>
-      </text>
+      <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
+         data-item-id="${t.id}"
+         onmousedown="startTextDrag('${t.id}', event)"
+         ontouchstart="startTextDrag('${t.id}', event)">
+        <text font-family="'${t.font}', serif" 
+              font-size="${t.fontSize || 22}" 
+              font-weight="800" 
+              letter-spacing="2px"
+              fill="#120e0a"
+              style="cursor: grab;"
+              class="virola-curved-text ${isActive ? 'active-text-element' : ''}"
+              data-item-id="${t.id}">
+          <textPath href="#${pathId}" xlink:href="#${pathId}" startOffset="${offsetVal}%" text-anchor="middle">
+            ${escapeHtml(t.text)}
+          </textPath>
+        </text>
+      </g>
     `;
   });
 
@@ -620,40 +833,31 @@ function renderVirolaCanvas() {
     const baseSize = 44;
     const halfSize = (baseSize * scale) / 2;
 
-    let contentHtml = '';
-    if (item.file) {
-      contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" />`;
-    } else if (item.inlineKey && INLINE_SVGS[item.inlineKey]) {
-      contentHtml = `
-        <g transform="translate(${-halfSize}, ${-halfSize}) scale(${(baseSize * scale) / 100})">
-          ${INLINE_SVGS[item.inlineKey]}
-        </g>
-      `;
-    }
+    const contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" />`;
 
-    // Handles interactivos (Rotación azul, Escala verde, Borrar rojo)
+    // Handles interactivos fijos y estables (con rotación contraria para evitar saltos locos)
     let handlesHtml = '';
     if (isActive) {
       const handleOffset = halfSize + 14;
       handlesHtml = `
-        <!-- Cuadro selector / Ring -->
+        <!-- Anillo selector punteado -->
         <circle cx="0" cy="0" r="${halfSize + 8}" fill="none" stroke="#c59b27" stroke-width="1.8" stroke-dasharray="4,4" />
 
-        <!-- Handle Azul (Rotación) Arriba -->
-        <g class="virola-handle handle-rotate" data-handle="rotate" data-item-id="${item.id}" transform="translate(0, ${-handleOffset})">
-          <circle cx="0" cy="0" r="10" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
+        <!-- Handle de Rotación (Azul, Arriba) con contra-rotación para mantenerse siempre fijo -->
+        <g class="virola-handle handle-rotate" data-handle="rotate" data-item-id="${item.id}" transform="rotate(${-rot}) translate(0, ${-handleOffset})">
+          <circle cx="0" cy="0" r="11" fill="#2563eb" stroke="#ffffff" stroke-width="2" />
           <path d="M-4 -2 A 4 4 0 1 1 4 2 M2 4 L4 2 L2 0" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" />
         </g>
 
-        <!-- Handle Verde (Escala) Abajo-Derecha -->
-        <g class="virola-handle handle-scale" data-handle="scale" data-item-id="${item.id}" transform="translate(${handleOffset * 0.75}, ${handleOffset * 0.75})">
-          <circle cx="0" cy="0" r="10" fill="#16a34a" stroke="#ffffff" stroke-width="2" />
+        <!-- Handle de Escala (Verde, Abajo-Derecha) -->
+        <g class="virola-handle handle-scale" data-handle="scale" data-item-id="${item.id}" transform="rotate(${-rot}) translate(${handleOffset * 0.75}, ${handleOffset * 0.75})">
+          <circle cx="0" cy="0" r="11" fill="#16a34a" stroke="#ffffff" stroke-width="2" />
           <path d="M-3 3 L3 -3 M0 -3 L3 -3 L3 0 M0 3 L-3 3 L-3 0" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" />
         </g>
 
-        <!-- Handle Rojo (Eliminar) Arriba-Izquierda -->
-        <g class="virola-handle handle-delete" data-handle="delete" data-item-id="${item.id}" transform="translate(${-handleOffset * 0.75}, ${-handleOffset * 0.75})" onclick="deleteVirolaItem('${item.id}', event)">
-          <circle cx="0" cy="0" r="10" fill="#dc2626" stroke="#ffffff" stroke-width="2" />
+        <!-- Handle de Eliminación (Rojo, Arriba-Izquierda) -->
+        <g class="virola-handle handle-delete" data-handle="delete" data-item-id="${item.id}" transform="rotate(${-rot}) translate(${-handleOffset * 0.75}, ${-handleOffset * 0.75})" onclick="deleteVirolaItem('${item.id}', event)">
+          <circle cx="0" cy="0" r="11" fill="#dc2626" stroke="#ffffff" stroke-width="2" />
           <path d="M-3 -3 L3 3 M3 -3 L-3 3" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
         </g>
       `;
@@ -738,10 +942,8 @@ function renderVirolaCanvas() {
 
     <!-- 5. Boca Interior del Mate (Calabaza curada con sombra de profundidad) -->
     <circle cx="${cx}" cy="${cy}" r="${rInner}" fill="url(#calabaza-interior)" stroke="#3d2d1e" stroke-width="3" />
-    <!-- Yerba y bombilla sutil en el centro -->
     <circle cx="${cx}" cy="${cy}" r="${rInner - 18}" fill="#162212" opacity="0.85" />
     <circle cx="${cx}" cy="${cy}" r="${rInner - 22}" fill="none" stroke="#25381e" stroke-width="3" stroke-dasharray="3,4" opacity="0.7" />
-    <!-- Sombra biselada del labio interior -->
     <circle cx="${cx}" cy="${cy}" r="${rInner}" fill="none" stroke="rgba(0,0,0,0.6)" stroke-width="4" />
 
     <!-- 6. Textos Curvos Grabados a Láser HD -->
@@ -757,12 +959,13 @@ function renderVirolaCanvas() {
 }
 
 // ==========================================================================
-// 7. INTERACCIÓN Y MANIPULACIÓN (DRAG POLAR, ROTATE, SCALE, DELETE)
+// 9. INTERACCIÓN Y MANIPULACIÓN (DRAG DE TEXTOS Y DISEÑOS, ROTATE, SCALE, DELETE)
 // ==========================================================================
 function selectVirolaItem(itemId, e) {
   if (e) e.stopPropagation();
   studio.activeItemId = itemId;
   renderVirolaCanvas();
+  updateActiveItemFloatingBar();
 }
 
 function deleteVirolaItem(itemId, e) {
@@ -772,7 +975,36 @@ function deleteVirolaItem(itemId, e) {
     studio.activeItemId = null;
   }
   renderVirolaCanvas();
+  updateActiveItemFloatingBar();
   showNotificationToast('Elemento eliminado de la virola', 'fa-trash');
+}
+
+function deleteActiveVirolaItem() {
+  if (!studio.activeItemId) return;
+  deleteVirolaItem(studio.activeItemId);
+}
+
+// Iniciar arrastre de texto a lo largo del arco
+function startTextDrag(itemId, e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  const item = studio.items.find(i => i.id === itemId);
+  if (!item) return;
+
+  studio.activeItemId = itemId;
+  studio.dragMode = 'text_move';
+  studio.dragItemId = itemId;
+
+  const coords = getPointerCoords(e);
+  studio.dragStart = {
+    x: coords.x,
+    y: coords.y,
+    itemOffset: item.offset || 50
+  };
+
+  renderVirolaCanvas();
+  updateActiveItemFloatingBar();
 }
 
 function startStickerDrag(itemId, e) {
@@ -788,12 +1020,12 @@ function startStickerDrag(itemId, e) {
   const targetHandle = e.target.closest('.virola-handle');
   const handleType = targetHandle?.getAttribute('data-handle');
 
-  const coords = getPointerCoords(e);
-
   if (handleType === 'delete') {
     deleteVirolaItem(itemId, e);
     return;
   }
+
+  const coords = getPointerCoords(e);
 
   if (handleType === 'scale') {
     studio.dragMode = 'scale';
@@ -813,21 +1045,23 @@ function startStickerDrag(itemId, e) {
   };
 
   renderVirolaCanvas();
+  updateActiveItemFloatingBar();
 }
 
 function initCanvasInteraction() {
   const svg = document.getElementById('virola-studio-svg');
   if (!svg) return;
 
-  // Deseleccionar al hacer clic en el fondo
+  // Deseleccionar al hacer clic en el fondo del SVG
   svg.addEventListener('click', (e) => {
-    if (!e.target.closest('.virola-sticker-group') && !e.target.closest('.virola-curved-text')) {
+    if (!e.target.closest('.virola-sticker-group') && !e.target.closest('.virola-curved-text') && !e.target.closest('.virola-handle')) {
       studio.activeItemId = null;
       renderVirolaCanvas();
+      updateActiveItemFloatingBar();
     }
   });
 
-  // Movimiento
+  // Movimiento global de puntero
   window.addEventListener('mousemove', onCanvasPointerMove);
   window.addEventListener('touchmove', onCanvasPointerMove, { passive: false });
 
@@ -846,7 +1080,27 @@ function onCanvasPointerMove(e) {
   const coords = getPointerCoords(e);
   const { cx, cy } = STUDIO_CONFIG;
 
-  if (studio.dragMode === 'move') {
+  if (studio.dragMode === 'text_move') {
+    // Desplazar texto a lo largo del arco de la virola
+    const dx = coords.x - cx;
+    const dy = coords.y - cy;
+    let angleRad = Math.atan2(dy, dx);
+    let angleDeg = (angleRad * 180) / Math.PI;
+    if (angleDeg < 0) angleDeg += 360;
+
+    // Si el texto está en curva superior (195° a 345°)
+    if (item.arcPosition === 'top') {
+      let pct = ((angleDeg - 195) / (345 - 195)) * 100;
+      pct = Math.max(10, Math.min(90, pct));
+      item.offset = Math.round(pct);
+    } else {
+      // Curva inferior (15° a 165°)
+      let pct = ((angleDeg - 15) / (165 - 15)) * 100;
+      pct = Math.max(10, Math.min(90, pct));
+      item.offset = Math.round(pct);
+    }
+    renderVirolaCanvas();
+  } else if (studio.dragMode === 'move') {
     // Mover polarmente alrededor del anillo de la virola
     const dx = coords.x - cx;
     const dy = coords.y - cy;
@@ -888,6 +1142,8 @@ function onCanvasPointerEnd() {
   if (studio.dragMode) {
     studio.dragMode = null;
     studio.dragItemId = null;
+    renderVirolaCanvas();
+    updateActiveItemFloatingBar();
   }
 }
 
@@ -908,15 +1164,131 @@ function getPointerCoords(e) {
   return { x: svgP.x, y: svgP.y };
 }
 
+// ==========================================================================
+// 10. BARRA FLOTANTE DE ACCIONES RÁPIDAS DEL ELEMENTO ACTIVO
+// ==========================================================================
+function updateActiveItemFloatingBar() {
+  const bar = document.getElementById('virola-active-item-controls');
+  const badge = document.getElementById('active-item-name-badge');
+  if (!bar) return;
+
+  const item = studio.items.find(i => i.id === studio.activeItemId);
+  if (!item) {
+    bar.style.display = 'none';
+    return;
+  }
+
+  bar.style.display = 'flex';
+  if (badge) {
+    if (item.type === 'text') {
+      badge.innerHTML = `<i class="fas fa-font"></i> Texto: "${item.text}"`;
+    } else {
+      badge.innerHTML = `<i class="fas fa-shield"></i> ${item.name || 'Diseño'}`;
+    }
+  }
+}
+
+function stepItemScale(delta) {
+  const item = studio.items.find(i => i.id === studio.activeItemId);
+  if (!item) return;
+
+  if (item.type === 'text') {
+    item.fontSize = Math.max(14, Math.min(32, (item.fontSize || 22) + Math.round(delta * 20)));
+  } else {
+    const cur = item.scale || 1.0;
+    item.scale = parseFloat(Math.max(STUDIO_CONFIG.minScale, Math.min(STUDIO_CONFIG.maxScale, cur + delta)).toFixed(2));
+  }
+  renderVirolaCanvas();
+}
+
+function stepItemRotation(degDelta) {
+  const item = studio.items.find(i => i.id === studio.activeItemId);
+  if (!item) return;
+
+  if (item.type === 'text') {
+    // Mover texto a lo largo del arco
+    item.offset = Math.max(10, Math.min(90, (item.offset || 50) + (degDelta > 0 ? 5 : -5)));
+  } else {
+    item.rotation = ((item.rotation || 0) + degDelta) % 360;
+  }
+  renderVirolaCanvas();
+}
+
+// ==========================================================================
+// 11. CENTRADO Y DISTRIBUCIÓN AUTOMÁTICA PROFESIONAL DE LA VIROLA
+// ==========================================================================
+function autoCenterAndBalanceVirola() {
+  // 1. Centrar todos los textos curvos
+  const textItems = studio.items.filter(i => i.type === 'text');
+  textItems.forEach(t => {
+    t.offset = 50; // Exactamente al centro del arco
+  });
+
+  // 2. Distribuir y alinear todos los íconos/escudos
+  const iconItems = studio.items.filter(i => i.type === 'icon');
+  const count = iconItems.length;
+
+  if (count === 1) {
+    // Si hay texto superior, colocar el ícono abajo centrado (90°)
+    const hasTopText = textItems.some(t => t.arcPosition === 'top');
+    iconItems[0].angle = hasTopText ? 90 : 270;
+    iconItems[0].rotation = 0;
+    iconItems[0].radius = STUDIO_CONFIG.rRing;
+    iconItems[0].scale = 1.05;
+  } else if (count === 2) {
+    // Colocación simétrica izquierda (180°) y derecha (0°)
+    iconItems[0].angle = 180;
+    iconItems[0].rotation = 0;
+    iconItems[0].radius = STUDIO_CONFIG.rRing;
+    iconItems[0].scale = 1.0;
+
+    iconItems[1].angle = 0;
+    iconItems[1].rotation = 0;
+    iconItems[1].radius = STUDIO_CONFIG.rRing;
+    iconItems[1].scale = 1.0;
+  } else if (count === 3) {
+    // 3 motivos: izquierda inferior (150°), base central (90°), derecha inferior (30°)
+    iconItems[0].angle = 150;
+    iconItems[0].rotation = 0;
+    iconItems[0].radius = STUDIO_CONFIG.rRing;
+    iconItems[0].scale = 0.95;
+
+    iconItems[1].angle = 90;
+    iconItems[1].rotation = 0;
+    iconItems[1].radius = STUDIO_CONFIG.rRing;
+    iconItems[1].scale = 1.0;
+
+    iconItems[2].angle = 30;
+    iconItems[2].rotation = 0;
+    iconItems[2].radius = STUDIO_CONFIG.rRing;
+    iconItems[2].scale = 0.95;
+  } else if (count >= 4) {
+    // Distribuir armónicamente en el perímetro
+    const step = 360 / count;
+    iconItems.forEach((item, idx) => {
+      item.angle = Math.round((90 + idx * step) % 360);
+      item.rotation = 0;
+      item.radius = STUDIO_CONFIG.rRing;
+      item.scale = 0.9;
+    });
+  }
+
+  studio.activeItemId = null;
+  renderVirolaCanvas();
+  updateActiveItemFloatingBar();
+  showNotificationToast('Elementos centrados y distribuidos armónicamente ✨', 'fa-crosshairs');
+}
+
 function resetVirolaStudio() {
   studio.items = [];
   studio.activeItemId = null;
   renderVirolaCanvas();
+  updateActiveItemFloatingBar();
   showNotificationToast('Virola reiniciada limpia', 'fa-rotate-left');
 }
 
 // ==========================================================================
-// 8. PASO 3: CONFIRMACIÓN, VECTOR DOWNLOAD & CARRITO
+// 12. PASO 3: CONFIRMACIÓN, VECTOR DOWNLOAD & CARRITO
 // ==========================================================================
 function setPurchaseType(type) {
   studio.purchaseType = type;

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 550" width="100%" height="100%">
+  <!-- Ciervo de los Pantanos Argentino - Original Vector -->
+  <defs>
+    <linearGradient id="ciervo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b0632a"/>
+      <stop offset="50%" stop-color="#7a3d13"/>
+      <stop offset="100%" stop-color="#421e05"/>
+    </linearGradient>
+    <linearGradient id="asta-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ded4c8"/>
+      <stop offset="50%" stop-color="#99836a"/>
+      <stop offset="100%" stop-color="#594632"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Cornamenta ramificada majestuosa (Asta dicotómica típica del ciervo de los pantanos) -->
+  <g fill="none" stroke="url(#asta-grad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Asta Izquierda ramificada -->
+    <path d="M 270 145 C 255 110 230 75 200 65"/>
+    <path d="M 230 85 C 215 50 185 35 155 40"/>
+    <path d="M 215 65 C 230 40 235 15 225 5"/>
+    <path d="M 185 50 C 180 30 165 20 150 25"/>
+    <path d="M 250 120 C 225 105 195 105 170 120"/>
+
+    <!-- Asta Derecha ramificada -->
+    <path d="M 300 145 C 315 110 340 75 370 65"/>
+    <path d="M 340 85 C 355 50 385 35 415 40"/>
+    <path d="M 355 65 C 340 40 335 15 345 5"/>
+    <path d="M 385 50 C 390 30 405 20 420 25"/>
+    <path d="M 320 120 C 345 105 375 105 400 120"/>
+  </g>
+
+  <!-- Cuerpo noble del Ciervo de los Pantanos -->
+  <g fill="url(#ciervo-grad)" stroke="#261203" stroke-width="2.5" stroke-linejoin="round">
+    <!-- Cabeza, cuello, lomo y patas negras en los extremos ("medias negras" típicas de la especie) -->
+    <path d="
+      M 285 140
+      C 300 140 315 150 320 165
+      C 330 175 345 195 345 210
+      C 340 220 325 225 310 220
+      C 305 250 300 290 295 315
+      C 330 325 365 335 390 355
+      C 410 370 415 395 405 430
+      L 415 520
+      L 395 520
+      L 385 450
+      L 365 450
+      L 360 520
+      L 340 520
+      L 350 425
+      C 315 415 275 415 245 425
+      L 250 520
+      L 230 520
+      L 235 450
+      L 215 450
+      L 205 520
+      L 185 520
+      L 195 415
+      C 185 385 180 360 195 330
+      C 220 315 245 310 265 295
+      C 265 260 270 205 275 165
+      C 275 150 280 140 285 140 Z
+    "/>
+
+    <!-- Orejas grandes y anchas con pelo blanco interior (típicas del ciervo de los pantanos) -->
+    <!-- Oreja Izquierda -->
+    <path d="M 270 155 C 245 145 230 160 245 180 C 260 190 275 180 275 165 Z" fill="#8c471c"/>
+    <path d="M 265 160 C 250 155 240 165 250 175 C 258 180 268 175 268 165 Z" fill="#ffffff"/>
+
+    <!-- Oreja Derecha -->
+    <path d="M 315 155 C 340 145 355 160 340 180 C 325 190 310 180 310 165 Z" fill="#8c471c"/>
+    <path d="M 320 160 C 335 155 345 165 335 175 C 327 180 317 175 317 165 Z" fill="#ffffff"/>
+
+    <!-- Hocico oscuro con anillo blanco característico alrededor de los ojos -->
+    <path d="M 320 205 C 335 210 345 215 342 222 C 330 227 318 225 312 218 Z" fill="#1f1105"/>
+    <circle cx="308" cy="180" r="8" fill="#fff5ea"/>
+    <circle cx="308" cy="180" r="4.5" fill="#0d0501"/>
+    <circle cx="309" cy="179" r="1.5" fill="#ffffff"/>
+  </g>
+
+  <!-- "Medias negras": patas oscuras características del Blastocerus dichotomus -->
+  <g fill="#140b03">
+    <rect x="185" y="480" width="20" height="40"/>
+    <rect x="230" y="480" width="20" height="40"/>
+    <rect x="340" y="480" width="20" height="40"/>
+    <rect x="395" y="480" width="20" height="40"/>
+  </g>
+
+  <!-- Junco de humedal / esteros -->
+  <g stroke="#3d6323" stroke-width="2.5" stroke-linecap="round">
+    <line x1="160" y1="522" x2="430" y2="522" stroke="#261203"/>
+    <path d="M 170 522 Q 165 470 155 440" fill="none"/>
+    <path d="M 435 522 Q 440 460 450 430" fill="none"/>
+  </g>
+</svg>

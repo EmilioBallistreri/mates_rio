@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 520" width="100%" height="100%">
+  <!-- Guanaco Criollo Patagónico - Original Vector -->
+  <defs>
+    <linearGradient id="guanaco-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b87333"/>
+      <stop offset="60%" stop-color="#8c4e1a"/>
+      <stop offset="100%" stop-color="#4d280b"/>
+    </linearGradient>
+  </defs>
+
+  <g fill="url(#guanaco-grad)" stroke="#261203" stroke-width="2.5" stroke-linejoin="round">
+    <!-- Silueta esbelta del Guanaco -->
+    <!-- Cabeza, cuello largo erguido, lomo y patas ágiles -->
+    <path d="
+      M 310 70
+      C 320 65 330 75 325 85
+      C 320 95 315 105 320 115
+      C 328 115 340 120 345 130
+      C 345 140 335 145 320 148
+      C 310 170 300 210 295 245
+      C 320 255 350 260 375 275
+      C 390 285 395 305 385 340
+      L 395 470
+      L 375 470
+      L 365 375
+      L 345 375
+      L 345 470
+      L 325 470
+      L 330 350
+      C 300 340 265 340 240 350
+      L 245 470
+      L 225 470
+      L 230 375
+      L 215 375
+      L 205 470
+      L 185 470
+      L 190 340
+      C 180 320 175 300 185 270
+      C 170 270 160 280 165 295
+      C 155 280 165 260 185 255
+      C 205 250 235 250 260 235
+      C 265 195 275 140 285 95
+      C 285 80 295 70 310 70 Z
+    "/>
+
+    <!-- Orejas puntiagudas y atentas características del guanaco -->
+    <!-- Oreja derecha -->
+    <path d="M 305 70 C 310 40 325 40 320 70 Z" fill="#663309"/>
+    <!-- Oreja izquierda -->
+    <path d="M 290 75 C 290 50 305 50 302 75 Z" fill="#4d280b"/>
+
+    <!-- Hocico grisáceo/oscuro característico -->
+    <path d="M 320 120 C 335 125 345 130 342 140 C 330 145 320 145 315 135 Z" fill="#2b1a0d"/>
+
+    <!-- Ojo grande almendrado con pestañas de estepa -->
+    <circle cx="310" cy="110" r="4.5" fill="#0d0501"/>
+    <circle cx="311" cy="109" r="1.5" fill="#ffffff"/>
+
+    <!-- Pecho y vientre blanco crema característico del guanaco -->
+    <path d="M 285 210 C 275 235 265 260 250 275 C 235 290 205 295 195 290 C 220 270 240 245 260 215 Z" fill="#fff5ea" stroke="none" opacity="0.9"/>
+  </g>
+
+  <!-- Suelo de estepa patagónica -->
+  <line x1="150" y1="472" x2="430" y2="472" stroke="#4d280b" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

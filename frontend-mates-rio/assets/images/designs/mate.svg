@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <!-- Mate Tradicional Imperial Argentino - Original Vector -->
+  <defs>
+    <!-- Gradiente de Cuero Vacuno / Calabaza -->
+    <radialGradient id="mate-leather-grad" cx="40%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#4a2e1b"/>
+      <stop offset="50%" stop-color="#2c1a0e"/>
+      <stop offset="100%" stop-color="#140b06"/>
+    </radialGradient>
+    <!-- Gradiente Virola Alpaca -->
+    <linearGradient id="mate-virola-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#cfc7bc"/>
+      <stop offset="30%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#e8e2d8"/>
+      <stop offset="100%" stop-color="#9a8e7e"/>
+    </linearGradient>
+    <!-- Gradiente Bombilla -->
+    <linearGradient id="mate-bombilla-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5f7fa"/>
+      <stop offset="50%" stop-color="#d0d7de"/>
+      <stop offset="100%" stop-color="#8c959f"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Bombilla de Alpaca inclinada elegante -->
+  <g>
+    <!-- Caño de la bombilla con curvatura clásica pico loro -->
+    <path d="M 270 210 L 375 60 C 382 50 395 52 405 60 C 412 68 410 80 400 90 L 300 230" 
+          fill="url(#mate-bombilla-grad)" stroke="#6e7781" stroke-width="2"/>
+    <!-- Anillo labrado / virola de la bombilla -->
+    <ellipse cx="365" cy="85" rx="14" ry="7" transform="rotate(-45, 365, 85)" fill="#e5c158" stroke="#a3821e" stroke-width="1.5"/>
+    <ellipse cx="380" cy="70" rx="11" ry="5" transform="rotate(-45, 380, 70)" fill="#e5c158" stroke="#a3821e" stroke-width="1.5"/>
+  </g>
+
+  <!-- Base de apoyo / Pie de 4 patas orfebre -->
+  <ellipse cx="250" cy="445" rx="110" ry="22" fill="#0d0805" opacity="0.6"/>
+  <path d="M 180 420 C 185 450 200 460 215 460 L 285 460 C 300 460 315 450 320 420 Z" 
+        fill="url(#mate-virola-grad)" stroke="#635746" stroke-width="2"/>
+
+  <!-- Cuerpo de Calabaza forrado en Cuero Genuino -->
+  <path d="M 170 230 
+           C 120 260 110 350 140 400 
+           C 165 440 210 450 250 450 
+           C 290 450 335 440 360 400 
+           C 390 350 380 260 330 230 Z" 
+        fill="url(#mate-leather-grad)" stroke="#1a0f08" stroke-width="3"/>
+
+  <!-- Costura artesanal gauchesca en cruz del cuero -->
+  <path d="M 250 240 L 250 445" fill="none" stroke="#7a5230" stroke-width="3" stroke-dasharray="6,4"/>
+  <!-- Cruces de tiento de cuero crudo -->
+  <g stroke="#c29b68" stroke-width="2" stroke-linecap="round">
+    <line x1="243" y1="260" x2="257" y2="270"/><line x1="257" y1="260" x2="243" y2="270"/>
+    <line x1="243" y1="290" x2="257" y2="300"/><line x1="257" y1="290" x2="243" y2="300"/>
+    <line x1="243" y1="320" x2="257" y2="330"/><line x1="257" y1="320" x2="243" y2="330"/>
+    <line x1="243" y1="350" x2="257" y2="360"/><line x1="257" y1="350" x2="243" y2="360"/>
+    <line x1="243" y1="380" x2="257" y2="390"/><line x1="257" y1="380" x2="243" y2="390"/>
+    <line x1="243" y1="410" x2="257" y2="420"/><line x1="257" y1="410" x2="243" y2="420"/>
+  </g>
+
+  <!-- Virola Imperial Ancha de Alpaca Maciza Cincelada -->
+  <!-- Faldón de la virola con borde cincelado -->
+  <path d="M 160 215 
+           L 155 240 
+           C 180 250 320 250 345 240 
+           L 340 215 Z" 
+        fill="url(#mate-virola-grad)" stroke="#594d3f" stroke-width="2"/>
+  
+  <!-- Guarda floral cincelada en la virola -->
+  <g fill="#42372a" opacity="0.6">
+    <circle cx="185" cy="230" r="3.5"/><circle cx="215" cy="233" r="3.5"/>
+    <circle cx="250" cy="234" r="4"/><circle cx="285" cy="233" r="3.5"/>
+    <circle cx="315" cy="230" r="3.5"/>
+  </g>
+
+  <!-- Corona superior de la virola con labio orfebre -->
+  <ellipse cx="250" cy="210" rx="96" ry="24" fill="url(#mate-virola-grad)" stroke="#594d3f" stroke-width="3"/>
+  <ellipse cx="250" cy="208" rx="84" ry="18" fill="#1b120c" stroke="#4a3e30" stroke-width="2"/>
+
+  <!-- Yerba mate con montañita verde en el interior -->
+  <ellipse cx="240" cy="210" rx="72" ry="14" fill="#2d421e"/>
+  <ellipse cx="230" cy="208" rx="55" ry="10" fill="#3d5e27"/>
+  <circle cx="220" cy="207" r="3" fill="#5c873b"/>
+  <circle cx="245" cy="209" r="2.5" fill="#5c873b"/>
+</svg>

@@ -2763,8 +2763,30 @@ body.admin-dark-mode .admin-data-table td {
   color: #f5efe6;
 }
 
+body.admin-dark-mode .admin-data-table tr:hover,
 body.admin-dark-mode .admin-data-table tbody tr:hover {
-  background: #251e17;
+  background: #281f18 !important;
+}
+
+body.admin-dark-mode .admin-data-table tr:hover td,
+body.admin-dark-mode .admin-data-table tbody tr:hover td {
+  background: #281f18 !important;
+  color: #f5efe6 !important;
+}
+
+body.admin-dark-mode .admin-data-table tr:hover td strong,
+body.admin-dark-mode .admin-data-table tr:hover td .table-product-name,
+body.admin-dark-mode .admin-data-table tr:hover td .order-items-summary,
+body.admin-dark-mode .admin-data-table tr:hover td .admin-order-customer,
+body.admin-dark-mode .admin-data-table tr:hover td .admin-log-user {
+  color: #ffffff !important;
+}
+
+body.admin-dark-mode .admin-data-table tr:hover td small,
+body.admin-dark-mode .admin-data-table tr:hover td .text-muted,
+body.admin-dark-mode .admin-data-table tr:hover td .table-product-sku,
+body.admin-dark-mode .admin-data-table tr:hover td .admin-log-time {
+  color: #bfa892 !important;
 }
 
 body.admin-dark-mode .table-filter-bar,
@@ -3008,5 +3030,91 @@ body.admin-dark-mode .table-responsive-card::-webkit-scrollbar-track {
 body.admin-dark-mode .table-responsive-card::-webkit-scrollbar-thumb {
   background: #3e3226;
 }
+
+/* ==========================================================================
+   ADMIN DESIGN ACCORDIONS (CATEGORÍAS DESPLEGABLES CON FLECHA)
+   ========================================================================== */
+.admin-design-accordion {
+  border: 1.5px solid var(--admin-border);
+  border-radius: var(--radius-md);
+  background: #fff;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  margin-bottom: 18px;
+}
+
+.admin-design-accordion:hover {
+  border-color: var(--admin-gold);
+}
+
+.admin-design-accordion-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: #faf7f2;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.admin-design-accordion-header:hover {
+  background: #f3ede2;
+}
+
+.admin-design-accordion-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--admin-gold);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.02em;
+}
+
+.admin-design-accordion-arrow {
+  font-size: 0.9rem;
+  color: var(--admin-gold);
+  transition: transform 0.25s ease;
+}
+
+.admin-design-accordion-arrow.collapsed {
+  transform: rotate(-90deg);
+}
+
+.admin-design-accordion-body {
+  padding: 18px;
+  border-top: 1px solid var(--admin-border);
+}
+
+.admin-design-accordion-body.collapsed {
+  display: none;
+}
+
+/* Dark mode for admin design accordions */
+body.admin-dark-mode .admin-design-accordion {
+  background: #1c1611;
+  border-color: #2e241c;
+}
+
+body.admin-dark-mode .admin-design-accordion:hover {
+  border-color: var(--admin-gold);
+}
+
+body.admin-dark-mode .admin-design-accordion-header {
+  background: #231b14;
+}
+
+body.admin-dark-mode .admin-design-accordion-header:hover {
+  background: #2a2018;
+}
+
+body.admin-dark-mode .admin-design-accordion-body {
+  border-top-color: #2e241c;
+}
+
 
 

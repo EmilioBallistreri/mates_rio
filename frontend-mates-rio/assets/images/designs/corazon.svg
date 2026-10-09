@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <!-- Corazón de Gaucho de Platería Criolla - Original Vector -->
+  <defs>
+    <!-- Gradiente de Plata Criolla Repujada -->
+    <radialGradient id="corazon-plata" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="40%" stop-color="#ded8cf"/>
+      <stop offset="75%" stop-color="#ab9e8d"/>
+      <stop offset="100%" stop-color="#6e5f4e"/>
+    </radialGradient>
+    <radialGradient id="corazon-rubi" cx="40%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#e62e43"/>
+      <stop offset="60%" stop-color="#9e0a1b"/>
+      <stop offset="100%" stop-color="#4d010b"/>
+    </radialGradient>
+    <linearGradient id="corazon-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff0a3"/>
+      <stop offset="50%" stop-color="#cfa229"/>
+      <stop offset="100%" stop-color="#7a5c0a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Resplandor / Rayos de Plata Orfebre del Corazón Criollo -->
+  <g stroke="url(#corazon-gold)" stroke-width="3" stroke-linecap="round" opacity="0.8">
+    <line x1="250" y1="50" x2="250" y2="20"/>
+    <line x1="210" y1="60" x2="190" y2="30"/>
+    <line x1="290" y1="60" x2="310" y2="30"/>
+    <line x1="165" y1="85" x2="140" y2="60"/>
+    <line x1="335" y1="85" x2="360" y2="60"/>
+    <line x1="130" y1="125" x2="100" y2="110"/>
+    <line x1="370" y1="125" x2="400" y2="110"/>
+  </g>
+
+  <!-- Guarda Pampa / Filigrana exterior de volutas gauchescas -->
+  <path d="
+    M 250 145
+    C 230 90 150 70 100 130
+    C 50 190 70 270 130 330
+    C 170 370 220 415 250 445
+    C 280 415 330 370 370 330
+    C 430 270 450 190 400 130
+    C 350 70 270 90 250 145 Z
+  " fill="url(#corazon-plata)" stroke="#3d3023" stroke-width="6" stroke-linejoin="round"/>
+
+  <!-- Borde festoneado perlado de platería -->
+  <path d="
+    M 250 160
+    C 235 110 165 95 120 145
+    C 75 195 95 260 145 315
+    C 180 355 225 395 250 420
+    C 275 395 320 355 355 315
+    C 405 260 425 195 380 145
+    C 335 95 265 110 250 160 Z
+  " fill="none" stroke="url(#corazon-gold)" stroke-width="4" stroke-dasharray="6,5"/>
+
+  <!-- Corazón Interior Esmaltado / Rojo Fuego Criollo -->
+  <path d="
+    M 250 175
+    C 235 130 175 120 140 160
+    C 105 200 120 255 165 300
+    C 195 330 230 365 250 385
+    C 270 365 305 330 335 300
+    C 380 255 395 200 360 160
+    C 325 120 265 130 250 175 Z
+  " fill="url(#corazon-rubi)" stroke="#2b0207" stroke-width="3"/>
+
+  <!-- Cincelado Central de Acanto y Rodaja de Espuela Criolla -->
+  <!-- Flor central dorada cincelada -->
+  <g transform="translate(250, 240)">
+    <!-- Rodaja de espuela de 8 puntas / sol gaucho en el centro -->
+    <circle cx="0" cy="0" r="28" fill="url(#corazon-gold)" stroke="#523a04" stroke-width="2.5"/>
+    <g stroke="#ffffff" stroke-width="2" stroke-linecap="round">
+      <line x1="0" y1="-28" x2="0" y2="28"/>
+      <line x1="-28" y1="0" x2="28" y2="0"/>
+      <line x1="-20" y1="-20" x2="20" y2="20"/>
+      <line x1="20" y1="-20" x2="-20" y2="20"/>
+    </g>
+    <circle cx="0" cy="0" r="10" fill="#ffffff" stroke="#523a04" stroke-width="2"/>
+    <circle cx="0" cy="0" r="4" fill="#9e0a1b"/>
+  </g>
+
+  <!-- Pajaritos / Palomas de la tradición gauchesca asomando a los costados -->
+  <path d="M 170 175 C 150 160 165 140 180 155 Z" fill="url(#corazon-gold)"/>
+  <path d="M 330 175 C 350 160 335 140 320 155 Z" fill="url(#corazon-gold)"/>
+</svg>
