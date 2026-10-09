@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 580" width="100%" height="100%">
+  <!-- Escarapela Nacional Argentina - Original Vector -->
+  <defs>
+    <!-- Gradiente Celeste Patrio -->
+    <linearGradient id="celeste-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8fd3fe"/>
+      <stop offset="50%" stop-color="#6cb4ee"/>
+      <stop offset="100%" stop-color="#4695d6"/>
+    </linearGradient>
+    <linearGradient id="blanco-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e8ecf0"/>
+    </linearGradient>
+    <filter id="escarapela-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#escarapela-shadow)">
+    <!-- Cintas inferiores colgantes -->
+    <!-- Cinta Izquierda (Celeste y Blanca) -->
+    <g>
+      <path d="M 190 320 L 130 520 L 180 480 L 225 525 L 235 340 Z" fill="url(#celeste-grad)" stroke="#3a82c4" stroke-width="2"/>
+      <path d="M 180 325 L 155 500 L 180 480 L 205 503 L 210 335 Z" fill="url(#blanco-grad)"/>
+      <path d="M 175 330 L 165 470 L 180 460 L 195 472 L 195 335 Z" fill="url(#celeste-grad)" opacity="0.8"/>
+    </g>
+
+    <!-- Cinta Derecha (Celeste y Blanca) -->
+    <g>
+      <path d="M 310 320 L 370 520 L 320 480 L 275 525 L 265 340 Z" fill="url(#celeste-grad)" stroke="#3a82c4" stroke-width="2"/>
+      <path d="M 320 325 L 345 500 L 320 480 L 295 503 L 290 335 Z" fill="url(#blanco-grad)"/>
+      <path d="M 325 330 L 335 470 L 320 460 L 305 472 L 305 335 Z" fill="url(#celeste-grad)" opacity="0.8"/>
+    </g>
+
+    <!-- Roseta Circular Plisada Exterior (Celeste) -->
+    <!-- 24 Pliegues radiales -->
+    <g transform="translate(250, 230)">
+      <!-- Anillo Exterior Celeste con pliegues festoneados -->
+      <circle cx="0" cy="0" r="180" fill="url(#celeste-grad)" stroke="#2b75b8" stroke-width="3"/>
+      
+      <!-- Detalle de pliegues exteriores en relieve -->
+      <g stroke="#ffffff" stroke-width="1.5" opacity="0.4">
+        <line x1="0" y1="-180" x2="0" y2="-120"/>
+        <line x1="0" y1="180" x2="0" y2="120"/>
+        <line x1="-180" y1="0" x2="-120" y2="0"/>
+        <line x1="180" y1="0" x2="120" y2="0"/>
+        <line x1="-127" y1="-127" x2="-85" y2="-85"/>
+        <line x1="127" y1="-127" x2="85" y2="-85"/>
+        <line x1="-127" y1="127" x2="-85" y2="85"/>
+        <line x1="127" y1="127" x2="85" y2="85"/>
+        <line x1="-68" y1="-166" x2="-45" y2="-110"/>
+        <line x1="68" y1="-166" x2="45" y2="-110"/>
+        <line x1="-166" y1="-68" x2="-110" y2="-45"/>
+        <line x1="166" y1="-68" x2="110" y2="-45"/>
+        <line x1="-166" y1="68" x2="-110" y2="45"/>
+        <line x1="166" y1="68" x2="110" y2="45"/>
+        <line x1="-68" y1="166" x2="-45" y2="110"/>
+        <line x1="68" y1="166" x2="45" y2="110"/>
+      </g>
+
+      <!-- Anillo Intermedio Blanco -->
+      <circle cx="0" cy="0" r="122" fill="url(#blanco-grad)" stroke="#d0d7de" stroke-width="2"/>
+      <g stroke="#6cb4ee" stroke-width="1.2" opacity="0.4">
+        <line x1="0" y1="-122" x2="0" y2="-65"/>
+        <line x1="0" y1="122" x2="0" y2="65"/>
+        <line x1="-122" y1="0" x2="-65" y2="0"/>
+        <line x1="122" y1="0" x2="65" y2="0"/>
+        <line x1="-86" y1="-86" x2="-46" y2="-46"/>
+        <line x1="86" y1="-86" x2="46" y2="-46"/>
+        <line x1="-86" y1="86" x2="-46" y2="46"/>
+        <line x1="86" y1="86" x2="46" y2="46"/>
+      </g>
+
+      <!-- Botón Central Celeste -->
+      <circle cx="0" cy="0" r="66" fill="url(#celeste-grad)" stroke="#2b75b8" stroke-width="3"/>
+      
+      <!-- Núcleo Blanco / Brillo de cinta de seda -->
+      <circle cx="0" cy="0" r="24" fill="#ffffff" stroke="#6cb4ee" stroke-width="2"/>
+      <circle cx="-5" cy="-5" r="7" fill="#ffffff" opacity="0.8"/>
+    </g>
+  </g>
+</svg>

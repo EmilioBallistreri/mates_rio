@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600" width="100%" height="100%">
+  <!-- Club Atlético Rosario Central - Escudo Oficial Original -->
+  <defs>
+    <clipPath id="rc-shield-clip">
+      <path d="M 50 40 
+               L 450 40 
+               C 450 40 460 380 250 560 
+               C 40 380 50 40 50 40 Z" />
+    </clipPath>
+  </defs>
+
+  <!-- Borde exterior heráldico festoneado / escudo -->
+  <path d="M 40 30 
+           L 460 30 
+           C 460 30 472 395 250 580 
+           C 28 395 40 30 40 30 Z" 
+        fill="#002b7f" stroke="#001848" stroke-width="6"/>
+
+  <path d="M 48 38 
+           L 452 38 
+           C 452 38 463 388 250 568 
+           C 37 388 48 38 48 38 Z" 
+        fill="#ffcc00" stroke="#ffb700" stroke-width="4"/>
+
+  <!-- Interior con rayas verticales azul y amarillo dentro del clip -->
+  <g clip-path="url(#rc-shield-clip)">
+    <!-- Fondo azul -->
+    <rect x="0" y="0" width="500" height="600" fill="#002b7f"/>
+
+    <!-- Rayas amarillas verticales oficiales -->
+    <!-- Raya 1 -->
+    <rect x="100" y="0" width="60" height="600" fill="#ffcc00"/>
+    <!-- Raya 2 -->
+    <rect x="220" y="0" width="60" height="600" fill="#ffcc00"/>
+    <!-- Raya 3 -->
+    <rect x="340" y="0" width="60" height="600" fill="#ffcc00"/>
+
+    <!-- Franja superior azul oscura institucional -->
+    <path d="M 40 30 L 460 30 L 460 190 C 350 205 150 205 40 190 Z" fill="#002b7f" stroke="#ffcc00" stroke-width="4"/>
+    
+    <!-- Siglas C. A. R. C. en amarillo oro -->
+    <g fill="#ffcc00" font-family="'Arial Black', 'Montserrat', Impact, sans-serif" font-weight="900" font-size="62" text-anchor="middle">
+      <text x="105" y="145">C</text>
+      <text x="195" y="145">A</text>
+      <text x="295" y="145">R</text>
+      <text x="390" y="145">C</text>
+    </g>
+
+    <!-- Puntos separadores -->
+    <circle cx="145" cy="142" r="5" fill="#ffcc00"/>
+    <circle cx="240" cy="142" r="5" fill="#ffcc00"/>
+    <circle cx="340" cy="142" r="5" fill="#ffcc00"/>
+    <circle cx="435" cy="142" r="5" fill="#ffcc00"/>
+  </g>
+
+  <!-- Borde interior refinado -->
+  <path d="M 50 40 
+           L 450 40 
+           C 450 40 460 380 250 560 
+           C 40 380 50 40 50 40 Z" 
+        fill="none" stroke="#002b7f" stroke-width="8"/>
+</svg>

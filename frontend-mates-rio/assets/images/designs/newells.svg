@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 580" width="100%" height="100%">
+  <!-- Club Atlético Newell's Old Boys - Escudo Oficial Original -->
+  <defs>
+    <clipPath id="nob-shield-clip">
+      <path d="M 50 40 
+               L 450 40 
+               C 450 40 455 370 250 540 
+               C 45 370 50 40 50 40 Z" />
+    </clipPath>
+  </defs>
+
+  <!-- Borde exterior blanco/plata -->
+  <path d="M 42 32 
+           L 458 32 
+           C 458 32 465 378 250 550 
+           C 35 378 42 32 42 32 Z" 
+        fill="#ffffff" stroke="#111111" stroke-width="4"/>
+
+  <!-- Interior del escudo dividido a la mitad -->
+  <g clip-path="url(#nob-shield-clip)">
+    <!-- Mitad Izquierda: Rojo carmesí oficial -->
+    <rect x="0" y="0" width="250" height="580" fill="#d91424"/>
+    <!-- Mitad Derecha: Negro profundo -->
+    <rect x="250" y="0" width="250" height="580" fill="#0d0d0d"/>
+
+    <!-- Línea divisoria central sutil -->
+    <line x1="250" y1="40" x2="250" y2="540" stroke="#ffffff" stroke-width="2" opacity="0.3"/>
+
+    <!-- Monograma Central Oficial NOB entrelazado en blanco con filete -->
+    <!-- N (a la izquierda) -->
+    <path d="M 115 170 L 160 170 L 205 295 L 205 170 L 240 170 L 240 370 L 195 370 L 150 245 L 150 370 L 115 370 Z" 
+          fill="#ffffff" stroke="#111111" stroke-width="5" stroke-linejoin="round"/>
+
+    <!-- O (en el centro superior/equilibrado) -->
+    <path d="M 250 175 C 285 175 310 205 310 270 C 310 335 285 365 250 365 C 215 365 190 335 190 270 C 190 205 215 175 250 175 Z
+             M 250 215 C 235 215 225 235 225 270 C 225 305 235 325 250 325 C 265 325 275 305 275 270 C 275 235 265 215 250 215 Z" 
+          fill="#ffffff" stroke="#111111" stroke-width="5" stroke-linejoin="round"/>
+
+    <!-- B (a la derecha) -->
+    <path d="M 260 170 L 330 170 C 365 170 385 188 385 218 C 385 240 370 258 350 265 C 375 272 390 292 390 322 C 390 355 365 370 330 370 L 260 370 Z
+             M 295 205 L 295 245 L 325 245 C 342 245 352 238 352 225 C 352 212 342 205 325 205 Z
+             M 295 285 L 295 335 L 328 335 C 346 335 356 325 356 310 C 356 295 346 285 328 285 Z" 
+          fill="#ffffff" stroke="#111111" stroke-width="5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Borde perimetral del escudo -->
+  <path d="M 50 40 
+           L 450 40 
+           C 450 40 455 370 250 540 
+           C 45 370 50 40 50 40 Z" 
+        fill="none" stroke="#ffffff" stroke-width="12"/>
+  <path d="M 50 40 
+           L 450 40 
+           C 450 40 455 370 250 540 
+           C 45 370 50 40 50 40 Z" 
+        fill="none" stroke="#111111" stroke-width="3"/>
+</svg>

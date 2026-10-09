@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 450" width="100%" height="100%">
+  <!-- Corona Imperial de Orfebrería - Original Vector -->
+  <defs>
+    <!-- Gradiente Oro Orfebre -->
+    <linearGradient id="corona-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff0aa"/>
+      <stop offset="35%" stop-color="#e6b830"/>
+      <stop offset="70%" stop-color="#ba8611"/>
+      <stop offset="100%" stop-color="#735003"/>
+    </linearGradient>
+    <!-- Forro de terciopelo carmesí -->
+    <radialGradient id="corona-velvet" cx="50%" cy="60%" r="55%">
+      <stop offset="0%" stop-color="#b30e28"/>
+      <stop offset="60%" stop-color="#6e0515"/>
+      <stop offset="100%" stop-color="#3d010a"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Bonete de Terciopelo Púrpura/Rojo Imperial -->
+  <path d="M 125 320 
+           C 110 240 160 160 250 150 
+           C 340 160 390 240 375 320 Z" 
+        fill="url(#corona-velvet)" stroke="#3d010a" stroke-width="2"/>
+
+  <!-- Diademas / Arcos de Oro Imperial que convergen al orbe central -->
+  <g fill="none" stroke="url(#corona-gold)" stroke-width="12" stroke-linecap="round">
+    <!-- Arco central -->
+    <path d="M 250 320 L 250 140"/>
+    <!-- Arco izquierdo -->
+    <path d="M 130 320 C 130 200 200 150 250 140"/>
+    <!-- Arco derecho -->
+    <path d="M 370 320 C 370 200 300 150 250 140"/>
+  </g>
+
+  <!-- Perlas engarzadas a lo largo de los arcos -->
+  <g fill="#ffffff" stroke="#ba8611" stroke-width="1.5">
+    <circle cx="160" cy="245" r="5.5"/><circle cx="185" cy="195" r="5.5"/><circle cx="215" cy="160" r="5.5"/>
+    <circle cx="340" cy="245" r="5.5"/><circle cx="315" cy="195" r="5.5"/><circle cx="285" cy="160" r="5.5"/>
+    <circle cx="250" cy="260" r="5.5"/><circle cx="250" cy="210" r="5.5"/><circle cx="250" cy="165" r="5.5"/>
+  </g>
+
+  <!-- Puntas de la Corona: Flores de Lis y Tréboles Reales -->
+  <g fill="url(#corona-gold)" stroke="#5c4002" stroke-width="2.5">
+    <!-- Flor de Lis Central Mayor -->
+    <path d="M 250 180 
+             C 240 220 225 250 215 280 L 285 280 C 275 250 260 220 250 180 Z"/>
+    <circle cx="250" cy="180" r="8" fill="#ffffff" stroke="#ba8611" stroke-width="2"/>
+    <path d="M 250 210 C 220 200 210 235 235 250 C 245 255 248 270 250 280 C 252 270 255 255 265 250 C 290 235 280 200 250 210 Z"/>
+
+    <!-- Puntas Laterales Intermedias -->
+    <path d="M 180 220 L 165 295 L 200 295 Z"/>
+    <circle cx="180" cy="220" r="6" fill="#ffffff" stroke="#ba8611" stroke-width="1.8"/>
+
+    <path d="M 320 220 L 300 295 L 335 295 Z"/>
+    <circle cx="320" cy="220" r="6" fill="#ffffff" stroke="#ba8611" stroke-width="1.8"/>
+
+    <!-- Puntas Extremas -->
+    <path d="M 115 255 L 110 320 L 140 320 Z"/>
+    <circle cx="115" cy="255" r="5.5" fill="#ffffff" stroke="#ba8611" stroke-width="1.5"/>
+
+    <path d="M 385 255 L 360 320 L 390 320 Z"/>
+    <circle cx="385" cy="255" r="5.5" fill="#ffffff" stroke="#ba8611" stroke-width="1.5"/>
+  </g>
+
+  <!-- Orbe con Cruz Paté Superior (Globus Cruciger) -->
+  <!-- Esfera de oro -->
+  <circle cx="250" cy="120" r="16" fill="url(#corona-gold)" stroke="#5c4002" stroke-width="2.5"/>
+  <ellipse cx="250" cy="120" rx="16" ry="5" fill="none" stroke="#5c4002" stroke-width="1.5"/>
+  <!-- Cruz Imperial -->
+  <path d="M 245 75 L 255 75 L 255 90 L 268 85 L 270 95 L 255 98 L 255 106 L 245 106 L 245 98 L 230 95 L 232 85 L 245 90 Z" 
+        fill="url(#corona-gold)" stroke="#5c4002" stroke-width="2"/>
+
+  <!-- Cintillo de la base (Banda de oro engarzada con piedras preciosas) -->
+  <path d="M 95 320 
+           L 95 365 
+           C 170 385 330 385 405 365 
+           L 405 320 
+           C 330 340 170 340 95 320 Z" 
+        fill="url(#corona-gold)" stroke="#5c4002" stroke-width="3"/>
+
+  <!-- Gemas engarzadas en el cintillo -->
+  <g stroke="#3b2901" stroke-width="1.8">
+    <!-- Rubí central -->
+    <rect x="238" y="342" width="24" height="16" rx="4" fill="#c4122d"/>
+    <!-- Esmeraldas -->
+    <ellipse cx="190" cy="347" rx="9" ry="7" fill="#0d8242"/>
+    <ellipse cx="310" cy="347" rx="9" ry="7" fill="#0d8242"/>
+    <!-- Zafiros -->
+    <polygon points="140,338 152,347 140,356 128,347" fill="#144fb8"/>
+    <polygon points="360,338 372,347 360,356 348,347" fill="#144fb8"/>
+  </g>
+
+  <!-- Borde de armiño inferior blanco con motas negras -->
+  <path d="M 90 365 
+           C 170 395 330 395 410 365 
+           C 415 390 330 415 250 415 
+           C 170 415 85 390 90 365 Z" 
+        fill="#fcfcfc" stroke="#cfc7bc" stroke-width="2"/>
+  <g fill="#141414">
+    <ellipse cx="160" cy="390" rx="3.5" ry="6" transform="rotate(-15, 160, 390)"/>
+    <ellipse cx="210" cy="398" rx="3.5" ry="6"/>
+    <ellipse cx="250" cy="402" rx="3.5" ry="6"/>
+    <ellipse cx="290" cy="398" rx="3.5" ry="6"/>
+    <ellipse cx="340" cy="390" rx="3.5" ry="6" transform="rotate(15, 340, 390)"/>
+  </g>
+</svg>

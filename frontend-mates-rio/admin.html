@@ -803,107 +803,119 @@
               </div>
 
               <!-- 1. SELECCIÓN DE UBICACIÓN INDEPENDIENTE EN LA WEB -->
-              <div style="margin-bottom: 24px;">
-                <h4 style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; color: var(--admin-gold); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                  <i class="fas fa-arrows-up-down-left-right"></i> 1. Ubicación del Banner en la Tienda Principal:
-                </h4>
-                <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 12px;">
-                  Tenés total libertad de ubicar el anuncio en el sector de la web que prefieras. Hacé clic para elegir dónde se mostrará:
-                </p>
+              <div class="admin-design-accordion" id="accordion-group-banner-pos">
+                <button type="button" class="admin-design-accordion-header" onclick="toggleAdminDesignSection('banner-pos')" aria-expanded="true">
+                  <span class="admin-design-accordion-title">
+                    <i class="fas fa-arrows-up-down-left-right"></i> 1. Ubicación del Banner en la Tienda Principal
+                  </span>
+                  <i class="fas fa-chevron-down admin-design-accordion-arrow" id="admin-chevron-banner-pos"></i>
+                </button>
+                <div class="admin-design-accordion-body" id="admin-section-banner-pos-body">
+                  <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 12px;">
+                    Tenés total libertad de ubicar el anuncio en el sector de la web que prefieras. Hacé clic para elegir dónde se mostrará:
+                  </p>
 
-                <input type="hidden" id="occasion-position-input" value="top-bar" />
+                  <input type="hidden" id="occasion-position-input" value="top-bar" />
 
-                <div class="occasion-positions-grid" id="occasion-positions-grid">
-                  <div class="occasion-position-card active" data-pos="top-bar" onclick="selectOccasionPosition('top-bar')">
-                    <div class="occasion-position-icon"><i class="fas fa-arrow-up-from-bracket"></i></div>
-                    <div class="occasion-position-info">
-                      <strong>Barra Superior 📌</strong>
-                      <span>Arriba de todo, inmediatamente sobre el encabezado y navegación.</span>
+                  <div class="occasion-positions-grid" id="occasion-positions-grid">
+                    <div class="occasion-position-card active" data-pos="top-bar" onclick="selectOccasionPosition('top-bar')">
+                      <div class="occasion-position-icon"><i class="fas fa-arrow-up-from-bracket"></i></div>
+                      <div class="occasion-position-info">
+                        <strong>Barra Superior 📌</strong>
+                        <span>Arriba de todo, inmediatamente sobre el encabezado y navegación.</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="occasion-position-card" data-pos="after-hero" onclick="selectOccasionPosition('after-hero')">
-                    <div class="occasion-position-icon"><i class="fas fa-images"></i></div>
-                    <div class="occasion-position-info">
-                      <strong>Debajo del Hero / Portada 🖼️</strong>
-                      <span>Entre el carrusel principal de banners y la grilla de categorías.</span>
+                    <div class="occasion-position-card" data-pos="after-hero" onclick="selectOccasionPosition('after-hero')">
+                      <div class="occasion-position-icon"><i class="fas fa-images"></i></div>
+                      <div class="occasion-position-info">
+                        <strong>Debajo del Hero / Portada 🖼️</strong>
+                        <span>Entre el carrusel principal de banners y la grilla de categorías.</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="occasion-position-card" data-pos="before-custom" onclick="selectOccasionPosition('before-custom')">
-                    <div class="occasion-position-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
-                    <div class="occasion-position-info">
-                      <strong>Antes del Taller de Grabado ✨</strong>
-                      <span>Destacado inmediatamente sobre el banner del personalizador láser.</span>
+                    <div class="occasion-position-card" data-pos="before-custom" onclick="selectOccasionPosition('before-custom')">
+                      <div class="occasion-position-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                      <div class="occasion-position-info">
+                        <strong>Antes del Taller de Grabado ✨</strong>
+                        <span>Destacado inmediatamente sobre el banner del personalizador láser.</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="occasion-position-card" data-pos="bottom" onclick="selectOccasionPosition('bottom')">
-                    <div class="occasion-position-icon"><i class="fas fa-arrow-down"></i></div>
-                    <div class="occasion-position-info">
-                      <strong>Sobre el Footer (Final) ⚓</strong>
-                      <span>Al pie de la página principal, sobre los datos de contacto y taller.</span>
+                    <div class="occasion-position-card" data-pos="bottom" onclick="selectOccasionPosition('bottom')">
+                      <div class="occasion-position-icon"><i class="fas fa-arrow-down"></i></div>
+                      <div class="occasion-position-info">
+                        <strong>Sobre el Footer (Final) ⚓</strong>
+                        <span>Al pie de la página principal, sobre los datos de contacto y taller.</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
               <!-- 2. DISEÑOS PRE-CONFIGURADOS (INCLUYENDO CELEBRACIONES PATRIAS ARGENTINAS) -->
-              <h4 style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; color: var(--admin-gold); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                <i class="fas fa-wand-magic-sparkles"></i> 2. Diseños Pre-Configurados Listos para Usar:
-              </h4>
-              <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 10px;">
-                Elegí una festividad para autocompletar colores, textos y emojis acordes:
-              </p>
-              
-              <div class="occasion-presets-grid">
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('mother')">
-                  <strong>🌸 Día de la Madre</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Tono rubí con grabado de regalo</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('father')">
-                  <strong>🎩 Día del Padre</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Azul profundo con envíos express</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('revolucion')">
-                  <strong>☀️ 25 de Mayo (Revolución)</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Celeste patrio y virolas con Sol de Mayo</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('independencia')">
-                  <strong>🇦🇷 9 de Julio (Independencia)</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Patria & Tradición en 3 cuotas sin interés</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('diamate')">
-                  <strong>🧉 30 de Noviembre (Día del Mate)</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Verde yerba y platería criolla cordobesa</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('tradicion')">
-                  <strong>🐎 10 de Noviembre (Tradición)</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Cuero vacuno legítimo y costura gauchesca</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('campeones')">
-                  <strong>⭐⭐⭐ 3 Estrellas / Campeones</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Pasión de Selección y escudo AFA</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('primavera')">
-                  <strong>🌸 Primavera & Estudiante</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Combos de mate al aire libre con descuento</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('halloween')">
-                  <strong>🎃 Halloween Matero</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Naranja y noche con ofertas especiales</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('christmas')">
-                  <strong>🎄 Navidad & Año Nuevo</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Verde y dorado con 15% OFF en combos</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('cyber')">
-                  <strong>⚡ Cyber & Black Friday</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Descuentos flash y cuotas sin interés</span>
-                </div>
-                <div class="occasion-preset-card" onclick="selectOccasionPreset('custom')">
-                  <strong>🎨 Personalizado Libre</strong>
-                  <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Configuración libre de colores y textos</span>
+              <div class="admin-design-accordion" id="accordion-group-banner-presets" style="margin-top: 18px; margin-bottom: 24px;">
+                <button type="button" class="admin-design-accordion-header" onclick="toggleAdminDesignSection('banner-presets')" aria-expanded="true">
+                  <span class="admin-design-accordion-title">
+                    <i class="fas fa-wand-magic-sparkles"></i> 2. Diseños Pre-Configurados Listos para Usar
+                  </span>
+                  <i class="fas fa-chevron-down admin-design-accordion-arrow" id="admin-chevron-banner-presets"></i>
+                </button>
+                <div class="admin-design-accordion-body" id="admin-section-banner-presets-body">
+                  <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 10px;">
+                    Elegí una festividad para autocompletar colores, textos y emojis acordes:
+                  </p>
+                  
+                  <div class="occasion-presets-grid">
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('mother')">
+                      <strong>🌸 Día de la Madre</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Tono rubí con grabado de regalo</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('father')">
+                      <strong>🎩 Día del Padre</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Azul profundo con envíos express</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('revolucion')">
+                      <strong>☀️ 25 de Mayo (Revolución)</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Celeste patrio y virolas con Sol de Mayo</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('independencia')">
+                      <strong>🇦🇷 9 de Julio (Independencia)</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Patria & Tradición en 3 cuotas sin interés</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('diamate')">
+                      <strong>🧉 30 de Noviembre (Día del Mate)</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Verde yerba y platería criolla cordobesa</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('tradicion')">
+                      <strong>🐎 10 de Noviembre (Tradición)</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Cuero vacuno legítimo y costura gauchesca</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('campeones')">
+                      <strong>⭐⭐⭐ 3 Estrellas / Campeones</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Pasión de Selección y escudo AFA</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('primavera')">
+                      <strong>🌸 Primavera & Estudiante</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Combos de mate al aire libre con descuento</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('halloween')">
+                      <strong>🎃 Halloween Matero</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Naranja y noche con ofertas especiales</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('christmas')">
+                      <strong>🎄 Navidad & Año Nuevo</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Verde y dorado con 15% OFF en combos</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('cyber')">
+                      <strong>⚡ Cyber & Black Friday</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Descuentos flash y cuotas sin interés</span>
+                    </div>
+                    <div class="occasion-preset-card" onclick="selectOccasionPreset('custom')">
+                      <strong>🎨 Personalizado Libre</strong>
+                      <span style="font-size: 0.74rem; color: var(--admin-text-muted);">Configuración libre de colores y textos</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 

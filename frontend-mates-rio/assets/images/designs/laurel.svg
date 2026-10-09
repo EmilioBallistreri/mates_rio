@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <!-- Corona de Laureles de la Victoria y de la Patria - Original Vector -->
+  <defs>
+    <linearGradient id="laurel-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff1b0"/>
+      <stop offset="40%" stop-color="#d4a326"/>
+      <stop offset="100%" stop-color="#73540a"/>
+    </linearGradient>
+    <linearGradient id="laurel-ribbon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8fd3fe"/>
+      <stop offset="50%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#559bd6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rama Izquierda de Laureles -->
+  <g fill="url(#laurel-gold)" stroke="#523c07" stroke-width="2" stroke-linejoin="round">
+    <!-- Tallo curvado principal izquierdo -->
+    <path d="M 235 410 C 130 380 90 240 130 140 C 150 90 200 40 235 30" fill="none" stroke="url(#laurel-gold)" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- Hojas de Laurel Izquierdas (Pares de hojas oblongas lanceoladas con nervadura) -->
+    <!-- Hoja 1 superior -->
+    <path d="M 235 30 C 220 20 200 35 210 55 C 220 50 230 40 235 30 Z"/>
+    <!-- Par 2 -->
+    <path d="M 205 50 C 170 50 165 75 190 85 C 200 75 205 60 205 50 Z"/>
+    <path d="M 185 80 C 190 105 215 105 220 90 C 205 85 195 80 185 80 Z"/>
+    <!-- Par 3 -->
+    <path d="M 160 95 C 125 105 130 130 155 135 C 160 120 160 105 160 95 Z"/>
+    <path d="M 150 130 C 160 155 185 150 185 135 C 170 130 160 130 150 130 Z"/>
+    <!-- Par 4 -->
+    <path d="M 130 155 C 90 170 100 200 130 200 C 135 185 135 170 130 155 Z"/>
+    <path d="M 125 195 C 140 220 165 210 165 195 C 150 195 135 195 125 195 Z"/>
+    <!-- Par 5 -->
+    <path d="M 115 225 C 80 250 95 280 125 275 C 128 255 125 240 115 225 Z"/>
+    <path d="M 125 270 C 140 295 165 280 160 265 C 145 265 135 268 125 270 Z"/>
+    <!-- Par 6 -->
+    <path d="M 125 305 C 95 335 120 360 145 350 C 145 330 140 315 125 305 Z"/>
+    <path d="M 145 345 C 170 365 185 345 180 330 C 165 335 155 340 145 345 Z"/>
+    <!-- Par 7 base -->
+    <path d="M 160 375 C 140 405 170 425 195 410 C 190 395 180 385 160 375 Z"/>
+
+    <!-- Bayas de laurel izquierdas -->
+    <circle cx="175" cy="70" r="5" fill="#f5d367"/>
+    <circle cx="140" cy="140" r="5" fill="#f5d367"/>
+    <circle cx="115" cy="210" r="5" fill="#f5d367"/>
+    <circle cx="120" cy="290" r="5" fill="#f5d367"/>
+    <circle cx="155" cy="360" r="5" fill="#f5d367"/>
+  </g>
+
+  <!-- Rama Derecha de Laureles (Simetría heráldica) -->
+  <g fill="url(#laurel-gold)" stroke="#523c07" stroke-width="2" stroke-linejoin="round">
+    <!-- Tallo curvado principal derecho -->
+    <path d="M 265 410 C 370 380 410 240 370 140 C 350 90 300 40 265 30" fill="none" stroke="url(#laurel-gold)" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- Hojas de Laurel Derechas -->
+    <path d="M 265 30 C 280 20 300 35 290 55 C 280 50 270 40 265 30 Z"/>
+    <path d="M 295 50 C 330 50 335 75 310 85 C 300 75 295 60 295 50 Z"/>
+    <path d="M 315 80 C 310 105 285 105 280 90 C 295 85 305 80 315 80 Z"/>
+    <path d="M 340 95 C 375 105 370 130 345 135 C 340 120 340 105 340 95 Z"/>
+    <path d="M 350 130 C 340 155 315 150 315 135 C 330 130 340 130 350 130 Z"/>
+    <path d="M 370 155 C 410 170 400 200 370 200 C 365 185 365 170 370 155 Z"/>
+    <path d="M 375 195 C 360 220 335 210 335 195 C 350 195 365 195 375 195 Z"/>
+    <path d="M 385 225 C 420 250 405 280 375 275 C 372 255 375 240 385 225 Z"/>
+    <path d="M 375 270 C 360 295 335 280 340 265 C 355 265 365 268 375 270 Z"/>
+    <path d="M 375 305 C 405 335 380 360 355 350 C 355 330 360 315 375 305 Z"/>
+    <path d="M 355 345 C 330 365 315 345 320 330 C 335 335 345 340 355 345 Z"/>
+    <path d="M 340 375 C 360 405 330 425 305 410 C 310 395 320 385 340 375 Z"/>
+
+    <!-- Bayas de laurel derechas -->
+    <circle cx="325" cy="70" r="5" fill="#f5d367"/>
+    <circle cx="360" cy="140" r="5" fill="#f5d367"/>
+    <circle cx="385" cy="210" r="5" fill="#f5d367"/>
+    <circle cx="380" cy="290" r="5" fill="#f5d367"/>
+    <circle cx="345" cy="360" r="5" fill="#f5d367"/>
+  </g>
+
+  <!-- Moño de Cinta Patria Argentina que une las dos ramas en la base -->
+  <g fill="url(#laurel-ribbon)" stroke="#2b6da8" stroke-width="2.5">
+    <!-- Nudo central -->
+    <ellipse cx="250" cy="410" rx="16" ry="14"/>
+    <!-- Lazos laterales -->
+    <path d="M 240 405 C 190 395 180 435 235 425 Z"/>
+    <path d="M 260 405 C 310 395 320 435 265 425 Z"/>
+    <!-- Cintas colgantes con corte en V -->
+    <path d="M 242 420 L 210 480 L 235 465 L 250 485 L 248 420 Z"/>
+    <path d="M 258 420 L 290 480 L 265 465 L 250 485 L 252 420 Z"/>
+  </g>
+</svg>

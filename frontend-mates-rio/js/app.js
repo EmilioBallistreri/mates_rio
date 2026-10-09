@@ -142,7 +142,7 @@ function showToast(message, icon = 'fa-check-circle') {
 // COLOR INVERSION / THEME TOGGLE (MODO CLARO / MODO OSCURO)
 // ==========================================================================
 function getPreferredThemeMode() {
-  const saved = localStorage.getItem('mates_rio_theme_mode');
+  const saved = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme');
   if (saved) return saved;
   const legacyInverted = localStorage.getItem('mates_rio_theme_inverted');
   if (legacyInverted === 'true') return 'light';
@@ -160,6 +160,7 @@ function applyThemeMode(mode, showNotification = false) {
   document.body.classList.toggle('theme-dark', !isLight);
   document.body.classList.toggle('theme-inverted', isLight);
   localStorage.setItem('mates_rio_theme_mode', mode);
+  localStorage.setItem('mates_rio_admin_theme', mode); // Sincronizado con panel de administradores
   localStorage.setItem('mates_rio_theme_inverted', isLight ? 'true' : 'false');
 
   updateThemeToggleIcons(isLight);
@@ -168,6 +169,19 @@ function applyThemeMode(mode, showNotification = false) {
     showToast(isLight ? 'Modo Claro activado ☀️' : 'Modo Oscuro activado 🌙', isLight ? 'fa-sun' : 'fa-moon');
   }
 }
+
+// Sincronización en tiempo real entre pestañas (Web y Panel de Administradores)
+window.addEventListener('storage', (e) => {
+  if (e.key === 'mates_rio_theme_mode' || e.key === 'mates_rio_admin_theme') {
+    if (e.newValue && (e.newValue === 'light' || e.newValue === 'dark')) {
+      const isCurrentLight = document.body.classList.contains('theme-light') || document.body.classList.contains('theme-inverted');
+      const targetIsLight = e.newValue === 'light';
+      if (isCurrentLight !== targetIsLight) {
+        applyThemeMode(e.newValue, false);
+      }
+    }
+  }
+});
 
 function toggleColorTheme() {
   const isLightNow = document.body.classList.contains('theme-light') || document.body.classList.contains('theme-inverted');
