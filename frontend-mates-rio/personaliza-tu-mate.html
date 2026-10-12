@@ -411,14 +411,17 @@
                     </button>
                   </div>
 
-                  <!-- Ubicación en Curva (Segmented Control Prolijo) -->
-                  <label class="sub-label" style="margin-top: 14px; margin-bottom: 6px;">Ubicación en el arco:</label>
-                  <div class="arc-selector-segmented">
-                    <button type="button" class="arc-segment-btn active" data-pos="top" onclick="toggleArcPosition('top')">
-                      <i class="fas fa-arrow-up"></i> Curva Superior
+                  <!-- Formato y Ubicación del Texto en la Virola -->
+                  <label class="sub-label" style="margin-top: 14px; margin-bottom: 6px;">Formato y curvatura del texto:</label>
+                  <div class="arc-selector-segmented text-mode-selector-3">
+                    <button type="button" class="arc-segment-btn active" data-pos="top" onclick="toggleArcPosition('top')" title="Curva hacia arriba (Arco superior)">
+                      <i class="fas fa-arrow-up"></i> Curva Arriba
                     </button>
-                    <button type="button" class="arc-segment-btn" data-pos="bottom" onclick="toggleArcPosition('bottom')">
-                      <i class="fas fa-arrow-down"></i> Curva Inferior
+                    <button type="button" class="arc-segment-btn" data-pos="straight" onclick="toggleArcPosition('straight')" title="Texto recto horizontal en la virola">
+                      <i class="fas fa-minus"></i> Recta
+                    </button>
+                    <button type="button" class="arc-segment-btn" data-pos="bottom" onclick="toggleArcPosition('bottom')" title="Curva hacia abajo (Arco inferior)">
+                      <i class="fas fa-arrow-down"></i> Curva Abajo
                     </button>
                   </div>
 
@@ -651,11 +654,23 @@
             <div class="active-item-status">
               <span id="active-item-name-badge" class="active-item-name-badge">Elemento Seleccionado</span>
             </div>
+            <!-- Opciones rápidas de formato para texto activo -->
+            <div id="active-text-mode-controls" class="active-text-mode-controls" style="display: none;">
+              <button type="button" class="text-mode-pill-btn active" data-mode="top" onclick="setActiveTextMode('top')" title="Curva hacia arriba">
+                <i class="fas fa-arrow-up"></i> Arriba
+              </button>
+              <button type="button" class="text-mode-pill-btn" data-mode="straight" onclick="setActiveTextMode('straight')" title="Texto recto">
+                <i class="fas fa-minus"></i> Recta
+              </button>
+              <button type="button" class="text-mode-pill-btn" data-mode="bottom" onclick="setActiveTextMode('bottom')" title="Curva hacia abajo">
+                <i class="fas fa-arrow-down"></i> Abajo
+              </button>
+            </div>
             <div class="active-item-actions">
               <button type="button" class="item-quick-btn" onclick="stepItemScale(-0.1)" title="Achicar tamaño"><i class="fas fa-minus"></i></button>
               <button type="button" class="item-quick-btn" onclick="stepItemScale(0.1)" title="Agrandar tamaño"><i class="fas fa-plus"></i></button>
-              <button type="button" class="item-quick-btn" onclick="stepItemRotation(-15)" title="Girar a la izquierda"><i class="fas fa-rotate-left"></i></button>
-              <button type="button" class="item-quick-btn" onclick="stepItemRotation(15)" title="Girar a la derecha"><i class="fas fa-rotate-right"></i></button>
+              <button type="button" class="item-quick-btn" onclick="stepItemRotation(-10)" title="Girar a la izquierda"><i class="fas fa-rotate-left"></i></button>
+              <button type="button" class="item-quick-btn" onclick="stepItemRotation(10)" title="Girar a la derecha"><i class="fas fa-rotate-right"></i></button>
               <button type="button" class="item-quick-btn btn-delete-item" onclick="deleteActiveVirolaItem()" title="Eliminar de la virola"><i class="fas fa-trash-can"></i></button>
             </div>
           </div>

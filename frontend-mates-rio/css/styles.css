@@ -5663,18 +5663,26 @@ body:not(.theme-light):not(.theme-inverted) .vector-card-name {
   opacity: 1;
 }
 
-/* Tarjetas de Frases Grabadas */
+/* Tarjetas de Frases Grabadas & Selector de Modo */
+.phrase-format-selector-box {
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(197, 155, 39, 0.06);
+  border: 1px solid rgba(197, 155, 39, 0.25);
+}
+
 .phrase-card-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
+  flex-direction: column;
+  padding: 10px 12px;
   border-radius: var(--radius-sm);
   border: 1.5px solid var(--border-light);
   background: #ffffff;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  gap: 8px;
 }
 
 body.theme-dark .phrase-card-item,
@@ -5688,6 +5696,13 @@ body:not(.theme-light):not(.theme-inverted) .phrase-card-item {
   background: rgba(197, 155, 39, 0.08);
 }
 
+.phrase-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .phrase-card-text {
   font-family: 'Cinzel', serif;
   font-size: 0.82rem;
@@ -5699,6 +5714,38 @@ body:not(.theme-light):not(.theme-inverted) .phrase-card-item {
 body.theme-dark .phrase-card-text,
 body:not(.theme-light):not(.theme-inverted) .phrase-card-text {
   color: #f5f2ec;
+}
+
+.phrase-card-actions {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+}
+
+.phrase-action-pill-btn {
+  flex: 1;
+  font-size: 0.67rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background: rgba(197, 155, 39, 0.1);
+  border: 1px solid rgba(197, 155, 39, 0.3);
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.phrase-action-pill-btn:hover {
+  background: var(--accent-gold);
+  color: #15100c;
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(197, 155, 39, 0.3);
 }
 
 .phrase-add-btn {
@@ -5822,6 +5869,41 @@ body:not(.theme-light):not(.theme-inverted) .lines-pill-btn.active {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 170px;
+}
+
+.active-text-mode-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3px 6px;
+  border-radius: 20px;
+  border: 1px solid rgba(197, 155, 39, 0.3);
+}
+
+.text-mode-pill-btn {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: #c5bcaf;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.text-mode-pill-btn:hover {
+  color: #ffffff;
+}
+
+.text-mode-pill-btn.active {
+  background: var(--accent-gold);
+  color: #120e0a;
+  font-weight: 800;
 }
 
 .active-item-actions {
