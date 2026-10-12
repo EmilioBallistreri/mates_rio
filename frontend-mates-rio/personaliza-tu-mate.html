@@ -18,15 +18,41 @@
   <!-- Google Fonts: Complete Luxury Engraving Suite -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Bebas+Neue&family=Cinzel:wght@600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Lato:wght@400;700;900&family=Lora:ital,wght@0,600;0,700;1,600&family=Marck+Script&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Oswald:wght@500;600;700&family=Outfit:wght@400;600;700;800;900&family=Pirata+One&family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;600;700;800&family=Rye&family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alex+Brush&family=Bebas+Neue&family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Italianno&family=Lato:wght@400;700;900&family=Lora:ital,wght@0,600;0,700;1,600&family=Marck+Script&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Oswald:wght@500;600;700&family=Outfit:wght@400;600;700;800;900&family=Parisienne&family=Pinyon+Script&family=Pirata+One&family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;600;700;800&family=Rochester&family=Rye&family=Sacramento&family=Satisfy&family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
 
   <!-- Font Awesome Icons 6.5.1 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Immediate Theme Initializer (Sincronizado con Panel de Administración) -->
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'light') {
+        document.documentElement.classList.add('theme-light');
+        document.documentElement.classList.remove('theme-dark');
+      } else {
+        document.documentElement.classList.add('theme-dark');
+        document.documentElement.classList.remove('theme-light');
+      }
+    })();
+  </script>
 </head>
 <body class="page-customizer">
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'light') {
+        document.body.classList.add('theme-light', 'theme-inverted');
+        document.body.classList.remove('theme-dark');
+      } else {
+        document.body.classList.add('theme-dark');
+        document.body.classList.remove('theme-light', 'theme-inverted');
+      }
+    })();
+  </script>
 
   <!-- Top Scroll Progress Indicator -->
   <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
@@ -353,8 +379,8 @@
             <p class="studio-step-sub">Editá cada una de las 4 secciones para componer tu grabado personalizado en la virola:</p>
 
             <!-- 1. CATEGORÍA: COLOCAR TEXTO (PROLIJO Y PROFESIONAL) -->
-            <div class="studio-accordion-card open" id="accordion-section-text">
-              <div class="studio-accordion-header" onclick="toggleStudioAccordion('text')" role="button" aria-expanded="true" tabindex="0">
+            <div class="studio-accordion-card" id="accordion-section-text">
+              <div class="studio-accordion-header" onclick="toggleStudioAccordion('text')" role="button" aria-expanded="false" tabindex="0">
                 <div class="accordion-header-left">
                   <div class="accordion-icon-box"><i class="fas fa-font"></i></div>
                   <div>
@@ -396,13 +422,20 @@
                     </button>
                   </div>
 
-                  <!-- Selector de Tipografías (Sólo nombre escrito con su propia tipografía) -->
-                  <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 14px; margin-bottom: 6px;">
-                    <label class="sub-label" style="margin: 0;">Tipografía orfebre:</label>
-                    <span id="selected-font-name-pill" class="selected-font-name-pill">Cinzel</span>
-                  </div>
-                  <div class="fonts-selector-grid" id="fonts-selector-grid">
-                    <!-- Rendered dynamically via customizer-studio.js -->
+                  <!-- Sub-acordeón de Tipografías con flecha para abrir y cerrar -->
+                  <div class="studio-subaccordion-card" id="subaccordion-fonts">
+                    <button type="button" class="studio-subaccordion-header" onclick="toggleFontsAccordion()" aria-expanded="false">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="sub-label" style="margin: 0; cursor: pointer;">Tipografía orfebre:</span>
+                        <span id="selected-font-name-pill" class="selected-font-name-pill">Cinzel</span>
+                      </div>
+                      <i class="fas fa-chevron-down subaccordion-chevron" id="chevron-fonts"></i>
+                    </button>
+                    <div class="studio-subaccordion-body" id="subaccordion-fonts-body" style="display: none;">
+                      <div class="fonts-selector-grid" id="fonts-selector-grid">
+                        <!-- Rendered dynamically via customizer-studio.js -->
+                      </div>
+                    </div>
                   </div>
 
                   <button type="button" class="btn btn-primary btn-apply-text-pro" onclick="applyTextToVirola()">
@@ -413,8 +446,8 @@
             </div>
 
             <!-- 2. CATEGORÍA: ÍCONOS Y DISEÑOS (MUESTRA CATEGORÍAS PRIMERO) -->
-            <div class="studio-accordion-card open" id="accordion-section-icons">
-              <div class="studio-accordion-header" onclick="toggleStudioAccordion('icons')" role="button" aria-expanded="true" tabindex="0">
+            <div class="studio-accordion-card" id="accordion-section-icons">
+              <div class="studio-accordion-header" onclick="toggleStudioAccordion('icons')" role="button" aria-expanded="false" tabindex="0">
                 <div class="accordion-header-left">
                   <div class="accordion-icon-box"><i class="fas fa-icons"></i></div>
                   <div>
@@ -453,8 +486,8 @@
             </div>
 
             <!-- 3. CATEGORÍA: LÍNEAS CIRCULARES EN VIROLA -->
-            <div class="studio-accordion-card open" id="accordion-section-lines">
-              <div class="studio-accordion-header" onclick="toggleStudioAccordion('lines')" role="button" aria-expanded="true" tabindex="0">
+            <div class="studio-accordion-card" id="accordion-section-lines">
+              <div class="studio-accordion-header" onclick="toggleStudioAccordion('lines')" role="button" aria-expanded="false" tabindex="0">
                 <div class="accordion-header-left">
                   <div class="accordion-icon-box"><i class="fas fa-circle-notch"></i></div>
                   <div>
@@ -485,8 +518,8 @@
             </div>
 
             <!-- 4. CATEGORÍA: SUBIR IMAGEN PROPIA (VECTORIZADA SIN FONDO) -->
-            <div class="studio-accordion-card open" id="accordion-section-upload">
-              <div class="studio-accordion-header" onclick="toggleStudioAccordion('upload')" role="button" aria-expanded="true" tabindex="0">
+            <div class="studio-accordion-card" id="accordion-section-upload">
+              <div class="studio-accordion-header" onclick="toggleStudioAccordion('upload')" role="button" aria-expanded="false" tabindex="0">
                 <div class="accordion-header-left">
                   <div class="accordion-icon-box"><i class="fas fa-cloud-arrow-up"></i></div>
                   <div>
@@ -653,17 +686,16 @@
     </div>
   </main>
 
-    <!-- Mobile Sticky Bottom Action Bar -->
-    <div class="mobile-sticky-action-bar" id="mobile-sticky-bar">
-      <div class="mobile-sticky-info">
-        <span class="mobile-sticky-label">Total Personalizado</span>
-        <span class="mobile-sticky-price" id="mobile-bar-price">$ 46.500</span>
-      </div>
-      <button type="button" class="btn btn-primary btn-mobile-finish" onclick="openCompletionModal()">
-        <span>Finalizar</span> <i class="fas fa-arrow-right"></i>
-      </button>
+  <!-- Mobile Sticky Bottom Action Bar -->
+  <div class="mobile-sticky-action-bar" id="mobile-sticky-bar">
+    <div class="mobile-sticky-info">
+      <span class="mobile-sticky-label">Total Personalizado</span>
+      <span class="mobile-sticky-price" id="mobile-bar-price">$ 46.500</span>
     </div>
-  </main>
+    <button type="button" class="btn btn-primary btn-mobile-finish" onclick="openCompletionModal()">
+      <span>Finalizar</span> <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
 
   <!-- ==========================================================================
        SITE FOOTER (UNIFICADO, SIN CLUB MATERO, TALLER EN RÍO CEBALLOS, CÓRDOBA)

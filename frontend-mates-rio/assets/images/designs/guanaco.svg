@@ -1,65 +1,118 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 520" width="100%" height="100%">
-  <!-- Guanaco Criollo Patagónico - Original Vector -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 520" width="100%" height="100%">
+  <!-- Guanaco Criollo Patagónico y Andino - Grabado Láser y Orfebrería HD -->
   <defs>
-    <linearGradient id="guanaco-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#b87333"/>
-      <stop offset="60%" stop-color="#8c4e1a"/>
-      <stop offset="100%" stop-color="#4d280b"/>
+    <linearGradient id="guanaco-fur-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#bf7a37"/>
+      <stop offset="50%" stop-color="#945520"/>
+      <stop offset="100%" stop-color="#542c0c"/>
+    </linearGradient>
+    <linearGradient id="guanaco-face-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4d443e"/>
+      <stop offset="60%" stop-color="#2e2621"/>
+      <stop offset="100%" stop-color="#140f0c"/>
+    </linearGradient>
+    <linearGradient id="guanaco-belly-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#f5ede4"/>
+      <stop offset="100%" stop-color="#d6c6b4"/>
     </linearGradient>
   </defs>
 
-  <g fill="url(#guanaco-grad)" stroke="#261203" stroke-width="2.5" stroke-linejoin="round">
-    <!-- Silueta esbelta del Guanaco -->
-    <!-- Cabeza, cuello largo erguido, lomo y patas ágiles -->
+  <g stroke="#261203" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Patas del lado izquierdo (segundo plano) -->
+    <!-- Pata trasera izquierda -->
+    <path d="M 175 320 L 155 490 L 175 490 L 200 350 Z" fill="#4d280b"/>
+    <!-- Pata delantera izquierda -->
+    <path d="M 310 320 L 325 490 L 345 490 L 340 335 Z" fill="#4d280b"/>
+
+    <!-- Cuerpo principal del Guanaco: cuello esbelto erguido, lomo elegante, ancas altas -->
     <path d="
-      M 310 70
-      C 320 65 330 75 325 85
-      C 320 95 315 105 320 115
-      C 328 115 340 120 345 130
-      C 345 140 335 145 320 148
-      C 310 170 300 210 295 245
-      C 320 255 350 260 375 275
-      C 390 285 395 305 385 340
-      L 395 470
-      L 375 470
-      L 365 375
-      L 345 375
-      L 345 470
-      L 325 470
-      L 330 350
-      C 300 340 265 340 240 350
-      L 245 470
-      L 225 470
-      L 230 375
-      L 215 375
-      L 205 470
-      L 185 470
-      L 190 340
-      C 180 320 175 300 185 270
-      C 170 270 160 280 165 295
-      C 155 280 165 260 185 255
-      C 205 250 235 250 260 235
-      C 265 195 275 140 285 95
-      C 285 80 295 70 310 70 Z
-    "/>
+      M 320 60
+      C 335 55 350 68 344 82
+      C 340 92 334 102 340 115
+      C 350 116 366 122 370 134
+      C 370 148 358 155 342 158
+      C 330 180 318 220 312 255
+      C 335 266 368 275 390 292
+      C 405 304 408 325 398 355
+      L 408 495
+      L 386 495
+      L 378 385
+      C 370 380 355 378 345 378
+      L 348 495
+      L 326 495
+      L 332 360
+      C 298 348 260 348 230 360
+      L 235 495
+      L 213 495
+      L 218 385
+      C 205 382 195 380 186 380
+      L 174 495
+      L 152 495
+      L 158 350
+      C 145 325 138 300 150 268
+      C 130 268 118 280 124 298
+      C 112 280 124 256 148 250
+      C 172 245 208 245 236 228
+      C 245 186 260 125 272 82
+      C 278 68 295 60 320 60 Z
+    " fill="url(#guanaco-fur-grad)"/>
 
-    <!-- Orejas puntiagudas y atentas características del guanaco -->
-    <!-- Oreja derecha -->
-    <path d="M 305 70 C 310 40 325 40 320 70 Z" fill="#663309"/>
-    <!-- Oreja izquierda -->
-    <path d="M 290 75 C 290 50 305 50 302 75 Z" fill="#4d280b"/>
+    <!-- Vientre, flancos y pecho de lana blanca pura característica -->
+    <path d="
+      M 295 210
+      C 285 240 272 270 252 288
+      C 230 305 195 312 182 305
+      C 212 280 236 250 262 216 Z
+    " fill="url(#guanaco-belly-grad)"/>
+    <path d="
+      M 230 360
+      C 260 348 298 348 332 360
+      C 310 380 255 380 230 360 Z
+    " fill="url(#guanaco-belly-grad)"/>
 
-    <!-- Hocico grisáceo/oscuro característico -->
-    <path d="M 320 120 C 335 125 345 130 342 140 C 330 145 320 145 315 135 Z" fill="#2b1a0d"/>
+    <!-- Cola corta lanuda alzada -->
+    <path d="M 124 298 C 116 280 128 260 148 250 C 138 260 134 275 140 290 Z" fill="#bf7a37"/>
 
-    <!-- Ojo grande almendrado con pestañas de estepa -->
-    <circle cx="310" cy="110" r="4.5" fill="#0d0501"/>
-    <circle cx="311" cy="109" r="1.5" fill="#ffffff"/>
+    <!-- Cabeza y rostro del guanaco: hocico gris/oscuro, labios y barbilla blanca -->
+    <path d="
+      M 322 80
+      C 334 85 342 98 340 115
+      C 350 116 366 122 370 134
+      C 370 148 358 155 342 158
+      C 328 155 318 140 316 125
+      C 314 105 316 90 322 80 Z
+    " fill="url(#guanaco-face-grad)"/>
 
-    <!-- Pecho y vientre blanco crema característico del guanaco -->
-    <path d="M 285 210 C 275 235 265 260 250 275 C 235 290 205 295 195 290 C 220 270 240 245 260 215 Z" fill="#fff5ea" stroke="none" opacity="0.9"/>
+    <!-- Bozo y barbilla blanca luminosa típica de los camélidos andinos -->
+    <path d="
+      M 346 130
+      C 358 132 368 138 368 146
+      C 368 152 358 156 345 156
+      C 338 156 335 150 338 144
+      C 340 138 343 134 346 130 Z
+    " fill="#ffffff" stroke="none"/>
+
+    <!-- Orejas largas, alertas y erguidas con interior afelpado -->
+    <!-- Oreja derecha (primer plano) -->
+    <path d="M 314 62 C 318 25 338 25 330 62 Z" fill="#7a3d13"/>
+    <path d="M 320 56 C 322 34 332 34 326 56 Z" fill="#f5ede4" stroke="none"/>
+    <!-- Oreja izquierda (segundo plano) -->
+    <path d="M 296 68 C 296 36 314 36 310 68 Z" fill="#542c0c"/>
+    <path d="M 300 62 C 300 44 310 44 306 62 Z" fill="#d6c6b4" stroke="none"/>
+
+    <!-- Ojo grande, almendrado y expresivo de la estepa patagónica -->
+    <ellipse cx="328" cy="108" rx="6.5" ry="5" fill="#140f0c"/>
+    <circle cx="330" cy="106" r="1.8" fill="#ffffff"/>
+    <path d="M 320 102 C 326 98 335 100 338 104" fill="none" stroke="#000000" stroke-width="1.8"/>
+
+    <!-- Narina fina en el hocico -->
+    <ellipse cx="360" cy="138" rx="3.5" ry="2.2" fill="#000000"/>
+
+    <!-- Pezuñas dobles ágiles en las 4 patas -->
+    <path d="M 152 493 L 174 493 L 174 498 L 152 498 Z" fill="#140f0c"/>
+    <path d="M 213 493 L 235 493 L 235 498 L 213 498 Z" fill="#140f0c"/>
+    <path d="M 326 493 L 348 493 L 348 498 L 326 498 Z" fill="#140f0c"/>
+    <path d="M 386 493 L 408 493 L 408 498 L 386 498 Z" fill="#140f0c"/>
   </g>
-
-  <!-- Suelo de estepa patagónica -->
-  <line x1="150" y1="472" x2="430" y2="472" stroke="#4d280b" stroke-width="2.5" stroke-linecap="round"/>
 </svg>

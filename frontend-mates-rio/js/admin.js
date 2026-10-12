@@ -2893,6 +2893,9 @@ function initAdminThemeMode() {
 function applyAdminThemeMode(mode, notify = false) {
   const isDark = mode === 'dark';
   document.body.classList.toggle('admin-dark-mode', isDark);
+  document.documentElement.classList.toggle('admin-dark-mode', isDark);
+  document.body.classList.toggle('theme-dark', isDark);
+  document.body.classList.toggle('theme-light', !isDark);
   localStorage.setItem('mates_rio_admin_theme', mode);
   localStorage.setItem('mates_rio_theme_mode', mode); // Sincronizado con Web principal
   localStorage.setItem('mates_rio_theme_inverted', isDark ? 'false' : 'true');

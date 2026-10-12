@@ -18,8 +18,36 @@
 
   <!-- Custom Admin Styles -->
   <link rel="stylesheet" href="css/admin.css" />
+
+  <!-- Immediate Theme Initializer (Sincronizado al instante con la Web) -->
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'dark') {
+        document.documentElement.classList.add('admin-dark-mode');
+        document.documentElement.classList.add('theme-dark');
+      } else {
+        document.documentElement.classList.remove('admin-dark-mode');
+        document.documentElement.classList.add('theme-light');
+      }
+    })();
+  </script>
 </head>
 <body class="admin-body">
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'dark') {
+        document.body.classList.add('admin-dark-mode');
+        document.body.classList.add('theme-dark');
+        document.body.classList.remove('theme-light');
+      } else {
+        document.body.classList.remove('admin-dark-mode');
+        document.body.classList.remove('theme-dark');
+        document.body.classList.add('theme-light');
+      }
+    })();
+  </script>
 
   <!-- ==========================================================================
        1. SECURITY ACCESS GATE / LOGIN SCREEN (Visible when not authenticated)
@@ -804,13 +832,13 @@
 
               <!-- 1. SELECCIÓN DE UBICACIÓN INDEPENDIENTE EN LA WEB -->
               <div class="admin-design-accordion" id="accordion-group-banner-pos">
-                <button type="button" class="admin-design-accordion-header" onclick="toggleAdminDesignSection('banner-pos')" aria-expanded="true">
+                <button type="button" class="admin-design-accordion-header" onclick="toggleAdminDesignSection('banner-pos')" aria-expanded="false">
                   <span class="admin-design-accordion-title">
                     <i class="fas fa-arrows-up-down-left-right"></i> 1. Ubicación del Banner en la Tienda Principal
                   </span>
-                  <i class="fas fa-chevron-down admin-design-accordion-arrow" id="admin-chevron-banner-pos"></i>
+                  <i class="fas fa-chevron-down admin-design-accordion-arrow collapsed" id="admin-chevron-banner-pos"></i>
                 </button>
-                <div class="admin-design-accordion-body" id="admin-section-banner-pos-body">
+                <div class="admin-design-accordion-body collapsed" id="admin-section-banner-pos-body" style="display: none;">
                   <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 12px;">
                     Tenés total libertad de ubicar el anuncio en el sector de la web que prefieras. Hacé clic para elegir dónde se mostrará:
                   </p>
@@ -855,13 +883,13 @@
 
               <!-- 2. DISEÑOS PRE-CONFIGURADOS (INCLUYENDO CELEBRACIONES PATRIAS ARGENTINAS) -->
               <div class="admin-design-accordion" id="accordion-group-banner-presets" style="margin-top: 18px; margin-bottom: 24px;">
-                <button type="button" class="admin-design-accordion-header" onclick="toggleAdminDesignSection('banner-presets')" aria-expanded="true">
+                <button type="button" class="admin-design-accordion-header" onclick="toggleAdminDesignSection('banner-presets')" aria-expanded="false">
                   <span class="admin-design-accordion-title">
                     <i class="fas fa-wand-magic-sparkles"></i> 2. Diseños Pre-Configurados Listos para Usar
                   </span>
-                  <i class="fas fa-chevron-down admin-design-accordion-arrow" id="admin-chevron-banner-presets"></i>
+                  <i class="fas fa-chevron-down admin-design-accordion-arrow collapsed" id="admin-chevron-banner-presets"></i>
                 </button>
-                <div class="admin-design-accordion-body" id="admin-section-banner-presets-body">
+                <div class="admin-design-accordion-body collapsed" id="admin-section-banner-presets-body" style="display: none;">
                   <p style="font-size: 0.8rem; color: var(--admin-text-muted); margin-bottom: 10px;">
                     Elegí una festividad para autocompletar colores, textos y emojis acordes:
                   </p>
