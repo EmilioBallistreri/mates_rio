@@ -28,7 +28,8 @@ const studio = {
   textInput: 'MATES RÍO',
   selectedFont: 'Cinzel',
   fontSize: 22,
-  arcPosition: 'top', // 'top' | 'bottom'
+  arcPosition: 'top', // 'top' | 'straight' | 'bottom'
+  phraseMode: 'top', // 'top' | 'straight' | 'bottom'
 
   // Categoría de íconos activa
   activeCategory: 'deportes',
@@ -242,7 +243,9 @@ function applyTemplate(templateKey) {
       font: 'Cinzel',
       fontSize: 22,
       arcPosition: 'top',
-      offset: 50
+      angle: 270,
+      radius: STUDIO_CONFIG.rRing,
+      rotation: 0
     });
     studio.items.push({
       id: 'item_icon_left',
@@ -276,7 +279,9 @@ function applyTemplate(templateKey) {
       font: 'Cinzel',
       fontSize: 20,
       arcPosition: 'top',
-      offset: 50
+      angle: 270,
+      radius: STUDIO_CONFIG.rRing,
+      rotation: 0
     });
     studio.items.push({
       id: 'item_icon_left',
@@ -321,7 +326,9 @@ function applyTemplate(templateKey) {
       font: 'Playfair Display',
       fontSize: 22,
       arcPosition: 'top',
-      offset: 50
+      angle: 270,
+      radius: STUDIO_CONFIG.rRing,
+      rotation: 0
     });
     studio.items.push({
       id: 'item_icon_bottom',
@@ -423,14 +430,17 @@ function onStudioTextInput(val) {
     updateActiveItemFloatingBar();
   } else if (val.trim()) {
     // Si no había item de texto creado aún, crearlo inmediatamente en el arco activo
+    const defaultAngle = studio.arcPosition === 'bottom' ? 90 : 270;
     const newItem = {
       id: 'text_' + Date.now(),
       type: 'text',
       text: val,
       font: studio.selectedFont,
-      fontSize: studio.fontSize,
-      arcPosition: studio.arcPosition,
-      offset: 50
+      fontSize: studio.fontSize || 22,
+      arcPosition: studio.arcPosition || 'top',
+      angle: defaultAngle,
+      radius: STUDIO_CONFIG.rRing,
+      rotation: 0
     };
     studio.items.push(newItem);
     studio.activeItemId = newItem.id;
@@ -463,8 +473,8 @@ function applyTextToVirola() {
   }
 
   const textCount = studio.items.filter(i => i.type === 'text').length;
-  if (textCount >= 4) {
-    showNotificationToast('Límite de 4 textos alcanzado para la virola', 'fa-info-circle');
+  if (textCount >= 6) {
+    showNotificationToast('Límite de textos alcanzado para la virola', 'fa-info-circle');
     return;
   }
 
@@ -473,17 +483,18 @@ function applyTextToVirola() {
   if (activeText) {
     activeText.text = text;
     activeText.font = studio.selectedFont;
-    activeText.fontSize = studio.fontSize;
-    activeText.arcPosition = studio.arcPosition;
+    activeText.fontSize = studio.fontSize || 22;
+    activeText.arcPosition = studio.arcPosition || 'top';
     studio.activeItemId = activeText.id;
     showNotificationToast('Texto actualizado en la virola', 'fa-check');
   } else {
     // Si no hay texto seleccionado, agregar uno nuevo en la posición elegida
-    const sameArcTexts = studio.items.filter(i => i.type === 'text' && i.arcPosition === studio.arcPosition);
-    let newOffset = 50;
-    if (sameArcTexts.length === 1) {
-      sameArcTexts[0].offset = 32;
-      newOffset = 68;
+    const targetPos = studio.arcPosition || 'top';
+    let defaultAngle = 270;
+    if (targetPos === 'bottom') defaultAngle = 90;
+    else if (targetPos === 'straight') {
+      const hasTop = studio.items.some(i => i.type === 'text' && (i.angle >= 225 && i.angle <= 315));
+      defaultAngle = hasTop ? 90 : 270;
     }
 
     const newItem = {
@@ -491,9 +502,11 @@ function applyTextToVirola() {
       type: 'text',
       text: text,
       font: studio.selectedFont,
-      fontSize: studio.fontSize,
-      arcPosition: studio.arcPosition,
-      offset: newOffset
+      fontSize: studio.fontSize || 22,
+      arcPosition: targetPos,
+      angle: defaultAngle,
+      radius: STUDIO_CONFIG.rRing,
+      rotation: 0
     };
     studio.items.push(newItem);
     studio.activeItemId = newItem.id;
@@ -504,13 +517,21 @@ function applyTextToVirola() {
   updateActiveItemFloatingBar();
 }
 
-function toggleArcPosition(pos) {
-  studio.arcPosition = pos;
+function updateArcSegmentButtons(pos) {
   document.querySelectorAll('.arc-segment-btn').forEach(b => {
     b.classList.toggle('active', b.getAttribute('data-pos') === pos);
   });
+}
 
-  // Si hay un texto activo o seleccionado, o solo un texto existente, moverlo inmediatamente a la nueva curva
+function setActiveTextMode(pos) {
+  toggleArcPosition(pos);
+}
+
+function toggleArcPosition(pos) {
+  studio.arcPosition = pos;
+  updateArcSegmentButtons(pos);
+
+  // Si hay un texto activo o seleccionado, o solo un texto existente, moverlo inmediatamente a la nueva forma/curva
   let targetText = studio.items.find(i => i.id === studio.activeItemId && i.type === 'text');
   if (!targetText) {
     const textItems = studio.items.filter(i => i.type === 'text');
@@ -522,6 +543,17 @@ function toggleArcPosition(pos) {
   if (targetText) {
     targetText.arcPosition = pos;
     studio.activeItemId = targetText.id;
+    
+    // Adaptar ángulo predeterminado si es necesario para que quede en el cuadrante adecuado
+    if (pos === 'top' && (targetText.angle === undefined || (targetText.angle > 45 && targetText.angle < 135))) {
+      targetText.angle = 270;
+    } else if (pos === 'bottom' && (targetText.angle === undefined || (targetText.angle > 225 && targetText.angle < 315))) {
+      targetText.angle = 90;
+    } else if (pos === 'straight' && targetText.angle === undefined) {
+      targetText.angle = 270;
+      targetText.rotation = 0;
+    }
+
     const textInput = document.getElementById('studio-text-input');
     if (textInput) {
       textInput.value = targetText.text;
@@ -531,7 +563,9 @@ function toggleArcPosition(pos) {
     }
     renderVirolaCanvas();
     updateActiveItemFloatingBar();
-    showNotificationToast(`Texto posicionado en ${pos === 'top' ? 'Curva Superior' : 'Curva Inferior'}`, 'fa-arrows-up-down');
+    
+    const label = pos === 'top' ? 'Curva Arriba' : (pos === 'straight' ? 'Formato Recto' : 'Curva Abajo');
+    showNotificationToast(`Texto posicionado en ${label}`, 'fa-arrows-up-down');
   } else {
     const existing = studio.items.find(i => i.type === 'text' && i.arcPosition === pos);
     const textInput = document.getElementById('studio-text-input');
@@ -607,16 +641,51 @@ function renderVectorLibrary(catKey) {
   const cat = VECTOR_CATEGORIES[catKey];
   if (!cat) return;
 
-  // Si es la categoría de Frases, renderizar como tarjetas tipográficas interactivas
+  // Si es la categoría de Frases, renderizar como tarjetas tipográficas interactivas con opciones
   if (catKey === 'frases') {
-    container.innerHTML = cat.items.map(item => `
-      <div class="phrase-card-item" onclick="applyPhraseToVirola('${escapeHtml(item.text)}')" title="Hacé clic para aplicar esta frase a la virola">
-        <div class="phrase-card-text">${item.name}</div>
-        <button type="button" class="phrase-add-btn">
-          <i class="fas fa-plus"></i> Aplicar al arco
-        </button>
+    const curMode = studio.phraseMode || 'top';
+    const headerHtml = `
+      <div class="phrase-format-selector-box">
+        <label class="sub-label" style="margin-bottom: 6px; display: block; font-size: 0.74rem;">
+          <i class="fas fa-shapes" style="color: var(--accent-gold);"></i> Formato predeterminado para frases:
+        </label>
+        <div class="arc-selector-segmented phrase-mode-segmented">
+          <button type="button" class="arc-segment-btn ${curMode === 'top' ? 'active' : ''}" 
+                  data-mode="top" onclick="setPhraseDefaultMode('top')" title="Curva arqueada hacia arriba">
+            <i class="fas fa-arrow-up"></i> Curva Arriba
+          </button>
+          <button type="button" class="arc-segment-btn ${curMode === 'straight' ? 'active' : ''}" 
+                  data-mode="straight" onclick="setPhraseDefaultMode('straight')" title="Texto recto horizontal">
+            <i class="fas fa-minus"></i> Recta
+          </button>
+          <button type="button" class="arc-segment-btn ${curMode === 'bottom' ? 'active' : ''}" 
+                  data-mode="bottom" onclick="setPhraseDefaultMode('bottom')" title="Curva arqueada hacia abajo">
+            <i class="fas fa-arrow-down"></i> Curva Abajo
+          </button>
+        </div>
+      </div>
+    `;
+
+    const cardsHtml = cat.items.map(item => `
+      <div class="phrase-card-item" onclick="applyPhraseToVirola('${escapeHtml(item.text)}', null, event)" title="Hacé clic para aplicar '${escapeHtml(item.name)}'">
+        <div class="phrase-card-top-row">
+          <span class="phrase-card-text">${item.name}</span>
+        </div>
+        <div class="phrase-card-actions">
+          <button type="button" class="phrase-action-pill-btn" onclick="applyPhraseToVirola('${escapeHtml(item.text)}', 'top', event)" title="Aplicar con Curva Arriba">
+            <i class="fas fa-arrow-up"></i> Arriba
+          </button>
+          <button type="button" class="phrase-action-pill-btn" onclick="applyPhraseToVirola('${escapeHtml(item.text)}', 'straight', event)" title="Aplicar Recta">
+            <i class="fas fa-minus"></i> Recta
+          </button>
+          <button type="button" class="phrase-action-pill-btn" onclick="applyPhraseToVirola('${escapeHtml(item.text)}', 'bottom', event)" title="Aplicar con Curva Abajo">
+            <i class="fas fa-arrow-down"></i> Abajo
+          </button>
+        </div>
       </div>
     `).join('');
+
+    container.innerHTML = headerHtml + cardsHtml;
     return;
   }
 
@@ -670,59 +739,71 @@ function addVectorToVirola(itemId, catKey) {
   showNotificationToast(`"${itemDef.name}" agregado a la virola`, 'fa-circle-check');
 }
 
-// Aplicar Frase a la virola de forma curva y limpia (sin sobreescribir otros textos)
-function applyPhraseToVirola(phraseText) {
+function setPhraseDefaultMode(mode) {
+  studio.phraseMode = mode;
+  document.querySelectorAll('.phrase-mode-segmented .arc-segment-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+  });
+  const modeLabels = { top: 'Curva Arriba', straight: 'Recta', bottom: 'Curva Abajo' };
+  showNotificationToast(`Modo para frases: ${modeLabels[mode] || mode}`, 'fa-shapes');
+}
+
+// Aplicar Frase a la virola de forma curva o recta sobre el anillo metálico (sin meterse adentro del mate)
+function applyPhraseToVirola(phraseText, mode = null, event = null) {
+  if (event) {
+    event.stopPropagation();
+  }
+
+  const targetMode = mode || studio.phraseMode || studio.arcPosition || 'top';
   studio.textInput = phraseText;
+  studio.arcPosition = targetMode;
+
   const textInput = document.getElementById('studio-text-input');
   if (textInput) textInput.value = phraseText;
   const counter = document.getElementById('studio-text-counter');
   if (counter) counter.textContent = `${phraseText.length}/35`;
 
+  updateArcSegmentButtons(targetMode);
+
   const textCount = studio.items.filter(i => i.type === 'text').length;
-  if (textCount >= 4) {
-    showNotificationToast('Límite de 4 textos alcanzado para la virola', 'fa-info-circle');
+  if (textCount >= 6) {
+    showNotificationToast('Límite de textos alcanzado para la virola', 'fa-info-circle');
     return;
   }
 
-  // Comprobar ocupación de arcos
-  const hasTop = studio.items.some(i => i.type === 'text' && i.arcPosition === 'top');
-  const hasBottom = studio.items.some(i => i.type === 'text' && i.arcPosition === 'bottom');
-
-  let targetPos = studio.arcPosition;
-  if (hasTop && !hasBottom) {
-    targetPos = 'bottom';
-    studio.arcPosition = 'bottom';
-  } else if (!hasTop && hasBottom) {
-    targetPos = 'top';
-    studio.arcPosition = 'top';
-  }
-
-  document.querySelectorAll('.arc-segment-btn').forEach(b => {
-    b.classList.toggle('active', b.getAttribute('data-pos') === targetPos);
-  });
-
-  const sameArcTexts = studio.items.filter(i => i.type === 'text' && i.arcPosition === targetPos);
-  let newOffset = 50;
-  if (sameArcTexts.length === 1) {
-    sameArcTexts[0].offset = 32;
-    newOffset = 68;
+  // Determinar ángulo en la virola metálica (rRing = 175)
+  let defaultAngle = 270;
+  if (targetMode === 'bottom') {
+    defaultAngle = 90;
+  } else if (targetMode === 'straight') {
+    const hasTop = studio.items.some(i => i.type === 'text' && (i.angle >= 225 && i.angle <= 315));
+    defaultAngle = hasTop ? 90 : 270;
+  } else {
+    // top
+    const hasTop = studio.items.some(i => i.type === 'text' && (i.angle >= 225 && i.angle <= 315));
+    defaultAngle = hasTop ? 90 : 270;
   }
 
   const newItem = {
     id: 'text_' + Date.now(),
     type: 'text',
     text: phraseText,
-    font: studio.selectedFont,
-    fontSize: studio.fontSize,
-    arcPosition: targetPos,
-    offset: newOffset
+    font: studio.selectedFont || 'Cinzel',
+    fontSize: studio.fontSize || 22,
+    arcPosition: targetMode,
+    angle: defaultAngle,
+    radius: STUDIO_CONFIG.rRing,
+    rotation: 0
   };
+
   studio.items.push(newItem);
   studio.activeItemId = newItem.id;
 
   renderVirolaCanvas();
   updateActiveItemFloatingBar();
-  showNotificationToast(`Frase "${phraseText}" aplicada al arco`, 'fa-font');
+
+  const modeLabels = { top: 'Curva Arriba', straight: 'Recta', bottom: 'Curva Abajo' };
+  showNotificationToast(`Frase "${phraseText}" agregada en la virola (${modeLabels[targetMode] || targetMode})`, 'fa-font');
 }
 
 // ==========================================================================
@@ -875,7 +956,6 @@ function handleCustomImageUpload(e) {
   reader.readAsDataURL(file);
 }
 
-// ==========================================================================
 // 8. RENDERIZADO DEL CANVAS SVG DE LA VIROLA CIRCULAR INTERACTIVA
 // ==========================================================================
 function renderVirolaCanvas() {
@@ -883,25 +963,6 @@ function renderVirolaCanvas() {
   if (!svg) return;
 
   const { cx, cy, rInner, rRing, rOuter } = STUDIO_CONFIG;
-
-  // Generar trazado de arcos para textos superior e inferior
-  // Arco superior: de 195° a 345° (reloj)
-  const rTextTop = rRing + 2;
-  const startAngleTop = 195 * (Math.PI / 180);
-  const endAngleTop = 345 * (Math.PI / 180);
-  const x1Top = cx + rTextTop * Math.cos(startAngleTop);
-  const y1Top = cy + rTextTop * Math.sin(startAngleTop);
-  const x2Top = cx + rTextTop * Math.cos(endAngleTop);
-  const y2Top = cy + rTextTop * Math.sin(endAngleTop);
-
-  // Arco inferior: de 15° a 165°
-  const rTextBottom = rRing + 2;
-  const startAngleBottom = 165 * (Math.PI / 180);
-  const endAngleBottom = 15 * (Math.PI / 180);
-  const x1Bottom = cx + rTextBottom * Math.cos(startAngleBottom);
-  const y1Bottom = cy + rTextBottom * Math.sin(startAngleBottom);
-  const x2Bottom = cx + rTextBottom * Math.cos(endAngleBottom);
-  const y2Bottom = cy + rTextBottom * Math.sin(endAngleBottom);
 
   // Líneas circulares orfebres
   let circularLinesHtml = '';
@@ -916,34 +977,98 @@ function renderVirolaCanvas() {
     `;
   }
 
-  // Trazados de textos curvos (con soporte drag polar y offset)
+  // Trazados de textos curvos y rectos sin cortes con giro libre 360° en la virola
   let textsHtml = '';
+  let defsTextPathsHtml = '';
   const textItems = studio.items.filter(i => i.type === 'text');
-  textItems.forEach(t => {
-    const isTop = t.arcPosition === 'top';
-    const pathId = isTop ? 'arc-top-path' : 'arc-bottom-path';
-    const isActive = t.id === studio.activeItemId;
-    const offsetVal = t.offset !== undefined ? t.offset : 50;
 
-    textsHtml += `
-      <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
-         data-item-id="${t.id}"
-         onmousedown="startTextDrag('${t.id}', event)"
-         ontouchstart="startTextDrag('${t.id}', event)">
-        <text font-family="'${t.font}', serif" 
-              font-size="${t.fontSize || 22}" 
-              font-weight="800" 
-              letter-spacing="2px"
-              fill="#120e0a"
-              style="cursor: grab;"
-              class="virola-curved-text ${isActive ? 'active-text-element' : ''}"
-              data-item-id="${t.id}">
-          <textPath href="#${pathId}" xlink:href="#${pathId}" startOffset="${offsetVal}%" text-anchor="middle">
+  textItems.forEach(t => {
+    const isStraight = t.arcPosition === 'straight';
+    const isBottom = t.arcPosition === 'bottom';
+    const isActive = t.id === studio.activeItemId;
+    const r = t.radius || rRing;
+    const angle = t.angle !== undefined ? t.angle : (isBottom ? 90 : 270);
+
+    if (isStraight) {
+      // Texto recto posicionado sobre la virola metálica
+      const rad = (angle * Math.PI) / 180;
+      const x = cx + r * Math.cos(rad);
+      const y = cy + r * Math.sin(rad);
+      const rot = t.rotation !== undefined ? t.rotation : 0;
+
+      textsHtml += `
+        <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
+           data-item-id="${t.id}"
+           transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
+           onmousedown="startTextDrag('${t.id}', event)"
+           ontouchstart="startTextDrag('${t.id}', event)">
+          <text font-family="'${t.font}', serif" 
+                font-size="${t.fontSize || 22}" 
+                font-weight="800" 
+                letter-spacing="2px" 
+                fill="#120e0a" 
+                text-anchor="middle" 
+                dominant-baseline="central" 
+                style="cursor: grab;" 
+                class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
+                data-item-id="${t.id}">
             ${escapeHtml(t.text)}
-          </textPath>
-        </text>
-      </g>
-    `;
+          </text>
+        </g>
+      `;
+    } else {
+      // Texto curvo (arriba o abajo) sin cortes y con 300° de amplitud de arco en la virola
+      const pathId = `text-path-${t.id}`;
+      let pathD = '';
+
+      if (isBottom) {
+        // Curva hacia abajo (arco inferior, sonrisa ⌣ en la virola):
+        // Sentido antihorario (sweep = 0) para que las letras se lean de izq a der mirando desde abajo
+        const startDeg = angle + 150;
+        const endDeg = angle - 150;
+        const startRad = (startDeg * Math.PI) / 180;
+        const endRad = (endDeg * Math.PI) / 180;
+        const x1 = cx + r * Math.cos(startRad);
+        const y1 = cy + r * Math.sin(startRad);
+        const x2 = cx + r * Math.cos(endRad);
+        const y2 = cy + r * Math.sin(endRad);
+        pathD = `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 1 0 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+      } else {
+        // Curva hacia arriba (arco superior, cúpula ⌒ en la virola):
+        // Sentido horario (sweep = 1) para que las letras se lean de izq a der mirando desde arriba
+        const startDeg = angle - 150;
+        const endDeg = angle + 150;
+        const startRad = (startDeg * Math.PI) / 180;
+        const endRad = (endDeg * Math.PI) / 180;
+        const x1 = cx + r * Math.cos(startRad);
+        const y1 = cy + r * Math.sin(startRad);
+        const x2 = cx + r * Math.cos(endRad);
+        const y2 = cy + r * Math.sin(endRad);
+        pathD = `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 1 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+      }
+
+      defsTextPathsHtml += `<path id="${pathId}" d="${pathD}" fill="none" />`;
+
+      textsHtml += `
+        <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
+           data-item-id="${t.id}"
+           onmousedown="startTextDrag('${t.id}', event)"
+           ontouchstart="startTextDrag('${t.id}', event)">
+          <text font-family="'${t.font}', serif" 
+                font-size="${t.fontSize || 22}" 
+                font-weight="800" 
+                letter-spacing="2px" 
+                fill="#120e0a" 
+                style="cursor: grab;" 
+                class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
+                data-item-id="${t.id}">
+            <textPath href="#${pathId}" xlink:href="#${pathId}" startOffset="50%" text-anchor="middle">
+              ${escapeHtml(t.text)}
+            </textPath>
+          </text>
+        </g>
+      `;
+    }
   });
 
   // Íconos / Stickers
@@ -1030,11 +1155,8 @@ function renderVirolaCanvas() {
         <stop offset="100%" stop-color="#0d0906" />
       </radialGradient>
 
-      <!-- Trazado de Texto Superior -->
-      <path id="arc-top-path" d="M ${x1Top} ${y1Top} A ${rTextTop} ${rTextTop} 0 0 1 ${x2Top} ${y2Top}" fill="none" />
-      
-      <!-- Trazado de Texto Inferior -->
-      <path id="arc-bottom-path" d="M ${x1Bottom} ${y1Bottom} A ${rTextBottom} ${rTextBottom} 0 0 1 ${x2Bottom} ${y2Bottom}" fill="none" />
+      <!-- Trazados dinámicos de texto sobre la virola -->
+      ${defsTextPathsHtml}
     </defs>
 
     <!-- 1. Borde Exterior de Cuero Vacuno Repujado -->
@@ -1111,7 +1233,7 @@ function deleteActiveVirolaItem() {
   deleteVirolaItem(studio.activeItemId);
 }
 
-// Iniciar arrastre de texto a lo largo del arco
+// Iniciar arrastre de texto a lo largo de toda la virola
 function startTextDrag(itemId, e) {
   e.preventDefault();
   e.stopPropagation();
@@ -1124,11 +1246,33 @@ function startTextDrag(itemId, e) {
   studio.dragItemId = itemId;
 
   const coords = getPointerCoords(e);
+  const { cx, cy } = STUDIO_CONFIG;
+  const dx = coords.x - cx;
+  const dy = coords.y - cy;
+  let pointerAngle = (Math.atan2(dy, dx) * 180) / Math.PI;
+  if (pointerAngle < 0) pointerAngle += 360;
+
+  const curAngle = item.angle !== undefined ? item.angle : (item.arcPosition === 'bottom' ? 90 : 270);
+  item.angle = curAngle;
+
   studio.dragStart = {
     x: coords.x,
     y: coords.y,
-    itemOffset: item.offset || 50
+    itemAngle: curAngle,
+    pointerAngle: pointerAngle,
+    itemRotation: item.rotation || 0
   };
+
+  const input = document.getElementById('studio-text-input');
+  if (input) {
+    input.value = item.text;
+    studio.textInput = item.text;
+    const counter = document.getElementById('studio-text-counter');
+    if (counter) counter.textContent = `${item.text.length}/35`;
+  }
+
+  studio.arcPosition = item.arcPosition || 'top';
+  updateArcSegmentButtons(studio.arcPosition);
 
   renderVirolaCanvas();
   updateActiveItemFloatingBar();
@@ -1208,28 +1352,18 @@ function onCanvasPointerMove(e) {
   const { cx, cy } = STUDIO_CONFIG;
 
   if (studio.dragMode === 'text_move') {
-    // Desplazar texto a lo largo del arco de la virola
+    // Desplazar texto libremente por toda la virola 360° sin cortes
     const dx = coords.x - cx;
     const dy = coords.y - cy;
     let angleRad = Math.atan2(dy, dx);
     let angleDeg = (angleRad * 180) / Math.PI;
     if (angleDeg < 0) angleDeg += 360;
 
-    // Si el texto está en curva superior (195° a 345°)
-    if (item.arcPosition === 'top') {
-      let deg = angleDeg;
-      if (deg < 90) deg += 360;
-      let pct = ((deg - 195) / (345 - 195)) * 100;
-      pct = Math.max(10, Math.min(90, pct));
-      item.offset = Math.round(pct);
-    } else {
-      // Curva inferior (de 165° a 15°): a medida que el puntero avanza de izq (165°) a der (15°), el ángulo decrece
-      let deg = angleDeg;
-      if (deg > 270) deg -= 360;
-      let pct = ((165 - deg) / (165 - 15)) * 100;
-      pct = Math.max(10, Math.min(90, pct));
-      item.offset = Math.round(pct);
-    }
+    let delta = angleDeg - studio.dragStart.pointerAngle;
+    let newAngle = (studio.dragStart.itemAngle + delta) % 360;
+    if (newAngle < 0) newAngle += 360;
+
+    item.angle = Math.round(newAngle);
     renderVirolaCanvas();
   } else if (studio.dragMode === 'move') {
     // Mover polarmente alrededor del anillo de la virola
@@ -1301,6 +1435,7 @@ function getPointerCoords(e) {
 function updateActiveItemFloatingBar() {
   const bar = document.getElementById('virola-active-item-controls');
   const badge = document.getElementById('active-item-name-badge');
+  const modeControls = document.getElementById('active-text-mode-controls');
   if (!bar) return;
 
   const item = studio.items.find(i => i.id === studio.activeItemId);
@@ -1312,9 +1447,21 @@ function updateActiveItemFloatingBar() {
   bar.style.display = 'flex';
   if (badge) {
     if (item.type === 'text') {
-      badge.innerHTML = `<i class="fas fa-font"></i> Texto: "${item.text}"`;
+      badge.innerHTML = `<i class="fas fa-font"></i> "${item.text}"`;
     } else {
       badge.innerHTML = `<i class="fas fa-shield"></i> ${item.name || 'Diseño'}`;
+    }
+  }
+
+  if (modeControls) {
+    if (item.type === 'text') {
+      modeControls.style.display = 'flex';
+      const curMode = item.arcPosition || 'top';
+      modeControls.querySelectorAll('.text-mode-pill-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-mode') === curMode);
+      });
+    } else {
+      modeControls.style.display = 'none';
     }
   }
 }
@@ -1324,7 +1471,7 @@ function stepItemScale(delta) {
   if (!item) return;
 
   if (item.type === 'text') {
-    item.fontSize = Math.max(14, Math.min(32, (item.fontSize || 22) + Math.round(delta * 20)));
+    item.fontSize = Math.max(12, Math.min(36, (item.fontSize || 22) + Math.round(delta * 20)));
   } else {
     const cur = item.scale || 1.0;
     item.scale = parseFloat(Math.max(STUDIO_CONFIG.minScale, Math.min(STUDIO_CONFIG.maxScale, cur + delta)).toFixed(2));
@@ -1337,8 +1484,14 @@ function stepItemRotation(degDelta) {
   if (!item) return;
 
   if (item.type === 'text') {
-    // Mover texto a lo largo del arco
-    item.offset = Math.max(10, Math.min(90, (item.offset || 50) + (degDelta > 0 ? 5 : -5)));
+    if (item.arcPosition === 'straight') {
+      item.rotation = ((item.rotation || 0) + degDelta) % 360;
+    } else {
+      const curAngle = item.angle !== undefined ? item.angle : (item.arcPosition === 'bottom' ? 90 : 270);
+      let newAngle = (curAngle + degDelta) % 360;
+      if (newAngle < 0) newAngle += 360;
+      item.angle = Math.round(newAngle);
+    }
   } else {
     item.rotation = ((item.rotation || 0) + degDelta) % 360;
   }
@@ -1353,30 +1506,46 @@ function autoCenterAndBalanceVirola() {
   const hasTopText = textItems.some(t => t.arcPosition === 'top');
   const hasBottomText = textItems.some(t => t.arcPosition === 'bottom');
 
-  // 1. Centrar y balancear textos curvos
+  // 1. Centrar y balancear textos
   const topTexts = textItems.filter(t => t.arcPosition === 'top');
   if (topTexts.length === 1) {
-    topTexts[0].offset = 50;
+    topTexts[0].angle = 270;
   } else if (topTexts.length === 2) {
-    topTexts[0].offset = 32;
-    topTexts[1].offset = 68;
+    topTexts[0].angle = 245;
+    topTexts[1].angle = 295;
   } else if (topTexts.length >= 3) {
+    const step = 60 / (topTexts.length - 1);
     topTexts.forEach((t, idx) => {
-      t.offset = Math.round(20 + (idx * 60) / (topTexts.length - 1));
+      t.angle = Math.round(240 + idx * step);
     });
   }
 
   const bottomTexts = textItems.filter(t => t.arcPosition === 'bottom');
   if (bottomTexts.length === 1) {
-    bottomTexts[0].offset = 50;
+    bottomTexts[0].angle = 90;
   } else if (bottomTexts.length === 2) {
-    bottomTexts[0].offset = 32;
-    bottomTexts[1].offset = 68;
+    bottomTexts[0].angle = 115;
+    bottomTexts[1].angle = 65;
   } else if (bottomTexts.length >= 3) {
+    const step = 60 / (bottomTexts.length - 1);
     bottomTexts.forEach((t, idx) => {
-      t.offset = Math.round(20 + (idx * 60) / (bottomTexts.length - 1));
+      t.angle = Math.round(120 - idx * step);
     });
   }
+
+  const straightTexts = textItems.filter(t => t.arcPosition === 'straight');
+  straightTexts.forEach((t, idx) => {
+    if (idx === 0 && !hasTopText) {
+      t.angle = 270;
+      t.rotation = 0;
+    } else if (idx === 1 || (idx === 0 && hasTopText && !hasBottomText)) {
+      t.angle = 90;
+      t.rotation = 0;
+    } else {
+      t.angle = Math.round((idx * 45) % 360);
+      t.rotation = 0;
+    }
+  });
 
   // 2. Distribuir y alinear todos los íconos/escudos sin colisión
   const iconItems = studio.items.filter(i => i.type === 'icon');
