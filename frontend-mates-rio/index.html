@@ -26,8 +26,34 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Immediate Theme Initializer (Sincronizado con Panel de Administración) -->
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'light') {
+        document.documentElement.classList.add('theme-light');
+        document.documentElement.classList.remove('theme-dark');
+      } else {
+        document.documentElement.classList.add('theme-dark');
+        document.documentElement.classList.remove('theme-light');
+      }
+    })();
+  </script>
 </head>
 <body>
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'light') {
+        document.body.classList.add('theme-light', 'theme-inverted');
+        document.body.classList.remove('theme-dark');
+      } else {
+        document.body.classList.add('theme-dark');
+        document.body.classList.remove('theme-light', 'theme-inverted');
+      }
+    })();
+  </script>
 
   <!-- Top Scroll Progress Indicator -->
   <div class="scroll-progress-bar" id="scroll-progress-bar"></div>

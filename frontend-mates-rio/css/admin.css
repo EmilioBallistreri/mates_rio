@@ -1202,7 +1202,7 @@ body.admin-body {
   vertical-align: middle;
 }
 
-.admin-data-table tr:hover td {
+body:not(.admin-dark-mode) .admin-data-table tr:hover td {
   background: #fdfcfa;
 }
 
@@ -2747,46 +2747,85 @@ body.admin-dark-mode .kpi-footer-sub {
   color: #8c7e73;
 }
 
-body.admin-dark-mode .table-responsive-card {
+body.admin-dark-mode .table-responsive-card,
+html.admin-dark-mode .table-responsive-card {
   background: #1c1611;
   border-color: #2e241c;
 }
 
-body.admin-dark-mode .admin-data-table th {
+body.admin-dark-mode .admin-data-table th,
+html.admin-dark-mode .admin-data-table th {
   background: #231b14;
   color: #dfb542;
   border-bottom-color: #2e241c;
 }
 
-body.admin-dark-mode .admin-data-table td {
+body.admin-dark-mode .admin-data-table td,
+html.admin-dark-mode .admin-data-table td {
   border-bottom-color: #261e16;
   color: #f5efe6;
 }
 
-body.admin-dark-mode .admin-data-table tr:hover,
-body.admin-dark-mode .admin-data-table tbody tr:hover {
-  background: #281f18 !important;
+body.admin-dark-mode .admin-data-table tr,
+body.admin-dark-mode .admin-data-table tbody tr,
+html.admin-dark-mode .admin-data-table tr,
+html.admin-dark-mode .admin-data-table tbody tr {
+  background: transparent;
 }
 
+body.admin-dark-mode .admin-data-table tr:hover,
+body.admin-dark-mode .admin-data-table tbody tr:hover,
 body.admin-dark-mode .admin-data-table tr:hover td,
-body.admin-dark-mode .admin-data-table tbody tr:hover td {
-  background: #281f18 !important;
-  color: #f5efe6 !important;
+body.admin-dark-mode .admin-data-table tbody tr:hover td,
+html.admin-dark-mode .admin-data-table tr:hover,
+html.admin-dark-mode .admin-data-table tbody tr:hover,
+html.admin-dark-mode .admin-data-table tr:hover td,
+html.admin-dark-mode .admin-data-table tbody tr:hover td {
+  background: #281f17 !important;
+  background-color: #281f17 !important;
+  color: #ffffff !important;
+}
+
+body.admin-dark-mode .admin-data-table tr:hover td *,
+html.admin-dark-mode .admin-data-table tr:hover td * {
+  color: #f5efe6;
 }
 
 body.admin-dark-mode .admin-data-table tr:hover td strong,
+body.admin-dark-mode .admin-data-table tr:hover td div,
+body.admin-dark-mode .admin-data-table tr:hover td span,
+body.admin-dark-mode .admin-data-table tr:hover td b,
 body.admin-dark-mode .admin-data-table tr:hover td .table-product-name,
 body.admin-dark-mode .admin-data-table tr:hover td .order-items-summary,
 body.admin-dark-mode .admin-data-table tr:hover td .admin-order-customer,
-body.admin-dark-mode .admin-data-table tr:hover td .admin-log-user {
+body.admin-dark-mode .admin-data-table tr:hover td .admin-log-user,
+html.admin-dark-mode .admin-data-table tr:hover td strong,
+html.admin-dark-mode .admin-data-table tr:hover td div,
+html.admin-dark-mode .admin-data-table tr:hover td span,
+html.admin-dark-mode .admin-data-table tr:hover td b,
+html.admin-dark-mode .admin-data-table tr:hover td .table-product-name,
+html.admin-dark-mode .admin-data-table tr:hover td .order-items-summary,
+html.admin-dark-mode .admin-data-table tr:hover td .admin-order-customer,
+html.admin-dark-mode .admin-data-table tr:hover td .admin-log-user {
   color: #ffffff !important;
+}
+
+body.admin-dark-mode .admin-data-table tr:hover td strong[style*="admin-leather"],
+html.admin-dark-mode .admin-data-table tr:hover td strong[style*="admin-leather"] {
+  color: #dfb542 !important;
 }
 
 body.admin-dark-mode .admin-data-table tr:hover td small,
 body.admin-dark-mode .admin-data-table tr:hover td .text-muted,
 body.admin-dark-mode .admin-data-table tr:hover td .table-product-sku,
-body.admin-dark-mode .admin-data-table tr:hover td .admin-log-time {
-  color: #bfa892 !important;
+body.admin-dark-mode .admin-data-table tr:hover td .admin-log-time,
+body.admin-dark-mode .admin-data-table tr:hover td .col-order-date,
+html.admin-dark-mode .admin-data-table tr:hover td small,
+html.admin-dark-mode .admin-data-table tr:hover td .text-muted,
+html.admin-dark-mode .admin-data-table tr:hover td .table-product-sku,
+html.admin-dark-mode .admin-data-table tr:hover td .admin-log-time,
+html.admin-dark-mode .admin-data-table tr:hover td .col-order-date {
+  color: #dfb542 !important;
 }
 
 body.admin-dark-mode .table-filter-bar,

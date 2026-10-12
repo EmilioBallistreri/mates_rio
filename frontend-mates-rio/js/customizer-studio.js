@@ -42,7 +42,7 @@ const studio = {
   dragStart: { x: 0, y: 0, angle: 0, itemAngle: 0, itemRotation: 0, itemScale: 1, itemOffset: 50 }
 };
 
-// BIBLIOTECA DE DISEÑOS VECTORIALES ORIGINALES CATEGORIZADOS
+// BIBLIOTECA DE DISEÑOS VECTORIALES ORIGINALES CATEGORIZADOS (NOMBRES PROLIJOS Y LIMPIOS)
 const VECTOR_CATEGORIES = {
   deportes: {
     name: '🏆 Escudos Deportivos',
@@ -50,8 +50,8 @@ const VECTOR_CATEGORIES = {
       { id: 'afa', name: 'AFA 3 Estrellas', file: 'assets/images/designs/afa.svg' },
       { id: 'boca', name: 'Boca Juniors', file: 'assets/images/designs/boca.svg' },
       { id: 'river', name: 'River Plate', file: 'assets/images/designs/river.svg' },
-      { id: 'central', name: 'Rosario Central (Oficial)', file: 'assets/images/designs/central.svg' },
-      { id: 'newells', name: "Newell's Old Boys (Oficial)", file: 'assets/images/designs/newells.svg' },
+      { id: 'central', name: 'Rosario Central', file: 'assets/images/designs/central.svg' },
+      { id: 'newells', name: "Newell's Old Boys", file: 'assets/images/designs/newells.svg' },
       { id: 'racing', name: 'Racing Club', file: 'assets/images/designs/racing.svg' },
       { id: 'independiente', name: 'Independiente', file: 'assets/images/designs/independiente.svg' },
       { id: 'sanlorenzo', name: 'San Lorenzo', file: 'assets/images/designs/sanlorenzo.svg' },
@@ -65,10 +65,10 @@ const VECTOR_CATEGORIES = {
     name: '🇦🇷 Motivos Criollos & Tradición',
     items: [
       { id: 'soldemayo', name: 'Sol de Mayo', file: 'assets/images/designs/soldemayo.svg' },
-      { id: 'escarapela', name: 'Escarapela Argentina (Original)', file: 'assets/images/designs/escarapela.svg' },
-      { id: 'ceibo', name: 'Flor de Ceibo Nacional (Original)', file: 'assets/images/designs/ceibo.svg' },
-      { id: 'mate_icono', name: 'Mate Tradicional Imperial (Original)', file: 'assets/images/designs/mate.svg' },
-      { id: 'cruz', name: 'Cruz Criolla Gauchesca (Original)', file: 'assets/images/designs/cruz.svg' },
+      { id: 'escarapela', name: 'Escarapela Argentina', file: 'assets/images/designs/escarapela.svg' },
+      { id: 'ceibo', name: 'Flor de Ceibo Nacional', file: 'assets/images/designs/ceibo.svg' },
+      { id: 'mate_icono', name: 'Mate Tradicional Imperial', file: 'assets/images/designs/mate.svg' },
+      { id: 'cruz', name: 'Cruz Criolla Gauchesca', file: 'assets/images/designs/cruz.svg' },
       { id: 'caballo', name: 'Caballo Criollo', file: 'assets/images/designs/caballo.svg' },
       { id: 'guardapampa', name: 'Guarda Pampa', file: 'assets/images/designs/guardapampa.svg' },
       { id: 'malvinas', name: 'Islas Malvinas', file: 'assets/images/designs/malvinas.svg' },
@@ -78,11 +78,11 @@ const VECTOR_CATEGORIES = {
   fauna: {
     name: '🦅 Fauna & Naturaleza',
     items: [
-      { id: 'condor', name: 'Cóndor Andino (Original)', file: 'assets/images/designs/condor.svg' },
-      { id: 'hornero', name: 'Hornero Nacional (Original)', file: 'assets/images/designs/hornero.svg' },
-      { id: 'carpincho', name: 'Carpincho / Capibara (Original)', file: 'assets/images/designs/carpincho.svg' },
-      { id: 'guanaco', name: 'Guanaco Criollo (Original)', file: 'assets/images/designs/guanaco.svg' },
-      { id: 'ciervo', name: 'Ciervo de los Pantanos (Original)', file: 'assets/images/designs/ciervo.svg' }
+      { id: 'condor', name: 'Cóndor Andino', file: 'assets/images/designs/condor.svg' },
+      { id: 'hornero', name: 'Hornero Nacional', file: 'assets/images/designs/hornero.svg' },
+      { id: 'carpincho', name: 'Carpincho', file: 'assets/images/designs/carpincho.svg' },
+      { id: 'guanaco', name: 'Guanaco Criollo', file: 'assets/images/designs/guanaco.svg' },
+      { id: 'ciervo', name: 'Ciervo de los Pantanos', file: 'assets/images/designs/ciervo.svg' }
     ]
   },
   frases: {
@@ -100,11 +100,11 @@ const VECTOR_CATEGORIES = {
   simbolos: {
     name: '✨ Símbolos & Formas',
     items: [
-      { id: 'corona', name: 'Corona Imperial (Original)', file: 'assets/images/designs/corona.svg' },
-      { id: 'laurel', name: 'Corona de Laureles (Original)', file: 'assets/images/designs/laurel.svg' },
-      { id: 'estrella_fed', name: 'Estrella Federal (Original)', file: 'assets/images/designs/estrella_fed.svg' },
-      { id: 'infinito', name: 'Infinito Eterno (Original)', file: 'assets/images/designs/infinito.svg' },
-      { id: 'corazon', name: 'Corazón de Gaucho (Original)', file: 'assets/images/designs/corazon.svg' }
+      { id: 'corona', name: 'Corona Imperial', file: 'assets/images/designs/corona.svg' },
+      { id: 'laurel', name: 'Corona de Laureles', file: 'assets/images/designs/laurel.svg' },
+      { id: 'estrella_fed', name: 'Estrella Federal', file: 'assets/images/designs/estrella_fed.svg' },
+      { id: 'infinito', name: 'Infinito Eterno', file: 'assets/images/designs/infinito.svg' },
+      { id: 'corazon', name: 'Corazón de Gaucho', file: 'assets/images/designs/corazon.svg' }
     ]
   }
 };
@@ -112,14 +112,23 @@ const VECTOR_CATEGORIES = {
 // TIPOGRAFÍAS DE GRABADO DISPONIBLES EN GOOGLE FONTS (AMPLIADAS Y PROFESIONALES)
 const GOOGLE_FONTS = [
   { id: 'Cinzel', name: 'Cinzel' },
+  { id: 'Cinzel Decorative', name: 'Cinzel Decorative' },
   { id: 'Playfair Display', name: 'Playfair Display' },
   { id: 'Cormorant Garamond', name: 'Cormorant Garamond' },
   { id: 'Lora', name: 'Lora' },
   { id: 'Montserrat', name: 'Montserrat' },
+  { id: 'Lato', name: 'Lato' },
   { id: 'Dancing Script', name: 'Dancing Script' },
   { id: 'Great Vibes', name: 'Great Vibes' },
   { id: 'Alex Brush', name: 'Alex Brush' },
+  { id: 'Parisienne', name: 'Parisienne' },
+  { id: 'Pinyon Script', name: 'Pinyon Script' },
+  { id: 'Sacramento', name: 'Sacramento' },
+  { id: 'Satisfy', name: 'Satisfy' },
+  { id: 'Italianno', name: 'Italianno' },
+  { id: 'Rochester', name: 'Rochester' },
   { id: 'Marck Script', name: 'Marck Script' },
+  { id: 'Abril Fatface', name: 'Abril Fatface' },
   { id: 'Bebas Neue', name: 'Bebas Neue' },
   { id: 'Outfit', name: 'Outfit' },
   { id: 'Poppins', name: 'Poppins' },
@@ -195,6 +204,24 @@ function toggleStudioAccordion(sectionKey) {
   const header = card.querySelector('.studio-accordion-header');
   if (header) {
     header.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+  }
+}
+
+// Sub-acordeón de Tipografías orfebres
+function toggleFontsAccordion() {
+  const card = document.getElementById('subaccordion-fonts');
+  const body = document.getElementById('subaccordion-fonts-body');
+  const header = card ? card.querySelector('.studio-subaccordion-header') : null;
+  if (!card || !body) return;
+  const isOpen = card.classList.contains('open');
+  if (isOpen) {
+    card.classList.remove('open');
+    body.style.display = 'none';
+    if (header) header.setAttribute('aria-expanded', 'false');
+  } else {
+    card.classList.add('open');
+    body.style.display = 'block';
+    if (header) header.setAttribute('aria-expanded', 'true');
   }
 }
 
@@ -394,13 +421,38 @@ function onStudioTextInput(val) {
     textItem.font = studio.selectedFont;
     renderVirolaCanvas();
     updateActiveItemFloatingBar();
+  } else if (val.trim()) {
+    // Si no había item de texto creado aún, crearlo inmediatamente en el arco activo
+    const newItem = {
+      id: 'text_' + Date.now(),
+      type: 'text',
+      text: val,
+      font: studio.selectedFont,
+      fontSize: studio.fontSize,
+      arcPosition: studio.arcPosition,
+      offset: 50
+    };
+    studio.items.push(newItem);
+    studio.activeItemId = newItem.id;
+    renderVirolaCanvas();
+    updateActiveItemFloatingBar();
   }
 }
 
 function clearStudioText() {
   const input = document.getElementById('studio-text-input');
   if (input) input.value = '';
-  onStudioTextInput('');
+  studio.textInput = '';
+  const counter = document.getElementById('studio-text-counter');
+  if (counter) counter.textContent = '0/35';
+
+  let textItem = studio.items.find(i => i.id === studio.activeItemId && i.type === 'text');
+  if (!textItem) {
+    textItem = studio.items.find(i => i.type === 'text' && i.arcPosition === studio.arcPosition);
+  }
+  if (textItem) {
+    deleteVirolaItem(textItem.id);
+  }
 }
 
 function applyTextToVirola() {
@@ -410,15 +462,30 @@ function applyTextToVirola() {
     return;
   }
 
-  // Comprobar si ya existe texto en esa posición de arco
-  let existing = studio.items.find(i => i.type === 'text' && i.arcPosition === studio.arcPosition);
-  if (existing) {
-    existing.text = text;
-    existing.font = studio.selectedFont;
-    existing.fontSize = studio.fontSize;
-    existing.offset = 50;
-    studio.activeItemId = existing.id;
+  const textCount = studio.items.filter(i => i.type === 'text').length;
+  if (textCount >= 4) {
+    showNotificationToast('Límite de 4 textos alcanzado para la virola', 'fa-info-circle');
+    return;
+  }
+
+  // Si hay un texto actualmente seleccionado, actualizar ese texto
+  let activeText = studio.items.find(i => i.id === studio.activeItemId && i.type === 'text');
+  if (activeText) {
+    activeText.text = text;
+    activeText.font = studio.selectedFont;
+    activeText.fontSize = studio.fontSize;
+    activeText.arcPosition = studio.arcPosition;
+    studio.activeItemId = activeText.id;
+    showNotificationToast('Texto actualizado en la virola', 'fa-check');
   } else {
+    // Si no hay texto seleccionado, agregar uno nuevo en la posición elegida
+    const sameArcTexts = studio.items.filter(i => i.type === 'text' && i.arcPosition === studio.arcPosition);
+    let newOffset = 50;
+    if (sameArcTexts.length === 1) {
+      sameArcTexts[0].offset = 32;
+      newOffset = 68;
+    }
+
     const newItem = {
       id: 'text_' + Date.now(),
       type: 'text',
@@ -426,15 +493,15 @@ function applyTextToVirola() {
       font: studio.selectedFont,
       fontSize: studio.fontSize,
       arcPosition: studio.arcPosition,
-      offset: 50
+      offset: newOffset
     };
     studio.items.push(newItem);
     studio.activeItemId = newItem.id;
+    showNotificationToast('Texto agregado a la virola', 'fa-check');
   }
 
   renderVirolaCanvas();
   updateActiveItemFloatingBar();
-  showNotificationToast('Texto aplicado en la curvatura de la virola', 'fa-check');
 }
 
 function toggleArcPosition(pos) {
@@ -443,15 +510,39 @@ function toggleArcPosition(pos) {
     b.classList.toggle('active', b.getAttribute('data-pos') === pos);
   });
 
-  const textInput = document.getElementById('studio-text-input');
-  const existing = studio.items.find(i => i.type === 'text' && i.arcPosition === pos);
-  if (existing && textInput) {
-    textInput.value = existing.text;
-    studio.textInput = existing.text;
-    const counter = document.getElementById('studio-text-counter');
-    if (counter) counter.textContent = `${existing.text.length}/35`;
-    studio.activeItemId = existing.id;
+  // Si hay un texto activo o seleccionado, o solo un texto existente, moverlo inmediatamente a la nueva curva
+  let targetText = studio.items.find(i => i.id === studio.activeItemId && i.type === 'text');
+  if (!targetText) {
+    const textItems = studio.items.filter(i => i.type === 'text');
+    if (textItems.length === 1) {
+      targetText = textItems[0];
+    }
+  }
+
+  if (targetText) {
+    targetText.arcPosition = pos;
+    studio.activeItemId = targetText.id;
+    const textInput = document.getElementById('studio-text-input');
+    if (textInput) {
+      textInput.value = targetText.text;
+      studio.textInput = targetText.text;
+      const counter = document.getElementById('studio-text-counter');
+      if (counter) counter.textContent = `${targetText.text.length}/35`;
+    }
+    renderVirolaCanvas();
     updateActiveItemFloatingBar();
+    showNotificationToast(`Texto posicionado en ${pos === 'top' ? 'Curva Superior' : 'Curva Inferior'}`, 'fa-arrows-up-down');
+  } else {
+    const existing = studio.items.find(i => i.type === 'text' && i.arcPosition === pos);
+    const textInput = document.getElementById('studio-text-input');
+    if (existing && textInput) {
+      textInput.value = existing.text;
+      studio.textInput = existing.text;
+      const counter = document.getElementById('studio-text-counter');
+      if (counter) counter.textContent = `${existing.text.length}/35`;
+      studio.activeItemId = existing.id;
+      updateActiveItemFloatingBar();
+    }
   }
 }
 
@@ -579,7 +670,7 @@ function addVectorToVirola(itemId, catKey) {
   showNotificationToast(`"${itemDef.name}" agregado a la virola`, 'fa-circle-check');
 }
 
-// Aplicar Frase a la virola de forma curva y limpia
+// Aplicar Frase a la virola de forma curva y limpia (sin sobreescribir otros textos)
 function applyPhraseToVirola(phraseText) {
   studio.textInput = phraseText;
   const textInput = document.getElementById('studio-text-input');
@@ -587,25 +678,47 @@ function applyPhraseToVirola(phraseText) {
   const counter = document.getElementById('studio-text-counter');
   if (counter) counter.textContent = `${phraseText.length}/35`;
 
-  // Buscar si ya existe texto curvo
-  let existing = studio.items.find(i => i.type === 'text' && i.arcPosition === studio.arcPosition);
-  if (existing) {
-    existing.text = phraseText;
-    existing.offset = 50;
-    studio.activeItemId = existing.id;
-  } else {
-    const newItem = {
-      id: 'text_' + Date.now(),
-      type: 'text',
-      text: phraseText,
-      font: studio.selectedFont,
-      fontSize: studio.fontSize,
-      arcPosition: studio.arcPosition,
-      offset: 50
-    };
-    studio.items.push(newItem);
-    studio.activeItemId = newItem.id;
+  const textCount = studio.items.filter(i => i.type === 'text').length;
+  if (textCount >= 4) {
+    showNotificationToast('Límite de 4 textos alcanzado para la virola', 'fa-info-circle');
+    return;
   }
+
+  // Comprobar ocupación de arcos
+  const hasTop = studio.items.some(i => i.type === 'text' && i.arcPosition === 'top');
+  const hasBottom = studio.items.some(i => i.type === 'text' && i.arcPosition === 'bottom');
+
+  let targetPos = studio.arcPosition;
+  if (hasTop && !hasBottom) {
+    targetPos = 'bottom';
+    studio.arcPosition = 'bottom';
+  } else if (!hasTop && hasBottom) {
+    targetPos = 'top';
+    studio.arcPosition = 'top';
+  }
+
+  document.querySelectorAll('.arc-segment-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-pos') === targetPos);
+  });
+
+  const sameArcTexts = studio.items.filter(i => i.type === 'text' && i.arcPosition === targetPos);
+  let newOffset = 50;
+  if (sameArcTexts.length === 1) {
+    sameArcTexts[0].offset = 32;
+    newOffset = 68;
+  }
+
+  const newItem = {
+    id: 'text_' + Date.now(),
+    type: 'text',
+    text: phraseText,
+    font: studio.selectedFont,
+    fontSize: studio.fontSize,
+    arcPosition: targetPos,
+    offset: newOffset
+  };
+  studio.items.push(newItem);
+  studio.activeItemId = newItem.id;
 
   renderVirolaCanvas();
   updateActiveItemFloatingBar();
@@ -672,48 +785,62 @@ function handleCustomImageUpload(e) {
       const imgData = ctx.getImageData(0, 0, w, h);
       const data = imgData.data;
 
-      // Muestrear las esquinas para determinar color de fondo predominante
-      const corners = [0, (w - 1) * 4, ((h - 1) * w) * 4, ((h - 1) * w + (w - 1)) * 4];
+      // Muestrear todo el perímetro (bordes superior, inferior, izquierdo, derecho) para determinar el color de fondo predominante
       let bgR = 0, bgG = 0, bgB = 0, count = 0;
-      corners.forEach(idx => {
-        if (data[idx + 3] > 40) {
-          bgR += data[idx];
-          bgG += data[idx + 1];
-          bgB += data[idx + 2];
-          count++;
-        }
-      });
+      const step = Math.max(1, Math.floor(w / 30));
+      for (let x = 0; x < w; x += step) {
+        // Top edge
+        const topIdx = x * 4;
+        if (data[topIdx + 3] > 40) { bgR += data[topIdx]; bgG += data[topIdx + 1]; bgB += data[topIdx + 2]; count++; }
+        // Bottom edge
+        const botIdx = ((h - 1) * w + x) * 4;
+        if (data[botIdx + 3] > 40) { bgR += data[botIdx]; bgG += data[botIdx + 1]; bgB += data[botIdx + 2]; count++; }
+      }
+      for (let y = 0; y < h; y += step) {
+        // Left edge
+        const leftIdx = (y * w) * 4;
+        if (data[leftIdx + 3] > 40) { bgR += data[leftIdx]; bgG += data[leftIdx + 1]; bgB += data[leftIdx + 2]; count++; }
+        // Right edge
+        const rightIdx = (y * w + (w - 1)) * 4;
+        if (data[rightIdx + 3] > 40) { bgR += data[rightIdx]; bgG += data[rightIdx + 1]; bgB += data[rightIdx + 2]; count++; }
+      }
+
       if (count > 0) {
         bgR /= count; bgG /= count; bgB /= count;
       } else {
         bgR = 255; bgG = 255; bgB = 255;
       }
       const bgLum = 0.299 * bgR + 0.587 * bgG + 0.114 * bgB;
-      const isLightBg = bgLum > 120;
+      const isLightBg = bgLum > 110;
 
-      // Binarización inteligente y recorte de fondo para grabado láser orfebre
+      // Binarización y recorte de fondo de alta definición para grabado láser orfebre
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
         const a = data[i + 3];
 
-        if (a < 30) {
+        // Ya es transparente en el archivo original
+        if (a < 25) {
           data[i + 3] = 0;
           continue;
         }
 
         const lum = 0.299 * r + 0.587 * g + 0.114 * b;
         const distToBg = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
+        const colorSpread = Math.max(r, g, b) - Math.min(r, g, b);
+        const isNearNeutralGray = colorSpread < 20 && lum > 185;
 
-        // Si es fondo (cercano al tono del fondo o blanco en fondos claros)
-        if (distToBg < 55 || (isLightBg && lum > 200) || (!isLightBg && lum < 40)) {
-          data[i + 3] = 0; // Transparencia total
+        // Si es fondo (cercano al tono del fondo, blanco/gris claro en fondos claros, o fondo oscuro)
+        if (distToBg < 65 || (isLightBg && lum > 210) || isNearNeutralGray || (!isLightBg && lum < 35)) {
+          data[i + 3] = 0; // Transparencia total del fondo
         } else {
-          // Motivo gráfico: convertir a grabado láser negro orfebre (#120e0a)
+          // Motivo gráfico: grabado láser negro orfebre nítido (#120e0a) con suavizado de bordes
           let edgeAlpha = 255;
-          if (distToBg < 80) {
-            edgeAlpha = Math.min(255, Math.max(0, Math.round(((distToBg - 55) / 25) * 255)));
+          if (distToBg < 90) {
+            edgeAlpha = Math.min(255, Math.max(0, Math.round(((distToBg - 65) / 25) * 255)));
+          } else if (lum > 175) {
+            edgeAlpha = Math.min(255, Math.max(0, Math.round(((210 - lum) / 35) * 255)));
           }
           data[i] = 18;
           data[i + 1] = 14;
@@ -1090,12 +1217,16 @@ function onCanvasPointerMove(e) {
 
     // Si el texto está en curva superior (195° a 345°)
     if (item.arcPosition === 'top') {
-      let pct = ((angleDeg - 195) / (345 - 195)) * 100;
+      let deg = angleDeg;
+      if (deg < 90) deg += 360;
+      let pct = ((deg - 195) / (345 - 195)) * 100;
       pct = Math.max(10, Math.min(90, pct));
       item.offset = Math.round(pct);
     } else {
-      // Curva inferior (15° a 165°)
-      let pct = ((angleDeg - 15) / (165 - 15)) * 100;
+      // Curva inferior (de 165° a 15°): a medida que el puntero avanza de izq (165°) a der (15°), el ángulo decrece
+      let deg = angleDeg;
+      if (deg > 270) deg -= 360;
+      let pct = ((165 - deg) / (165 - 15)) * 100;
       pct = Math.max(10, Math.min(90, pct));
       item.offset = Math.round(pct);
     }
@@ -1218,58 +1349,89 @@ function stepItemRotation(degDelta) {
 // 11. CENTRADO Y DISTRIBUCIÓN AUTOMÁTICA PROFESIONAL DE LA VIROLA
 // ==========================================================================
 function autoCenterAndBalanceVirola() {
-  // 1. Centrar todos los textos curvos
   const textItems = studio.items.filter(i => i.type === 'text');
-  textItems.forEach(t => {
-    t.offset = 50; // Exactamente al centro del arco
-  });
+  const hasTopText = textItems.some(t => t.arcPosition === 'top');
+  const hasBottomText = textItems.some(t => t.arcPosition === 'bottom');
 
-  // 2. Distribuir y alinear todos los íconos/escudos
+  // 1. Centrar y balancear textos curvos
+  const topTexts = textItems.filter(t => t.arcPosition === 'top');
+  if (topTexts.length === 1) {
+    topTexts[0].offset = 50;
+  } else if (topTexts.length === 2) {
+    topTexts[0].offset = 32;
+    topTexts[1].offset = 68;
+  } else if (topTexts.length >= 3) {
+    topTexts.forEach((t, idx) => {
+      t.offset = Math.round(20 + (idx * 60) / (topTexts.length - 1));
+    });
+  }
+
+  const bottomTexts = textItems.filter(t => t.arcPosition === 'bottom');
+  if (bottomTexts.length === 1) {
+    bottomTexts[0].offset = 50;
+  } else if (bottomTexts.length === 2) {
+    bottomTexts[0].offset = 32;
+    bottomTexts[1].offset = 68;
+  } else if (bottomTexts.length >= 3) {
+    bottomTexts.forEach((t, idx) => {
+      t.offset = Math.round(20 + (idx * 60) / (bottomTexts.length - 1));
+    });
+  }
+
+  // 2. Distribuir y alinear todos los íconos/escudos sin colisión
   const iconItems = studio.items.filter(i => i.type === 'icon');
   const count = iconItems.length;
 
   if (count === 1) {
-    // Si hay texto superior, colocar el ícono abajo centrado (90°)
-    const hasTopText = textItems.some(t => t.arcPosition === 'top');
-    iconItems[0].angle = hasTopText ? 90 : 270;
+    if (hasTopText && !hasBottomText) {
+      iconItems[0].angle = 90; // Abajo centro
+    } else if (!hasTopText && hasBottomText) {
+      iconItems[0].angle = 270; // Arriba centro
+    } else if (hasTopText && hasBottomText) {
+      iconItems[0].angle = 0; // A la derecha
+    } else {
+      iconItems[0].angle = 90;
+    }
     iconItems[0].rotation = 0;
     iconItems[0].radius = STUDIO_CONFIG.rRing;
     iconItems[0].scale = 1.05;
   } else if (count === 2) {
-    // Colocación simétrica izquierda (180°) y derecha (0°)
-    iconItems[0].angle = 180;
+    // Si hay texto arriba o abajo, los 2 iconos van perfectamente en flancos (180° y 0°)
+    iconItems[0].angle = 180; // Izquierda
     iconItems[0].rotation = 0;
     iconItems[0].radius = STUDIO_CONFIG.rRing;
     iconItems[0].scale = 1.0;
 
-    iconItems[1].angle = 0;
+    iconItems[1].angle = 0; // Derecha
     iconItems[1].rotation = 0;
     iconItems[1].radius = STUDIO_CONFIG.rRing;
     iconItems[1].scale = 1.0;
   } else if (count === 3) {
-    // 3 motivos: izquierda inferior (150°), base central (90°), derecha inferior (30°)
-    iconItems[0].angle = 150;
-    iconItems[0].rotation = 0;
-    iconItems[0].radius = STUDIO_CONFIG.rRing;
-    iconItems[0].scale = 0.95;
-
-    iconItems[1].angle = 90;
-    iconItems[1].rotation = 0;
-    iconItems[1].radius = STUDIO_CONFIG.rRing;
-    iconItems[1].scale = 1.0;
-
-    iconItems[2].angle = 30;
-    iconItems[2].rotation = 0;
-    iconItems[2].radius = STUDIO_CONFIG.rRing;
-    iconItems[2].scale = 0.95;
+    if (hasTopText && !hasBottomText) {
+      iconItems[0].angle = 150;
+      iconItems[1].angle = 90;
+      iconItems[2].angle = 30;
+    } else if (!hasTopText && hasBottomText) {
+      iconItems[0].angle = 210;
+      iconItems[1].angle = 270;
+      iconItems[2].angle = 330;
+    } else {
+      iconItems[0].angle = 180;
+      iconItems[1].angle = 0;
+      iconItems[2].angle = 90;
+    }
+    iconItems.forEach(item => {
+      item.rotation = 0;
+      item.radius = STUDIO_CONFIG.rRing;
+      item.scale = 0.95;
+    });
   } else if (count >= 4) {
-    // Distribuir armónicamente en el perímetro
     const step = 360 / count;
     iconItems.forEach((item, idx) => {
       item.angle = Math.round((90 + idx * step) % 360);
       item.rotation = 0;
       item.radius = STUDIO_CONFIG.rRing;
-      item.scale = 0.9;
+      item.scale = 0.88;
     });
   }
 
@@ -1419,4 +1581,88 @@ function showNotificationToast(msg, icon = 'fa-info-circle') {
   } else {
     console.log(`[Toast]: ${msg}`);
   }
+}
+
+// ==========================================================================
+// 13. MODAL DE FINALIZACIÓN Y OPCIONES DE COMPRA
+// ==========================================================================
+function openCompletionModal() {
+  const mate = typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA.find(p => p.id === studio.selectedMateId) : null;
+  const mateName = mate ? mate.name : 'Mate Imperial Personalizado';
+  const matePrice = mate ? formatARS(mate.price) : '$ 46.500';
+  const mateImg = mate ? mate.image : 'assets/images/prod_mate_imperial.jpg';
+
+  const previewBox = document.getElementById('completion-summary-preview');
+  if (previewBox) {
+    const texts = studio.items.filter(i => i.type === 'text').map(t => `"${escapeHtml(t.text)}" (${t.font})`).join(', ');
+    const icons = studio.items.filter(i => i.type === 'icon').map(i => escapeHtml(i.name || i.graphicId)).join(', ');
+    const linesLabel = studio.circularLines === 'doble' ? 'Líneas Dobles' : (studio.circularLines === 'simple' ? 'Línea Simple' : 'Sin líneas');
+
+    previewBox.innerHTML = `
+      <div class="comp-item-header">
+        <img src="${mateImg}" alt="${mateName}" class="comp-item-thumb" />
+        <div>
+          <strong class="comp-item-title">${mateName}</strong>
+          <span class="comp-item-price">${matePrice}</span>
+        </div>
+      </div>
+      <div class="comp-engraving-badge">
+        <div><i class="fas fa-magic" style="color: var(--accent-gold);"></i> <b>Virola:</b> Alpaca maciza cincelada (${linesLabel})</div>
+        ${texts ? `<div>• <b>Texto:</b> ${texts}</div>` : ''}
+        ${icons ? `<div>• <b>Diseños:</b> ${icons}</div>` : ''}
+        <div>• <b>Grabado:</b> Láser HD (¡Bonificado $0!)</div>
+      </div>
+    `;
+  }
+
+  const modal = document.getElementById('completion-modal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeCompletionModal() {
+  const modal = document.getElementById('completion-modal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleFinishAndContinueShopping() {
+  finalizeAndAddToCart();
+  closeCompletionModal();
+  window.location.href = 'index.html?openCart=true';
+}
+
+function handleFinishAndOpenCheckout() {
+  finalizeAndAddToCart();
+  closeCompletionModal();
+  if (typeof openCheckoutModal === 'function') {
+    openCheckoutModal();
+  } else if (typeof openCartDrawer === 'function') {
+    openCartDrawer();
+  }
+}
+
+function handleFinishAndOrderWhatsApp() {
+  const mate = typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA.find(p => p.id === studio.selectedMateId) : null;
+  const mateName = mate ? mate.name : 'Mate Imperial';
+  const texts = studio.items.filter(i => i.type === 'text').map(t => `"${t.text}" (${t.font})`).join(', ');
+  const icons = studio.items.filter(i => i.type === 'icon').map(i => i.name || i.graphicId).join(', ');
+  const lines = studio.circularLines;
+  const notesInput = document.getElementById('custom-order-notes');
+  const notes = notesInput ? notesInput.value.trim() : '';
+
+  let msg = `¡Hola Mates Río! Quiero encargar este mate personalizado:\n`;
+  msg += `• Modelo: ${mateName}\n`;
+  if (texts) msg += `• Texto grabado: ${texts}\n`;
+  if (icons) msg += `• Escudos/Diseños: ${icons}\n`;
+  msg += `• Cincelado virola: ${lines}\n`;
+  msg += `• Modalidad: ${studio.purchaseType === 'local' ? 'Retiro en taller oficial' : 'Envío a domicilio'}\n`;
+  if (notes) msg += `• Notas: ${notes}\n`;
+
+  closeCompletionModal();
+  window.open(`https://wa.me/5493513830111?text=${encodeURIComponent(msg)}`, '_blank');
 }
