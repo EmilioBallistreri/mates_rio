@@ -1179,14 +1179,22 @@
               <label class="admin-form-label">Fotos del Producto (Ilimitadas • Arrastrá o Seleccioná) <span style="color: var(--admin-danger);">*</span></label>
               
               <div class="image-dropzone" id="edit-prod-dropzone" onclick="document.getElementById('edit-prod-file-input').click()">
-                <input type="file" id="edit-prod-file-input" multiple accept="image/*" style="display: none;" onchange="handleProductFilesSelect(event, 'edit')" />
+                <input type="file" id="edit-prod-file-input" multiple accept="image/jpeg, image/jpg, image/png, .jpg, .jpeg, .png, image/*" style="display: none;" onchange="handleProductFilesSelect(event, 'edit')" />
                 <div class="image-dropzone-icon">
                   <i class="fas fa-cloud-arrow-up"></i>
                 </div>
                 <div class="image-dropzone-title">Hacé clic para subir fotos o arrastralas acá</div>
-                <div class="image-dropzone-sub">Podés subir imágenes ilimitadas (3, 4, 5 fotos por producto). La primera será la foto de portada.</div>
+                <div class="image-dropzone-sub">Subí una o más fotos en formato <strong>JPG, JPEG o PNG</strong>. La primera será la foto de portada.</div>
                 <button type="button" class="btn-admin btn-admin-gold" style="margin-top: 10px; pointer-events: none;">
-                  <i class="fas fa-camera"></i> Subir Fotos del Producto
+                  <i class="fas fa-camera"></i> Subir Fotos (JPG, JPEG, PNG)
+                </button>
+              </div>
+
+              <!-- Input opcional para ingresar ruta local o URL de imagen -->
+              <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <input type="text" id="edit-prod-img-url-input" class="admin-input modal-input" style="font-size: 0.8rem; height: 36px;" placeholder="O pegá una ruta / URL de imagen (ej: assets/images/foto.jpg)..." onkeydown="if(event.key === 'Enter'){event.preventDefault(); addUploadedImageUrl('edit');}" />
+                <button type="button" class="btn-admin btn-admin-outline" style="height: 36px; padding: 0 12px; font-size: 0.78rem; white-space: nowrap;" onclick="addUploadedImageUrl('edit')">
+                  <i class="fas fa-plus"></i> Agregar
                 </button>
               </div>
 
@@ -1340,14 +1348,22 @@
               <label class="admin-form-label">Fotos del Producto (Ilimitadas • Arrastrá o Seleccioná) <span style="color: var(--admin-danger);">*</span></label>
               
               <div class="image-dropzone" id="new-prod-dropzone" onclick="document.getElementById('new-prod-file-input').click()">
-                <input type="file" id="new-prod-file-input" multiple accept="image/*" style="display: none;" onchange="handleProductFilesSelect(event, 'new')" />
+                <input type="file" id="new-prod-file-input" multiple accept="image/jpeg, image/jpg, image/png, .jpg, .jpeg, .png, image/*" style="display: none;" onchange="handleProductFilesSelect(event, 'new')" />
                 <div class="image-dropzone-icon">
                   <i class="fas fa-cloud-arrow-up"></i>
                 </div>
                 <div class="image-dropzone-title">Hacé clic para subir fotos o arrastralas acá</div>
-                <div class="image-dropzone-sub">Podés subir imágenes ilimitadas (3, 4, 5 fotos por producto). La primera será la foto de portada.</div>
+                <div class="image-dropzone-sub">Subí una o más fotos en formato <strong>JPG, JPEG o PNG</strong>. La primera será la foto de portada.</div>
                 <button type="button" class="btn-admin btn-admin-gold" style="margin-top: 10px; pointer-events: none;">
-                  <i class="fas fa-camera"></i> Subir Fotos del Producto
+                  <i class="fas fa-camera"></i> Subir Fotos (JPG, JPEG, PNG)
+                </button>
+              </div>
+
+              <!-- Input opcional para ingresar ruta local o URL de imagen -->
+              <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <input type="text" id="new-prod-img-url-input" class="admin-input modal-input" style="font-size: 0.8rem; height: 36px;" placeholder="O pegá una ruta / URL de imagen (ej: assets/images/foto.jpg)..." onkeydown="if(event.key === 'Enter'){event.preventDefault(); addUploadedImageUrl('new');}" />
+                <button type="button" class="btn-admin btn-admin-outline" style="height: 36px; padding: 0 12px; font-size: 0.78rem; white-space: nowrap;" onclick="addUploadedImageUrl('new')">
+                  <i class="fas fa-plus"></i> Agregar
                 </button>
               </div>
 

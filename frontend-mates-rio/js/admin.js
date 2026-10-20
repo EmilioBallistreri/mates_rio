@@ -652,22 +652,154 @@ function onCategorySelectChange(mode) {
   subcatSelect.innerHTML = subcats.map(sc => `<option value="${sc}">${sc}</option>`).join('');
 }
 
-function handleProductFilesSelect(event, mode) {
-  const files = event.target.files;
+// Procesamiento, escalado y optimización de imágenes (JPG, JPEG, PNG)
+function processAndOptimizeImage(file) {
+  return new Promise((resolve) => {
+    if (!file) return resolve(null);
+    if (typeof file === 'string') return resolve(file);
+
+    const reader = new FileReader();
+    reader.onerror = () => {
+      console.warn('Error en FileReader para:', file.name);
+      resolve(null);
+    };
+
+    reader.onload = (e) => {
+      const rawDataUrl = e.target.result;
+      const img = new Image();
+      img.onerror = () => {
+        console.warn('Error al decodificar la imagen:', file.name);
+        resolve(rawDataUrl);
+      };
+
+      img.onload = () => {
+        try {
+          const maxDim = 1200; // Resolución óptima para e-commerce sin sobrecargar almacenamiento
+          let width = img.naturalWidth || img.width || 800;
+          let height = img.naturalHeight || img.height || 800;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+
+          const isPng = (file.type === 'image/png') ||
+                        (file.name && file.name.toLowerCase().endsWith('.png'));
+
+          if (isPng) {
+            ctx.clearRect(0, 0, width, height);
+            ctx.drawImage(img, 0, 0, width, height);
+            const pngDataUrl = canvas.toDataURL('image/png');
+            // Si el PNG optimizado pesa menos de 750KB, se conserva como PNG
+            if (pngDataUrl && pngDataUrl.length < 900000) {
+              return resolve(pngDataUrl);
+            }
+          }
+
+          // Para JPG, JPEG y fotos en general: fondo blanco limpio y compresión visual premium
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+          const jpegDataUrl = canvas.toDataURL('image/jpeg', 0.86);
+          resolve(jpegDataUrl || rawDataUrl);
+        } catch (err) {
+          console.warn('Excepción en canvas de imagen, usando DataURL original:', err);
+          resolve(rawDataUrl);
+        }
+      };
+
+      img.src = rawDataUrl;
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleProductFilesSelect(event, mode) {
+  const fileInput = event.target;
+  const files = fileInput && fileInput.files ? Array.from(fileInput.files) : [];
   if (!files || files.length === 0) return;
 
   const targetList = mode === 'edit' ? uploadedImagesEdit : uploadedImagesNew;
+  const dropzone = document.getElementById(mode === 'edit' ? 'edit-prod-dropzone' : 'new-prod-dropzone');
+  const titleEl = dropzone ? dropzone.querySelector('.image-dropzone-title') : null;
+  const originalTitle = titleEl ? titleEl.textContent : '';
 
-  Array.from(files).forEach(file => {
-    if (!file.type.startsWith('image/')) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      targetList.push(e.target.result);
-      renderUploadedImagesPreview(mode);
-    };
-    reader.readAsDataURL(file);
-  });
-  event.target.value = '';
+  if (dropzone) {
+    dropzone.classList.add('is-processing');
+  }
+  if (titleEl) {
+    titleEl.innerHTML = '<i class="fas fa-spinner fa-spin" style="color: var(--admin-gold);"></i> Procesando fotos JPG/PNG...';
+  }
+
+  let added = 0;
+  for (const file of files) {
+    const fileName = (file.name || '').toLowerCase();
+    const isImage = (file.type && file.type.startsWith('image/')) ||
+                    /\.(jpe?g|png|webp|gif|svg|bmp|avif)$/i.test(fileName);
+
+    if (!isImage) {
+      if (typeof showAdminToast === 'function') {
+        showAdminToast(`"${file.name}" no es una imagen válida (JPG, JPEG o PNG).`, 'fa-triangle-exclamation');
+      }
+      continue;
+    }
+
+    try {
+      const optimizedUrl = await processAndOptimizeImage(file);
+      if (optimizedUrl) {
+        targetList.push(optimizedUrl);
+        added++;
+        renderUploadedImagesPreview(mode);
+      }
+    } catch (err) {
+      console.error('Error al procesar archivo:', err);
+    }
+  }
+
+  if (dropzone) {
+    dropzone.classList.remove('is-processing');
+  }
+  if (titleEl) {
+    titleEl.textContent = originalTitle || 'Hacé clic para subir fotos o arrastralas acá';
+  }
+
+  if (added > 0 && typeof showAdminToast === 'function') {
+    showAdminToast(`¡${added} foto(s) cargada(s) correctamente!`, 'fa-circle-check');
+  }
+
+  if (fileInput) fileInput.value = '';
+}
+
+function addUploadedImageUrl(mode) {
+  const input = document.getElementById(mode === 'edit' ? 'edit-prod-img-url-input' : 'new-prod-img-url-input');
+  if (!input) return;
+  const val = input.value.trim();
+  if (!val) {
+    if (typeof showAdminToast === 'function') {
+      showAdminToast('Ingresá una URL o ruta válida.', 'fa-triangle-exclamation');
+    }
+    return;
+  }
+
+  const targetList = mode === 'edit' ? uploadedImagesEdit : uploadedImagesNew;
+  targetList.push(val);
+  input.value = '';
+  renderUploadedImagesPreview(mode);
+
+  if (typeof showAdminToast === 'function') {
+    showAdminToast('Foto agregada a la galería del producto.', 'fa-circle-check');
+  }
 }
 
 function renderUploadedImagesPreview(mode) {
@@ -676,15 +808,22 @@ function renderUploadedImagesPreview(mode) {
 
   const list = mode === 'edit' ? uploadedImagesEdit : uploadedImagesNew;
   if (list.length === 0) {
-    container.innerHTML = '<p style="grid-column: 1/-1; font-size: 0.8rem; color: var(--admin-text-muted); text-align: center; margin: 6px 0;">Sin imágenes adicionales cargadas aún.</p>';
+    container.innerHTML = '<p class="image-preview-empty"><i class="fas fa-images"></i> Sin imágenes cargadas aún. Subí una o más fotos en formato JPG, JPEG o PNG.</p>';
+    if (mode === 'edit') {
+      const previewThumb = document.getElementById('edit-prod-preview-thumb');
+      if (previewThumb) previewThumb.src = 'assets/images/prod_mate_imperial.jpg';
+    }
     return;
   }
 
   container.innerHTML = list.map((imgSrc, idx) => `
-    <div class="preview-thumb-card ${idx === 0 ? 'is-primary' : ''}">
-      <img src="${imgSrc}" alt="Foto ${idx + 1}" />
-      ${idx === 0 ? '<span class="thumb-badge-primary">Portada</span>' : ''}
-      <button type="button" class="btn-remove-thumb" onclick="removeUploadedImage('${mode}', ${idx})" title="Eliminar foto">
+    <div class="preview-thumb-card ${idx === 0 ? 'primary is-primary' : ''}" onclick="setPrimaryUploadedImage('${mode}', ${idx})" title="${idx === 0 ? 'Foto de Portada Oficial' : 'Hacé clic para fijar como Foto de Portada'}">
+      <img src="${imgSrc}" class="preview-thumb-img" alt="Foto ${idx + 1}" onerror="this.onerror=null; this.src='assets/images/prod_mate_imperial.jpg';" />
+      ${idx === 0
+        ? '<span class="preview-thumb-badge thumb-badge-primary"><i class="fas fa-star"></i> Portada</span>'
+        : '<span class="preview-thumb-set-primary"><i class="fas fa-arrow-up"></i> Fijar portada</span>'
+      }
+      <button type="button" class="preview-thumb-delete btn-remove-thumb" onclick="event.stopPropagation(); removeUploadedImage('${mode}', ${idx})" title="Eliminar foto">
         <i class="fas fa-times"></i>
       </button>
     </div>
@@ -697,12 +836,25 @@ function renderUploadedImagesPreview(mode) {
 }
 
 function removeUploadedImage(mode, idx) {
-  if (mode === 'edit') {
-    uploadedImagesEdit.splice(idx, 1);
-    renderUploadedImagesPreview('edit');
-  } else {
-    uploadedImagesNew.splice(idx, 1);
-    renderUploadedImagesPreview('new');
+  const list = mode === 'edit' ? uploadedImagesEdit : uploadedImagesNew;
+  if (idx >= 0 && idx < list.length) {
+    list.splice(idx, 1);
+    renderUploadedImagesPreview(mode);
+    if (typeof showAdminToast === 'function') {
+      showAdminToast('Foto eliminada de la lista.', 'fa-trash-can');
+    }
+  }
+}
+
+function setPrimaryUploadedImage(mode, idx) {
+  const list = mode === 'edit' ? uploadedImagesEdit : uploadedImagesNew;
+  if (idx > 0 && idx < list.length) {
+    const chosen = list.splice(idx, 1)[0];
+    list.unshift(chosen);
+    renderUploadedImagesPreview(mode);
+    if (typeof showAdminToast === 'function') {
+      showAdminToast('Foto de portada actualizada.', 'fa-star');
+    }
   }
 }
 
@@ -715,6 +867,7 @@ function initDragAndDropZones() {
       dropzone.addEventListener(eventName, (e) => {
         e.preventDefault();
         e.stopPropagation();
+        dropzone.classList.add('dragover');
         dropzone.classList.add('drag-over');
       }, false);
     });
@@ -723,6 +876,7 @@ function initDragAndDropZones() {
       dropzone.addEventListener(eventName, (e) => {
         e.preventDefault();
         e.stopPropagation();
+        dropzone.classList.remove('dragover');
         dropzone.classList.remove('drag-over');
       }, false);
     });
@@ -832,6 +986,12 @@ function openEditProductModal(productId) {
   } else {
     uploadedImagesEdit = ['assets/images/prod_mate_imperial.jpg'];
   }
+
+  const editFileInput = document.getElementById('edit-prod-file-input');
+  if (editFileInput) editFileInput.value = '';
+  const editUrlInput = document.getElementById('edit-prod-img-url-input');
+  if (editUrlInput) editUrlInput.value = '';
+
   renderUploadedImagesPreview('edit');
 
   // Descripción y specs
@@ -1050,6 +1210,12 @@ function openCreateProductModal() {
   const form = document.getElementById('new-product-form');
   if (form) form.reset();
 
+  const fileInput = document.getElementById('new-prod-file-input');
+  if (fileInput) fileInput.value = '';
+
+  const urlInput = document.getElementById('new-prod-img-url-input');
+  if (urlInput) urlInput.value = '';
+
   uploadedImagesNew = [];
   renderUploadedImagesPreview('new');
   onCategorySelectChange('new');
@@ -1128,7 +1294,11 @@ function handleCreateProduct() {
     customProducts = [];
   }
   customProducts.push(newProduct);
-  localStorage.setItem('mates_rio_custom_products', JSON.stringify(customProducts));
+  try {
+    localStorage.setItem('mates_rio_custom_products', JSON.stringify(customProducts));
+  } catch (err) {
+    console.error('Aviso al guardar en mates_rio_custom_products:', err);
+  }
 
   // 2. Insertar en tiempo de ejecución en PRODUCTS_DATA
   if (typeof PRODUCTS_DATA !== 'undefined' && !PRODUCTS_DATA.some(p => p.id === newProduct.id)) {
@@ -1151,7 +1321,11 @@ function handleCreateProduct() {
     inStock: stock > 0,
     isCustom: true
   };
-  saveInventory(inv);
+  try {
+    saveInventory(inv);
+  } catch (err) {
+    console.error('Aviso al guardar en inventario:', err);
+  }
 
   // 4. Actualizar interfaz
   closeCreateProductModal();
@@ -1166,7 +1340,7 @@ function handleCreateProduct() {
   }
 
   logAuditAction('Carga de Producto', `Nuevo producto creado: "${newProduct.name}" (${newProduct.categoryName} - ${subcategory || 'General'}) con ${stock} un.`);
-  showAdminToast(`¡"${newProduct.name}" publicado exitosamente!`, 'fa-circle-check');
+  showAdminToast(`¡"${newProduct.name}" publicado exitosamente con sus fotos!`, 'fa-circle-check');
 }
 
 function deleteProduct(productId) {

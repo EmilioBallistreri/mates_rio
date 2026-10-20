@@ -1871,10 +1871,18 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
   position: relative;
 }
 
-.image-dropzone.dragover {
+.image-dropzone.dragover,
+.image-dropzone.drag-over {
   border-color: var(--admin-gold);
-  background: rgba(197, 155, 39, 0.08);
+  background: rgba(197, 155, 39, 0.12);
   transform: scale(1.01);
+}
+
+.image-dropzone.is-processing {
+  opacity: 0.7;
+  pointer-events: none;
+  border-color: var(--admin-gold);
+  background: rgba(197, 155, 39, 0.06);
 }
 
 .image-dropzone-icon {
@@ -1898,8 +1906,20 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
 .image-preview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 10px;
+  gap: 12px;
   margin-top: 14px;
+}
+
+.image-preview-empty {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+  text-align: center;
+  margin: 6px 0;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 6px;
+  border: 1px dashed rgba(0, 0, 0, 0.06);
 }
 
 .preview-thumb-card {
@@ -1910,24 +1930,35 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
   border: 1.5px solid var(--admin-border);
   overflow: hidden;
   background: var(--admin-card-bg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.preview-thumb-card.primary {
+.preview-thumb-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.preview-thumb-card.primary,
+.preview-thumb-card.is-primary {
   border-color: var(--admin-gold);
-  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.35);
+  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.45);
 }
 
+.preview-thumb-card img,
 .preview-thumb-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.preview-thumb-delete {
+.preview-thumb-delete,
+.btn-remove-thumb {
   position: absolute;
   top: 4px;
   right: 4px;
-  background: rgba(231, 76, 60, 0.9);
+  background: rgba(231, 76, 60, 0.92);
   color: #ffffff;
   border: none;
   width: 22px;
@@ -1939,14 +1970,17 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
   font-size: 0.65rem;
   cursor: pointer;
   transition: all 0.2s;
+  z-index: 3;
 }
 
-.preview-thumb-delete:hover {
+.preview-thumb-delete:hover,
+.btn-remove-thumb:hover {
   background: #c0392b;
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
-.preview-thumb-badge {
+.preview-thumb-badge,
+.thumb-badge-primary {
   position: absolute;
   bottom: 4px;
   left: 4px;
@@ -1954,9 +1988,35 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
   color: #121212;
   font-size: 0.62rem;
   font-weight: 800;
-  padding: 1px 5px;
+  padding: 2px 6px;
   border-radius: 3px;
   text-transform: uppercase;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.preview-thumb-set-primary {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+  font-size: 0.58rem;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 3px;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.preview-thumb-card:hover .preview-thumb-set-primary {
+  opacity: 1;
 }
 
 /* ==========================================================================
@@ -3017,6 +3077,18 @@ body.admin-dark-mode .admin-modal-engraving-badge {
 body.admin-dark-mode .preview-thumb-card {
   background: #251e17;
   border-color: #382c21;
+}
+
+body.admin-dark-mode .preview-thumb-card.primary,
+body.admin-dark-mode .preview-thumb-card.is-primary {
+  border-color: var(--admin-gold);
+  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.45);
+}
+
+body.admin-dark-mode .image-preview-empty {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #9e9185;
 }
 
 body.admin-dark-mode .occasion-preset-card {
