@@ -3157,3 +3157,158 @@ body.admin-dark-mode .admin-design-accordion-body {
 
 
 
+
+
+/* ==========================================================================
+   MATES RÍO: ARMONIZACIÓN VISUAL Y LIMPIEZA TIPOGRÁFICA EN MODO OSCURO
+   Atenuación de tonos dorados/amarillos chillones, reducción de sobrecarga visual
+   y optimización del contraste y jerarquía de datos en tablas y etiquetas.
+   ========================================================================== */
+
+body.admin-dark-mode {
+  --admin-gold: #cfa83b;
+  --admin-gold-hover: #dfb84c;
+  --admin-gold-light: rgba(207, 168, 59, 0.12);
+  --admin-border: #282018;
+  --admin-border-focus: #cfa83b;
+  --admin-text-main: #f5f0ea;
+  --admin-text-muted: #a89c90;
+  --admin-bg-main: #130f0c;
+  --admin-card-bg: #1a1410;
+}
+
+body.admin-dark-mode .kpi-card {
+  background: #1a1410;
+  border-color: #2b2219;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+}
+
+body.admin-dark-mode .kpi-card.kpi-gold {
+  border-left: 4px solid #cfa83b;
+}
+
+body.admin-dark-mode .kpi-card.kpi-success {
+  border-left: 4px solid #27ae60;
+}
+
+body.admin-dark-mode .kpi-card.kpi-leather {
+  border-left: 4px solid #9c5c2a;
+}
+
+body.admin-dark-mode .kpi-card.kpi-warning {
+  border-left: 4px solid #d97724;
+}
+
+body.admin-dark-mode .kpi-title {
+  color: #a89c90;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+body.admin-dark-mode .kpi-value {
+  color: #f5f0ea;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+body.admin-dark-mode .icon-wrap-gold {
+  background: rgba(207, 168, 59, 0.12);
+  color: #cfa83b;
+}
+
+body.admin-dark-mode .sidebar-badge.badge-gold {
+  background: rgba(207, 168, 59, 0.14) !important;
+  color: #d8b449 !important;
+  border: 1px solid rgba(207, 168, 59, 0.3) !important;
+}
+
+body.admin-dark-mode .sidebar-badge.badge-info {
+  background: rgba(41, 128, 185, 0.15) !important;
+  color: #70b3e0 !important;
+  border: 1px solid rgba(41, 128, 185, 0.25) !important;
+}
+
+body.admin-dark-mode .sidebar-badge.badge-success {
+  background: rgba(39, 174, 96, 0.15) !important;
+  color: #58d68d !important;
+  border: 1px solid rgba(39, 174, 96, 0.25) !important;
+}
+
+/* Tablas en modo oscuro limpias y contrastadas */
+body.admin-dark-mode .table-responsive-card {
+  background: #1a1410;
+  border-color: #2b2219;
+}
+
+body.admin-dark-mode .admin-data-table th {
+  background: #211914;
+  color: #b5a99d;
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.6px;
+  border-bottom: 1.5px solid #33271d;
+  text-transform: uppercase;
+}
+
+body.admin-dark-mode .admin-data-table td {
+  border-bottom: 1px solid #261d16;
+  color: #e8e2d8;
+  font-size: 0.82rem;
+}
+
+body.admin-dark-mode .admin-data-table tbody tr:hover td {
+  background: #231b14 !important;
+}
+
+body.admin-dark-mode .table-product-name {
+  color: #f5f0ea;
+  font-weight: 700;
+}
+
+body.admin-dark-mode .table-product-sku {
+  color: #94887b;
+}
+
+body.admin-dark-mode .stock-counter-pill {
+  background: #211914;
+  border-color: #33271d;
+}
+
+body.admin-dark-mode .stock-val-display {
+  color: #f5f0ea;
+}
+
+/* Modales y Formularios en modo oscuro */
+body.admin-dark-mode .admin-modal-card {
+  background: #1a1410;
+  border: 1px solid #382c21;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+body.admin-dark-mode .admin-modal-header {
+  border-bottom-color: #2e241c;
+}
+
+body.admin-dark-mode .admin-modal-title {
+  color: #f5f0ea;
+}
+
+body.admin-dark-mode .admin-form-label {
+  color: #b5a99d;
+}
+
+body.admin-dark-mode .modal-input,
+body.admin-dark-mode .admin-input,
+body.admin-dark-mode .admin-select {
+  background: #211914;
+  border-color: #33271d;
+  color: #f5f0ea;
+}
+
+body.admin-dark-mode .modal-input:focus,
+body.admin-dark-mode .admin-input:focus,
+body.admin-dark-mode .admin-select:focus {
+  border-color: #cfa83b;
+  box-shadow: 0 0 0 2px rgba(207, 168, 59, 0.2);
+}

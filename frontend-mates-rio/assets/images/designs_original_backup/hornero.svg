@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 520" width="100%" height="100%">
+  <!-- Hornero Nacional Argentino - Original Vector -->
+  <!-- Nido de barro característico / Horno -->
+  <g fill="#9e6938" stroke="#4a2e12" stroke-width="3">
+    <!-- Base del nido de adobe -->
+    <path d="M 100 420 
+             C 90 340 130 280 200 270 
+             C 270 260 350 280 380 340 
+             C 410 400 370 460 280 470 
+             C 180 480 110 470 100 420 Z"/>
+    
+    <!-- Entrada en espiral / boca del nido -->
+    <path d="M 310 320 
+             C 340 330 360 360 350 400 
+             C 335 435 295 440 280 410 
+             C 270 380 285 350 310 320 Z" 
+          fill="#3b200b" stroke="#211104" stroke-width="3"/>
+    
+    <!-- Textura de barro y paja del hornero -->
+    <g fill="none" stroke="#6e451f" stroke-width="2" opacity="0.6">
+      <path d="M 140 330 Q 200 320 250 335"/>
+      <path d="M 120 380 Q 180 375 240 390"/>
+      <path d="M 150 430 Q 210 435 260 440"/>
+    </g>
+  </g>
+
+  <!-- Rama de poste o quebracho donde se asienta -->
+  <path d="M 60 460 L 440 460 C 440 480 420 495 380 495 L 80 495 C 65 495 55 480 60 460 Z" fill="#4a301a" stroke="#29180b" stroke-width="2.5"/>
+
+  <!-- Hornero erguido sobre el nido -->
+  <g fill="#c4793d" stroke="#3d210c" stroke-width="2.5" stroke-linejoin="round">
+    <!-- Cola parda rojiza -->
+    <path d="M 140 220 L 75 285 L 95 295 L 175 240 Z" fill="#8c471c"/>
+    
+    <!-- Patas delgadas con garras prensiles firmes en el barro -->
+    <g stroke="#3d210c" stroke-width="3.5" stroke-linecap="round" fill="none">
+      <line x1="210" y1="245" x2="200" y2="285"/>
+      <line x1="200" y1="285" x2="185" y2="295"/>
+      <line x1="200" y1="285" x2="205" y2="297"/>
+      
+      <line x1="240" y1="245" x2="235" y2="280"/>
+      <line x1="235" y1="280" x2="220" y2="290"/>
+      <line x1="235" y1="280" x2="240" y2="292"/>
+    </g>
+
+    <!-- Cuerpo y pecho redondeado -->
+    <path d="M 160 215 
+             C 170 170 210 160 240 160 
+             C 275 160 285 185 275 220 
+             C 265 250 230 260 190 255 
+             C 170 250 155 235 160 215 Z" 
+          fill="#d98c4e"/>
+
+    <!-- Ala plegada con ribetes más oscuros -->
+    <path d="M 165 210 
+             C 185 175 235 175 255 195 
+             C 240 225 210 240 165 230 Z" 
+          fill="#a65d28"/>
+    <path d="M 180 205 Q 210 205 240 215" fill="none" stroke="#703610" stroke-width="1.8"/>
+
+    <!-- Cuello y cabeza vigilante -->
+    <path d="M 240 165 
+             C 255 150 260 130 270 120 
+             C 285 105 305 110 315 125 
+             C 320 135 315 150 300 160 
+             C 280 175 255 175 240 165 Z"/>
+
+    <!-- Garganta blanquecina característica -->
+    <path d="M 285 140 C 295 145 295 158 280 165 C 270 160 275 148 285 140 Z" fill="#faebd7" stroke="none"/>
+
+    <!-- Pico esbelto y curvado típico para moldear barro -->
+    <path d="M 315 125 L 365 128 L 318 138 Z" fill="#2e1a0b"/>
+
+    <!-- Ojo negro despierto con halo -->
+    <circle cx="295" cy="125" r="4.5" fill="#140b04"/>
+    <circle cx="294" cy="123" r="1.5" fill="#ffffff"/>
+  </g>
+</svg>

@@ -58,11 +58,11 @@
        gradientUnits="userSpaceOnUse">
       <stop
          offset="0"
-         stop-color="#ac936e"
+         stop-color="#14100c"
          id="stop3029" />
       <stop
          offset="1"
-         stop-color="#4f6f98"
+         stop-color="#241e18"
          id="stop3031" />
     </linearGradient>
     <linearGradient
@@ -74,11 +74,11 @@
        gradientUnits="userSpaceOnUse">
       <stop
          offset="0"
-         stop-color="#ac936e"
+         stop-color="#14100c"
          id="stop3034" />
       <stop
          offset="1"
-         stop-color="#4f6f98"
+         stop-color="#241e18"
          id="stop3036" />
     </linearGradient>
     <linearGradient
@@ -90,11 +90,11 @@
        gradientUnits="userSpaceOnUse">
       <stop
          offset="0"
-         stop-color="#ac936e"
+         stop-color="#14100c"
          id="stop3039" />
       <stop
          offset="1"
-         stop-color="#4f6f98"
+         stop-color="#241e18"
          id="stop3041" />
     </linearGradient>
     <linearGradient
@@ -106,11 +106,11 @@
        gradientUnits="userSpaceOnUse">
       <stop
          offset="0"
-         stop-color="#ac936e"
+         stop-color="#14100c"
          id="stop3044" />
       <stop
          offset="1"
-         stop-color="#4f6f98"
+         stop-color="#241e18"
          id="stop3046" />
     </linearGradient>
   </defs>

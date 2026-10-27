@@ -47,13 +47,24 @@ const Product = {
   },
 
   create: (data) => {
+    const cost = data.cost !== undefined ? Number(data.cost) : Math.round((Number(data.price) || 0) * 0.5);
+    const price = Number(data.price) || 0;
+    const wholesalePrice = data.wholesalePrice !== undefined ? Number(data.wholesalePrice) : Math.round(price * 0.7);
+    const retailMarginPercent = cost > 0 ? Math.round(((price - cost) / cost) * 100) : (Number(data.retailMarginPercent) || 100);
+    const wholesaleMarginPercent = cost > 0 ? Math.round(((wholesalePrice - cost) / cost) * 100) : (Number(data.wholesaleMarginPercent) || 40);
+
     const newProduct = {
       id: data.id || `prod-${Date.now()}`,
       name: data.name || 'Nuevo Producto',
       category: data.category || 'mates',
       categoryName: (data.category || 'mates').toUpperCase(),
-      price: Number(data.price) || 0,
+      price: price,
       originalPrice: data.originalPrice ? Number(data.originalPrice) : null,
+      cost: cost,
+      wholesalePrice: wholesalePrice,
+      retailMarginPercent: retailMarginPercent,
+      wholesaleMarginPercent: wholesaleMarginPercent,
+      stock: data.stock !== undefined ? Number(data.stock) : 15,
       badge: data.badge || null,
       badgeType: data.badgeType || null,
       rating: Number(data.rating) || 5.0,

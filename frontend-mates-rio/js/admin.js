@@ -2950,3 +2950,449 @@ function toggleAdminDesignSection(sectionKey) {
     if (arrow) arrow.classList.add('collapsed');
   }
 }
+
+
+// ==========================================================================
+// CÁLCULO DINÁMICO DE COSTOS, PRECIOS Y MÁRGENES (BIDIRECCIONAL AUTOMÁTICO)
+// ==========================================================================
+function onCostChange(prefix) {
+  const cost = parseFloat(document.getElementById(`${prefix}-prod-cost`)?.value) || 0;
+  const retMargin = parseFloat(document.getElementById(`${prefix}-prod-retail-margin`)?.value) || 100;
+  const wsMargin = parseFloat(document.getElementById(`${prefix}-prod-wholesale-margin`)?.value) || 40;
+
+  if (cost > 0) {
+    const calcRetail = Math.round(cost * (1 + retMargin / 100));
+    const calcWs = Math.round(cost * (1 + wsMargin / 100));
+    const priceEl = document.getElementById(`${prefix}-prod-price`);
+    const wsEl = document.getElementById(`${prefix}-prod-wholesale-price`);
+    if (priceEl) priceEl.value = calcRetail;
+    if (wsEl) wsEl.value = calcWs;
+  }
+}
+
+function onRetailMarginChange(prefix) {
+  const cost = parseFloat(document.getElementById(`${prefix}-prod-cost`)?.value) || 0;
+  const retMargin = parseFloat(document.getElementById(`${prefix}-prod-retail-margin`)?.value) || 0;
+  if (cost > 0) {
+    const calcRetail = Math.round(cost * (1 + retMargin / 100));
+    const priceEl = document.getElementById(`${prefix}-prod-price`);
+    if (priceEl) priceEl.value = calcRetail;
+  }
+}
+
+function onRetailPriceChange(prefix) {
+  const cost = parseFloat(document.getElementById(`${prefix}-prod-cost`)?.value) || 0;
+  const price = parseFloat(document.getElementById(`${prefix}-prod-price`)?.value) || 0;
+  if (cost > 0 && price > 0) {
+    const margin = Math.round(((price - cost) / cost) * 100);
+    const marginEl = document.getElementById(`${prefix}-prod-retail-margin`);
+    if (marginEl) marginEl.value = margin;
+  }
+}
+
+function onWholesaleMarginChange(prefix) {
+  const cost = parseFloat(document.getElementById(`${prefix}-prod-cost`)?.value) || 0;
+  const wsMargin = parseFloat(document.getElementById(`${prefix}-prod-wholesale-margin`)?.value) || 0;
+  if (cost > 0) {
+    const calcWs = Math.round(cost * (1 + wsMargin / 100));
+    const wsEl = document.getElementById(`${prefix}-prod-wholesale-price`);
+    if (wsEl) wsEl.value = calcWs;
+  }
+}
+
+function onWholesalePriceChange(prefix) {
+  const cost = parseFloat(document.getElementById(`${prefix}-prod-cost`)?.value) || 0;
+  const wsPrice = parseFloat(document.getElementById(`${prefix}-prod-wholesale-price`)?.value) || 0;
+  if (cost > 0 && wsPrice > 0) {
+    const margin = Math.round(((wsPrice - cost) / cost) * 100);
+    const marginEl = document.getElementById(`${prefix}-prod-wholesale-margin`);
+    if (marginEl) marginEl.value = margin;
+  }
+}
+
+// ==========================================================================
+// GESTIÓN EXCLUSIVA DE VENTAS Y PEDIDOS MAYORISTAS (CANAL B2B)
+// ==========================================================================
+function initWholesaleOrders() {
+  if (!localStorage.getItem('mates_rio_wholesale_orders')) {
+    const initialB2BOrders = [
+      {
+        id: 'B2B-201',
+        date: new Date(Date.now() - 36 * 3600000).toISOString(),
+        businessName: 'Regalería Serrana Alta Gracia',
+        cuit: '30-71649281-4',
+        contactName: 'Marcelo Rossi',
+        phone: '3547-582319',
+        email: 'ventas@regaleriaserrana.com.ar',
+        location: 'Alta Gracia, Córdoba',
+        businessType: 'Regalería & Artículos Regionales',
+        itemsSummary: '20x Mates Imperiales Alpaca, 10x Termos 1L Cuero Negro, 25x Bombillas Alpaca',
+        items: [
+          { name: 'Mate Imperial Cuero Negro Virola Alpaca', qty: 20, price: 32500, cost: 22000 },
+          { name: 'Termo 1 Litro Acero Cuero Negro', qty: 10, price: 34000, cost: 24000 },
+          { name: 'Bombilla Alpaca Maciza Pico de Loro', qty: 25, price: 9500, cost: 5200 }
+        ],
+        totalUnits: 55,
+        totalWholesale: 1227500,
+        totalCost: 810000,
+        status: 'En Preparación / Embalaje',
+        notes: 'Despachar por Expreso Lancioni con doble embalaje de burbuja.'
+      },
+      {
+        id: 'B2B-202',
+        date: new Date(Date.now() - 84 * 3600000).toISOString(),
+        businessName: 'Bazar Matero Rosario Central',
+        cuit: '33-68941235-9',
+        contactName: 'Lucía Santillán',
+        phone: '341-4829104',
+        email: 'lucia@bazarmaterorosario.com',
+        location: 'Rosario, Santa Fe',
+        businessType: 'Bazar Especializado Matero',
+        itemsSummary: '15x Mates Torpedo Uruguayo, 15x Mates Camioneros',
+        items: [
+          { name: 'Mate Torpedo Uruguayo Alpaca', qty: 15, price: 29800, cost: 19500 },
+          { name: 'Mate Camionero Cuero Vaqueta', qty: 15, price: 27500, cost: 18000 }
+        ],
+        totalUnits: 30,
+        totalWholesale: 859500,
+        totalCost: 562500,
+        status: 'Despachado por Expreso',
+        notes: 'Remito comercial N° 0004-00012891 adjunto.'
+      },
+      {
+        id: 'B2B-203',
+        date: new Date(Date.now() - 14 * 3600000).toISOString(),
+        businessName: 'Distribuidora Gaucha Cuyo',
+        cuit: '30-70984512-3',
+        contactName: 'Esteban Morales',
+        phone: '261-6192843',
+        email: 'compras@gauchacuyo.com.ar',
+        location: 'Mendoza Capital, Mendoza',
+        businessType: 'Distribuidor Regional Mayorista',
+        itemsSummary: '40x Combos Materos Express, 20x Canastas Materas Cuero',
+        items: [
+          { name: 'Combo Matero Express', qty: 40, price: 34900, cost: 23500 },
+          { name: 'Canasta Matera Cuero Vacuno', qty: 20, price: 31000, cost: 21000 }
+        ],
+        totalUnits: 60,
+        totalWholesale: 2016000,
+        totalCost: 1360000,
+        status: 'Pendiente de Aprobación',
+        notes: 'Cliente solicita factura A y comprobante de transferencia bancaria.'
+      }
+    ];
+    localStorage.setItem('mates_rio_wholesale_orders', JSON.stringify(initialB2BOrders));
+  }
+}
+
+function getWholesaleOrders() {
+  initWholesaleOrders();
+  return JSON.parse(localStorage.getItem('mates_rio_wholesale_orders')) || [];
+}
+
+function saveWholesaleOrders(orders) {
+  localStorage.setItem('mates_rio_wholesale_orders', JSON.stringify(orders));
+  updateWholesaleBadge();
+}
+
+function updateWholesaleBadge() {
+  const orders = getWholesaleOrders();
+  const pendingCount = orders.filter(o => o.status.includes('Pendiente') || o.status.includes('Preparación')).length;
+  const badge = document.getElementById('sidebar-wholesale-orders-badge');
+  if (badge) {
+    badge.textContent = pendingCount;
+    badge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+  }
+}
+
+function renderWholesaleOrdersTable() {
+  const orders = getWholesaleOrders();
+  const tbody = document.getElementById('ws-orders-table-tbody');
+  if (!tbody) return;
+
+  const search = cleanStr(document.getElementById('ws-orders-search-input')?.value);
+  const statusFilter = document.getElementById('ws-orders-status-filter')?.value || 'all';
+
+  let list = [...orders];
+
+  if (search) {
+    list = list.filter(o => 
+      cleanStr(o.id).includes(search) || 
+      cleanStr(o.businessName).includes(search) || 
+      cleanStr(o.cuit).includes(search) ||
+      cleanStr(o.contactName).includes(search) ||
+      cleanStr(o.location).includes(search)
+    );
+  }
+
+  if (statusFilter === 'pending') {
+    list = list.filter(o => o.status.includes('Pendiente'));
+  } else if (statusFilter === 'prep') {
+    list = list.filter(o => o.status.includes('Preparación'));
+  } else if (statusFilter === 'shipped') {
+    list = list.filter(o => o.status.includes('Despachado'));
+  } else if (statusFilter === 'delivered') {
+    list = list.filter(o => o.status.includes('Entregado'));
+  } else if (statusFilter === 'cancelled') {
+    list = list.filter(o => o.status.includes('Cancelado'));
+  }
+
+  const countLabel = document.getElementById('ws-orders-count-label');
+  if (countLabel) countLabel.textContent = `Mostrando ${list.length} de ${orders.length} pedidos mayoristas`;
+
+  // Actualizar KPIs de sección mayorista
+  const totalRev = orders.reduce((acc, o) => o.status !== 'Cancelado' ? acc + (o.totalWholesale || 0) : acc, 0);
+  const totalUnits = orders.reduce((acc, o) => o.status !== 'Cancelado' ? acc + (o.totalUnits || 0) : acc, 0);
+  const validCount = orders.filter(o => o.status !== 'Cancelado').length;
+  const avgTicket = validCount > 0 ? Math.round(totalRev / validCount) : 0;
+  const pendingCount = orders.filter(o => o.status.includes('Pendiente') || o.status.includes('Preparación')).length;
+
+  const kpiRev = document.getElementById('kpi-ws-total-revenue');
+  const kpiCount = document.getElementById('kpi-ws-orders-count');
+  const kpiPending = document.getElementById('kpi-ws-pending-text');
+  const kpiAvg = document.getElementById('kpi-ws-avg-ticket');
+  const kpiUnits = document.getElementById('kpi-ws-units-count');
+
+  if (kpiRev) kpiRev.textContent = formatARS(totalRev);
+  if (kpiCount) kpiCount.textContent = orders.length;
+  if (kpiPending) kpiPending.textContent = `${pendingCount} pedidos pendientes`;
+  if (kpiAvg) kpiAvg.textContent = formatARS(avgTicket);
+  if (kpiUnits) kpiUnits.textContent = `${totalUnits} un.`;
+
+  if (list.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="9" style="text-align: center; padding: 36px 14px; color: var(--admin-text-muted);">
+          <i class="fas fa-boxes-packing" style="font-size: 2rem; margin-bottom: 8px; opacity: 0.4;"></i>
+          <p>No se encontraron pedidos mayoristas con los filtros seleccionados.</p>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = list.map(order => {
+    let statusClass = 'status-prep';
+    if (order.status.includes('Despachado')) statusClass = 'status-shipped';
+    else if (order.status.includes('Entregado')) statusClass = 'status-delivered';
+    else if (order.status.includes('Cancelado')) statusClass = 'status-cancelled';
+    else if (order.status.includes('Pendiente')) statusClass = 'status-low';
+
+    const grossMargin = (order.totalWholesale || 0) - (order.totalCost || 0);
+    const dateFormatted = new Date(order.date).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+    return `
+      <tr>
+        <td>
+          <strong style="color: var(--admin-gold); font-family: monospace; font-size: 0.88rem;">#${order.id}</strong>
+        </td>
+        <td style="font-size: 0.8rem; color: var(--admin-text-muted); white-space: nowrap;">
+          ${dateFormatted}
+        </td>
+        <td>
+          <div style="display: flex; flex-direction: column;">
+            <strong style="color: var(--admin-text-main); font-size: 0.86rem;">${order.businessName}</strong>
+            <span style="font-size: 0.72rem; color: var(--admin-text-muted); font-family: monospace;">CUIT: ${order.cuit}</span>
+          </div>
+        </td>
+        <td>
+          <div style="display: flex; flex-direction: column; font-size: 0.78rem;">
+            <span>${order.contactName} (${order.phone})</span>
+            <span style="color: var(--admin-text-muted); font-size: 0.72rem;">${order.location}</span>
+          </div>
+        </td>
+        <td>
+          <span style="font-weight: 800; color: var(--admin-text-main);">${order.totalUnits} un.</span>
+          <div style="font-size: 0.7rem; color: var(--admin-text-muted); max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${order.itemsSummary}">
+            ${order.itemsSummary}
+          </div>
+        </td>
+        <td>
+          <strong style="color: #27ae60; font-size: 0.95rem;">${formatARS(order.totalWholesale)}</strong>
+        </td>
+        <td>
+          <span style="font-size: 0.82rem; color: var(--admin-gold); font-weight: 700;">+${formatARS(grossMargin)}</span>
+        </td>
+        <td>
+          <select class="admin-select" onchange="updateWholesaleOrderStatus('${order.id}', this.value)" style="font-size: 0.72rem; height: 30px; padding: 2px 8px; border-radius: var(--radius-sm);">
+            <option value="Pendiente de Aprobación" ${order.status.includes('Pendiente') ? 'selected' : ''}>🟡 Pendiente</option>
+            <option value="En Preparación / Embalaje" ${order.status.includes('Preparación') ? 'selected' : ''}>🔵 En Preparación</option>
+            <option value="Despachado por Expreso" ${order.status.includes('Despachado') ? 'selected' : ''}>🟣 Despachado</option>
+            <option value="Entregado a Comercio" ${order.status.includes('Entregado') ? 'selected' : ''}>🟢 Entregado</option>
+            <option value="Cancelado" ${order.status.includes('Cancelado') ? 'selected' : ''}>🔴 Cancelado</option>
+          </select>
+        </td>
+        <td>
+          <div class="action-btn-cell">
+            <button type="button" class="btn-table-action" onclick="openWholesaleOrderDetail('${order.id}')" title="Ver Detalle / Remito B2B">
+              <i class="fas fa-file-invoice"></i>
+            </button>
+            <a href="https://wa.me/${(order.phone || '').replace(/\D/g, '')}?text=Hola%20${encodeURIComponent(order.contactName)}%20de%20${encodeURIComponent(order.businessName)},%20te%20escribimos%20de%20Mates%20R%C3%ADo%20por%20tu%20pedido%20mayorista%20#${order.id}." target="_blank" class="btn-table-action" title="Contactar por WhatsApp">
+              <i class="fab fa-whatsapp" style="color: #25d366;"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterWholesaleOrdersTable() {
+  renderWholesaleOrdersTable();
+}
+
+function updateWholesaleOrderStatus(id, newStatus) {
+  const orders = getWholesaleOrders();
+  const order = orders.find(o => o.id === id);
+  if (order) {
+    order.status = newStatus;
+    saveWholesaleOrders(orders);
+    renderWholesaleOrdersTable();
+    showNotificationToast(`Estado del pedido B2B #${id} actualizado a: ${newStatus}`, 'fa-circle-check');
+  }
+}
+
+function openWholesaleOrderDetail(id) {
+  const orders = getWholesaleOrders();
+  const order = orders.find(o => o.id === id);
+  if (!order) return;
+
+  const modal = document.getElementById('ws-order-modal');
+  const idBadge = document.getElementById('ws-modal-order-id');
+  const content = document.getElementById('ws-modal-body-content');
+  if (!modal || !content) return;
+
+  if (idBadge) idBadge.textContent = `#${order.id}`;
+
+  const grossMargin = (order.totalWholesale || 0) - (order.totalCost || 0);
+  const marginPct = order.totalWholesale > 0 ? Math.round((grossMargin / order.totalWholesale) * 100) : 0;
+
+  content.innerHTML = `
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; background: rgba(255,255,255,0.03); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+      <div>
+        <span style="font-size: 0.72rem; color: var(--admin-text-muted);">Razón Social:</span>
+        <div style="font-weight: 800; font-size: 0.95rem;">${order.businessName}</div>
+        <div style="font-size: 0.78rem; font-family: monospace; color: var(--admin-gold);">CUIT: ${order.cuit}</div>
+        <div style="font-size: 0.78rem; color: var(--admin-text-muted);">Rubro: ${order.businessType || 'Comercial'}</div>
+      </div>
+      <div>
+        <span style="font-size: 0.72rem; color: var(--admin-text-muted);">Contacto & Despacho:</span>
+        <div style="font-weight: 700; font-size: 0.88rem;">${order.contactName}</div>
+        <div style="font-size: 0.78rem;">${order.phone} • ${order.email}</div>
+        <div style="font-size: 0.78rem; color: var(--admin-text-muted);">Localidad: ${order.location}</div>
+      </div>
+    </div>
+
+    <h4 style="font-size: 0.9rem; margin-bottom: 8px;"><i class="fas fa-boxes-stacked" style="color: var(--admin-gold);"></i> Detalle de Bultos & Mercadería:</h4>
+    <div class="table-responsive-card" style="margin-bottom: 16px;">
+      <table class="admin-data-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Mayorista Unit.</th>
+            <th>Costo Unit.</th>
+            <th>Subtotal Mayorista</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${(order.items || []).map(it => `
+            <tr>
+              <td>${it.name}</td>
+              <td><strong>${it.qty} un.</strong></td>
+              <td>${formatARS(it.price)}</td>
+              <td style="color: var(--admin-text-muted);">${formatARS(it.cost)}</td>
+              <td><strong style="color: #27ae60;">${formatARS(it.price * it.qty)}</strong></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(197, 155, 39, 0.08); padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid rgba(197, 155, 39, 0.3);">
+      <div>
+        <span style="font-size: 0.75rem; color: var(--admin-text-muted);">Rentabilidad de la Orden B2B:</span>
+        <div style="font-size: 1.05rem; font-weight: 800; color: var(--admin-gold);">+${formatARS(grossMargin)} (${marginPct}% Margen Bruto)</div>
+      </div>
+      <div style="text-align: right;">
+        <span style="font-size: 0.75rem; color: var(--admin-text-muted);">Total Mayorista Final:</span>
+        <div style="font-size: 1.3rem; font-weight: 900; color: #27ae60;">${formatARS(order.totalWholesale)}</div>
+      </div>
+    </div>
+
+    ${order.notes ? `
+      <div style="margin-top: 14px; font-size: 0.8rem; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 6px; border-left: 3px solid var(--admin-gold);">
+        <strong>Nota de Despacho:</strong> ${order.notes}
+      </div>
+    ` : ''}
+
+    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+      <button type="button" class="btn-admin btn-admin-outline" onclick="closeWholesaleOrderModal()">Cerrar</button>
+      <button type="button" class="btn-admin btn-admin-gold" onclick="window.print()"><i class="fas fa-print"></i> Imprimir Remito</button>
+    </div>
+  `;
+
+  modal.classList.add('active');
+}
+
+function closeWholesaleOrderModal() {
+  const modal = document.getElementById('ws-order-modal');
+  if (modal) modal.classList.remove('active');
+}
+
+function createSampleWholesaleOrder() {
+  const orders = getWholesaleOrders();
+  const newId = 'B2B-' + (200 + orders.length + 1);
+  const sample = {
+    id: newId,
+    date: new Date().toISOString(),
+    businessName: 'Vinoteca & Regionales El Gaucho',
+    cuit: '30-71982341-2',
+    contactName: 'Facundo Gómez',
+    phone: '351-4928172',
+    email: 'elgauchovinoteca@gmail.com',
+    location: 'Córdoba Capital, Córdoba',
+    businessType: 'Vinoteca & Regalería Fina',
+    itemsSummary: '12x Mate Imperial Alpaca, 12x Termos 1L',
+    items: [
+      { name: 'Mate Imperial Cuero Negro Virola Alpaca', qty: 12, price: 32500, cost: 22000 },
+      { name: 'Termo 1 Litro Acero Cuero', qty: 12, price: 34000, cost: 24000 }
+    ],
+    totalUnits: 24,
+    totalWholesale: 798000,
+    totalCost: 552000,
+    status: 'Pendiente de Aprobación',
+    notes: 'Pedido generado desde el panel para demostración B2B.'
+  };
+
+  orders.unshift(sample);
+  saveWholesaleOrders(orders);
+  renderWholesaleOrdersTable();
+  refreshDashboardData();
+  showNotificationToast(`Pedido mayorista #${newId} generado con éxito`, 'fa-circle-check');
+}
+
+function exportWholesaleOrdersCSV() {
+  const orders = getWholesaleOrders();
+  if (orders.length === 0) {
+    showNotificationToast('No hay pedidos mayoristas para exportar', 'fa-info-circle');
+    return;
+  }
+
+  let csv = 'ID,Fecha,Razon Social,CUIT,Contacto,Localidad,Unidades,Total Mayorista,Costo,Margen,Estado\n';
+  orders.forEach(o => {
+    const margin = (o.totalWholesale || 0) - (o.totalCost || 0);
+    csv += `"${o.id}","${o.date}","${o.businessName}","${o.cuit}","${o.contactName}","${o.location}",${o.totalUnits},${o.totalWholesale},${o.totalCost},${margin},"${o.status}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `mates_rio_ventas_mayoristas_${Date.now()}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showNotificationToast('Archivo CSV de Ventas Mayoristas descargado', 'fa-file-excel');
+}

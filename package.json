@@ -4,6 +4,7 @@
   "description": "Monorepo / Workspace oficial de Mates Río (Frontend y Backend)",
   "private": true,
   "scripts": {
+    "dev": "npx -y concurrently \"npm run dev:back\" \"npm run dev:front\"",
     "dev:front": "npm --prefix frontend-mates-rio run dev",
     "dev:back": "npm --prefix backend-mates-rio run dev",
     "start:front": "npm --prefix frontend-mates-rio start",

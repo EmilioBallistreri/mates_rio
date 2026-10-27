@@ -11,9 +11,9 @@
     </linearGradient>
     <!-- Gradiente de Oro / Bronce para detalles cincelados -->
     <linearGradient id="inf-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fceda2"/>
-      <stop offset="50%" stop-color="#c99b24"/>
-      <stop offset="100%" stop-color="#735508"/>
+      <stop offset="0%" stop-color="#ded8cf"/>
+      <stop offset="50%" stop-color="#14100c"/>
+      <stop offset="100%" stop-color="#14100c"/>
     </linearGradient>
   </defs>
 

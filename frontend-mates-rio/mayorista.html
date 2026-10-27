@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Mayorista B2B • Mates Río | Venta Directa de Fábrica</title>
+  <meta name="description" content="Acceso exclusivo para comercios, regalerías y distribuidores. Precios mayoristas directos de fábrica en mates imperiales, camioneros, termos y accesorios." />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="page-mayorista">
+
+  <!-- ==========================================================================
+       TOP ANNOUNCEMENT BAR
+       ========================================================================== -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-item">
+        <i class="fas fa-boxes-packing"></i>
+        <span><b>CANAL MAYORISTA EXCLUSIVO:</b> Precios de fábrica y envíos por expreso a todo el país.</span>
+      </div>
+      <div class="top-bar-item top-bar-contact">
+        <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20consultar%20por%20compras%20mayoristas." target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-whatsapp"></i> Atención Mayorista: +54 9 351 383-0111
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN HEADER / NAVBAR
+       ========================================================================== -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <div class="header-left">
+        <button class="mobile-menu-toggle action-btn" id="mobile-menu-toggle" onclick="openMobileDrawer()" aria-label="Abrir Menú">
+          <i class="fas fa-bars"></i>
+        </button>
+        <a href="index.html" class="brand-logo-wrap" title="Mates Río - Inicio">
+          <img src="assets/images/logo.jpg" alt="Logo de Mates Río" class="brand-logo-img" />
+          <div class="brand-name-group">
+            <span class="brand-name">MATES RÍO</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="header-center" aria-label="Navegación Principal">
+        <ul class="main-nav">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+          <li><a href="catalogo.html" class="nav-link">Catálogo</a></li>
+          <li><a href="promos.html" class="nav-link">Promos <span class="nav-badge-pill">OFF</span></a></li>
+          <li><a href="personaliza-tu-mate.html" class="nav-link">Personalización <span class="nav-badge-pill pill-gold">360°</span></a></li>
+          <li><a href="mayorista.html" class="nav-link active" style="color: var(--accent-gold); font-weight: 800;">Mayorista <span class="nav-badge-pill pill-gold">B2B</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="header-right">
+        <button class="action-btn theme-toggle-btn" id="theme-toggle-btn" onclick="toggleColorTheme()" title="Cambiar Tema" aria-label="Cambiar tema">
+          <i class="fas fa-sun"></i>
+        </button>
+
+        <a href="index.html" class="btn btn-outline-dark" style="padding: 7px 14px; font-size: 0.78rem; font-weight: 700;">
+          <i class="fas fa-store"></i> <span class="desktop-only-inline">Tienda Minorista</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MOBILE DRAWER
+       ========================================================================== -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileDrawer()"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Menú Móvil">
+    <div class="mobile-drawer-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="assets/images/logo.jpg" alt="Mates Río" style="width: 36px; height: 36px; border-radius: 6px;" />
+        <span style="font-family: var(--font-heading); font-weight: 800;">MATES RÍO</span>
+      </div>
+      <button class="mobile-drawer-close" onclick="closeMobileDrawer()"><i class="fas fa-times"></i></button>
+    </div>
+    <ul class="mobile-nav-list">
+      <li class="mobile-nav-item"><a href="index.html"><i class="fas fa-home" style="width: 22px;"></i> Inicio</a></li>
+      <li class="mobile-nav-item"><a href="catalogo.html"><i class="fas fa-th-large" style="width: 22px;"></i> Catálogo</a></li>
+      <li class="mobile-nav-item"><a href="promos.html"><i class="fas fa-fire" style="width: 22px; color: var(--badge-promo);"></i> Promos</a></li>
+      <li class="mobile-nav-item"><a href="personaliza-tu-mate.html"><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Personalización</a></li>
+      <li class="mobile-nav-item mobile-nav-highlight"><a href="mayorista.html"><i class="fas fa-building" style="width: 22px; color: var(--accent-gold);"></i> Portal Mayorista B2B</a></li>
+    </ul>
+  </aside>
+
+  <!-- ==========================================================================
+       HERO DEL PORTAL MAYORISTA
+       ========================================================================== -->
+  <section class="wholesale-hero" style="background: linear-gradient(180deg, rgba(20,16,12,0.95) 0%, rgba(30,22,16,0.98) 100%), url('assets/images/cat_mates.jpg') center/cover; padding: 50px 0 40px; color: #fff; text-align: center; border-bottom: 2px solid var(--accent-gold);">
+    <div class="container" style="max-width: 900px;">
+      <div class="studio-badge-pill" style="margin-bottom: 14px; background: rgba(197, 155, 39, 0.18); border-color: var(--accent-gold); color: var(--accent-gold);">
+        <i class="fas fa-shield-halved"></i> CANAL COMERCIAL EXCLUSIVO B2B
+      </div>
+      <h1 style="font-family: var(--font-heading); font-size: 2.3rem; font-weight: 900; margin-bottom: 12px; letter-spacing: 1px;">
+        Portal Mayorista & Distribuidores
+      </h1>
+      <p style="font-size: 0.95rem; color: #ded7cd; line-height: 1.6; margin-bottom: 24px;">
+        Venta directa de fábrica desde nuestro taller en Río Ceballos, Córdoba. Accedé a la lista de precios mayoristas bonificada, stock asegurado y grabados láser corporativos para abastecer tu negocio.
+      </p>
+
+      <!-- Grid de Beneficios Comerciales -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 24px;">
+        <div style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: var(--radius-md); border: 1px solid rgba(197, 155, 39, 0.3);">
+          <i class="fas fa-truck-fast" style="font-size: 1.4rem; color: var(--accent-gold); margin-bottom: 8px;"></i>
+          <h4 style="font-size: 0.92rem; margin: 0 0 4px; font-weight: 800;">Envíos a Todo el País</h4>
+          <p style="font-size: 0.76rem; color: #bbb; margin: 0;">Por expreso, transporte de cargas o encomienda a tu elección.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: var(--radius-md); border: 1px solid rgba(197, 155, 39, 0.3);">
+          <i class="fas fa-percent" style="font-size: 1.4rem; color: #27ae60; margin-bottom: 8px;"></i>
+          <h4 style="font-size: 0.92rem; margin: 0 0 4px; font-weight: 800;">Margen de Reventa de 40% a 55%</h4>
+          <p style="font-size: 0.76rem; color: #bbb; margin: 0;">Precios de costo industrial pensados para tu máxima rentabilidad.</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: var(--radius-md); border: 1px solid rgba(197, 155, 39, 0.3);">
+          <i class="fas fa-boxes-stacked" style="font-size: 1.4rem; color: var(--accent-gold); margin-bottom: 8px;"></i>
+          <h4 style="font-size: 0.92rem; margin: 0 0 4px; font-weight: 800;">Pedido Mínimo Flexible</h4>
+          <p style="font-size: 0.76rem; color: #bbb; margin: 0;">Combiná mates imperiales, camioneros, termos y bombillas en una misma orden.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CONTENEDOR PRINCIPAL: MURO DE REGISTRO / LOGIN B2B O CATÁLOGO MAYORISTA
+       ========================================================================== -->
+  <main class="container" style="padding: 40px 15px 80px;">
+
+    <!-- 1. MURO DE REGISTRO Y LOGIN COMERCIAL OBLIGATORIO (Si NO está logueado) -->
+    <div id="wholesale-auth-wall" style="max-width: 650px; margin: 0 auto; background: var(--bg-surface); border: 2px solid var(--accent-gold); border-radius: var(--radius-lg); padding: 32px 28px; box-shadow: var(--shadow-lg);">
+      
+      <div style="text-align: center; margin-bottom: 24px;">
+        <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(197, 155, 39, 0.15); display: inline-flex; align-items: center; justify-content: center; color: var(--accent-gold); font-size: 1.6rem; margin-bottom: 12px;">
+          <i class="fas fa-lock"></i>
+        </div>
+        <h2 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; margin-bottom: 6px;">
+          Muro de Acceso Comercial B2B
+        </h2>
+        <p style="font-size: 0.84rem; color: var(--text-muted); margin: 0;">
+          Completá los datos de tu comercio o empresa para validar tu cuenta mayorista y visualizar la lista de precios bonificados.
+        </p>
+      </div>
+
+      <!-- Selector de Modo: Registro vs Login Comercial -->
+      <div style="display: flex; gap: 8px; background: rgba(0,0,0,0.06); padding: 4px; border-radius: var(--radius-sm); margin-bottom: 22px;">
+        <button type="button" class="btn" id="tab-btn-register" onclick="switchB2BAuthTab('register')" style="flex: 1; padding: 10px; font-weight: 800; font-size: 0.82rem; background: var(--accent-gold); color: #121212;">
+          <i class="fas fa-store"></i> Registrar Nuevo Comercio
+        </button>
+        <button type="button" class="btn" id="tab-btn-login" onclick="switchB2BAuthTab('login')" style="flex: 1; padding: 10px; font-weight: 700; font-size: 0.82rem; background: transparent; color: var(--text-main);">
+          <i class="fas fa-key"></i> Ya Tengo Cuenta Comercial
+        </button>
+      </div>
+
+      <!-- FORMULARIO 1: REGISTRO COMERCIAL B2B -->
+      <form id="form-wholesale-register" onsubmit="event.preventDefault(); handleWholesaleRegister();">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div class="form-group" style="grid-column: span 2;">
+            <label class="sub-label">Razón Social o Nombre de Fantasía del Negocio <span style="color: #dc2626;">*</span></label>
+            <input type="text" id="ws-reg-business-name" class="form-control" placeholder="Ej: Regalería El Hornero S.R.L." required style="width: 100%; height: 42px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.86rem; background: var(--bg-main);" />
+          </div>
+
+          <div class="form-group">
+            <label class="sub-label">CUIT / CUIL Comercial <span style="color: #dc2626;">*</span></label>
+            <input type="text" id="ws-reg-cuit" class="form-control" placeholder="Ej: 30-71458923-8" required style="width: 100%; height: 42px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.86rem; background: var(--bg-main); font-family: monospace;" />
+          </div>
+
+          <div class="form-group">
+            <label class="sub-label">Rubro / Tipo de Comercio <span style="color: #dc2626;">*</span></label>
+            <select id="ws-reg-type" class="form-control" required style="width: 100%; height: 42px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.86rem; background: var(--bg-main);">
+              <option value="Regalería / Regionales">Regalería & Regionales</option>
+              <option value="Bazar Especializado">Bazar Especializado</option>
+              <option value="Vinoteca / Gourmet">Vinoteca & Delicatessen</option>
+              <option value="Tienda Matera">Tienda Matera Exclusiva</option>
+              <option value="Distribuidora Mayorista">Distribuidora Mayorista</option>
+              <option value="Regalos Empresariales">Regalos Empresariales</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="sub-label">Nombre y Apellido del Responsable <span style="color: #dc2626;">*</span></label>
+            <input type="text" id="ws-reg-owner" class="form-control" placeholder="Ej: Lucas Benítez" required style="width: 100%; height: 42px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.86rem; background: var(--bg-main);" />
+          </div>
+
+          <div class="form-group">
+            <label class="sub-label">WhatsApp de Compras <span style="color: #dc2626;">*</span></label>
+            <input type="tel" id="ws-reg-phone" class="form-control" placeholder="Ej: 3515982314" required style="width: 100%; height: 42px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.86rem; background: var(--bg-main);" />
+          </div>
+
+          <div class="form-group" style="grid-column: span 2;">
+            <label class="sub-label">Localidad y Provincia de Despacho <span style="color: #dc2626;">*</span></label>
+            <input type="text" id="ws-reg-location" class="form-control" placeholder="Ej: Villa Carlos Paz, Córdoba" required style="width: 100%; height: 42px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.86rem; background: var(--bg-main);" />
+          </div>
+
+          <div class="form-group">
+            <label class="sub-label">Email Corporativo / Comercial <span style="color: #dc2626;">*</span></label>
+            <input type="email" id="ws-reg-email" class="form-control" placeholder="compras@negocio.com" required style="width: 100%; height: 42px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.86rem; background: var(--bg-main);" />
+          </div>
+
+          <div class="form-group">
+            <label class="sub-label">Crear Contraseña Comercial <span style="color: #dc2626;">*</span></label>
+            <input type="password" id="ws-reg-password" class="form-control" placeholder="••••••••" required style="width: 100%; height: 42px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.86rem; background: var(--bg-main);" />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 800; border-radius: var(--radius-sm);">
+          <i class="fas fa-check-circle"></i> Registrar Comercio & Desbloquear Lista Mayorista
+        </button>
+      </form>
+
+      <!-- FORMULARIO 2: LOGIN COMERCIAL B2B -->
+      <form id="form-wholesale-login" onsubmit="event.preventDefault(); handleWholesaleLogin();" style="display: none;">
+        <div style="margin-bottom: 14px;">
+          <label class="sub-label">Email Comercial o CUIT:</label>
+          <input type="text" id="ws-login-ident" class="form-control" placeholder="compras@negocio.com o 30-71458923-8" required style="width: 100%; height: 44px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.9rem; background: var(--bg-main);" />
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label class="sub-label">Contraseña Comercial:</label>
+          <input type="password" id="ws-login-pass" class="form-control" placeholder="••••••••" required style="width: 100%; height: 44px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 0 12px; font-size: 0.9rem; background: var(--bg-main);" />
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 800; border-radius: var(--radius-sm); margin-bottom: 12px;">
+          <i class="fas fa-sign-in-alt"></i> Ingresar al Portal Mayorista
+        </button>
+
+        <!-- Botón Demo Rápido -->
+        <button type="button" class="btn btn-outline-dark" onclick="loginDemoWholesale()" style="width: 100%; padding: 10px; font-size: 0.82rem; font-weight: 700;">
+          <i class="fas fa-wand-magic-sparkles" style="color: var(--accent-gold);"></i> Acceso Rápido Comercio Demo (1 Clic)
+        </button>
+      </form>
+    </div>
+
+    <!-- 2. CATÁLOGO Y COTIZADOR MAYORISTA B2B (Visible tras login comercial) -->
+    <div id="wholesale-catalog-stage" style="display: none;">
+      
+      <!-- Barra Superior de Estado del Comercio Conectado -->
+      <div style="background: var(--bg-surface); border: 1.5px solid rgba(197, 155, 39, 0.4); border-radius: var(--radius-md); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(197, 155, 39, 0.15); display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-size: 1.2rem;">
+            <i class="fas fa-building"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <strong id="b2b-active-business-name" style="font-size: 1.05rem; color: var(--text-main);">Regalería Serrana Alta Gracia</strong>
+              <span class="nav-badge-pill pill-gold" style="font-size: 0.65rem;">CLIENTE B2B HABILITADO</span>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted);">
+              CUIT: <span id="b2b-active-cuit" style="font-family: monospace;">30-71649281-4</span> • Despacho: <span id="b2b-active-location">Alta Gracia, Córdoba</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <button type="button" class="btn btn-outline-dark btn-sm" onclick="logoutWholesaleCustomer()">
+            <i class="fas fa-sign-out-alt"></i> Salir de Cuenta B2B
+          </button>
+        </div>
+      </div>
+
+      <!-- Layout del Catálogo: Lista de Productos Mayoristas + Resumen Flotante -->
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;" class="wholesale-grid-layout">
+        
+        <!-- Columna Izquierda: Tabla / Lista de Precios Mayoristas -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; margin: 0;">
+              <i class="fas fa-boxes-stacked" style="color: var(--accent-gold); margin-right: 6px;"></i> Lista Oficial de Precios Mayoristas de Fábrica
+            </h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Precios netos sin IVA</span>
+          </div>
+
+          <div class="table-responsive-card" style="box-shadow: var(--shadow-sm); border: 1px solid var(--border-light);">
+            <table class="admin-data-table" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th>Artículo</th>
+                  <th>Precio Mayorista (Fábrica)</th>
+                  <th>Precio Minorista Sugerido</th>
+                  <th>Tu Margen de Reventa</th>
+                  <th>Unidades</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody id="b2b-products-tbody">
+                <!-- Rendered dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Resumen de Orden B2B & Envío -->
+        <aside>
+          <div style="background: var(--bg-surface); border: 2px solid var(--accent-gold); border-radius: var(--radius-md); padding: 22px; position: sticky; top: 90px; box-shadow: var(--shadow-md);">
+            <h4 style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; margin: 0 0 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px;">
+              <i class="fas fa-receipt" style="color: var(--accent-gold);"></i> Resumen de Pedido Mayorista
+            </h4>
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px;">
+              <span>Total de unidades seleccionadas:</span>
+              <strong id="b2b-summary-units" style="font-size: 1rem; color: var(--text-main);">0 un.</strong>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 12px;">
+              <span>Pedido mínimo sugerido:</span>
+              <span style="font-size: 0.78rem; color: #27ae60; font-weight: 700;">10 un. (Alcanzable)</span>
+            </div>
+
+            <div style="background: rgba(197, 155, 39, 0.08); padding: 12px; border-radius: var(--radius-sm); border: 1px solid rgba(197, 155, 39, 0.25); margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <span style="font-size: 0.78rem; color: var(--text-muted);">Total Mayorista de la Orden:</span>
+                <strong id="b2b-summary-total" style="font-size: 1.35rem; font-weight: 900; color: #27ae60;">$ 0</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--accent-gold); margin-top: 4px; font-weight: 700;">
+                <span>Ganancia bruta estimada al revender:</span>
+                <span id="b2b-summary-profit">+$ 0</span>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+              <label class="sub-label" for="b2b-order-notes">Notas / Expreso o Transporte de preferencia:</label>
+              <textarea id="b2b-order-notes" class="form-control" rows="3" placeholder="Ej: Enviar por Expreso Lancioni a sucursal Córdoba Capital con factura A..." style="width: 100%; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 0.82rem; background: var(--bg-main); resize: vertical;"></textarea>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="submitWholesaleOrder()" style="width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 800; border-radius: var(--radius-sm); box-shadow: 0 4px 14px rgba(197, 155, 39, 0.35);">
+              <i class="fas fa-paper-plane"></i> Confirmar & Enviar Pedido Mayorista
+            </button>
+            <p style="font-size: 0.72rem; color: var(--text-muted); text-align: center; margin-top: 8px;">
+              El pedido ingresará directamente al panel de producción del taller en Río Ceballos.
+            </p>
+          </div>
+        </aside>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       MODAL DE CONFIRMACIÓN DE PEDIDO MAYORISTA
+       ========================================================================== -->
+  <div class="admin-modal-overlay" id="b2b-success-modal" style="display: none;">
+    <div class="admin-modal-card" style="max-width: 500px; text-align: center; padding: 30px;">
+      <div style="width: 70px; height: 70px; border-radius: 50%; background: #ebfaf1; color: #27ae60; font-size: 2rem; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+        <i class="fas fa-check"></i>
+      </div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; margin-bottom: 8px;">
+        ¡Pedido Mayorista Confirmado!
+      </h3>
+      <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px;">
+        Tu orden <b id="b2b-modal-order-id" style="color: var(--accent-gold);">#B2B-XXX</b> fue registrada con éxito en nuestro sistema de taller. Nuestro equipo comercial coordinará contigo el remito y despacho.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a id="b2b-modal-wa-btn" href="#" target="_blank" class="btn btn-primary" style="padding: 12px; font-weight: 800; background: #25d366; border-color: #25d366; color: #fff;">
+          <i class="fab fa-whatsapp"></i> Abrir WhatsApp del Taller con Remito
+        </a>
+        <button type="button" class="btn btn-outline-dark" onclick="closeB2BSuccessModal()">
+          Volver al Catálogo Mayorista
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Lógica interactiva del Portal Mayorista -->
+  <script>
+    // Estado del comprador B2B
+    let currentB2BCustomer = null;
+    let b2bCart = {}; // { [productId]: quantity }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkB2BSession();
+    });
+
+    function checkB2BSession() {
+      const stored = localStorage.getItem('mates_rio_b2b_session');
+      if (stored) {
+        try {
+          currentB2BCustomer = JSON.parse(stored);
+          showWholesaleCatalog();
+        } catch (e) {
+          showWholesaleAuthWall();
+        }
+      } else {
+        showWholesaleAuthWall();
+      }
+    }
+
+    function switchB2BAuthTab(tab) {
+      const formReg = document.getElementById('form-wholesale-register');
+      const formLog = document.getElementById('form-wholesale-login');
+      const btnReg = document.getElementById('tab-btn-register');
+      const btnLog = document.getElementById('tab-btn-login');
+
+      if (tab === 'register') {
+        formReg.style.display = 'block';
+        formLog.style.display = 'none';
+        btnReg.style.background = 'var(--accent-gold)';
+        btnReg.style.color = '#121212';
+        btnLog.style.background = 'transparent';
+        btnLog.style.color = 'var(--text-main)';
+      } else {
+        formReg.style.display = 'none';
+        formLog.style.display = 'block';
+        btnLog.style.background = 'var(--accent-gold)';
+        btnLog.style.color = '#121212';
+        btnReg.style.background = 'transparent';
+        btnReg.style.color = 'var(--text-main)';
+      }
+    }
+
+    function handleWholesaleRegister() {
+      const businessName = document.getElementById('ws-reg-business-name').value.trim();
+      const cuit = document.getElementById('ws-reg-cuit').value.trim();
+      const owner = document.getElementById('ws-reg-owner').value.trim();
+      const type = document.getElementById('ws-reg-type').value;
+      const location = document.getElementById('ws-reg-location').value.trim();
+      const phone = document.getElementById('ws-reg-phone').value.trim();
+      const email = document.getElementById('ws-reg-email').value.trim();
+
+      if (!businessName || !cuit || !phone || !email) {
+        alert('Por favor completá todos los campos comerciales obligatorios.');
+        return;
+      }
+
+      const customer = {
+        businessName,
+        cuit,
+        owner,
+        type,
+        location,
+        phone,
+        email
+      };
+
+      // Guardar en cuentas registradas B2B
+      const customers = JSON.parse(localStorage.getItem('mates_rio_b2b_customers')) || [];
+      customers.push(customer);
+      localStorage.setItem('mates_rio_b2b_customers', JSON.stringify(customers));
+
+      // Iniciar sesión B2B
+      localStorage.setItem('mates_rio_b2b_session', JSON.stringify(customer));
+      currentB2BCustomer = customer;
+
+      showWholesaleCatalog();
+    }
+
+    function handleWholesaleLogin() {
+      const ident = document.getElementById('ws-login-ident').value.trim();
+      if (!ident) {
+        alert('Por favor ingresá tu CUIT o Email comercial.');
+        return;
+      }
+
+      const customers = JSON.parse(localStorage.getItem('mates_rio_b2b_customers')) || [];
+      const found = customers.find(c => c.email.toLowerCase() === ident.toLowerCase() || c.cuit.includes(ident));
+
+      const customer = found || {
+        businessName: 'Comercio Mayorista Habilitado',
+        cuit: ident.includes('-') ? ident : '30-71649281-4',
+        owner: 'Responsable Comercial',
+        type: 'Regalería & Artículos Regionales',
+        location: 'Córdoba Capital, Córdoba',
+        phone: '351-3830111',
+        email: ident.includes('@') ? ident : 'comercial@negocio.com.ar'
+      };
+
+      localStorage.setItem('mates_rio_b2b_session', JSON.stringify(customer));
+      currentB2BCustomer = customer;
+      showWholesaleCatalog();
+    }
+
+    function loginDemoWholesale() {
+      const demoCustomer = {
+        businessName: 'Regalería Serrana Alta Gracia',
+        cuit: '30-71649281-4',
+        owner: 'Marcelo Rossi',
+        type: 'Regalería & Regionales',
+        location: 'Alta Gracia, Córdoba',
+        phone: '3547-582319',
+        email: 'ventas@regaleriaserrana.com.ar'
+      };
+      localStorage.setItem('mates_rio_b2b_session', JSON.stringify(demoCustomer));
+      currentB2BCustomer = demoCustomer;
+      showWholesaleCatalog();
+    }
+
+    function logoutWholesaleCustomer() {
+      localStorage.removeItem('mates_rio_b2b_session');
+      currentB2BCustomer = null;
+      b2bCart = {};
+      showWholesaleAuthWall();
+    }
+
+    function showWholesaleAuthWall() {
+      document.getElementById('wholesale-auth-wall').style.display = 'block';
+      document.getElementById('wholesale-catalog-stage').style.display = 'none';
+    }
+
+    function showWholesaleCatalog() {
+      document.getElementById('wholesale-auth-wall').style.display = 'none';
+      document.getElementById('wholesale-catalog-stage').style.display = 'block';
+
+      if (currentB2BCustomer) {
+        document.getElementById('b2b-active-business-name').textContent = currentB2BCustomer.businessName;
+        document.getElementById('b2b-active-cuit').textContent = currentB2BCustomer.cuit;
+        document.getElementById('b2b-active-location').textContent = currentB2BCustomer.location;
+      }
+
+      renderWholesaleProductsTable();
+    }
+
+    function renderWholesaleProductsTable() {
+      const tbody = document.getElementById('b2b-products-tbody');
+      if (!tbody || typeof PRODUCTS_DATA === 'undefined') return;
+
+      tbody.innerHTML = PRODUCTS_DATA.map(p => {
+        const cost = p.cost || Math.round((p.price * 0.48) / 100) * 100;
+        const wsPrice = p.wholesalePrice || Math.round((p.price * 0.68) / 100) * 100;
+        const retailPrice = p.price;
+        const marginPct = cost > 0 ? Math.round(((wsPrice - cost) / cost) * 100) : 40;
+        const resaleMarginPct = Math.round(((retailPrice - wsPrice) / wsPrice) * 100);
+
+        const currentQty = b2bCart[p.id] || 0;
+        const subtotal = currentQty * wsPrice;
+
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="${p.image}" alt="${p.name}" style="width: 44px; height: 44px; border-radius: 6px; object-fit: cover; border: 1px solid var(--border-light);" />
+                <div>
+                  <strong style="font-size: 0.88rem; color: var(--text-main);">${p.name}</strong>
+                  <div style="font-size: 0.72rem; color: var(--text-muted);">${p.categoryName || p.category.toUpperCase()}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <strong style="color: #27ae60; font-size: 0.95rem;">$ ${wsPrice.toLocaleString('es-AR')}</strong>
+            </td>
+            <td>
+              <span style="font-size: 0.85rem; color: var(--text-muted); text-decoration: line-through;">$ ${retailPrice.toLocaleString('es-AR')}</span>
+            </td>
+            <td>
+              <span class="sidebar-badge badge-success" style="font-size: 0.75rem; padding: 3px 8px;">+${resaleMarginPct}% al revender</span>
+            </td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <button type="button" class="btn btn-outline-dark btn-sm" onclick="adjustB2BQty('${p.id}', -5)" style="padding: 2px 8px;">-5</button>
+                <button type="button" class="btn btn-outline-dark btn-sm" onclick="adjustB2BQty('${p.id}', -1)" style="padding: 2px 7px;">-</button>
+                <input type="number" min="0" value="${currentQty}" onchange="setB2BQty('${p.id}', this.value)" style="width: 50px; height: 32px; text-align: center; border-radius: 4px; border: 1.5px solid var(--border-light); font-weight: 800; background: var(--bg-main);" />
+                <button type="button" class="btn btn-outline-dark btn-sm" onclick="adjustB2BQty('${p.id}', 1)" style="padding: 2px 7px;">+</button>
+                <button type="button" class="btn btn-outline-dark btn-sm" onclick="adjustB2BQty('${p.id}', 5)" style="padding: 2px 8px;">+5</button>
+              </div>
+            </td>
+            <td>
+              <strong style="font-size: 0.95rem; color: var(--text-main);">$ ${subtotal.toLocaleString('es-AR')}</strong>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      updateB2BSummary();
+    }
+
+    function adjustB2BQty(prodId, delta) {
+      const cur = b2bCart[prodId] || 0;
+      const next = Math.max(0, cur + delta);
+      if (next === 0) delete b2bCart[prodId];
+      else b2bCart[prodId] = next;
+      renderWholesaleProductsTable();
+    }
+
+    function setB2BQty(prodId, val) {
+      const num = parseInt(val, 10);
+      if (isNaN(num) || num <= 0) delete b2bCart[prodId];
+      else b2bCart[prodId] = num;
+      renderWholesaleProductsTable();
+    }
+
+    function updateB2BSummary() {
+      let totalUnits = 0;
+      let totalWs = 0;
+      let totalRetail = 0;
+
+      Object.keys(b2bCart).forEach(id => {
+        const qty = b2bCart[id];
+        const p = PRODUCTS_DATA.find(x => x.id === id);
+        if (p) {
+          const ws = p.wholesalePrice || Math.round((p.price * 0.68) / 100) * 100;
+          totalUnits += qty;
+          totalWs += qty * ws;
+          totalRetail += qty * p.price;
+        }
+      });
+
+      const totalProfit = totalRetail - totalWs;
+
+      document.getElementById('b2b-summary-units').textContent = `${totalUnits} un.`;
+      document.getElementById('b2b-summary-total').textContent = `$ ${totalWs.toLocaleString('es-AR')}`;
+      document.getElementById('b2b-summary-profit').textContent = `+$ ${totalProfit.toLocaleString('es-AR')}`;
+    }
+
+    function submitWholesaleOrder() {
+      const itemsKeys = Object.keys(b2bCart);
+      if (itemsKeys.length === 0) {
+        alert('Por favor seleccioná al menos 1 artículo para armar tu pedido mayorista.');
+        return;
+      }
+
+      let totalUnits = 0;
+      let totalWs = 0;
+      let totalCost = 0;
+      const itemsList = [];
+      const summaries = [];
+
+      itemsKeys.forEach(id => {
+        const qty = b2bCart[id];
+        const p = PRODUCTS_DATA.find(x => x.id === id);
+        if (p) {
+          const cost = p.cost || Math.round((p.price * 0.48) / 100) * 100;
+          const ws = p.wholesalePrice || Math.round((p.price * 0.68) / 100) * 100;
+          totalUnits += qty;
+          totalWs += qty * ws;
+          totalCost += qty * cost;
+          itemsList.push({
+            productId: p.id,
+            name: p.name,
+            qty: qty,
+            price: ws,
+            cost: cost
+          });
+          summaries.push(`${qty}x ${p.name}`);
+        }
+      });
+
+      const notes = document.getElementById('b2b-order-notes')?.value.trim() || '';
+      const orderId = 'B2B-' + Math.floor(100 + Math.random() * 900);
+
+      const wholesaleOrder = {
+        id: orderId,
+        date: new Date().toISOString(),
+        businessName: currentB2BCustomer?.businessName || 'Comercio Mayorista',
+        cuit: currentB2BCustomer?.cuit || '30-XXXXXXXX-X',
+        contactName: currentB2BCustomer?.owner || 'Responsable',
+        phone: currentB2BCustomer?.phone || '351-3830111',
+        email: currentB2BCustomer?.email || 'comercial@cliente.com',
+        location: currentB2BCustomer?.location || 'Córdoba',
+        businessType: currentB2BCustomer?.type || 'Comercial',
+        itemsSummary: summaries.join(', '),
+        items: itemsList,
+        totalUnits: totalUnits,
+        totalWholesale: totalWs,
+        totalCost: totalCost,
+        status: 'Pendiente de Aprobación',
+        notes: notes
+      };
+
+      // Guardar en localStorage para que aparezca en el Panel de Administración de Mates Río
+      const existing = JSON.parse(localStorage.getItem('mates_rio_wholesale_orders')) || [];
+      existing.unshift(wholesaleOrder);
+      localStorage.setItem('mates_rio_wholesale_orders', JSON.stringify(existing));
+
+      // Preparar enlace a WhatsApp
+      const waMsg = `¡Hola Mates Río! Registramos el Pedido Mayorista #${orderId} de "${wholesaleOrder.businessName}" (CUIT: ${wholesaleOrder.cuit}).\nTotal: $ ${totalWs.toLocaleString('es-AR')} (${totalUnits} unidades).\nDetalle: ${summaries.slice(0, 3).join(', ')}${summaries.length > 3 ? '...' : ''}\nNotas: ${notes || 'Sin notas adicionales'}`;
+      const waUrl = `https://wa.me/5493513830111?text=${encodeURIComponent(waMsg)}`;
+
+      document.getElementById('b2b-modal-order-id').textContent = `#${orderId}`;
+      document.getElementById('b2b-modal-wa-btn').href = waUrl;
+
+      const modal = document.getElementById('b2b-success-modal');
+      if (modal) modal.style.display = 'flex';
+
+      // Limpiar carrito B2B
+      b2bCart = {};
+      renderWholesaleProductsTable();
+    }
+
+    function closeB2BSuccessModal() {
+      const modal = document.getElementById('b2b-success-modal');
+      if (modal) modal.style.display = 'none';
+    }
+  </script>
+
+</body>
+</html>
