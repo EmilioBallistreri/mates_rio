@@ -19,7 +19,12 @@
       "bombilla": "Alpaca pico de loro 19cm con filtro desarmable",
       "garantia": "Garantía artesanal de 6 meses"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 40800,
+    "wholesalePrice": 57700,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 41,
+    "stock": 12
   },
   {
     "id": "promo-2",
@@ -41,7 +46,12 @@
       "bombilla": "Bombillón curvo con resorte limpiable",
       "garantia": "Garantía artesanal de 6 meses"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 34800,
+    "wholesalePrice": 49300,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 42,
+    "stock": 15
   },
   {
     "id": "promo-3",
@@ -62,7 +72,12 @@
       "bombilla": "2 Bombillas pico de loro estándar de 18cm",
       "garantia": "Garantía de satisfacción Mates Río"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 28800,
+    "wholesalePrice": 40700,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 41,
+    "stock": 18
   },
   {
     "id": "promo-4",
@@ -84,7 +99,12 @@
       "canasta": "Canasta con manija de madera torneada",
       "garantia": "Garantía artesanal Mates Río de 1 año"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 57100,
+    "wholesalePrice": 80900,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 42,
+    "stock": 21
   },
   {
     "id": "promo-5",
@@ -106,7 +126,12 @@
       "bombilla": "Alpaca maciza con resorte limpiador",
       "garantia": "Garantía oficial Mates Río"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 24000,
+    "wholesalePrice": 33900,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 41,
+    "stock": 24
   },
   {
     "id": "mate-1",
@@ -128,7 +153,12 @@
       "base": "Fuelle con base de alpaca repujada",
       "alturaAprox": "12 a 14 cm"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 22300,
+    "wholesalePrice": 31600,
+    "retailMarginPercent": 109,
+    "wholesaleMarginPercent": 42,
+    "stock": 27
   },
   {
     "id": "mate-2",
@@ -150,7 +180,12 @@
       "apoyo": "Costura reforzada con base firme",
       "alturaAprox": "11 a 13 cm"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 16400,
+    "wholesalePrice": 23300,
+    "retailMarginPercent": 109,
+    "wholesaleMarginPercent": 42,
+    "stock": 30
   },
   {
     "id": "mate-3",
@@ -172,7 +207,12 @@
       "alturaAprox": "11 cm",
       "diametroBoca": "9 cm"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 17700,
+    "wholesalePrice": 25000,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 41,
+    "stock": 14
   },
   {
     "id": "mate-4",
@@ -193,7 +233,12 @@
       "cuero": "Cuero vacuno labrado con tratamiento antihumedad",
       "incluye": "Certificado de autenticidad artesanal"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 25000,
+    "wholesalePrice": 35400,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 42,
+    "stock": 17
   },
   {
     "id": "termo-1",
@@ -215,7 +260,12 @@
       "tapon": "Pico matero vertedor de flujo continuo libre de goteo",
       "material": "Acero inoxidable grado alimenticio 18/8 libre de BPA"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 20600,
+    "wholesalePrice": 29200,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 42,
+    "stock": 20
   },
   {
     "id": "termo-2",
@@ -236,7 +286,12 @@
       "mantenimiento": "Conserva agua caliente por más de 28 horas",
       "tapa": "Tapa térmica que funciona como taza / vaso auxiliar"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 30700,
+    "wholesalePrice": 43500,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 42,
+    "stock": 23
   },
   {
     "id": "termo-3",
@@ -257,7 +312,12 @@
       "tapon": "Pico vertedor 360 cebador exacto",
       "garantia": "Garantía de hermeticidad total"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 18500,
+    "wholesalePrice": 26200,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 42,
+    "stock": 26
   },
   {
     "id": "acc-1",
@@ -279,7 +339,12 @@
       "filtro": "Filtro cuchara microperforado de alta densidad",
       "limpieza": "Incluye cepillo limpiador de regalo"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 8100,
+    "wholesalePrice": 11500,
+    "retailMarginPercent": 109,
+    "wholesaleMarginPercent": 42,
+    "stock": 29
   },
   {
     "id": "acc-2",
@@ -299,7 +364,12 @@
       "largo": "21 cm",
       "filtro": "Cuchara amplia con doble ranurado"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 8900,
+    "wholesalePrice": 12600,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 42,
+    "stock": 13
   },
   {
     "id": "acc-3",
@@ -319,7 +389,12 @@
       "capacidad": "Hasta 250g de yerba",
       "facilidad": "Lavable en segundos, sistema a rosca hermético"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 4400,
+    "wholesalePrice": 6300,
+    "retailMarginPercent": 109,
+    "wholesaleMarginPercent": 43,
+    "stock": 16
   },
   {
     "id": "acc-4",
@@ -339,7 +414,12 @@
       "capacidad": "Yerbera 350g / Azucarera 250g",
       "tapa": "Pico dosificador retráctil"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 9500,
+    "wholesalePrice": 13500,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 42,
+    "stock": 19
   },
   {
     "id": "yerba-1",
@@ -361,7 +441,12 @@
       "peso": "500 gramos",
       "molienda": "Tradicional con palo equilibrado"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 2500,
+    "wholesalePrice": 3500,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 40,
+    "stock": 22
   },
   {
     "id": "yerba-2",
@@ -382,7 +467,12 @@
       "origen": "Oberá, Misiones",
       "peso": "500 gramos"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 2800,
+    "wholesalePrice": 3900,
+    "retailMarginPercent": 107,
+    "wholesaleMarginPercent": 39,
+    "stock": 25
   },
   {
     "id": "yerba-3",
@@ -402,7 +492,12 @@
       "beneficios": "Digestiva y refrescante",
       "peso": "500 gramos"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 2400,
+    "wholesalePrice": 3300,
+    "retailMarginPercent": 104,
+    "wholesaleMarginPercent": 38,
+    "stock": 28
   },
   {
     "id": "equipo-1",
@@ -424,7 +519,12 @@
       "correas": "Correas acolchadas reforzadas regulables",
       "bolsillos": "Bolsillo frontal para llaves, celular y bombillas"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 43200,
+    "wholesalePrice": 61100,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 41,
+    "stock": 12
   },
   {
     "id": "equipo-2",
@@ -445,7 +545,12 @@
       "capacidad": "Entra termo de 1L a 1.9L + mate + yerbera",
       "origen": "Fabricación 100% artesanal en Buenos Aires"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 21400,
+    "wholesalePrice": 30300,
+    "retailMarginPercent": 108,
+    "wholesaleMarginPercent": 42,
+    "stock": 15
   },
   {
     "id": "equipo-3",
@@ -466,6 +571,11 @@
       "compartimentos": "Sujetador interno para termo y mate",
       "lavable": "Apto lavado a mano"
     },
-    "inStock": true
+    "inStock": true,
+    "cost": 18100,
+    "wholesalePrice": 25700,
+    "retailMarginPercent": 109,
+    "wholesaleMarginPercent": 42,
+    "stock": 18
   }
 ]

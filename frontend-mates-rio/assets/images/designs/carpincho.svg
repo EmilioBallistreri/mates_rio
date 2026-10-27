@@ -2,22 +2,22 @@
   <!-- Carpincho / Capibara Criollo Argentino - Diseño de Grabado Láser y Orfebrería HD -->
   <defs>
     <linearGradient id="carpincho-body-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8a5629"/>
-      <stop offset="45%" stop-color="#5e3818"/>
-      <stop offset="85%" stop-color="#3b200b"/>
-      <stop offset="100%" stop-color="#241205"/>
+      <stop offset="0%" stop-color="#3b3128"/>
+      <stop offset="45%" stop-color="#14100c"/>
+      <stop offset="85%" stop-color="#14100c"/>
+      <stop offset="100%" stop-color="#14100c"/>
     </linearGradient>
     <linearGradient id="carpincho-snout-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b200b"/>
-      <stop offset="100%" stop-color="#190a02"/>
+      <stop offset="0%" stop-color="#14100c"/>
+      <stop offset="100%" stop-color="#14100c"/>
     </linearGradient>
   </defs>
 
-  <g stroke="#1a0c03" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+  <g stroke="#14100c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
     <!-- Pata trasera izquierda (segundo plano) -->
-    <path d="M 105 270 C 100 290 95 320 90 355 L 115 358 C 122 340 128 310 135 285 Z" fill="#2d1708"/>
+    <path d="M 105 270 C 100 290 95 320 90 355 L 115 358 C 122 340 128 310 135 285 Z" fill="#14100c"/>
     <!-- Pata delantera izquierda (segundo plano) -->
-    <path d="M 345 260 C 342 285 338 320 335 355 L 360 357 C 365 330 370 290 375 260 Z" fill="#2d1708"/>
+    <path d="M 345 260 C 342 285 338 320 335 355 L 360 357 C 365 330 370 290 375 260 Z" fill="#14100c"/>
 
     <!-- Silueta principal del Carpincho: hocico cuadrangular típico, lomo robusto redondeado -->
     <path d="
@@ -43,18 +43,18 @@
     " fill="url(#carpincho-body-grad)"/>
 
     <!-- Pelaje y textura de lomo cerdoso característico -->
-    <path d="M 150 115 C 200 102 260 98 320 105" fill="none" stroke="#a66e3c" stroke-width="2.5" opacity="0.6"/>
-    <path d="M 125 145 C 180 128 250 120 310 128" fill="none" stroke="#a66e3c" stroke-width="2" opacity="0.5"/>
-    <path d="M 105 185 C 160 165 230 155 290 165" fill="none" stroke="#a66e3c" stroke-width="1.8" opacity="0.4"/>
+    <path d="M 150 115 C 200 102 260 98 320 105" fill="none" stroke="#3b3128" stroke-width="2.5" opacity="0.6"/>
+    <path d="M 125 145 C 180 128 250 120 310 128" fill="none" stroke="#3b3128" stroke-width="2" opacity="0.5"/>
+    <path d="M 105 185 C 160 165 230 155 290 165" fill="none" stroke="#3b3128" stroke-width="1.8" opacity="0.4"/>
 
     <!-- Oreja redondeada pequeña característica colocada atrás en la cabeza -->
-    <path d="M 378 132 C 375 110 395 105 402 124 C 404 138 392 148 378 132 Z" fill="#241205"/>
-    <path d="M 383 126 C 383 118 393 115 397 125 Z" fill="#5e3818" stroke="none"/>
+    <path d="M 378 132 C 375 110 395 105 402 124 C 404 138 392 148 378 132 Z" fill="#14100c"/>
+    <path d="M 383 126 C 383 118 393 115 397 125 Z" fill="#14100c" stroke="none"/>
 
     <!-- Ojo tranquilo y sereno situado alto en el rostro -->
-    <ellipse cx="425" cy="170" rx="7.5" ry="5.5" fill="#140600"/>
+    <ellipse cx="425" cy="170" rx="7.5" ry="5.5" fill="#14100c"/>
     <circle cx="427" cy="168" r="2" fill="#ffffff"/>
-    <path d="M 416 163 C 424 160 433 162 436 165" fill="none" stroke="#1a0c03" stroke-width="2"/>
+    <path d="M 416 163 C 424 160 433 162 436 165" fill="none" stroke="#14100c" stroke-width="2"/>
 
     <!-- Gran hocico romo cuadrangular con almohadilla nasal de roedor gigante -->
     <path d="
@@ -69,10 +69,10 @@
     <ellipse cx="474" cy="226" rx="4.5" ry="7" transform="rotate(-15, 474, 226)" fill="#0d0400"/>
 
     <!-- Línea de boca y comisura pacífica -->
-    <path d="M 470 250 C 455 256 438 252 425 248" fill="none" stroke="#140600" stroke-width="2.5"/>
+    <path d="M 470 250 C 455 256 438 252 425 248" fill="none" stroke="#14100c" stroke-width="2.5"/>
 
     <!-- Bigotes táctiles del carpincho -->
-    <g stroke="#3b200b" stroke-width="1.4" opacity="0.75" fill="none">
+    <g stroke="#14100c" stroke-width="1.4" opacity="0.75" fill="none">
       <path d="M 462 238 C 478 240 495 245 508 252"/>
       <path d="M 460 244 C 475 248 492 256 504 266"/>
       <path d="M 456 248 C 470 255 485 266 495 278"/>
@@ -81,15 +81,15 @@
     <!-- Pata delantera derecha (primer plano) con dedos robustos -->
     <path d="M 380 265 L 392 368 L 362 368 L 352 275 Z" fill="#4a2a11"/>
     <!-- Uñas/dedos delanteros semi-palmeados -->
-    <circle cx="368" cy="368" r="3.5" fill="#140600"/>
-    <circle cx="378" cy="368" r="3.5" fill="#140600"/>
-    <circle cx="388" cy="368" r="3.5" fill="#140600"/>
+    <circle cx="368" cy="368" r="3.5" fill="#14100c"/>
+    <circle cx="378" cy="368" r="3.5" fill="#14100c"/>
+    <circle cx="388" cy="368" r="3.5" fill="#14100c"/>
 
     <!-- Pata trasera derecha (primer plano) poderosa y plantígrada -->
     <path d="M 148 245 C 160 270 172 310 170 368 L 140 368 C 132 320 120 275 110 245 Z" fill="#4a2a11"/>
     <!-- Dedos traseros -->
-    <circle cx="146" cy="368" r="3.5" fill="#140600"/>
-    <circle cx="156" cy="368" r="3.5" fill="#140600"/>
-    <circle cx="166" cy="368" r="3.5" fill="#140600"/>
+    <circle cx="146" cy="368" r="3.5" fill="#14100c"/>
+    <circle cx="156" cy="368" r="3.5" fill="#14100c"/>
+    <circle cx="166" cy="368" r="3.5" fill="#14100c"/>
   </g>
 </svg>

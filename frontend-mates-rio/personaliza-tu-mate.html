@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personalizá tu Mate | Taller de Grabado Oficial Mates Río</title>
+  <title>Personalización | Taller & Estudio 360° Mates Río</title>
   <meta name="description" content="Personalizá la virola de tu mate imperial con grabado láser de alta definición o cincelado orfebre. Nombres, fechas, escudos y logos. Mates Río." />
   
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Personalizá tu Mate | Mates Río" />
+  <meta property="og:title" content="Personalización | Mates Río" />
   <meta property="og:description" content="Grabado exclusivo en la virola de alpaca y acero quirúrgico. Personalizá tu mate en vivo." />
   <meta property="og:image" content="assets/images/prod_mate_imperial.jpg" />
 
@@ -92,7 +92,7 @@
           <img src="assets/images/logo.jpg" alt="Logo Mates Río" class="brand-logo-img" />
           <div class="brand-text">
             <span class="brand-name">MATES RÍO</span>
-            <span class="brand-tagline">TALLER DE PERSONALIZACIÓN</span>
+            <span class="brand-tagline">ESTUDIO DE PERSONALIZACIÓN 360°</span>
           </div>
         </a>
       </div>
@@ -104,7 +104,7 @@
           <li><i class="fas fa-chevron-right sep"></i></li>
           <li><a href="catalogo.html">Catálogo</a></li>
           <li><i class="fas fa-chevron-right sep"></i></li>
-          <li class="active"><span>Personalizá tu Mate</span></li>
+          <li class="active"><span>Personalización</span></li>
         </ul>
       </nav>
 
@@ -196,6 +196,12 @@
           <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
         </a>
       </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="mayorista.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-boxes-packing" style="width: 22px; color: var(--accent-gold);"></i> Portal Mayorista</span>
+          <span class="nav-badge-pill pill-gold">B2B</span>
+        </a>
+      </li>
       <li class="mobile-nav-item">
         <a href="promos.html" onclick="closeMobileDrawer()">
           <span><i class="fas fa-fire" style="width: 22px; color: var(--badge-promo);"></i> PROMOS & COMBOS</span>
@@ -216,7 +222,7 @@
       </li>
       <li class="mobile-nav-item mobile-nav-highlight">
         <a href="personaliza-tu-mate.html" onclick="closeMobileDrawer()">
-          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Personalizá tu Mate</span>
+          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Personalización</span>
           <span class="nav-badge-pill pill-gold">VIROLA</span>
         </a>
       </li>
@@ -274,432 +280,586 @@
        MAIN STUDIO WORKSPACE
        ========================================================================== -->
   <main class="customizer-main-container">
-    <div class="container customizer-container">
+    <div class="container customizer-container-wide">
       
-      <!-- Studio Hero Header -->
-      <div class="studio-intro-header">
+      <!-- 1. ENCABEZADO DE LA SECCIÓN -->
+      <div class="customizer-hero-head">
         <div class="studio-badge-pill">
-          <i class="fas fa-magic"></i> ESTUDIO DE PERSONALIZACIÓN EN VIVO
+          <i class="fas fa-magic"></i> ESTUDIO DE PERSONALIZACIÓN PROFESIONAL 360°
         </div>
-        <h1 class="studio-page-title">Personalizá tu Mate</h1>
+        <h1 class="studio-page-title">Personalización</h1>
         <p class="studio-page-subtitle">
-          Diseñá tu mate ideal en simples pasos. Seleccioná el modelo, el acabado del metal y agregale nombres, fechas, escudos, guardas orfebres o tu propio logo con vista previa en tiempo real.
+          Elegí qué pieza querés grabar, redactá tus textos con libertad total de tamaño y longitud, sumá escudos o tu propio logo y disfrutá de la previsualización interactiva en 360°.
         </p>
-
-        <!-- Aclaración Destacada: Grabado Exclusivo en la Virola -->
-        <div class="virola-notice-card">
-          <div class="virola-notice-icon">
-            <i class="fas fa-ring"></i>
-          </div>
-          <div class="virola-notice-content">
-            <h4 class="virola-notice-title">
-              ¿Dónde se realiza la personalización? <b>Exclusivamente en la Virola del Mate</b>
-            </h4>
-            <p class="virola-notice-text">
-              La virola es la corona metálica superior (en <b>alpaca maciza</b> o <b>acero quirúrgico</b>). Es la única parte que permite grabados láser milimétricos y cincelados orfebres eternos, resistentes al agua y al uso diario, protegiendo al 100% el cuero y la calabaza natural.
-            </p>
-          </div>
-        </div>
       </div>
 
-      <!-- Studio 2-Column Split Workspace (Sidebar 3 Pasos + Canvas Circular Virola) -->
-      <div class="studio-layout-grid">
+      <!-- 2. CARDS DE ELECCIÓN DE PRODUCTO: MATE, TERMO O CAJA (ITEM 6) -->
+      <div class="product-selector-cards-wrap" id="product-selection-cards">
         
-        <!-- ==========================================================================
-             COLUMNA IZQUIERDA: PANEL DE 3 PASOS (PLANTILLAS, DISEÑO, CONFIRMAR)
-             ========================================================================== -->
-        <aside class="studio-sidebar" aria-label="Controles del Taller de Grabado">
+        <!-- Card 1: Mate Imperial -->
+        <div class="prod-select-card active" data-product="mate" onclick="switchActiveProduct('mate')">
+          <span class="prod-card-badge">Más Popular</span>
+          <div class="prod-card-icon-wrap">
+            <i class="fas fa-mug-hot"></i>
+          </div>
+          <div class="prod-card-body">
+            <h3 class="prod-card-title">Mate Imperial</h3>
+            <p class="prod-card-desc">Corona de alpaca maciza / acero y cuero vacuno. Grabado láser milimétrico, cincelado y vista 360°.</p>
+            <div class="prod-card-meta">
+              <span class="prod-card-price">Desde $ 46.500</span>
+              <span class="prod-card-free">Grabado BONIFICADO</span>
+            </div>
+          </div>
+          <div class="prod-card-check"><i class="fas fa-check"></i></div>
+        </div>
+
+        <!-- Card 2: Termo de Acero -->
+        <div class="prod-select-card" data-product="termo" onclick="switchActiveProduct('termo')">
+          <span class="prod-card-badge">Doble Capa</span>
+          <div class="prod-card-icon-wrap">
+            <i class="fas fa-temperature-high"></i>
+          </div>
+          <div class="prod-card-body">
+            <h3 class="prod-card-title">Termo de Acero</h3>
+            <p class="prod-card-desc">Acero inoxidable 18/8 de 1 Litro térmico 24hs. Grabado indeleble de alta definición a lo largo del cuerpo.</p>
+            <div class="prod-card-meta">
+              <span class="prod-card-price">Desde $ 42.900</span>
+              <span class="prod-card-free">Grabado BONIFICADO</span>
+            </div>
+          </div>
+          <div class="prod-card-check"><i class="fas fa-check"></i></div>
+        </div>
+
+        <!-- Card 3: Caja Matera Premium -->
+        <div class="prod-select-card" data-product="caja" onclick="switchActiveProduct('caja')">
+          <span class="prod-card-badge">Ideal Regalo</span>
+          <div class="prod-card-icon-wrap">
+            <i class="fas fa-box-open"></i>
+          </div>
+          <div class="prod-card-body">
+            <h3 class="prod-card-title">Caja Matera Premium</h3>
+            <p class="prod-card-desc">Caja de madera noble para regalo o presentación. Pirograbado y láser de precisión en tapa y laterales.</p>
+            <div class="prod-card-meta">
+              <span class="prod-card-price">Desde $ 32.000</span>
+              <span class="prod-card-free">Grabado BONIFICADO</span>
+            </div>
+          </div>
+          <div class="prod-card-check"><i class="fas fa-check"></i></div>
+        </div>
+
+      </div>
+
+      <!-- 3. BARRA RIBBON SUPERIOR ESTILO PAINT / WORD (ITEMS 3 & 4) -->
+      <div class="studio-ribbon-container" id="studio-ribbon">
+        
+        <!-- Pestañas de la barra Ribbon -->
+        <div class="ribbon-tabs-strip">
+          <button type="button" class="ribbon-tab-btn" data-tab="product" onclick="switchRibbonTab('product')">
+            <i class="fas fa-sliders"></i> <span>Producto & Vista</span>
+          </button>
+          <button type="button" class="ribbon-tab-btn active" data-tab="text" onclick="switchRibbonTab('text')">
+            <i class="fas fa-font"></i> <span>Texto & Tipografía</span>
+          </button>
+          <button type="button" class="ribbon-tab-btn" data-tab="icons" onclick="switchRibbonTab('icons')">
+            <i class="fas fa-shield-halved"></i> <span>Diseños & Escudos</span>
+          </button>
+          <button type="button" class="ribbon-tab-btn" data-tab="upload" onclick="switchRibbonTab('upload')">
+            <i class="fas fa-cloud-arrow-up"></i> <span>Tu Logo / Imagen</span>
+          </button>
+          <button type="button" class="ribbon-tab-btn" data-tab="lines" onclick="switchRibbonTab('lines')">
+            <i class="fas fa-circle-notch"></i> <span>Cincelado & Acabados</span>
+          </button>
+          <button type="button" class="ribbon-tab-btn ribbon-tab-finish" data-tab="finish" onclick="switchRibbonTab('finish')">
+            <i class="fas fa-shopping-bag"></i> <span>Finalizar Pedido</span>
+          </button>
+        </div>
+
+        <!-- Contenido dinámico del Ribbon organizado por Grupos -->
+        <div class="ribbon-toolbar-content">
           
-          <!-- Navegación de los 3 Pasos -->
-          <div class="studio-step-tabs">
-            <button type="button" class="studio-step-tab active" data-step="1" onclick="switchStudioStep(1)">
-              <i class="fas fa-layer-group"></i> 1. Plantillas
+          <!-- PESTAÑA 1: PRODUCTO & VISTA -->
+          <div class="ribbon-tab-panel" data-panel="product" id="ribbon-panel-product">
+            <!-- Grupo: Selección de Producto -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" data-prod-btn="mate" onclick="switchActiveProduct('mate')">
+                  <i class="fas fa-mug-hot"></i> Mate
+                </button>
+                <button type="button" class="ribbon-btn" data-prod-btn="termo" onclick="switchActiveProduct('termo')">
+                  <i class="fas fa-temperature-high"></i> Termo
+                </button>
+                <button type="button" class="ribbon-btn" data-prod-btn="caja" onclick="switchActiveProduct('caja')">
+                  <i class="fas fa-box-open"></i> Caja
+                </button>
+              </div>
+              <span class="ribbon-group-label">Producto</span>
+            </div>
+
+            <!-- Grupo: Modelo Base -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <select id="mate-model-select" class="ribbon-select" onchange="onMateModelChange(this.value)" style="min-width: 220px;">
+                  <!-- Populated via JS -->
+                </select>
+              </div>
+              <span class="ribbon-group-label">Modelo Base</span>
+            </div>
+
+            <!-- Grupo: Modo de Vista -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" id="ribbon-view-2d-btn" onclick="setStudioViewMode('2d')">
+                  <i class="fas fa-pen-ruler"></i> Vista Grabado 2D
+                </button>
+                <button type="button" class="ribbon-btn" id="ribbon-view-360-btn" onclick="setStudioViewMode('360')">
+                  <i class="fas fa-rotate"></i> Giro 360°
+                </button>
+              </div>
+              <span class="ribbon-group-label">Modo Visualización</span>
+            </div>
+
+            <!-- Grupo: Acciones del Lienzo -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn" onclick="autoCenterAndBalanceVirola()" title="Centrar concéntricamente">
+                  <i class="fas fa-crosshairs"></i> Centrar
+                </button>
+                <button type="button" class="ribbon-btn" onclick="resetVirolaStudio()" title="Limpiar todo">
+                  <i class="fas fa-trash-can"></i> Limpiar
+                </button>
+              </div>
+              <span class="ribbon-group-label">Lienzo</span>
+            </div>
+          </div>
+
+          <!-- PESTAÑA 2: TEXTO & TIPOGRAFÍA (LIBERTAD TOTAL, ITEM 5) -->
+          <div class="ribbon-tab-panel active" data-panel="text" id="ribbon-panel-text">
+            
+            <!-- Grupo 1: Redacción Libre (Sin límites de texto) -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <div style="position: relative; display: flex; align-items: center;">
+                  <input type="text" 
+                         id="active-text-input" 
+                         class="ribbon-input-text" 
+                         placeholder="Escribí nombres, fechas, frases o dedicatorias..." 
+                         oninput="onActiveTextInput(this.value)" />
+                  <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="clearActiveText()" title="Borrar texto" style="position: absolute; right: 4px; border: none; background: transparent;">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                <button type="button" class="ribbon-btn ribbon-btn-lg" onclick="addNewTextBlock('', 'top')" title="Agregar otro bloque de texto libre">
+                  <i class="fas fa-plus"></i> Nuevo Texto
+                </button>
+              </div>
+              <span class="ribbon-group-label">Redacción Libre</span>
+            </div>
+
+            <!-- Grupo 2: Tipografía de Grabado -->
+            <div class="ribbon-group" style="position: relative;">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn ribbon-font-preview-btn" id="ribbon-font-select-btn" onclick="toggleRibbonFontDropdown()">
+                  <span id="active-text-font-badge" style="font-family: 'Cinzel', serif; font-weight: 800;">Cinzel</span>
+                  <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 8px;"></i>
+                </button>
+                <div class="ribbon-font-dropdown" id="ribbon-font-dropdown">
+                  <!-- Generado dinámicamente -->
+                </div>
+              </div>
+              <span class="ribbon-group-label">Fuente Orfebre</span>
+            </div>
+
+            <!-- Grupo 3: Tamaño de Letra (Libre de 8px a 140px+) -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="stepTextFontSize(-2)" title="Achicar letra (A-)">
+                  <i class="fas fa-font" style="font-size: 0.72rem;"></i>-
+                </button>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <input type="number" id="active-text-size-input" class="ribbon-select" min="8" max="160" value="20" style="width: 60px; text-align: center;" onchange="onActiveTextSizeChange(this.value)" />
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">px</span>
+                </div>
+                <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="stepTextFontSize(2)" title="Agrandar letra (A+)">
+                  <i class="fas fa-font" style="font-size: 1rem;"></i>+
+                </button>
+                <input type="range" id="active-text-size-slider" min="8" max="140" step="1" value="20" oninput="onActiveTextSizeChange(this.value)" style="width: 90px; accent-color: var(--accent-gold);" />
+              </div>
+              <span class="ribbon-group-label">Tamaño</span>
+            </div>
+
+            <!-- Grupo 4: Curvatura / Formato -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active-text-curve-btn" data-pos="top" onclick="setActiveTextCurvature('top')" title="Curva Superior ⌒">
+                  <i class="fas fa-arrow-up"></i> Curva Arriba
+                </button>
+                <button type="button" class="ribbon-btn active-text-curve-btn" data-pos="straight" onclick="setActiveTextCurvature('straight')" title="Recto Libre —">
+                  <i class="fas fa-minus"></i> Recto
+                </button>
+                <button type="button" class="ribbon-btn active-text-curve-btn" data-pos="bottom" onclick="setActiveTextCurvature('bottom')" title="Curva Inferior ⌣">
+                  <i class="fas fa-arrow-down"></i> Curva Abajo
+                </button>
+              </div>
+              <span class="ribbon-group-label">Formato & Curvatura</span>
+            </div>
+
+            <!-- Grupo 5: Capas de Texto Activas -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content" id="text-layers-container">
+                <!-- Capas en pills dinámicos -->
+              </div>
+              <span class="ribbon-group-label">Capas Activas</span>
+            </div>
+
+            <!-- Grupo 6: Operaciones -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn" onclick="duplicateActiveItem()" title="Duplicar texto">
+                  <i class="fas fa-clone"></i>
+                </button>
+                <button type="button" class="ribbon-btn" onclick="deleteActiveVirolaItem()" title="Eliminar texto" style="color: #ef4444;">
+                  <i class="fas fa-trash-can"></i>
+                </button>
+              </div>
+              <span class="ribbon-group-label">Editar</span>
+            </div>
+
+          </div>
+
+          <!-- PESTAÑA 3: DISEÑOS & ESCUDOS -->
+          <div class="ribbon-tab-panel" data-panel="icons" id="ribbon-panel-icons">
+            
+            <!-- Grupo 1: Filtro de Categoría -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" data-cat-filter="deportes" onclick="filterRibbonDesigns('deportes')">
+                  🏆 Deportes
+                </button>
+                <button type="button" class="ribbon-btn" data-cat-filter="criollo" onclick="filterRibbonDesigns('criollo')">
+                  🇦🇷 Criollos
+                </button>
+                <button type="button" class="ribbon-btn" data-cat-filter="fauna" onclick="filterRibbonDesigns('fauna')">
+                  🦅 Fauna
+                </button>
+                <button type="button" class="ribbon-btn" data-cat-filter="simbolos" onclick="filterRibbonDesigns('simbolos')">
+                  ✨ Símbolos
+                </button>
+                <button type="button" class="ribbon-btn" data-cat-filter="frases" onclick="filterRibbonDesigns('frases')">
+                  💬 Frases
+                </button>
+              </div>
+              <span class="ribbon-group-label">Categorías</span>
+            </div>
+
+            <!-- Grupo 2: Diseños Rápidos (Carrusel interactivo con flechas y scroll fluido) -->
+            <div class="ribbon-group ribbon-carousel-group">
+              <div class="ribbon-carousel-wrapper">
+                <button type="button" class="ribbon-carousel-nav ribbon-carousel-prev" onclick="scrollRibbonDesigns(-240)" title="Ver anteriores" aria-label="Ver anteriores">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="ribbon-group-content ribbon-carousel-track" id="ribbon-quick-designs">
+                  <!-- Populated via JS -->
+                </div>
+                <button type="button" class="ribbon-carousel-nav ribbon-carousel-next" onclick="scrollRibbonDesigns(240)" title="Ver más" aria-label="Ver más">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              <span class="ribbon-group-label">Deslizá o usá flechas ◀ ▶</span>
+            </div>
+
+            <!-- Grupo 3: Catálogo Completo -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn ribbon-btn-lg" onclick="openDesignCatalogModal()">
+                  <i class="fas fa-th-large"></i> Ver Todo el Catálogo
+                </button>
+              </div>
+              <span class="ribbon-group-label">Galería Completa</span>
+            </div>
+
+          </div>
+
+          <!-- PESTAÑA 4: TU LOGO / IMAGEN (ESCALA LIBRE SIN LÍMITES, ITEM 5) -->
+          <div class="ribbon-tab-panel" data-panel="upload" id="ribbon-panel-upload">
+            
+            <!-- Grupo 1: Subir Archivo Propio -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <input type="file" id="studio-custom-file-upload" accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml" style="display: none;" onchange="handleCustomImageUpload(event)" />
+                <button type="button" class="ribbon-btn ribbon-btn-lg" onclick="document.getElementById('studio-custom-file-upload').click()" style="background: var(--accent-gold); color: #120e0a;">
+                  <i class="fas fa-upload"></i> Subir Logo o Imagen
+                </button>
+                <span style="font-size: 0.74rem; color: var(--text-muted); max-width: 170px; line-height: 1.3;">
+                  Auto-vectorizado y eliminación de fondo automática.
+                </span>
+              </div>
+              <span class="ribbon-group-label">Cargar Archivo</span>
+            </div>
+
+            <!-- Grupo 2: Escala Libre (Puede abarcar toda la virola o producto) -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="stepItemScale(-0.15)" title="Achicar">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <span id="ribbon-image-scale-val" style="font-size: 0.8rem; font-weight: 800; color: var(--accent-gold); min-width: 45px; text-align: center;">100%</span>
+                </div>
+                <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="stepItemScale(0.15)" title="Agrandar libremente">
+                  <i class="fas fa-plus"></i>
+                </button>
+                <button type="button" class="ribbon-btn" onclick="setItemFullSurfaceScale()" title="Agrandar para cubrir superficie">
+                  <i class="fas fa-expand"></i> Escala Máxima
+                </button>
+              </div>
+              <span class="ribbon-group-label">Escala Libre (Sin Límite)</span>
+            </div>
+
+            <!-- Grupo 3: Rotación y Ajuste -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn" onclick="stepItemRotation(-15)" title="Girar a la izquierda">
+                  <i class="fas fa-rotate-left"></i> -15°
+                </button>
+                <button type="button" class="ribbon-btn" onclick="stepItemRotation(15)" title="Girar a la derecha">
+                  <i class="fas fa-rotate-right"></i> +15°
+                </button>
+                <button type="button" class="ribbon-btn" onclick="resetItemTransform()" title="Restablecer giro">
+                  <i class="fas fa-undo"></i> 0°
+                </button>
+              </div>
+              <span class="ribbon-group-label">Orientación</span>
+            </div>
+
+          </div>
+
+          <!-- PESTAÑA 5: CINCELADO & ACABADOS -->
+          <div class="ribbon-tab-panel" data-panel="lines" id="ribbon-panel-lines">
+            
+            <!-- Grupo 1: Ranuras Cinceladas -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn lines-pill-btn" data-lines="no" onclick="selectCircularLines('no')">
+                  Sin Ranuras
+                </button>
+                <button type="button" class="ribbon-btn lines-pill-btn" data-lines="simple" onclick="selectCircularLines('simple')">
+                  Línea Simple
+                </button>
+                <button type="button" class="ribbon-btn lines-pill-btn active" data-lines="doble" onclick="selectCircularLines('doble')">
+                  Línea Doble Concéntrica
+                </button>
+              </div>
+              <span class="ribbon-group-label">Ranuras Cinceladas en Virola</span>
+            </div>
+
+            <!-- Grupo 2: Metal y Acabado -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" id="metal-alpaca-btn" onclick="setMetalFinish('alpaca')">
+                  <i class="fas fa-gem"></i> Alpaca Maciza
+                </button>
+                <button type="button" class="ribbon-btn" id="metal-acero-btn" onclick="setMetalFinish('acero')">
+                  <i class="fas fa-shield"></i> Acero Quirúrgico
+                </button>
+              </div>
+              <span class="ribbon-group-label">Material de la Corona</span>
+            </div>
+
+            <!-- Grupo 3: Asistencias CAD -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" id="toggle-snapping-btn" onclick="toggleSnappingGuides()">
+                  <i class="fas fa-magnet"></i> Guías Imán (Snap)
+                </button>
+                <button type="button" class="ribbon-btn active" id="toggle-clipping-btn" onclick="toggleClipToMetal()">
+                  <i class="fas fa-crop-simple"></i> Recorte al Metal
+                </button>
+              </div>
+              <span class="ribbon-group-label">Asistencias CAD</span>
+            </div>
+
+          </div>
+
+          <!-- PESTAÑA 6: FINALIZAR PEDIDO -->
+          <div class="ribbon-tab-panel" data-panel="finish" id="ribbon-panel-finish">
+            
+            <!-- Grupo 1: Resumen de Precios -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">Total de la pieza:</span>
+                  <strong id="confirm-mate-price" style="font-size: 1.15rem; color: var(--accent-gold);">$ 46.500</strong>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 2px; margin-left: 14px;">
+                  <span style="font-size: 0.72rem; color: #10b981; font-weight: 800;">GRABADO BONIFICADO ($0)</span>
+                  <span id="confirm-items-count" style="font-size: 0.72rem; color: var(--text-muted);">3 elementos</span>
+                </div>
+              </div>
+              <span class="ribbon-group-label">Precio</span>
+            </div>
+
+            <!-- Grupo 2: Modalidad de Entrega -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" id="purchase-type-web-btn" onclick="setPurchaseType('web')">
+                  <i class="fas fa-truck-fast"></i> Compra Web (Envío)
+                </button>
+                <button type="button" class="ribbon-btn" id="purchase-type-local-btn" onclick="setPurchaseType('local')">
+                  <i class="fas fa-store"></i> Retiro Río Ceballos
+                </button>
+              </div>
+              <span class="ribbon-group-label">Entrega</span>
+            </div>
+
+            <!-- Grupo 3: Acciones Finales -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn ribbon-btn-lg" onclick="finalizeAndAddToCart()" style="background: var(--accent-gold); color: #120e0a; font-weight: 900; padding: 10px 22px;">
+                  <i class="fas fa-shopping-bag"></i> Agregar al Carrito
+                </button>
+                <button type="button" class="ribbon-btn" onclick="downloadVectorLaserFile()" title="Descargar plano SVG para máquina láser">
+                  <i class="fas fa-file-arrow-down" style="color: var(--accent-gold);"></i> SVG Láser
+                </button>
+              </div>
+              <span class="ribbon-group-label">Confirmar</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- 4. LIENZO CENTRAL EXPANDIDO (OCUPA LA MAYOR PARTE DE LA PANTALLA) (ITEMS 3 & 4) -->
+      <section class="studio-main-stage-full" id="studio-main-stage" aria-label="Lienzo de Grabado y Simulador 360°">
+        
+        <!-- Barra de Control Superior en el Lienzo -->
+        <div class="stage-topbar-controls">
+          <div class="stage-mode-switch-segmented">
+            <button type="button" class="stage-mode-btn active" id="stage-btn-2d" onclick="setStudioViewMode('2d')" title="Vista plana para diseñar milimétricamente">
+              <i class="fas fa-pen-ruler"></i> Vista Grabado 2D
             </button>
-            <button type="button" class="studio-step-tab" data-step="2" onclick="switchStudioStep(2)">
-              <i class="fas fa-pen-nib"></i> 2. Diseño
-            </button>
-            <button type="button" class="studio-step-tab" data-step="3" onclick="switchStudioStep(3)">
-              <i class="fas fa-circle-check"></i> 3. Confirmar
+            <button type="button" class="stage-mode-btn" id="stage-btn-360" onclick="setStudioViewMode('360')" title="Vista 3D interactiva orbital 360°">
+              <i class="fas fa-rotate"></i> Vista 360° Interactiva
             </button>
           </div>
 
-          <!-- PASO 1: PLANTILLAS PRE-CONFIGURADAS -->
-          <div class="studio-panel-step active" data-step-panel="1" id="step-panel-1">
-            <h3 class="studio-step-title"><i class="fas fa-wand-magic-sparkles" style="color: var(--accent-gold);"></i> Elegí una Plantilla de Inicio</h3>
-            <p class="studio-step-sub">Comenzá con una distribución orfebre equilibrada o armá tu diseño desde una virola en blanco:</p>
-
-            <div class="templates-list-grid">
-              <!-- Plantilla 1: Texto + 2 Íconos -->
-              <div class="template-choice-card active" data-tpl="text_2icons" onclick="applyTemplate('text_2icons')">
-                <div class="tpl-icon-box"><i class="fas fa-crown"></i></div>
-                <div class="tpl-info">
-                  <strong>Texto + 2 Íconos (Recomendado)</strong>
-                  <span>Texto superior curvado, 2 escudos simétricos a los lados y líneas dobles cinceladas.</span>
-                </div>
-              </div>
-
-              <!-- Plantilla 2: Texto + 3 Íconos -->
-              <div class="template-choice-card" data-tpl="text_3icons" onclick="applyTemplate('text_3icons')">
-                <div class="tpl-icon-box"><i class="fas fa-shapes"></i></div>
-                <div class="tpl-info">
-                  <strong>Texto + 3 Íconos</strong>
-                  <span>Texto en la curva superior y 3 motivos criollos distribuidos (izq, base y der).</span>
-                </div>
-              </div>
-
-              <!-- Plantilla 3: Texto + 1 Ícono -->
-              <div class="template-choice-card" data-tpl="text_1icon" onclick="applyTemplate('text_1icon')">
-                <div class="tpl-icon-box"><i class="fas fa-certificate"></i></div>
-                <div class="tpl-info">
-                  <strong>Texto + 1 Ícono</strong>
-                  <span>Frase curva de homenaje y un escudo o sol central en la parte inferior.</span>
-                </div>
-              </div>
-
-              <!-- Plantilla 4: Empezar desde cero -->
-              <div class="template-choice-card" data-tpl="scratch" onclick="applyTemplate('scratch')">
-                <div class="tpl-icon-box"><i class="fas fa-plus"></i></div>
-                <div class="tpl-info">
-                  <strong>Empezar desde cero</strong>
-                  <span>Virola circular limpia para agregar tus textos y diseños libremente.</span>
-                </div>
-              </div>
-            </div>
-
-            <div style="margin-top: 24px;">
-              <button type="button" class="btn btn-primary" onclick="switchStudioStep(2)" style="width: 100%; padding: 12px; font-weight: 800;">
-                Personalizar Diseño <i class="fas fa-arrow-right" style="margin-left: 6px;"></i>
-              </button>
-            </div>
+          <div class="stage-badge-status" id="stage-badge-status">
+            <i class="fas fa-circle live-pulse-dot"></i> <span id="stage-status-text">CORONA DE ALPACA MACIZA (ANCHO 70MM) • ESCALA 1:1 CNC</span>
           </div>
+        </div>
 
-          <!-- PASO 2: DISEÑO (4 CATEGORÍAS COLAPSABLES CON FLECHA) -->
-          <div class="studio-panel-step" data-step-panel="2" id="step-panel-2">
-            <h3 class="studio-step-title"><i class="fas fa-palette" style="color: var(--accent-gold);"></i> Personalizá tu Diseño</h3>
-            <p class="studio-step-sub">Editá cada una de las 4 secciones para componer tu grabado personalizado en la virola:</p>
-
-            <!-- 1. CATEGORÍA: COLOCAR TEXTO (PROLIJO Y PROFESIONAL) -->
-            <div class="studio-accordion-card" id="accordion-section-text">
-              <div class="studio-accordion-header" onclick="toggleStudioAccordion('text')" role="button" aria-expanded="false" tabindex="0">
-                <div class="accordion-header-left">
-                  <div class="accordion-icon-box"><i class="fas fa-font"></i></div>
-                  <div>
-                    <strong class="accordion-title">1. Texto de la Virola</strong>
-                    <span class="accordion-subtitle">Escribí tus nombres, fechas o dedicatorias</span>
-                  </div>
-                </div>
-                <div class="accordion-chevron-wrap">
-                  <i class="fas fa-chevron-down accordion-chevron"></i>
-                </div>
-              </div>
-              <div class="studio-accordion-body" id="accordion-body-text">
-                <div class="text-editor-pro-box">
-                  <label class="sub-label" style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-                    <span>Contenido del grabado:</span>
-                    <span id="studio-text-counter" class="text-counter-pill">10/35</span>
-                  </label>
-                  <div class="input-with-action text-input-pro">
-                    <input type="text" 
-                           id="studio-text-input" 
-                           class="studio-input studio-input-pro" 
-                           value="MATES RÍO" 
-                           maxlength="35"
-                           placeholder="Escribí nombres, fechas o frases..."
-                           oninput="onStudioTextInput(this.value)" />
-                    <button type="button" class="input-action-btn" onclick="clearStudioText()" title="Borrar texto">
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </div>
-
-                  <!-- Formato y Ubicación del Texto en la Virola -->
-                  <label class="sub-label" style="margin-top: 14px; margin-bottom: 6px;">Formato y curvatura del texto:</label>
-                  <div class="arc-selector-segmented text-mode-selector-3">
-                    <button type="button" class="arc-segment-btn active" data-pos="top" onclick="toggleArcPosition('top')" title="Curva hacia arriba (Arco superior)">
-                      <i class="fas fa-arrow-up"></i> Curva Arriba
-                    </button>
-                    <button type="button" class="arc-segment-btn" data-pos="straight" onclick="toggleArcPosition('straight')" title="Texto recto horizontal en la virola">
-                      <i class="fas fa-minus"></i> Recta
-                    </button>
-                    <button type="button" class="arc-segment-btn" data-pos="bottom" onclick="toggleArcPosition('bottom')" title="Curva hacia abajo (Arco inferior)">
-                      <i class="fas fa-arrow-down"></i> Curva Abajo
-                    </button>
-                  </div>
-
-                  <!-- Sub-acordeón de Tipografías con flecha para abrir y cerrar -->
-                  <div class="studio-subaccordion-card" id="subaccordion-fonts">
-                    <button type="button" class="studio-subaccordion-header" onclick="toggleFontsAccordion()" aria-expanded="false">
-                      <div style="display: flex; align-items: center; gap: 8px;">
-                        <span class="sub-label" style="margin: 0; cursor: pointer;">Tipografía orfebre:</span>
-                        <span id="selected-font-name-pill" class="selected-font-name-pill">Cinzel</span>
-                      </div>
-                      <i class="fas fa-chevron-down subaccordion-chevron" id="chevron-fonts"></i>
-                    </button>
-                    <div class="studio-subaccordion-body" id="subaccordion-fonts-body" style="display: none;">
-                      <div class="fonts-selector-grid" id="fonts-selector-grid">
-                        <!-- Rendered dynamically via customizer-studio.js -->
-                      </div>
-                    </div>
-                  </div>
-
-                  <button type="button" class="btn btn-primary btn-apply-text-pro" onclick="applyTextToVirola()">
-                    <i class="fas fa-check"></i> Aplicar / Agregar Texto a la Virola
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- 2. CATEGORÍA: ÍCONOS Y DISEÑOS (MUESTRA CATEGORÍAS PRIMERO) -->
-            <div class="studio-accordion-card" id="accordion-section-icons">
-              <div class="studio-accordion-header" onclick="toggleStudioAccordion('icons')" role="button" aria-expanded="false" tabindex="0">
-                <div class="accordion-header-left">
-                  <div class="accordion-icon-box"><i class="fas fa-icons"></i></div>
-                  <div>
-                    <strong class="accordion-title">2. Íconos y Diseños</strong>
-                    <span class="accordion-subtitle">Escudos originales, patria, fauna y símbolos</span>
-                  </div>
-                </div>
-                <div class="accordion-chevron-wrap">
-                  <i class="fas fa-chevron-down accordion-chevron"></i>
-                </div>
-              </div>
-              <div class="studio-accordion-body" id="accordion-body-icons">
-                <!-- Vista Inicial: Menú de Categorías -->
-                <div id="vector-categories-view" class="vector-categories-view">
-                  <p style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 10px;">
-                    Hacé clic en una categoría para explorar sus diseños:
-                  </p>
-                  <div class="vector-category-cards-grid" id="vector-category-cards-grid">
-                    <!-- Populated dynamically via customizer-studio.js -->
-                  </div>
-                </div>
-
-                <!-- Vista de Diseños de la Categoría Seleccionada -->
-                <div id="vector-items-view" class="vector-items-view" style="display: none;">
-                  <div class="vector-sub-header">
-                    <button type="button" class="btn-back-categories" onclick="showVectorCategoriesView()">
-                      <i class="fas fa-arrow-left"></i> Categorías
-                    </button>
-                    <span id="active-category-title-badge" class="active-category-title-badge">🏆 Escudos Deportivos</span>
-                  </div>
-                  <div class="vector-icons-grid" id="vector-icons-grid">
-                    <!-- Populated via JS -->
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 3. CATEGORÍA: LÍNEAS CIRCULARES EN VIROLA -->
-            <div class="studio-accordion-card" id="accordion-section-lines">
-              <div class="studio-accordion-header" onclick="toggleStudioAccordion('lines')" role="button" aria-expanded="false" tabindex="0">
-                <div class="accordion-header-left">
-                  <div class="accordion-icon-box"><i class="fas fa-circle-notch"></i></div>
-                  <div>
-                    <strong class="accordion-title">3. Líneas Circulares en Virola</strong>
-                    <span class="accordion-subtitle">Cincelado ranurado perimetral</span>
-                  </div>
-                </div>
-                <div class="accordion-chevron-wrap">
-                  <i class="fas fa-chevron-down accordion-chevron"></i>
-                </div>
-              </div>
-              <div class="studio-accordion-body" id="accordion-body-lines">
-                <p style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 10px;">
-                  Elegí las ranuras cinceladas concéntricas sobre el metal:
-                </p>
-                <div class="lines-pill-group">
-                  <button type="button" class="lines-pill-btn" data-lines="no" onclick="selectCircularLines('no')">
-                    No
-                  </button>
-                  <button type="button" class="lines-pill-btn" data-lines="simple" onclick="selectCircularLines('simple')">
-                    Simple
-                  </button>
-                  <button type="button" class="lines-pill-btn active" data-lines="doble" onclick="selectCircularLines('doble')">
-                    Doble
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- 4. CATEGORÍA: SUBIR IMAGEN PROPIA (VECTORIZADA SIN FONDO) -->
-            <div class="studio-accordion-card" id="accordion-section-upload">
-              <div class="studio-accordion-header" onclick="toggleStudioAccordion('upload')" role="button" aria-expanded="false" tabindex="0">
-                <div class="accordion-header-left">
-                  <div class="accordion-icon-box"><i class="fas fa-cloud-arrow-up"></i></div>
-                  <div>
-                    <strong class="accordion-title">4. Subir Imagen Propia</strong>
-                    <span class="accordion-subtitle">Subí tu logo o foto (vectorizada y sin fondo)</span>
-                  </div>
-                </div>
-                <div class="accordion-chevron-wrap">
-                  <i class="fas fa-chevron-down accordion-chevron"></i>
-                </div>
-              </div>
-              <div class="studio-accordion-body" id="accordion-body-upload">
-                <div class="custom-upload-pro-card">
-                  <div class="upload-magic-badge"><i class="fas fa-wand-magic-sparkles"></i> Vectorización Láser HD</div>
-                  <p style="font-size: 0.76rem; color: var(--text-muted); margin: 8px 0 12px 0; line-height: 1.45;">
-                    Subí tu escudo, marca de ganado o imagen propia. El simulador <b>elimina el fondo automáticamente</b> y lo convierte a grabado láser negro transparente.
-                  </p>
-                  <input type="file" id="studio-custom-file-upload" accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml" style="display: none;" onchange="handleCustomImageUpload(event)" />
-                  <button type="button" class="btn btn-outline-dark btn-upload-file-pro" onclick="document.getElementById('studio-custom-file-upload').click()">
-                    <i class="fas fa-upload" style="color: var(--accent-gold);"></i> Seleccionar Imagen / Vector
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-top: 16px;">
-              <button type="button" class="btn btn-outline-dark" onclick="switchStudioStep(1)" style="flex: 1;">
-                <i class="fas fa-arrow-left"></i> Volver
-              </button>
-              <button type="button" class="btn btn-primary" onclick="switchStudioStep(3)" style="flex: 2; font-weight: 800;">
-                Confirmar Grabado <i class="fas fa-arrow-right" style="margin-left: 6px;"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- PASO 3: CONFIRMAR (COMPRA WEB/LOCAL, ORDEN, NOTAS, DESCARGAR VECTOR, CARRITO) -->
-          <div class="studio-panel-step" data-step-panel="3" id="step-panel-3">
-            <h3 class="studio-step-title"><i class="fas fa-circle-check" style="color: var(--accent-gold);"></i> 3. Confirmar Pedido de Grabado</h3>
-            <p class="studio-step-sub">Revisá tu configuración final, seleccioná el tipo de compra y enviá tu pedido al taller:</p>
-
-            <!-- Selector Compra Web vs Local -->
-            <label class="sub-label">Modalidad de Compra:</label>
-            <div class="purchase-types-grid">
-              <div class="purchase-type-card active" data-type="web" onclick="setPurchaseType('web')">
-                <i class="fas fa-truck-fast"></i>
-                <strong>Compra Web</strong>
-                <span>Envío a domicilio o sucursal de todo el país</span>
-              </div>
-              <div class="purchase-type-card" data-type="local" onclick="setPurchaseType('local')">
-                <i class="fas fa-store"></i>
-                <strong>Compra Local</strong>
-                <span>Retiro en taller oficial en Río Ceballos, Córdoba</span>
-              </div>
-            </div>
-
-            <!-- Selector del Modelo de Mate Base -->
-            <div style="margin-bottom: 16px;">
-              <label class="sub-label" for="mate-model-select">Modelo de Mate a Personalizar:</label>
-              <select id="mate-model-select" class="form-control" onchange="onMateModelChange(this.value)" style="width: 100%; height: 42px; border-radius: var(--radius-sm); border: 1.5px solid var(--border-light); padding: 0 12px; font-weight: 700; background: var(--bg-surface); color: var(--text-main);">
-                <!-- Populated via JS -->
-              </select>
-            </div>
-
-            <!-- Resumen Técnico -->
-            <div class="custom-action-summary-card" style="margin-top: 0; margin-bottom: 16px;">
-              <div class="summary-line-row">
-                <span>Mate seleccionado:</span>
-                <strong id="confirm-mate-name">Mate Imperial Cuero Negro</strong>
-              </div>
-              <div class="summary-line-row">
-                <span>Precio del Mate:</span>
-                <strong id="confirm-mate-price">$ 46.500</strong>
-              </div>
-              <div class="summary-line-row">
-                <span>Grabado Láser HD en Virola:</span>
-                <span class="summary-price-free"><b>¡BONIFICADO! ($0)</b></span>
-              </div>
-              <div class="summary-line-row">
-                <span>Elementos grabados:</span>
-                <span id="confirm-items-count">3 elementos</span>
-              </div>
-              <div class="summary-line-row">
-                <span>Cincelado de virola:</span>
-                <span id="confirm-lines-type">Líneas Dobles</span>
-              </div>
-            </div>
-
-            <!-- Notas Especiales -->
-            <div style="margin-bottom: 18px;">
-              <label class="sub-label" for="custom-order-notes">Notas / Especificaciones para el orfebre (opcional):</label>
-              <textarea id="custom-order-notes" class="form-control" rows="2" placeholder="Ej: Alinear el escudo con la costura del cuero, letra bien visible..." style="width: 100%; border-radius: var(--radius-sm); border: 1.5px solid var(--border-light); padding: 10px; font-size: 0.82rem; background: var(--bg-surface); color: var(--text-main); resize: vertical;"></textarea>
-            </div>
-
-            <!-- Botones de Acción -->
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-              <button type="button" class="btn btn-primary" onclick="finalizeAndAddToCart()" style="width: 100%; padding: 14px; font-size: 0.95rem; font-weight: 800;">
-                <i class="fas fa-shopping-bag"></i> Finalizar & Agregar al Carrito
-              </button>
-
-              <button type="button" class="btn btn-outline-dark" onclick="downloadVectorLaserFile()" style="width: 100%; padding: 10px; font-size: 0.84rem; font-weight: 700;">
-                <i class="fas fa-file-arrow-down" style="color: var(--accent-gold);"></i> Descargar Archivo Vectorial (SVG Láser)
-              </button>
-
-              <button type="button" class="btn btn-link" onclick="switchStudioStep(2)" style="color: var(--text-muted); font-size: 0.78rem;">
-                <i class="fas fa-arrow-left"></i> Volver a editar diseño
-              </button>
-            </div>
-
-          </div>
-
-        </aside>
-
-        <!-- ==========================================================================
-             COLUMNA DERECHA: CANVAS CIRCULAR INTERACTIVO DE LA VIROLA
-             ========================================================================== -->
-        <section class="studio-canvas-stage" aria-label="Simulador Circular de Virola">
+        <!-- Contenedor del Lienzo: Alterna entre SVG 2D CNC y Viewport 360° -->
+        <div class="studio-canvas-wrap" id="studio-canvas-wrap">
           
-          <div class="stage-header-badge">
-            <i class="fas fa-circle live-pulse-dot"></i> VISTA EN VIVO • CORONA DE ALPACA MACIZA (VISTA SUPERIOR)
+          <!-- VISTA 1: CANVAS SVG INTERACTIVO 2D (DISEÑO MILIMÉTRICO) -->
+          <div id="studio-2d-viewport" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <svg id="virola-studio-svg" viewBox="0 0 500 500" class="studio-svg-viewport" xmlns="http://www.w3.org/2000/svg">
+              <!-- Renderizado dinámicamente por customizer-studio.js -->
+            </svg>
           </div>
 
-          <!-- Canvas SVG Interactivo -->
-          <svg id="virola-studio-svg" viewBox="0 0 500 500" class="virola-studio-svg" xmlns="http://www.w3.org/2000/svg">
-            <!-- Rendered dynamically by customizer-studio.js -->
-          </svg>
-
-          <!-- Barra Flotante de Herramientas para el Elemento Seleccionado (Fija y Estable) -->
-          <div id="virola-active-item-controls" class="virola-active-item-controls" style="display: none;">
-            <div class="active-item-status">
-              <span id="active-item-name-badge" class="active-item-name-badge">Elemento Seleccionado</span>
-            </div>
-            <!-- Opciones rápidas de formato para texto activo -->
-            <div id="active-text-mode-controls" class="active-text-mode-controls" style="display: none;">
-              <button type="button" class="text-mode-pill-btn active" data-mode="top" onclick="setActiveTextMode('top')" title="Curva hacia arriba">
-                <i class="fas fa-arrow-up"></i> Arriba
+          <!-- VISTA 2: VIEWPORT 360° INTERACTIVO ORBITAL 3D (ITEM 6) -->
+          <div id="studio-360-viewport" class="studio-360-viewport" style="display: none;" 
+               onmousedown="start360RotationDrag(event)" 
+               ontouchstart="start360RotationDrag(event)">
+            <canvas id="studio-360-canvas" width="560" height="520" style="width: 100%; height: 100%; max-width: 560px; max-height: 520px;"></canvas>
+            
+            <div class="rotation-guide-overlay">
+              <i class="fas fa-arrows-left-right"></i>
+              <span>Arrastrá libremente para girar 360°</span>
+              <span class="rotation-degree-val" id="rotation-degree-val">0°</span>
+              <button type="button" class="ribbon-btn ribbon-btn-icon-only" id="toggle-autorotate-btn" onclick="toggleAutoRotate360(event)" title="Giro automático continuo" style="width: 26px; height: 26px; font-size: 0.72rem; margin-left: 6px;">
+                <i class="fas fa-play" id="autorotate-icon"></i>
               </button>
-              <button type="button" class="text-mode-pill-btn" data-mode="straight" onclick="setActiveTextMode('straight')" title="Texto recto">
-                <i class="fas fa-minus"></i> Recta
-              </button>
-              <button type="button" class="text-mode-pill-btn" data-mode="bottom" onclick="setActiveTextMode('bottom')" title="Curva hacia abajo">
-                <i class="fas fa-arrow-down"></i> Abajo
-              </button>
-            </div>
-            <div class="active-item-actions">
-              <button type="button" class="item-quick-btn" onclick="stepItemScale(-0.1)" title="Achicar tamaño"><i class="fas fa-minus"></i></button>
-              <button type="button" class="item-quick-btn" onclick="stepItemScale(0.1)" title="Agrandar tamaño"><i class="fas fa-plus"></i></button>
-              <button type="button" class="item-quick-btn" onclick="stepItemRotation(-10)" title="Girar a la izquierda"><i class="fas fa-rotate-left"></i></button>
-              <button type="button" class="item-quick-btn" onclick="stepItemRotation(10)" title="Girar a la derecha"><i class="fas fa-rotate-right"></i></button>
-              <button type="button" class="item-quick-btn btn-delete-item" onclick="deleteActiveVirolaItem()" title="Eliminar de la virola"><i class="fas fa-trash-can"></i></button>
             </div>
           </div>
 
-          <!-- Floating Canvas Controls -->
-          <div class="canvas-bottom-toolbar">
-            <button type="button" class="canvas-tool-btn" onclick="autoCenterAndBalanceVirola()" title="Centrar y distribuir profesionalmente de forma automática">
+        </div>
+
+        <!-- Barra Fija de Control del Elemento Seleccionado (Posición y Altura Fija Permanente, Nunca Salta) -->
+        <div id="virola-active-item-controls" class="virola-active-item-controls">
+          <div class="active-item-status">
+            <span id="active-item-name-badge" class="active-item-name-badge">
+              <i class="fas fa-hand-pointer" style="color: var(--accent-gold); margin-right: 6px;"></i> Hacé clic en cualquier texto o grabado para editarlo
+            </span>
+          </div>
+          <div class="active-item-actions disabled" id="active-item-actions">
+            <button type="button" class="item-quick-btn" onclick="stepItemScale(-0.1)" title="Achicar tamaño"><i class="fas fa-minus"></i></button>
+            <span class="active-item-scale-pill" id="active-item-scale-display">--</span>
+            <button type="button" class="item-quick-btn" onclick="stepItemScale(0.1)" title="Agrandar tamaño"><i class="fas fa-plus"></i></button>
+
+            <div class="active-item-divider"></div>
+
+            <button type="button" class="item-quick-btn" onclick="stepItemRotation(-15)" title="Girar 15° a la izquierda"><i class="fas fa-rotate-left"></i></button>
+            <button type="button" class="item-quick-btn" onclick="stepItemRotation(15)" title="Girar 15° a la derecha"><i class="fas fa-rotate-right"></i></button>
+
+            <div class="active-item-divider"></div>
+
+            <button type="button" class="item-quick-btn" onclick="centerActiveItem()" title="Centrar en la corona"><i class="fas fa-crosshairs"></i></button>
+            <button type="button" class="item-quick-btn" onclick="duplicateActiveItem()" title="Duplicar capa"><i class="fas fa-clone"></i></button>
+            <button type="button" class="item-quick-btn btn-delete-item" onclick="deleteActiveVirolaItem()" title="Eliminar de la pieza"><i class="fas fa-trash-can"></i></button>
+          </div>
+        </div>
+
+        <!-- Barra Inferior de Herramientas del Escenario -->
+        <div class="stage-bottombar-tools">
+          <div class="stage-tools-pill-group">
+            <button type="button" class="stage-tool-pill" onclick="autoCenterAndBalanceVirola()" title="Centrar concéntricamente">
               <i class="fas fa-crosshairs"></i> Centrar
             </button>
-            <button type="button" class="canvas-tool-btn" onclick="studio.activeItemId = null; renderVirolaCanvas();" title="Deseleccionar">
+            <button type="button" class="stage-tool-pill" id="canvas-snap-btn" onclick="toggleSnappingGuides()" title="Guías magnéticas de imán">
+              <i class="fas fa-magnet"></i> Snapping
+            </button>
+            <button type="button" class="stage-tool-pill" onclick="studio.activeItemId = null; renderVirolaCanvas();" title="Deseleccionar">
               <i class="fas fa-mouse-pointer"></i> Deseleccionar
             </button>
-            <button type="button" class="canvas-tool-btn" onclick="resetVirolaStudio()" title="Limpiar elementos">
+            <button type="button" class="stage-tool-pill" onclick="resetVirolaStudio()" title="Limpiar lienzo">
               <i class="fas fa-trash-can"></i> Limpiar
             </button>
-            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20consultar%20por%20un%20dise%C3%B1o%20de%20virola." target="_blank" rel="noopener noreferrer" class="canvas-tool-btn" style="color: #25d366;">
-              <i class="fab fa-whatsapp"></i> Ayuda WhatsApp
-            </a>
           </div>
 
-          <div style="margin-top: 14px; font-size: 0.72rem; color: rgba(255,255,255,0.6); text-align: center;">
-            💡 <i>Podés arrastrar tanto los textos como los diseños alrededor de la virola, o usar el botón <b>Centrar</b> para alinearlos automáticamente.</i>
+          <div class="stage-tools-pill-group">
+            <button type="button" class="stage-tool-pill" onclick="downloadVectorLaserFile()" title="Descargar SVG vectorial para máquina láser">
+              <i class="fas fa-file-arrow-down" style="color: var(--accent-gold);"></i> SVG Láser CNC
+            </button>
           </div>
+        </div>
 
-        </section>
+      </section>
 
-      </div>
     </div>
   </main>
+
+  <!-- MODAL: CATÁLOGO COMPLETO DE DISEÑOS & ESCUDOS (40+ DISEÑOS) -->
+  <div class="design-catalog-modal" id="design-catalog-modal" onclick="closeDesignCatalogModal(event)">
+    <div class="design-modal-card" onclick="event.stopPropagation()">
+      <div class="design-modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-shield-halved" style="color: var(--accent-gold); font-size: 1.25rem;"></i>
+          <h3 style="margin: 0; font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800;">Catálogo Completo de Diseños & Escudos</h3>
+        </div>
+        <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="closeDesignCatalogModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="design-modal-body">
+        <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+          <button type="button" class="ribbon-btn active modal-cat-tab-btn" data-modal-cat="all" onclick="filterModalCatalog('all')">Todos</button>
+          <button type="button" class="ribbon-btn modal-cat-tab-btn" data-modal-cat="deportes" onclick="filterModalCatalog('deportes')">Deportes</button>
+          <button type="button" class="ribbon-btn modal-cat-tab-btn" data-modal-cat="criollo" onclick="filterModalCatalog('criollo')">Criollos & Tradición</button>
+          <button type="button" class="ribbon-btn modal-cat-tab-btn" data-modal-cat="fauna" onclick="filterModalCatalog('fauna')">Fauna Nacional</button>
+          <button type="button" class="ribbon-btn modal-cat-tab-btn" data-modal-cat="simbolos" onclick="filterModalCatalog('simbolos')">Símbolos</button>
+          <button type="button" class="ribbon-btn modal-cat-tab-btn" data-modal-cat="frases" onclick="filterModalCatalog('frases')">Frases</button>
+        </div>
+
+        <div class="vector-icons-grid" id="modal-designs-grid" style="grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Mobile Sticky Bottom Action Bar -->
   <div class="mobile-sticky-action-bar" id="mobile-sticky-bar">

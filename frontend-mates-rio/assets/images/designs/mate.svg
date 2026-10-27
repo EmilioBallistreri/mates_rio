@@ -3,9 +3,9 @@
   <defs>
     <!-- Gradiente de Cuero Vacuno / Calabaza -->
     <radialGradient id="mate-leather-grad" cx="40%" cy="50%" r="60%">
-      <stop offset="0%" stop-color="#4a2e1b"/>
-      <stop offset="50%" stop-color="#2c1a0e"/>
-      <stop offset="100%" stop-color="#140b06"/>
+      <stop offset="0%" stop-color="#2e251e"/>
+      <stop offset="50%" stop-color="#14100c"/>
+      <stop offset="100%" stop-color="#14100c"/>
     </radialGradient>
     <!-- Gradiente Virola Alpaca -->
     <linearGradient id="mate-virola-grad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -28,8 +28,8 @@
     <path d="M 270 210 L 375 60 C 382 50 395 52 405 60 C 412 68 410 80 400 90 L 300 230" 
           fill="url(#mate-bombilla-grad)" stroke="#6e7781" stroke-width="2"/>
     <!-- Anillo labrado / virola de la bombilla -->
-    <ellipse cx="365" cy="85" rx="14" ry="7" transform="rotate(-45, 365, 85)" fill="#e5c158" stroke="#a3821e" stroke-width="1.5"/>
-    <ellipse cx="380" cy="70" rx="11" ry="5" transform="rotate(-45, 380, 70)" fill="#e5c158" stroke="#a3821e" stroke-width="1.5"/>
+    <ellipse cx="365" cy="85" rx="14" ry="7" transform="rotate(-45, 365, 85)" fill="#14100c" stroke="#14100c" stroke-width="1.5"/>
+    <ellipse cx="380" cy="70" rx="11" ry="5" transform="rotate(-45, 380, 70)" fill="#14100c" stroke="#14100c" stroke-width="1.5"/>
   </g>
 
   <!-- Base de apoyo / Pie de 4 patas orfebre -->
@@ -43,12 +43,12 @@
            C 165 440 210 450 250 450 
            C 290 450 335 440 360 400 
            C 390 350 380 260 330 230 Z" 
-        fill="url(#mate-leather-grad)" stroke="#1a0f08" stroke-width="3"/>
+        fill="url(#mate-leather-grad)" stroke="#14100c" stroke-width="3"/>
 
   <!-- Costura artesanal gauchesca en cruz del cuero -->
-  <path d="M 250 240 L 250 445" fill="none" stroke="#7a5230" stroke-width="3" stroke-dasharray="6,4"/>
+  <path d="M 250 240 L 250 445" fill="none" stroke="#14100c" stroke-width="3" stroke-dasharray="6,4"/>
   <!-- Cruces de tiento de cuero crudo -->
-  <g stroke="#c29b68" stroke-width="2" stroke-linecap="round">
+  <g stroke="#ffffff" stroke-width="2" stroke-linecap="round">
     <line x1="243" y1="260" x2="257" y2="270"/><line x1="257" y1="260" x2="243" y2="270"/>
     <line x1="243" y1="290" x2="257" y2="300"/><line x1="257" y1="290" x2="243" y2="300"/>
     <line x1="243" y1="320" x2="257" y2="330"/><line x1="257" y1="320" x2="243" y2="330"/>
@@ -77,8 +77,8 @@
   <ellipse cx="250" cy="208" rx="84" ry="18" fill="#1b120c" stroke="#4a3e30" stroke-width="2"/>
 
   <!-- Yerba mate con montañita verde en el interior -->
-  <ellipse cx="240" cy="210" rx="72" ry="14" fill="#2d421e"/>
-  <ellipse cx="230" cy="208" rx="55" ry="10" fill="#3d5e27"/>
-  <circle cx="220" cy="207" r="3" fill="#5c873b"/>
-  <circle cx="245" cy="209" r="2.5" fill="#5c873b"/>
+  <ellipse cx="240" cy="210" rx="72" ry="14" fill="#14100c"/>
+  <ellipse cx="230" cy="208" rx="55" ry="10" fill="#14100c"/>
+  <circle cx="220" cy="207" r="3" fill="#2a221b"/>
+  <circle cx="245" cy="209" r="2.5" fill="#2a221b"/>
 </svg>

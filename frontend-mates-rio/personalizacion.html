@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personalización | Taller & Estudio 360° Mates Río</title>
+  <meta name="description" content="Personalizá la virola de tu mate imperial con grabado láser de alta definición o cincelado orfebre. Nombres, fechas, escudos y logos. Mates Río." />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Personalización | Mates Río" />
+  <meta property="og:description" content="Grabado exclusivo en la virola de alpaca y acero quirúrgico. Personalizá tu mate en vivo." />
+  <meta property="og:image" content="assets/images/prod_mate_imperial.jpg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
+
+  <!-- Google Fonts: Complete Luxury Engraving Suite -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alex+Brush&family=Bebas+Neue&family=Cinzel+Decorative:wght@700&family=Cinzel:wght@600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Italianno&family=Lato:wght@400;700;900&family=Lora:ital,wght@0,600;0,700;1,600&family=Marck+Script&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Oswald:wght@500;600;700&family=Outfit:wght@400;600;700;800;900&family=Parisienne&family=Pinyon+Script&family=Pirata+One&family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;600;700;800&family=Rochester&family=Rye&family=Sacramento&family=Satisfy&family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css?v=20261012-3" />
+
+  <!-- Immediate Theme Initializer (Sincronizado con Panel de Administración) -->
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'light') {
+        document.documentElement.classList.add('theme-light');
+        document.documentElement.classList.remove('theme-dark');
+      } else {
+        document.documentElement.classList.add('theme-dark');
+        document.documentElement.classList.remove('theme-light');
+      }
+    })();
+  </script>
+</head>
+<body class="page-customizer">
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'light') {
+        document.body.classList.add('theme-light', 'theme-inverted');
+        document.body.classList.remove('theme-dark');
+      } else {
+        document.body.classList.add('theme-dark');
+        document.body.classList.remove('theme-light', 'theme-inverted');
+      }
+    })();
+  </script>
+
+  <!-- Top Scroll Progress Indicator -->
+  <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+
+  <!-- Announcement Bar -->
+  <aside class="announcement-bar">
+    <div class="container announcement-inner">
+      <div class="announcement-center-msg">
+        <span class="announcement-item"><i class="fas fa-magic"></i> <b>Taller de Grabado Oficial Mates Río</b></span>
+        <span class="announcement-sep announcement-sep-desktop">•</span>
+        <span class="announcement-item announcement-item-desktop"><i class="fas fa-bolt"></i> <b>Grabado en Virola BONIFICADO</b></span>
+        <span class="announcement-sep announcement-sep-desktop">•</span>
+        <span class="announcement-item announcement-item-desktop"><i class="fas fa-truck"></i> Despacho desde <b>Río Ceballos, Córdoba</b></span>
+      </div>
+
+      <div class="announcement-links">
+        <a href="index.html" title="Ir a la Tienda Principal">
+          <i class="fas fa-store"></i> Volver a la Tienda
+        </a>
+        <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20consultar%20sobre%20la%20personalizaci%C3%B3n%20de%20un%20mate." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
+          <i class="fab fa-whatsapp"></i> Asesoría WhatsApp
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sticky Header with Clean Navigation Back to Store -->
+  <header class="site-header" id="main-header">
+    <div class="container header-inner">
+      <!-- 1. Brand Logo & Mobile Menu Toggle (Tres rayitas al lado del logo para celu) -->
+      <div class="header-left">
+        <button class="mobile-menu-btn" id="mobile-menu-toggle" onclick="openMobileDrawer()" aria-label="Abrir Menú de Navegación" title="Menú" style="color: var(--accent-gold);">
+          <i class="fas fa-bars" style="color: var(--accent-gold);"></i>
+        </button>
+
+        <a href="index.html" class="header-brand" title="Mates Río - Volver a la tienda">
+          <img src="assets/images/logo.jpg" alt="Logo Mates Río" class="brand-logo-img" />
+          <div class="brand-text">
+            <span class="brand-name">MATES RÍO</span>
+            <span class="brand-tagline">ESTUDIO DE PERSONALIZACIÓN 360°</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- 2. Breadcrumb / Status -->
+      <nav class="header-center header-breadcrumb-nav" aria-label="Ruta de navegación">
+        <ul class="customizer-breadcrumb">
+          <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+          <li><i class="fas fa-chevron-right sep"></i></li>
+          <li><a href="catalogo.html">Catálogo</a></li>
+          <li><i class="fas fa-chevron-right sep"></i></li>
+          <li class="active"><span>Personalización</span></li>
+        </ul>
+      </nav>
+
+      <!-- 3. Right Zone: Back to Store & Cart Trigger -->
+      <div class="header-right">
+        <!-- Selector Modo Claro / Modo Oscuro -->
+        <button class="action-btn theme-toggle-btn" id="theme-toggle-btn" onclick="toggleColorTheme()" title="Cambiar a Modo Claro / Modo Oscuro" aria-label="Cambiar tema de color">
+          <i class="fas fa-sun"></i>
+        </button>
+
+        <!-- Desktop Back to Store -->
+        <a href="index.html" class="btn btn-outline-dark btn-header-back" title="Explorar otros productos">
+          <i class="fas fa-arrow-left"></i> <span>Volver a la Tienda</span>
+        </a>
+
+        <!-- Mobile Back to Store Icon -->
+        <a href="index.html" class="btn-header-back-mobile" title="Volver a la Tienda" aria-label="Volver a la Tienda">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+
+        <!-- User Account (Login / Register / Profile Dropdown) -->
+        <div class="user-btn-wrap">
+          <button class="user-account-btn" id="user-account-btn" onclick="openAuthModal('login')" title="Mi Cuenta">
+            <i class="far fa-user"></i>
+            <span class="user-name-display" id="user-btn-name">Ingresar</span>
+          </button>
+
+          <!-- User Dropdown Menu for Logged In User -->
+          <div class="user-dropdown-menu" id="user-dropdown-menu">
+            <div class="user-dropdown-item" onclick="openProfileModal()">
+              <i class="far fa-id-badge"></i> Mi Perfil
+            </div>
+            <div class="user-dropdown-item" onclick="openProfileModal()">
+              <i class="fas fa-box-open"></i> Mis Pedidos
+            </div>
+            <a href="admin.html" class="user-dropdown-item admin-only-item admin-highlight-link" id="dropdown-admin-link" style="display: none; color: var(--accent-leather); font-weight: 800; text-decoration: none;">
+              <i class="fas fa-shield-halved" style="color: var(--accent-gold);"></i> Panel de Administración
+            </a>
+            <div class="user-dropdown-divider"></div>
+            <div class="user-dropdown-item text-danger" onclick="logoutUser()">
+              <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </div>
+          </div>
+        </div>
+
+        <!-- Shopping Cart Trigger Button -->
+        <button class="action-btn cart-btn-highlight" id="open-cart-btn" onclick="openCartDrawer()" title="Ver Carrito de Compras">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-count-badge" id="cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MOBILE NAVIGATION DRAWER & OVERLAY (Menú hamburguesa en celular)
+       ========================================================================== -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileDrawer()"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Navegación Móvil">
+    <div class="mobile-drawer-header">
+      <div class="mobile-drawer-brand">
+        <img src="assets/images/logo.jpg" alt="Logo Mates Río" class="drawer-logo-img" />
+        <div>
+          <span class="drawer-brand-name">MATES RÍO</span>
+          <span class="drawer-brand-sub">RÍO CEBALLOS • CÓRDOBA</span>
+        </div>
+      </div>
+      <button class="mobile-drawer-close" onclick="closeMobileDrawer()" aria-label="Cerrar menú">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <ul class="mobile-nav-list">
+      <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
+        <a href="javascript:void(0)" onclick="handleMobileAuthClick()">
+          <span><i class="fas fa-user-circle" style="width: 22px; color: var(--accent-leather);"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-admin" id="mobile-nav-admin-item" style="display: none;">
+        <a href="admin.html" onclick="closeMobileDrawer();">
+          <span><i class="fas fa-shield-halved" style="width: 22px; color: var(--accent-gold);"></i> <b style="color: var(--accent-leather);">Panel Admin</b></span>
+          <span class="nav-badge-pill pill-gold">STAFF</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="index.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-home" style="width: 22px; color: var(--accent-gold);"></i> Inicio</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="mayorista.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-boxes-packing" style="width: 22px; color: var(--accent-gold);"></i> Portal Mayorista</span>
+          <span class="nav-badge-pill pill-gold">B2B</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="promos.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-fire" style="width: 22px; color: var(--badge-promo);"></i> PROMOS & COMBOS</span>
+          <span class="nav-badge-pill">Hasta 25% OFF</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-th-large" style="width: 22px; color: var(--accent-gold);"></i> Catálogo Completo</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=mates" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-mug-hot" style="width: 22px; color: var(--accent-leather);"></i> Mates Imperiales</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="personaliza-tu-mate.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Personalización</span>
+          <span class="nav-badge-pill pill-gold">VIROLA</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=termos" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-temperature-high" style="width: 22px; color: var(--accent-gold);"></i> Termos de Acero</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=accesorios" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Bombillas & Accesorios</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=yerbas" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-leaf" style="width: 22px; color: #27ae60;"></i> Yerbas Seleccionadas</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html?categoria=equipos" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-briefcase" style="width: 22px; color: var(--accent-leather);"></i> Equipos de Mate</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="#contacto" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-envelope" style="width: 22px; color: var(--accent-gold);"></i> Contacto & Taller</span>
+          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        </a>
+      </li>
+    </ul>
+
+    <div class="mobile-nav-footer">
+      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+        <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="flex: 1; padding: 10px; font-size: 0.78rem;">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+        <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok" style="flex: 1; padding: 10px; font-size: 0.78rem;">
+          <i class="fab fa-tiktok"></i> TikTok
+        </a>
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="flex: 1; padding: 10px; font-size: 0.78rem;">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+      </div>
+      <p style="font-size: 0.75rem; color: var(--text-secondary); text-align: center;">
+        Taller en Río Ceballos, Córdoba • Envíos a todo el país
+      </p>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       MAIN STUDIO WORKSPACE
+       ========================================================================== -->
+  <main class="customizer-main-container">
+    <div class="container customizer-container-wide">
+      
+      <!-- 1. ENCABEZADO DE LA SECCIÓN -->
+      <div class="customizer-hero-head">
+        <div class="studio-badge-pill">
+          <i class="fas fa-magic"></i> ESTUDIO DE PERSONALIZACIÓN PROFESIONAL 360°
+        </div>
+        <h1 class="studio-page-title">Personalización</h1>
+        <p class="studio-page-subtitle">
+          Elegí qué pieza querés grabar, redactá tus textos con libertad total de tamaño y longitud, sumá escudos o tu propio logo y disfrutá de la previsualización interactiva en 360°.
+        </p>
+      </div>
+
+      <!-- 2. CARDS DE ELECCIÓN DE PRODUCTO: MATE, TERMO O CAJA (ITEM 6) -->
+      <div class="product-selector-cards-wrap" id="product-selection-cards">
+        
+        <!-- Card 1: Mate Imperial -->
+        <div class="prod-select-card active" data-product="mate" onclick="switchActiveProduct('mate')">
+          <span class="prod-card-badge">Más Popular</span>
+          <div class="prod-card-icon-wrap">
+            <i class="fas fa-mug-hot"></i>
+          </div>
+          <div class="prod-card-body">
+            <h3 class="prod-card-title">Mate Imperial</h3>
+            <p class="prod-card-desc">Corona de alpaca maciza / acero y cuero vacuno. Grabado láser milimétrico, cincelado y vista 360°.</p>
+            <div class="prod-card-meta">
+              <span class="prod-card-price">Desde $ 46.500</span>
+              <span class="prod-card-free">Grabado BONIFICADO</span>
+            </div>
+          </div>
+          <div class="prod-card-check"><i class="fas fa-check"></i></div>
+        </div>
+
+        <!-- Card 2: Termo de Acero -->
+        <div class="prod-select-card" data-product="termo" onclick="switchActiveProduct('termo')">
+          <span class="prod-card-badge">Doble Capa</span>
+          <div class="prod-card-icon-wrap">
+            <i class="fas fa-temperature-high"></i>
+          </div>
+          <div class="prod-card-body">
+            <h3 class="prod-card-title">Termo de Acero</h3>
+            <p class="prod-card-desc">Acero inoxidable 18/8 de 1 Litro térmico 24hs. Grabado indeleble de alta definición a lo largo del cuerpo.</p>
+            <div class="prod-card-meta">
+              <span class="prod-card-price">Desde $ 42.900</span>
+              <span class="prod-card-free">Grabado BONIFICADO</span>
+            </div>
+          </div>
+          <div class="prod-card-check"><i class="fas fa-check"></i></div>
+        </div>
+
+        <!-- Card 3: Caja Matera Premium -->
+        <div class="prod-select-card" data-product="caja" onclick="switchActiveProduct('caja')">
+          <span class="prod-card-badge">Ideal Regalo</span>
+          <div class="prod-card-icon-wrap">
+            <i class="fas fa-box-open"></i>
+          </div>
+          <div class="prod-card-body">
+            <h3 class="prod-card-title">Caja Matera Premium</h3>
+            <p class="prod-card-desc">Caja de madera noble para regalo o presentación. Pirograbado y láser de precisión en tapa y laterales.</p>
+            <div class="prod-card-meta">
+              <span class="prod-card-price">Desde $ 32.000</span>
+              <span class="prod-card-free">Grabado BONIFICADO</span>
+            </div>
+          </div>
+          <div class="prod-card-check"><i class="fas fa-check"></i></div>
+        </div>
+
+      </div>
+
+      <!-- 3. BARRA RIBBON SUPERIOR ESTILO PAINT / WORD (ITEMS 3 & 4) -->
+      <div class="studio-ribbon-container" id="studio-ribbon">
+        
+        <!-- Pestañas de la barra Ribbon -->
+        <div class="ribbon-tabs-strip">
+          <button type="button" class="ribbon-tab-btn" data-tab="product" onclick="switchRibbonTab('product')">
+            <i class="fas fa-sliders"></i> <span>Producto & Vista</span>
+          </button>
+          <button type="button" class="ribbon-tab-btn active" data-tab="text" onclick="switchRibbonTab('text')">
+            <i class="fas fa-font"></i> <span>Texto & Tipografía</span>
+          </button>
+          <button type="button" class="ribbon-tab-btn" data-tab="icons" onclick="switchRibbonTab('icons')">
+            <i class="fas fa-shield-halved"></i> <span>Diseños & Escudos</span>
+          </button>
+          <button type="button" class="ribbon-tab-btn" data-tab="upload" onclick="switchRibbonTab('upload')">
+            <i class="fas fa-cloud-arrow-up"></i> <span>Tu Logo / Imagen</span>
+          </button>
+          <button type="button" class="ribbon-tab-btn" data-tab="lines" onclick="switchRibbonTab('lines')">
+            <i class="fas fa-circle-notch"></i> <span>Cincelado & Acabados</span>
+          </button>
+          <button type="button" class="ribbon-tab-btn ribbon-tab-finish" data-tab="finish" onclick="switchRibbonTab('finish')">
+            <i class="fas fa-shopping-bag"></i> <span>Finalizar Pedido</span>
+          </button>
+        </div>
+
+        <!-- Contenido dinámico del Ribbon organizado por Grupos -->
+        <div class="ribbon-toolbar-content">
+          
+          <!-- PESTAÑA 1: PRODUCTO & VISTA -->
+          <div class="ribbon-tab-panel" data-panel="product" id="ribbon-panel-product">
+            <!-- Grupo: Selección de Producto -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" data-prod-btn="mate" onclick="switchActiveProduct('mate')">
+                  <i class="fas fa-mug-hot"></i> Mate
+                </button>
+                <button type="button" class="ribbon-btn" data-prod-btn="termo" onclick="switchActiveProduct('termo')">
+                  <i class="fas fa-temperature-high"></i> Termo
+                </button>
+                <button type="button" class="ribbon-btn" data-prod-btn="caja" onclick="switchActiveProduct('caja')">
+                  <i class="fas fa-box-open"></i> Caja
+                </button>
+              </div>
+              <span class="ribbon-group-label">Producto</span>
+            </div>
+
+            <!-- Grupo: Modelo Base -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <select id="mate-model-select" class="ribbon-select" onchange="onMateModelChange(this.value)" style="min-width: 220px;">
+                  <!-- Populated via JS -->
+                </select>
+              </div>
+              <span class="ribbon-group-label">Modelo Base</span>
+            </div>
+
+            <!-- Grupo: Modo de Vista -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" id="ribbon-view-2d-btn" onclick="setStudioViewMode('2d')">
+                  <i class="fas fa-pen-ruler"></i> Vista Grabado 2D
+                </button>
+                <button type="button" class="ribbon-btn" id="ribbon-view-360-btn" onclick="setStudioViewMode('360')">
+                  <i class="fas fa-rotate"></i> Giro 360°
+                </button>
+              </div>
+              <span class="ribbon-group-label">Modo Visualización</span>
+            </div>
+
+            <!-- Grupo: Acciones del Lienzo -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn" onclick="autoCenterAndBalanceVirola()" title="Centrar concéntricamente">
+                  <i class="fas fa-crosshairs"></i> Centrar
+                </button>
+                <button type="button" class="ribbon-btn" onclick="resetVirolaStudio()" title="Limpiar todo">
+                  <i class="fas fa-trash-can"></i> Limpiar
+                </button>
+              </div>
+              <span class="ribbon-group-label">Lienzo</span>
+            </div>
+          </div>
+
+          <!-- PESTAÑA 2: TEXTO & TIPOGRAFÍA (LIBERTAD TOTAL, ITEM 5) -->
+          <div class="ribbon-tab-panel active" data-panel="text" id="ribbon-panel-text">
+            
+            <!-- Grupo 1: Redacción Libre (Sin límites de texto) -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <div style="position: relative; display: flex; align-items: center;">
+                  <input type="text" 
+                         id="active-text-input" 
+                         class="ribbon-input-text" 
+                         placeholder="Escribí nombres, fechas, frases o dedicatorias..." 
+                         oninput="onActiveTextInput(this.value)" />
+                  <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="clearActiveText()" title="Borrar texto" style="position: absolute; right: 4px; border: none; background: transparent;">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                <button type="button" class="ribbon-btn ribbon-btn-lg" onclick="addNewTextBlock('', 'top')" title="Agregar otro bloque de texto libre">
+                  <i class="fas fa-plus"></i> Nuevo Texto
+                </button>
+              </div>
+              <span class="ribbon-group-label">Redacción Libre</span>
+            </div>
+
+            <!-- Grupo 2: Tipografía de Grabado -->
+            <div class="ribbon-group" style="position: relative;">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn ribbon-font-preview-btn" id="ribbon-font-select-btn" onclick="toggleRibbonFontDropdown()">
+                  <span id="active-text-font-badge" style="font-family: 'Cinzel', serif; font-weight: 800;">Cinzel</span>
+                  <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 8px;"></i>
+                </button>
+                <div class="ribbon-font-dropdown" id="ribbon-font-dropdown">
+                  <!-- Generado dinámicamente -->
+                </div>
+              </div>
+              <span class="ribbon-group-label">Fuente Orfebre</span>
+            </div>
+
+            <!-- Grupo 3: Tamaño de Letra (Libre de 8px a 140px+) -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="stepTextFontSize(-2)" title="Achicar letra (A-)">
+                  <i class="fas fa-font" style="font-size: 0.72rem;"></i>-
+                </button>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <input type="number" id="active-text-size-input" class="ribbon-select" min="8" max="160" value="20" style="width: 60px; text-align: center;" onchange="onActiveTextSizeChange(this.value)" />
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">px</span>
+                </div>
+                <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="stepTextFontSize(2)" title="Agrandar letra (A+)">
+                  <i class="fas fa-font" style="font-size: 1rem;"></i>+
+                </button>
+                <input type="range" id="active-text-size-slider" min="8" max="140" step="1" value="20" oninput="onActiveTextSizeChange(this.value)" style="width: 90px; accent-color: var(--accent-gold);" />
+              </div>
+              <span class="ribbon-group-label">Tamaño</span>
+            </div>
+
+            <!-- Grupo 4: Curvatura / Formato -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active-text-curve-btn" data-pos="top" onclick="setActiveTextCurvature('top')" title="Curva Superior ⌒">
+                  <i class="fas fa-arrow-up"></i> Curva Arriba
+                </button>
+                <button type="button" class="ribbon-btn active-text-curve-btn" data-pos="straight" onclick="setActiveTextCurvature('straight')" title="Recto Libre —">
+                  <i class="fas fa-minus"></i> Recto
+                </button>
+                <button type="button" class="ribbon-btn active-text-curve-btn" data-pos="bottom" onclick="setActiveTextCurvature('bottom')" title="Curva Inferior ⌣">
+                  <i class="fas fa-arrow-down"></i> Curva Abajo
+                </button>
+              </div>
+              <span class="ribbon-group-label">Formato & Curvatura</span>
+            </div>
+
+            <!-- Grupo 5: Capas de Texto Activas -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content" id="text-layers-container">
+                <!-- Capas en pills dinámicos -->
+              </div>
+              <span class="ribbon-group-label">Capas Activas</span>
+            </div>
+
+            <!-- Grupo 6: Operaciones -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn" onclick="duplicateActiveItem()" title="Duplicar texto">
+                  <i class="fas fa-clone"></i>
+                </button>
+                <button type="button" class="ribbon-btn" onclick="deleteActiveVirolaItem()" title="Eliminar texto" style="color: #ef4444;">
+                  <i class="fas fa-trash-can"></i>
+                </button>
+              </div>
+              <span class="ribbon-group-label">Editar</span>
+            </div>
+
+          </div>
+
+          <!-- PESTAÑA 3: DISEÑOS & ESCUDOS -->
+          <div class="ribbon-tab-panel" data-panel="icons" id="ribbon-panel-icons">
+            
+            <!-- Grupo 1: Filtro de Categoría -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" data-cat-filter="deportes" onclick="filterRibbonDesigns('deportes')">
+                  🏆 Deportes
+                </button>
+                <button type="button" class="ribbon-btn" data-cat-filter="criollo" onclick="filterRibbonDesigns('criollo')">
+                  🇦🇷 Criollos
+                </button>
+                <button type="button" class="ribbon-btn" data-cat-filter="fauna" onclick="filterRibbonDesigns('fauna')">
+                  🦅 Fauna
+                </button>
+                <button type="button" class="ribbon-btn" data-cat-filter="simbolos" onclick="filterRibbonDesigns('simbolos')">
+                  ✨ Símbolos
+                </button>
+                <button type="button" class="ribbon-btn" data-cat-filter="frases" onclick="filterRibbonDesigns('frases')">
+                  💬 Frases
+                </button>
+              </div>
+              <span class="ribbon-group-label">Categorías</span>
+            </div>
+
+            <!-- Grupo 2: Diseños Rápidos (Carrusel interactivo con flechas y scroll fluido) -->
+            <div class="ribbon-group ribbon-carousel-group">
+              <div class="ribbon-carousel-wrapper">
+                <button type="button" class="ribbon-carousel-nav ribbon-carousel-prev" onclick="scrollRibbonDesigns(-240)" title="Ver anteriores" aria-label="Ver anteriores">
+                  <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="ribbon-group-content ribbon-carousel-track" id="ribbon-quick-designs">
+                  <!-- Populated via JS -->
+                </div>
+                <button type="button" class="ribbon-carousel-nav ribbon-carousel-next" onclick="scrollRibbonDesigns(240)" title="Ver más" aria-label="Ver más">
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              <span class="ribbon-group-label">Deslizá o usá flechas ◀ ▶</span>
+            </div>
+
+            <!-- Grupo 3: Catálogo Completo -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn ribbon-btn-lg" onclick="openDesignCatalogModal()">
+                  <i class="fas fa-th-large"></i> Ver Todo el Catálogo
+                </button>
+              </div>
+              <span class="ribbon-group-label">Galería Completa</span>
+            </div>
+
+          </div>
+
+          <!-- PESTAÑA 4: TU LOGO / IMAGEN (ESCALA LIBRE SIN LÍMITES, ITEM 5) -->
+          <div class="ribbon-tab-panel" data-panel="upload" id="ribbon-panel-upload">
+            
+            <!-- Grupo 1: Subir Archivo Propio -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <input type="file" id="studio-custom-file-upload" accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml" style="display: none;" onchange="handleCustomImageUpload(event)" />
+                <button type="button" class="ribbon-btn ribbon-btn-lg" onclick="document.getElementById('studio-custom-file-upload').click()" style="background: var(--accent-gold); color: #120e0a;">
+                  <i class="fas fa-upload"></i> Subir Logo o Imagen
+                </button>
+                <span style="font-size: 0.74rem; color: var(--text-muted); max-width: 170px; line-height: 1.3;">
+                  Auto-vectorizado y eliminación de fondo automática.
+                </span>
+              </div>
+              <span class="ribbon-group-label">Cargar Archivo</span>
+            </div>
+
+            <!-- Grupo 2: Escala Libre (Puede abarcar toda la virola o producto) -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="stepItemScale(-0.15)" title="Achicar">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <span id="ribbon-image-scale-val" style="font-size: 0.8rem; font-weight: 800; color: var(--accent-gold); min-width: 45px; text-align: center;">100%</span>
+                </div>
+                <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="stepItemScale(0.15)" title="Agrandar libremente">
+                  <i class="fas fa-plus"></i>
+                </button>
+                <button type="button" class="ribbon-btn" onclick="setItemFullSurfaceScale()" title="Agrandar para cubrir superficie">
+                  <i class="fas fa-expand"></i> Escala Máxima
+                </button>
+              </div>
+              <span class="ribbon-group-label">Escala Libre (Sin Límite)</span>
+            </div>
+
+            <!-- Grupo 3: Rotación y Ajuste -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn" onclick="stepItemRotation(-15)" title="Girar a la izquierda">
+                  <i class="fas fa-rotate-left"></i> -15°
+                </button>
+                <button type="button" class="ribbon-btn" onclick="stepItemRotation(15)" title="Girar a la derecha">
+                  <i class="fas fa-rotate-right"></i> +15°
+                </button>
+                <button type="button" class="ribbon-btn" onclick="resetItemTransform()" title="Restablecer giro">
+                  <i class="fas fa-undo"></i> 0°
+                </button>
+              </div>
+              <span class="ribbon-group-label">Orientación</span>
+            </div>
+
+          </div>
+
+          <!-- PESTAÑA 5: CINCELADO & ACABADOS -->
+          <div class="ribbon-tab-panel" data-panel="lines" id="ribbon-panel-lines">
+            
+            <!-- Grupo 1: Ranuras Cinceladas -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn lines-pill-btn" data-lines="no" onclick="selectCircularLines('no')">
+                  Sin Ranuras
+                </button>
+                <button type="button" class="ribbon-btn lines-pill-btn" data-lines="simple" onclick="selectCircularLines('simple')">
+                  Línea Simple
+                </button>
+                <button type="button" class="ribbon-btn lines-pill-btn active" data-lines="doble" onclick="selectCircularLines('doble')">
+                  Línea Doble Concéntrica
+                </button>
+              </div>
+              <span class="ribbon-group-label">Ranuras Cinceladas en Virola</span>
+            </div>
+
+            <!-- Grupo 2: Metal y Acabado -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" id="metal-alpaca-btn" onclick="setMetalFinish('alpaca')">
+                  <i class="fas fa-gem"></i> Alpaca Maciza
+                </button>
+                <button type="button" class="ribbon-btn" id="metal-acero-btn" onclick="setMetalFinish('acero')">
+                  <i class="fas fa-shield"></i> Acero Quirúrgico
+                </button>
+              </div>
+              <span class="ribbon-group-label">Material de la Corona</span>
+            </div>
+
+            <!-- Grupo 3: Asistencias CAD -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" id="toggle-snapping-btn" onclick="toggleSnappingGuides()">
+                  <i class="fas fa-magnet"></i> Guías Imán (Snap)
+                </button>
+                <button type="button" class="ribbon-btn active" id="toggle-clipping-btn" onclick="toggleClipToMetal()">
+                  <i class="fas fa-crop-simple"></i> Recorte al Metal
+                </button>
+              </div>
+              <span class="ribbon-group-label">Asistencias CAD</span>
+            </div>
+
+          </div>
+
+          <!-- PESTAÑA 6: FINALIZAR PEDIDO -->
+          <div class="ribbon-tab-panel" data-panel="finish" id="ribbon-panel-finish">
+            
+            <!-- Grupo 1: Resumen de Precios -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">Total de la pieza:</span>
+                  <strong id="confirm-mate-price" style="font-size: 1.15rem; color: var(--accent-gold);">$ 46.500</strong>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 2px; margin-left: 14px;">
+                  <span style="font-size: 0.72rem; color: #10b981; font-weight: 800;">GRABADO BONIFICADO ($0)</span>
+                  <span id="confirm-items-count" style="font-size: 0.72rem; color: var(--text-muted);">3 elementos</span>
+                </div>
+              </div>
+              <span class="ribbon-group-label">Precio</span>
+            </div>
+
+            <!-- Grupo 2: Modalidad de Entrega -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn active" id="purchase-type-web-btn" onclick="setPurchaseType('web')">
+                  <i class="fas fa-truck-fast"></i> Compra Web (Envío)
+                </button>
+                <button type="button" class="ribbon-btn" id="purchase-type-local-btn" onclick="setPurchaseType('local')">
+                  <i class="fas fa-store"></i> Retiro Río Ceballos
+                </button>
+              </div>
+              <span class="ribbon-group-label">Entrega</span>
+            </div>
+
+            <!-- Grupo 3: Acciones Finales -->
+            <div class="ribbon-group">
+              <div class="ribbon-group-content">
+                <button type="button" class="ribbon-btn ribbon-btn-lg" onclick="finalizeAndAddToCart()" style="background: var(--accent-gold); color: #120e0a; font-weight: 900; padding: 10px 22px;">
+                  <i class="fas fa-shopping-bag"></i> Agregar al Carrito
+                </button>
+                <button type="button" class="ribbon-btn" onclick="downloadVectorLaserFile()" title="Descargar plano SVG para máquina láser">
+                  <i class="fas fa-file-arrow-down" style="color: var(--accent-gold);"></i> SVG Láser
+                </button>
+              </div>
+              <span class="ribbon-group-label">Confirmar</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- 4. LIENZO CENTRAL EXPANDIDO (OCUPA LA MAYOR PARTE DE LA PANTALLA) (ITEMS 3 & 4) -->
+      <section class="studio-main-stage-full" id="studio-main-stage" aria-label="Lienzo de Grabado y Simulador 360°">
+        
+        <!-- Barra de Control Superior en el Lienzo -->
+        <div class="stage-topbar-controls">
+          <div class="stage-mode-switch-segmented">
+            <button type="button" class="stage-mode-btn active" id="stage-btn-2d" onclick="setStudioViewMode('2d')" title="Vista plana para diseñar milimétricamente">
+              <i class="fas fa-pen-ruler"></i> Vista Grabado 2D
+            </button>
+            <button type="button" class="stage-mode-btn" id="stage-btn-360" onclick="setStudioViewMode('360')" title="Vista 3D interactiva orbital 360°">
+              <i class="fas fa-rotate"></i> Vista 360° Interactiva
+            </button>
+          </div>
+
+          <div class="stage-badge-status" id="stage-badge-status">
+            <i class="fas fa-circle live-pulse-dot"></i> <span id="stage-status-text">CORONA DE ALPACA MACIZA (ANCHO 70MM) • ESCALA 1:1 CNC</span>
+          </div>
+        </div>
+
+        <!-- Contenedor del Lienzo: Alterna entre SVG 2D CNC y Viewport 360° -->
+        <div class="studio-canvas-wrap" id="studio-canvas-wrap">
+          
+          <!-- VISTA 1: CANVAS SVG INTERACTIVO 2D (DISEÑO MILIMÉTRICO) -->
+          <div id="studio-2d-viewport" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <svg id="virola-studio-svg" viewBox="0 0 500 500" class="studio-svg-viewport" xmlns="http://www.w3.org/2000/svg">
+              <!-- Renderizado dinámicamente por customizer-studio.js -->
+            </svg>
+          </div>
+
+          <!-- VISTA 2: VIEWPORT 360° INTERACTIVO ORBITAL 3D (ITEM 6) -->
+          <div id="studio-360-viewport" class="studio-360-viewport" style="display: none;" 
+               onmousedown="start360RotationDrag(event)" 
+               ontouchstart="start360RotationDrag(event)">
+            <canvas id="studio-360-canvas" width="560" height="520" style="width: 100%; height: 100%; max-width: 560px; max-height: 520px;"></canvas>
+            
+            <div class="rotation-guide-overlay">
+              <i class="fas fa-arrows-left-right"></i>
+              <span>Arrastrá libremente para girar 360°</span>
+              <span class="rotation-degree-val" id="rotation-degree-val">0°</span>
+              <button type="button" class="ribbon-btn ribbon-btn-icon-only" id="toggle-autorotate-btn" onclick="toggleAutoRotate360(event)" title="Giro automático continuo" style="width: 26px; height: 26px; font-size: 0.72rem; margin-left: 6px;">
+                <i class="fas fa-play" id="autorotate-icon"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Barra Fija de Control del Elemento Seleccionado (Posición y Altura Fija Permanente, Nunca Salta) -->
+        <div id="virola-active-item-controls" class="virola-active-item-controls">
+          <div class="active-item-status">
+            <span id="active-item-name-badge" class="active-item-name-badge">
+              <i class="fas fa-hand-pointer" style="color: var(--accent-gold); margin-right: 6px;"></i> Hacé clic en cualquier texto o grabado para editarlo
+            </span>
+          </div>
+          <div class="active-item-actions disabled" id="active-item-actions">
+            <button type="button" class="item-quick-btn" onclick="stepItemScale(-0.1)" title="Achicar tamaño"><i class="fas fa-minus"></i></button>
+            <span class="active-item-scale-pill" id="active-item-scale-display">--</span>
+            <button type="button" class="item-quick-btn" onclick="stepItemScale(0.1)" title="Agrandar tamaño"><i class="fas fa-plus"></i></button>
+
+            <div class="active-item-divider"></div>
+
+            <button type="button" class="item-quick-btn" onclick="stepItemRotation(-15)" title="Girar 15° a la izquierda"><i class="fas fa-rotate-left"></i></button>
+            <button type="button" class="item-quick-btn" onclick="stepItemRotation(15)" title="Girar 15° a la derecha"><i class="fas fa-rotate-right"></i></button>
+
+            <div class="active-item-divider"></div>
+
+            <button type="button" class="item-quick-btn" onclick="centerActiveItem()" title="Centrar en la corona"><i class="fas fa-crosshairs"></i></button>
+            <button type="button" class="item-quick-btn" onclick="duplicateActiveItem()" title="Duplicar capa"><i class="fas fa-clone"></i></button>
+            <button type="button" class="item-quick-btn btn-delete-item" onclick="deleteActiveVirolaItem()" title="Eliminar de la pieza"><i class="fas fa-trash-can"></i></button>
+          </div>
+        </div>
+
+        <!-- Barra Inferior de Herramientas del Escenario -->
+        <div class="stage-bottombar-tools">
+          <div class="stage-tools-pill-group">
+            <button type="button" class="stage-tool-pill" onclick="autoCenterAndBalanceVirola()" title="Centrar concéntricamente">
+              <i class="fas fa-crosshairs"></i> Centrar
+            </button>
+            <button type="button" class="stage-tool-pill" id="canvas-snap-btn" onclick="toggleSnappingGuides()" title="Guías magnéticas de imán">
+              <i class="fas fa-magnet"></i> Snapping
+            </button>
+            <button type="button" class="stage-tool-pill" onclick="studio.activeItemId = null; renderVirolaCanvas();" title="Deseleccionar">
+              <i class="fas fa-mouse-pointer"></i> Deseleccionar
+            </button>
+            <button type="button" class="stage-tool-pill" onclick="resetVirolaStudio()" title="Limpiar lienzo">
+              <i class="fas fa-trash-can"></i> Limpiar
+            </button>
+          </div>
+
+          <div class="stage-tools-pill-group">
+            <button type="button" class="stage-tool-pill" onclick="downloadVectorLaserFile()" title="Descargar SVG vectorial para máquina láser">
+              <i class="fas fa-file-arrow-down" style="color: var(--accent-gold);"></i> SVG Láser CNC
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- MODAL: CATÁLOGO COMPLETO DE DISEÑOS & ESCUDOS (40+ DISEÑOS) -->
+  <div class="design-catalog-modal" id="design-catalog-modal" onclick="closeDesignCatalogModal(event)">
+    <div class="design-modal-card" onclick="event.stopPropagation()">
+      <div class="design-modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-shield-halved" style="color: var(--accent-gold); font-size: 1.25rem;"></i>
+          <h3 style="margin: 0; font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800;">Catálogo Completo de Diseños & Escudos</h3>
+        </div>
+        <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="closeDesignCatalogModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="design-modal-body">
+        <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+          <button type="button" class="ribbon-btn active modal-cat-tab-btn" data-modal-cat="all" onclick="filterModalCatalog('all')">Todos</button>
+          <button type="button" class="ribbon-btn modal-cat-tab-btn" data-modal-cat="deportes" onclick="filterModalCatalog('deportes')">Deportes</button>
+          <button type="button" class="ribbon-btn modal-cat-tab-btn" data-modal-cat="criollo" onclick="filterModalCatalog('criollo')">Criollos & Tradición</button>
+          <button type="button" class="ribbon-btn modal-cat-tab-btn" data-modal-cat="fauna" onclick="filterModalCatalog('fauna')">Fauna Nacional</button>
+          <button type="button" class="ribbon-btn modal-cat-tab-btn" data-modal-cat="simbolos" onclick="filterModalCatalog('simbolos')">Símbolos</button>
+          <button type="button" class="ribbon-btn modal-cat-tab-btn" data-modal-cat="frases" onclick="filterModalCatalog('frases')">Frases</button>
+        </div>
+
+        <div class="vector-icons-grid" id="modal-designs-grid" style="grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Sticky Bottom Action Bar -->
+  <div class="mobile-sticky-action-bar" id="mobile-sticky-bar">
+    <div class="mobile-sticky-info">
+      <span class="mobile-sticky-label">Total Personalizado</span>
+      <span class="mobile-sticky-price" id="mobile-bar-price">$ 46.500</span>
+    </div>
+    <button type="button" class="btn btn-primary btn-mobile-finish" onclick="openCompletionModal()">
+      <span>Finalizar</span> <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
+
+  <!-- ==========================================================================
+       SITE FOOTER (UNIFICADO, SIN CLUB MATERO, TALLER EN RÍO CEBALLOS, CÓRDOBA)
+       ========================================================================== -->
+  <footer class="site-footer" id="contacto">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Column 1: Brand & Slogan -->
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="assets/images/logo.jpg" alt="Mates Río Logo" class="footer-logo-img" />
+            <div>
+              <span class="footer-brand-title">MATES RÍO</span>
+              <p style="font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 1px; font-weight: 600;">INDUSTRIA ARGENTINA</p>
+            </div>
+          </div>
+          <p class="footer-brand-desc">
+            Mates imperiales seleccionados, termos de alto rendimiento y accesorios artesanales hechos con pasión matera en las Sierras de Córdoba.
+          </p>
+
+          <!-- Social Links -->
+          <div class="social-links">
+            <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="social-icon-btn instagram" title="Instagram @mates_rio_">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="social-icon-btn tiktok" title="TikTok @Mates_rio">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20taller%20de%20personalizaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="mailto:mates.rio6@gmail.com" class="social-icon-btn email" title="Correo mates.rio6@gmail.com">
+              <i class="fas fa-envelope"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Column 2: Navigation Links -->
+        <div>
+          <h4 class="footer-title">Navegación</h4>
+          <ul class="footer-nav-list">
+            <li><a href="index.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Inicio</a></li>
+            <li><a href="catalogo.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Catálogo Completo</a></li>
+            <li><a href="promos.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Promociones & Combos</a></li>
+            <li><a href="catalogo.html?categoria=mates" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Mates Imperiales</a></li>
+            <li><a href="catalogo.html?categoria=termos" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Termos de Acero</a></li>
+            <li><a href="personaliza-tu-mate.html" class="footer-nav-link active" style="color: var(--accent-gold); font-weight: 700;"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Taller de Personalización</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Payment & Shipping Methods -->
+        <div>
+          <h4 class="footer-title">Pagos & Envíos</h4>
+          <div class="payment-badges-wrap">
+            <span class="pay-badge"><i class="far fa-credit-card"></i> Mercado Pago</span>
+            <span class="pay-badge"><i class="fab fa-cc-visa"></i> 3 Cuotas s/interés</span>
+            <span class="pay-badge"><i class="fas fa-money-bill-wave"></i> Transf. 10% OFF</span>
+          </div>
+
+          <div class="shipping-methods-info" style="margin-top: 10px;">
+            <p><i class="fas fa-truck-fast" style="color: var(--accent-gold); margin-right: 4px;"></i> Envíos a todo el país desde nuestro taller en <b>Río Ceballos, Sierras Chicas • Córdoba</b> vía Correo Argentino y Andreani.</p>
+          </div>
+        </div>
+
+        <!-- Column 4: Contact & Taller -->
+        <div>
+          <h4 class="footer-title">Contacto & Taller</h4>
+          <ul class="contact-info-list">
+            <li class="contact-item">
+              <i class="fab fa-whatsapp"></i>
+              <div>
+                <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 351 383-0111</a>
+              </div>
+            </li>
+            <li class="contact-item">
+              <i class="far fa-envelope"></i>
+              <div>
+                <a href="mailto:mates.rio6@gmail.com">mates.rio6@gmail.com</a>
+              </div>
+            </li>
+            <li class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <span>Río Ceballos, Sierras Chicas • Córdoba, Argentina</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Copyright Bar -->
+      <div class="footer-bottom-bar">
+        <span onclick="handleSecretAdminTrigger()" style="cursor: default;" title="Mates Río Oficial">© 2026 Mates Río. Pasión por la cultura matera. Río Ceballos, Córdoba.</span>
+        <span>Envíos a toda la República Argentina</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Botón Flotante de Carrito Profesional -->
+  <button class="floating-cart-btn" id="floating-cart-btn" onclick="openCartDrawer()" aria-label="Abrir Carrito de Compras" title="Ver Carrito de Compras">
+    <div class="floating-cart-icon-wrap">
+      <i class="fas fa-shopping-bag"></i>
+    </div>
+    <span class="floating-cart-label">Carrito</span>
+    <span class="floating-cart-badge" id="floating-cart-badge">0</span>
+  </button>
+
+  <!-- ==========================================================================
+       MODAL: FINALIZAR PERSONALIZACIÓN (COMPRA ONLINE O WHATSAPP O CONTINUAR)
+       ========================================================================== -->
+  <div class="modal-overlay" id="completion-modal">
+    <div class="modal-box modal-completion-box">
+      <button class="modal-close-icon" onclick="closeCompletionModal()" aria-label="Cerrar ventana">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="completion-modal-inner">
+        <div class="completion-icon-circle">
+          <i class="fas fa-check"></i>
+        </div>
+        <h3 class="completion-title">¡Tu mate quedó personalizado!</h3>
+        <p class="completion-subtitle">
+          El diseño exclusivo para la virola ya está configurado y guardado. ¿Cómo deseás continuar?
+        </p>
+
+        <!-- Summary Preview Box -->
+        <div class="completion-summary-preview" id="completion-summary-preview">
+          <!-- Populated via JS -->
+        </div>
+
+        <!-- 3 Clear Action Paths -->
+        <div class="completion-actions-grid">
+          <!-- Option 1: Seguir comprando / Ver carrito -->
+          <button type="button" class="btn-completion-choice btn-choice-continue" onclick="handleFinishAndContinueShopping()">
+            <div class="choice-icon"><i class="fas fa-shopping-bag"></i></div>
+            <div class="choice-text">
+              <strong>Guardar en Carrito y Seguir Comprando</strong>
+              <span>Agrega el mate con su grabado y volvé al catálogo</span>
+            </div>
+            <i class="fas fa-chevron-right choice-arrow"></i>
+          </button>
+
+          <!-- Option 2: Finalizar Compra Online Directa -->
+          <button type="button" class="btn-completion-choice btn-choice-checkout" onclick="handleFinishAndOpenCheckout()">
+            <div class="choice-icon"><i class="fas fa-credit-card"></i></div>
+            <div class="choice-text">
+              <strong>Iniciar Compra Online Ahora</strong>
+              <span>Pagar por Transferencia (10% OFF) o Tarjeta en la Web</span>
+            </div>
+            <i class="fas fa-chevron-right choice-arrow"></i>
+          </button>
+
+          <!-- Option 3: Finalizar y Pedir por WhatsApp -->
+          <button type="button" class="btn-completion-choice btn-choice-whatsapp" onclick="handleFinishAndOrderWhatsApp()">
+            <div class="choice-icon"><i class="fab fa-whatsapp"></i></div>
+            <div class="choice-text">
+              <strong>Pedir y Coordinar por WhatsApp</strong>
+              <span>Enviar el pedido con el diseño listo a nuestro equipo</span>
+            </div>
+            <i class="fas fa-chevron-right choice-arrow"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       CART DRAWER
+       ========================================================================== -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Carrito de compras lateral">
+    <div class="cart-header">
+      <div class="cart-header-title-group">
+        <div class="cart-header-icon-box">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <div>
+          <h3 class="cart-header-title">Mi Carrito</h3>
+          <span class="cart-items-counter-sub" id="cart-count-title">(0 productos)</span>
+        </div>
+      </div>
+      <button class="cart-close-btn" onclick="closeCartDrawer()" aria-label="Cerrar carrito" title="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="cart-added-banner" id="cart-added-banner">
+      <i class="fas fa-check-circle"></i>
+      <span id="cart-added-banner-text">¡Producto agregado con éxito!</span>
+    </div>
+
+    <div class="free-shipping-meter">
+      <div class="meter-text" id="free-shipping-text">
+        <i class="fas fa-truck-fast"></i> ¡Sumá más productos para tener <b>ENVÍO GRATIS</b>!
+      </div>
+      <div class="meter-bar-track">
+        <div class="meter-bar-fill" id="free-shipping-bar"></div>
+      </div>
+    </div>
+
+    <div class="cart-items-list" id="cart-items-container">
+      <!-- Populated via JS -->
+    </div>
+
+    <div class="cart-drawer-footer">
+      <div class="cart-tools-accordion">
+        <button type="button" class="cart-tool-btn" id="btn-toggle-shipping" onclick="toggleCartTool('shipping')">
+          <span><i class="fas fa-truck"></i> Calcular costo de envío por Código Postal</span>
+          <i class="fas fa-chevron-down arrow" id="arrow-shipping"></i>
+        </button>
+      </div>
+
+      <div class="cart-tool-collapse" id="collapse-shipping">
+        <div class="shipping-calc-wrap">
+          <input type="text" id="cart-cp-input" placeholder="Tu Código Postal (ej: 5111)" maxlength="8" />
+          <button class="btn btn-outline-dark shipping-calc-btn" onclick="calculateShippingCP()">Calcular</button>
+        </div>
+        <div id="cart-cp-result" class="tool-feedback-msg"></div>
+      </div>
+
+      <div class="cart-summary-totals">
+        <div class="summary-line">
+          <span>Subtotal</span>
+          <span class="value" id="cart-subtotal">$ 0</span>
+        </div>
+        <div class="summary-line">
+          <span>Costo de envío</span>
+          <span class="value" id="cart-shipping-amount">A calcular</span>
+        </div>
+        <div class="summary-line total">
+          <div style="display: flex; flex-direction: column;">
+            <span>Total a pagar</span>
+            <small style="font-size: 0.72rem; color: #27ae60; font-weight: 600;"><i class="fas fa-bolt"></i> 10% OFF extra con transferencia</small>
+          </div>
+          <span class="value" id="cart-total">$ 0</span>
+        </div>
+      </div>
+
+      <div class="cart-checkout-actions">
+        <button class="btn btn-primary btn-checkout-main" onclick="openWebCheckout()">
+          <i class="fas fa-lock"></i> Iniciar Compra Online
+        </button>
+        <button class="btn btn-whatsapp-secondary" onclick="checkoutWhatsApp()" title="Atención y pedido por WhatsApp">
+          <i class="fab fa-whatsapp"></i> Finalizar Pedido por WhatsApp
+        </button>
+      </div>
+
+      <div class="cart-footer-links">
+        <button onclick="closeCartDrawer()" class="cart-continue-link">Continuar personalizando</button>
+        <span class="sep">•</span>
+        <button onclick="confirmClearCart()" class="cart-clear-link">Vaciar carrito</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       MODAL: AUTH (INICIAR SESIÓN / CREAR CUENTA)
+       ========================================================================== -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-box">
+      <button class="modal-close-icon" onclick="closeAuthModal()" aria-label="Cerrar modal">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">
+          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </button>
+        <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">
+          <i class="fas fa-user-plus"></i> Crear Cuenta
+        </button>
+      </div>
+
+      <div class="auth-panel active" id="auth-panel-login">
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" id="login-email" required class="form-input" placeholder="tunombre@correo.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <div class="input-with-eye">
+              <input type="password" id="login-password" required class="form-input" placeholder="••••••••" />
+              <i class="far fa-eye eye-toggle-btn" id="login-eye-icon" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')"></i>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.8rem;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" checked /> Recordarme
+            </label>
+            <a href="#" onclick="showToast('Te enviamos un enlace de recuperación a tu email.'); return false;" style="color: var(--accent-leather);">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            Ingresar a mi cuenta
+          </button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center; font-size: 0.84rem; color: var(--text-secondary);">
+          ¿Todavía no tenés cuenta?
+          <a href="#" onclick="switchAuthTab('register'); return false;" style="color: var(--accent-gold); font-weight: 700;">Registrate gratis</a>
+        </div>
+      </div>
+
+      <div class="auth-panel" id="auth-panel-register">
+        <form onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label">Nombre y Apellido *</label>
+            <input type="text" id="reg-name" required class="form-input" placeholder="Ej: Lucas González" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Teléfono / WhatsApp *</label>
+            <input type="tel" id="reg-phone" required class="form-input" placeholder="Ej: 11 4455 6677" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Correo electrónico *</label>
+            <input type="email" id="reg-email" required class="form-input" placeholder="tuemail@ejemplo.com" />
+          </div>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Contraseña *</label>
+              <div class="input-with-eye">
+                <input type="password" id="reg-password" required class="form-input" placeholder="••••••••" />
+                <i class="far fa-eye eye-toggle-btn" id="reg-eye-icon1" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon1')"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Confirmar *</label>
+              <div class="input-with-eye">
+                <input type="password" id="reg-password-confirm" required class="form-input" placeholder="••••••••" />
+                <i class="far fa-eye eye-toggle-btn" id="reg-eye-icon2" onclick="togglePasswordVisibility('reg-password-confirm', 'reg-eye-icon2')"></i>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 20px; font-size: 0.78rem; color: var(--text-secondary);">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" required checked /> Acepto los términos, condiciones y políticas de privacidad.
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            Crear mi Cuenta
+          </button>
+        </form>
+
+        <div style="margin-top: 20px; text-align: center; font-size: 0.84rem; color: var(--text-secondary);">
+          ¿Ya tenés cuenta?
+          <a href="#" onclick="switchAuthTab('login'); return false;" style="color: var(--accent-gold); font-weight: 700;">Iniciá sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: USER PROFILE & MIS PEDIDOS (SEPARADOS CON PESTAÑAS Y UBICACIÓN)
+       ========================================================================== -->
+  <div class="modal-overlay" id="profile-modal">
+    <div class="modal-box modal-box-padded">
+      <button class="modal-close-icon" onclick="closeProfileModal()" aria-label="Cerrar perfil">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <!-- Profile Header Summary -->
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border-light);">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <i class="far fa-user"></i>
+        </div>
+        <div style="overflow: hidden;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-name-display">Usuario</h3>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-email-display">email@ejemplo.com</p>
+          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 351 383-0111</span>
+        </div>
+      </div>
+
+      <!-- Admin Quick Access Card (Visible para administradores) -->
+      <div id="profile-admin-card" style="display: none; background: linear-gradient(135deg, #17110c 0%, #2a1b12 100%); border: 1.5px solid var(--accent-gold); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px; box-shadow: 0 4px 16px rgba(197, 155, 39, 0.18);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase;">
+            <i class="fas fa-shield-halved"></i> Permisos de Administrador
+          </span>
+          <span class="nav-badge-pill pill-gold" id="profile-admin-role-badge">STAFF</span>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <a href="admin.html" class="btn btn-primary" style="flex: 1; font-size: 0.8rem; padding: 9px 12px; background: var(--accent-gold); color: #121212; border: none; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; gap: 6px;">
+            <i class="fas fa-shield-halved"></i> Abrir Panel de Control
+          </a>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs: Mi Perfil vs Mis Pedidos -->
+      <div class="profile-modal-tabs">
+        <button class="profile-tab-btn active" id="profile-tab-btn-info" onclick="switchProfileTab('profile')">
+          <i class="far fa-id-badge"></i> Mi Perfil y Ubicación
+        </button>
+        <button class="profile-tab-btn" id="profile-tab-btn-orders" onclick="switchProfileTab('orders')">
+          <i class="fas fa-box-open"></i> Mis Pedidos
+        </button>
+      </div>
+
+      <!-- Panel 1: Perfil y Datos de Envío -->
+      <div id="profile-panel-info">
+        <form onsubmit="saveUserLocation(event)" class="location-box">
+          <div class="location-box-title">
+            <i class="fas fa-location-dot" style="color: var(--accent-gold);"></i> Mi Dirección de Entrega Guardada
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+            Guardá tu ubicación para calcular automáticamente tu costo de envío y pre-completar el checkout desde Río Ceballos, Córdoba.
+          </p>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Provincia *</label>
+              <select id="profile-input-province" class="form-input" style="height: 40px; font-size: 0.84rem;">
+                <option value="Córdoba">Córdoba</option>
+                <option value="Buenos Aires">Buenos Aires</option>
+                <option value="CABA">Ciudad de Buenos Aires (CABA)</option>
+                <option value="Santa Fe">Santa Fe</option>
+                <option value="Mendoza">Mendoza</option>
+                <option value="Entre Ríos">Entre Ríos</option>
+                <option value="Salta">Salta</option>
+                <option value="Tucumán">Tucumán</option>
+                <option value="Chaco">Chaco</option>
+                <option value="Corrientes">Corrientes</option>
+                <option value="Misiones">Misiones</option>
+                <option value="San Juan">San Juan</option>
+                <option value="San Luis">San Luis</option>
+                <option value="Catamarca">Catamarca</option>
+                <option value="La Rioja">La Rioja</option>
+                <option value="Santiago del Estero">Santiago del Estero</option>
+                <option value="Jujuy">Jujuy</option>
+                <option value="Neuquén">Neuquén</option>
+                <option value="Río Negro">Río Negro</option>
+                <option value="Chubut">Chubut</option>
+                <option value="Santa Cruz">Santa Cruz</option>
+                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                <option value="La Pampa">La Pampa</option>
+                <option value="Formosa">Formosa</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Ciudad / Localidad *</label>
+              <input type="text" id="profile-input-city" class="form-input" placeholder="Ej: Río Ceballos / Córdoba / Rosario" />
+            </div>
+          </div>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Dirección (Calle y Nro) *</label>
+              <input type="text" id="profile-input-address" class="form-input" placeholder="Ej: San Martín 450" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Código Postal *</label>
+              <input type="text" id="profile-input-zip" class="form-input" placeholder="Ej: 5111" />
+            </div>
+          </div>
+
+          <div id="profile-location-zone-hint" style="font-size: 0.78rem; color: #27ae60; font-weight: 600; margin-bottom: 12px; display: none;"></div>
+
+          <button type="submit" class="btn btn-outline-dark" style="width: 100%; font-size: 0.82rem; padding: 9px 14px;">
+            <i class="fas fa-floppy-disk"></i> Guardar Dirección de Entrega
+          </button>
+        </form>
+      </div>
+
+      <!-- Panel 2: Mis Pedidos -->
+      <div id="profile-panel-orders" style="display: none;">
+        <h4 style="font-family: var(--font-heading); font-size: 1rem; margin-bottom: 12px; color: var(--accent-leather);">
+          <i class="fas fa-clock-rotate-left"></i> Historial de Compras
+        </h4>
+        <div id="profile-orders-list">
+          <!-- Rendered dynamically via JS -->
+        </div>
+      </div>
+
+      <button class="btn btn-outline-dark" onclick="logoutUser()" style="width: 100%; margin-top: 16px; border-color: #ddd;">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: WEB CHECKOUT (CON PROVINCIA Y ENVÍO DINÁMICO DESDE RÍO CEBALLOS)
+       ========================================================================== -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal-box modal-box-padded" style="max-width: 640px;">
+      <button class="modal-close-icon" onclick="closeWebCheckout()" aria-label="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="checkout-header-wrap">
+        <h3 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; margin-bottom: 6px;">
+          Datos de Envío y Facturación
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px;">
+          Despachamos desde nuestro taller en Río Ceballos, Córdoba a todo el país.
+        </p>
+      </div>
+
+      <!-- Order Summary Box inside Checkout -->
+      <div id="checkout-order-summary-box" style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px;"></div>
+
+      <form onsubmit="processWebCheckout(event)">
+        <div class="form-group">
+          <label class="form-label">Nombre y Apellido *</label>
+          <input type="text" id="checkout-name" required class="form-input" placeholder="Ej: Santiago Pérez" />
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label">Teléfono / WhatsApp *</label>
+            <input type="tel" id="checkout-phone" required class="form-input" placeholder="Ej: 351 555-1234" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email *</label>
+            <input type="email" id="checkout-email" required class="form-input" placeholder="tunombre@email.com" />
+          </div>
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label">Provincia de Entrega *</label>
+            <select id="checkout-province" required class="form-input" style="height: 42px;" onchange="updateCheckoutSummary()">
+              <option value="Córdoba">Córdoba</option>
+              <option value="Buenos Aires">Buenos Aires</option>
+              <option value="CABA">Ciudad de Buenos Aires (CABA)</option>
+              <option value="Santa Fe">Santa Fe</option>
+              <option value="Mendoza">Mendoza</option>
+              <option value="Entre Ríos">Entre Ríos</option>
+              <option value="Salta">Salta</option>
+              <option value="Tucumán">Tucumán</option>
+              <option value="Chaco">Chaco</option>
+              <option value="Corrientes">Corrientes</option>
+              <option value="Misiones">Misiones</option>
+              <option value="San Juan">San Juan</option>
+              <option value="San Luis">San Luis</option>
+              <option value="Catamarca">Catamarca</option>
+              <option value="La Rioja">La Rioja</option>
+              <option value="Santiago del Estero">Santiago del Estero</option>
+              <option value="Jujuy">Jujuy</option>
+              <option value="Neuquén">Neuquén</option>
+              <option value="Río Negro">Río Negro</option>
+              <option value="Chubut">Chubut</option>
+              <option value="Santa Cruz">Santa Cruz</option>
+              <option value="Tierra del Fuego">Tierra del Fuego</option>
+              <option value="La Pampa">La Pampa</option>
+              <option value="Formosa">Formosa</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ciudad / Localidad *</label>
+            <input type="text" id="checkout-city" required class="form-input" placeholder="Ej: Río Ceballos / Córdoba / Rosario" oninput="updateCheckoutSummary()" />
+          </div>
+        </div>
+
+        <div class="form-grid-2col">
+          <div class="form-group">
+            <label class="form-label">Dirección (Calle y Número) *</label>
+            <input type="text" id="checkout-address" required class="form-input" placeholder="Ej: Av. San Martín 1234 4to B" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Código Postal *</label>
+            <input type="text" id="checkout-zip" required class="form-input" placeholder="Ej: 5111" />
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+          <label class="form-label">Forma de Pago:</label>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <label class="payment-radio-card">
+              <input type="radio" name="payment_method" value="transferencia" checked onchange="updateCheckoutSummary()" />
+              <div class="pay-card-content">
+                <b>Transferencia Bancaria (10% OFF EXTRA)</b>
+                <p style="font-size: 0.78rem; color: var(--text-secondary);">Te enviamos los datos bancarios y Alias oficial con el descuento directo ya aplicado.</p>
+              </div>
+            </label>
+
+            <label class="payment-radio-card">
+              <input type="radio" name="payment_method" value="tarjeta" onchange="updateCheckoutSummary()" />
+              <div class="pay-card-content">
+                <b>Tarjeta de Crédito / Débito (3 Cuotas Sin Interés)</b>
+                <p style="font-size: 0.78rem; color: var(--text-secondary);">Pago 100% seguro con todas las tarjetas bancarias.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 14px;">
+          <i class="fas fa-check-circle"></i> Confirmar Pedido
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: ORDER SUCCESS RECEIPT
+       ========================================================================== -->
+  <div class="modal-overlay" id="order-success-modal">
+    <div class="modal-card success-modal-card">
+      <button class="modal-close-icon" onclick="closeOrderSuccess()" aria-label="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="success-icon-wrap">
+        <i class="fas fa-check"></i>
+      </div>
+
+      <h3 class="success-title">¡Muchas Gracias por tu Compra!</h3>
+      <p class="success-subtitle">Tu orden fue recibida y ya estamos preparando tus productos en el taller.</p>
+
+      <div class="success-order-box">
+        <div class="success-data-row">
+          <span>Número de Pedido:</span>
+          <strong id="success-order-id" style="color: var(--accent-leather);">RIO-9842</strong>
+        </div>
+        <div class="success-data-row">
+          <span>Total a abonar:</span>
+          <strong id="success-order-total">$ 0</strong>
+        </div>
+      </div>
+
+      <div class="success-bank-info" id="success-bank-info">
+        <h5 style="font-size: 0.85rem; font-weight: 800; color: var(--accent-leather); margin-bottom: 6px;">
+          <i class="fas fa-building-columns"></i> Datos para Transferencia Bancaria (10% OFF Aplicado)
+        </h5>
+        <div style="font-size: 0.82rem; line-height: 1.5; color: var(--text-secondary);">
+          <div>Banco: <b>Banco Santander</b></div>
+          <div>Titular: <b>Mates Río S.R.L.</b></div>
+          <div>Alias: <code class="bank-alias-code">MATES.RIO.OFICIAL</code></div>
+          <button class="btn btn-outline-dark" onclick="copyCBU('MATES.RIO.OFICIAL')" style="padding: 6px 14px; font-size: 0.76rem; width: 100%; margin-top: 8px;">
+            <i class="fas fa-copy"></i> Copiar Alias Bancario
+          </button>
+        </div>
+      </div>
+
+      <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Acabo%20de%20realizar%20un%20pedido%20en%20el%20personalizador%20web." target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="width: 100%; margin-top: 10px;">
+        <i class="fab fa-whatsapp"></i> Enviar Comprobante por WhatsApp
+      </a>
+
+      <button class="btn btn-outline-dark" onclick="closeOrderSuccess()" style="width: 100%; margin-top: 10px;">
+        Seguir viendo productos
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: QUICK VIEW DE PRODUCTOS
+       ========================================================================== -->
+  <div class="modal-overlay" id="quick-view-modal">
+    <div class="modal-box" style="max-width: 820px; padding: 0;">
+      <button class="modal-close-icon" onclick="closeQuickView()" aria-label="Cerrar vista rápida">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="quick-view-grid">
+        <div>
+          <img src="" id="qv-image" alt="Detalle del producto" class="quick-view-img" />
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <span id="qv-badge" class="badge-tag promo" style="align-self: flex-start; margin-bottom: 8px;"></span>
+          <span id="qv-category" style="font-size: 0.75rem; font-weight: 700; color: var(--accent-leather); letter-spacing: 1px; text-transform: uppercase;"></span>
+          <h3 id="qv-title" style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; line-height: 1.25; margin: 6px 0 10px;"></h3>
+
+          <div id="qv-rating" style="display: flex; align-items: center; gap: 4px; color: #e5a100; font-size: 0.85rem; margin-bottom: 14px;"></div>
+
+          <div style="margin-bottom: 16px;">
+            <span id="qv-price" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: var(--bg-dark);"></span>
+            <span id="qv-orig-price" style="font-size: 1rem; color: var(--text-muted); text-decoration: line-through; margin-left: 10px;"></span>
+            <div style="font-size: 0.8rem; color: #27ae60; font-weight: 600; margin-top: 4px;">
+              <i class="far fa-credit-card"></i> 3 Cuotas sin interés • 10% OFF extra con Transferencia
+            </div>
+          </div>
+
+          <p id="qv-description" style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;"></p>
+
+          <h5 style="font-size: 0.82rem; font-weight: 700; text-transform: uppercase; color: var(--text-main); margin-bottom: 6px;">Ficha Técnica:</h5>
+          <ul id="qv-specs" class="specs-list"></ul>
+
+          <div style="display: flex; align-items: center; gap: 14px; margin-top: auto; padding-top: 16px;">
+            <div class="qty-stepper" style="height: 44px;">
+              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="changeQuickViewQty(-1)" aria-label="Disminuir cantidad">-</button>
+              <input type="number" id="qv-qty" value="1" min="1" max="99" style="width: 44px; text-align: center; border: none; font-weight: 700;" />
+              <button class="qty-btn" style="width: 36px; height: 100%;" onclick="changeQuickViewQty(1)" aria-label="Aumentar cantidad">+</button>
+            </div>
+
+            <button class="btn btn-primary" onclick="addQuickViewToCart()" style="flex: 1; height: 44px;">
+              <i class="fas fa-shopping-bag"></i> Agregar al Carrito
+            </button>
+          </div>
+
+          <button id="qv-btn-personalize" class="btn btn-outline-dark" onclick="if (currentQuickViewProduct) { selectStudioMate(currentQuickViewProduct.id); closeQuickView(); }" style="margin-top: 8px; width: 100%; display: none;">
+            <i class="fas fa-magic"></i> Seleccionar este Mate en el Taller
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top-btn" id="back-to-top-btn" aria-label="Volver arriba" title="Volver al inicio">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- Floating WhatsApp Action -->
+  <div class="floating-whatsapp-container">
+    <div class="whatsapp-chat-popup" id="whatsapp-chat-popup">
+      <div class="chat-popup-header">
+        <img src="assets/images/logo.jpg" alt="Asesor Mates Río" class="chat-avatar" />
+        <div class="chat-title-info">
+          <h5>Mates Río</h5>
+          <span class="chat-status">En línea ahora • Río Ceballos</span>
+        </div>
+        <button class="chat-popup-close" onclick="toggleWhatsAppChat()" aria-label="Cerrar chat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="chat-popup-body">
+        <div class="chat-bubble">
+          ¡Hola! 👋 ¿Querés asesoramiento para tu diseño de virola o necesitás grabar un logo especial?
+          <time>Ahora</time>
+        </div>
+
+        <div class="chat-quick-options">
+          <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quiero%20consultar%20sobre%20un%20grabado%20especial." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
+            Consultar por grabado de logo
+          </a>
+          <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Tengo%20dudas%20con%20el%20simulador%20de%20mates." target="_blank" rel="noopener noreferrer" class="chat-quick-btn">
+            Ayuda con el simulador
+          </a>
+        </div>
+      </div>
+
+      <div class="chat-popup-footer">
+        <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20el%20personalizador%20web." target="_blank" rel="noopener noreferrer" class="btn-chat-send">
+          <i class="fab fa-whatsapp"></i> Iniciar Chat en WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <button class="floating-whatsapp-btn" onclick="toggleWhatsAppChat()" aria-label="Abrir chat de WhatsApp" title="¿Dudas con tu mate? Escribinos">
+      <i class="fab fa-whatsapp"></i>
+    </button>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/customizer-studio.js?v=20261012-3"></script>
+</body>
+</html>

@@ -4,16 +4,16 @@
 	<title>Sun of May</title>
 	<title>Sun of May as represented on the flag of Argentina</title>
 
-	<g id="sun" fill="#fcbf49" stroke="#843511" stroke-width="1.5">
+	<g id="sun" fill="none" stroke="#14100c" stroke-width="1.5">
 		<g id="rays-16">
 			<g id="rays-8">
 				<g id="rays-4">
 					<g id="rays-2">
 						<path d="M -8,0 L -2,159.5 c 0,0 0,3 2,3 s 2,-3 2,-3 L 8,0"/>
-						<path d="M -4,0 L 0,109.5 L 4,0" fill="#843511" stroke="none"/>
+						<path d="M -4,0 L 0,109.5 L 4,0" fill="#14100c" stroke="none"/>
 						<g transform="rotate(11.5)">
 							<path d="M -4.5,53.5 C -9.5,75 1.5,89.5 -4,108.5 S -1,140.5 0,148.5 -5,160 -3,161.5 5,158 5.5,147 -1.5,131.25 5,108 1,77 8,56"/>
-							<path d="M -1,58 C -4,79 6,90.5 0,109 C 8,95 -2,81 3,59" fill="#843511" stroke="none"/>
+							<path d="M -1,58 C -4,79 6,90.5 0,109 C 8,95 -2,81 3,59" fill="#14100c" stroke="none"/>
 						</g>
 					</g>
 					<use xlink:href="#rays-2" transform="rotate(180)"/>
@@ -24,7 +24,7 @@
 		</g>
 		<use xlink:href="#rays-16" transform="rotate(22.5)"/>
 		<circle r="65" stroke-width="1"/>
-		<g id="face_right" fill="#843511" stroke="none">
+		<g id="face_right" fill="#14100c" stroke="none">
 			<path id="eyebrow_nose" d="M 41,-14 C 29.5,-24 15,-25.5 7,-18 A 140,50 10 0,0 8.5,8.5 C 8,8.5 7,9 6.5,9.5 A 80,50 10 0,1 4,-19 C 15,-28 30,-29 41,-14"/>
 			<path id="uppalpebra" d="M 23,-17 C 16.5,-17 15,-15.5 12,-13 S 7.5,-11 7,-10.5 S 7,-8.5 8,-9 S 11,-10.5 14,-13 S 20,-15.5 23,-15.5 C 32,-15.5 37,-8 38,-8.5 S 33,-17 23,-17"/>
 			<path id="upeyecontour" d="M 34.5,-8.5 C 28,-15.5 16,-16 11,-8 H 13 C 18,-16 30,-12.5 31,-9 v 1"/>

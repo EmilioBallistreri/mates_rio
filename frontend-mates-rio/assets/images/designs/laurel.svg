@@ -2,19 +2,19 @@
   <!-- Corona de Laureles de la Victoria y de la Patria - Original Vector -->
   <defs>
     <linearGradient id="laurel-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fff1b0"/>
-      <stop offset="40%" stop-color="#d4a326"/>
-      <stop offset="100%" stop-color="#73540a"/>
+      <stop offset="0%" stop-color="#ded8cf"/>
+      <stop offset="40%" stop-color="#14100c"/>
+      <stop offset="100%" stop-color="#14100c"/>
     </linearGradient>
     <linearGradient id="laurel-ribbon" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8fd3fe"/>
+      <stop offset="0%" stop-color="#3b3128"/>
       <stop offset="50%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#559bd6"/>
+      <stop offset="100%" stop-color="#14100c"/>
     </linearGradient>
   </defs>
 
   <!-- Rama Izquierda de Laureles -->
-  <g fill="url(#laurel-gold)" stroke="#523c07" stroke-width="2" stroke-linejoin="round">
+  <g fill="url(#laurel-gold)" stroke="#14100c" stroke-width="2" stroke-linejoin="round">
     <!-- Tallo curvado principal izquierdo -->
     <path d="M 235 410 C 130 380 90 240 130 140 C 150 90 200 40 235 30" fill="none" stroke="url(#laurel-gold)" stroke-width="7" stroke-linecap="round"/>
 
@@ -40,15 +40,15 @@
     <path d="M 160 375 C 140 405 170 425 195 410 C 190 395 180 385 160 375 Z"/>
 
     <!-- Bayas de laurel izquierdas -->
-    <circle cx="175" cy="70" r="5" fill="#f5d367"/>
-    <circle cx="140" cy="140" r="5" fill="#f5d367"/>
-    <circle cx="115" cy="210" r="5" fill="#f5d367"/>
-    <circle cx="120" cy="290" r="5" fill="#f5d367"/>
-    <circle cx="155" cy="360" r="5" fill="#f5d367"/>
+    <circle cx="175" cy="70" r="5" fill="#ded8cf"/>
+    <circle cx="140" cy="140" r="5" fill="#ded8cf"/>
+    <circle cx="115" cy="210" r="5" fill="#ded8cf"/>
+    <circle cx="120" cy="290" r="5" fill="#ded8cf"/>
+    <circle cx="155" cy="360" r="5" fill="#ded8cf"/>
   </g>
 
   <!-- Rama Derecha de Laureles (Simetría heráldica) -->
-  <g fill="url(#laurel-gold)" stroke="#523c07" stroke-width="2" stroke-linejoin="round">
+  <g fill="url(#laurel-gold)" stroke="#14100c" stroke-width="2" stroke-linejoin="round">
     <!-- Tallo curvado principal derecho -->
     <path d="M 265 410 C 370 380 410 240 370 140 C 350 90 300 40 265 30" fill="none" stroke="url(#laurel-gold)" stroke-width="7" stroke-linecap="round"/>
 
@@ -67,15 +67,15 @@
     <path d="M 340 375 C 360 405 330 425 305 410 C 310 395 320 385 340 375 Z"/>
 
     <!-- Bayas de laurel derechas -->
-    <circle cx="325" cy="70" r="5" fill="#f5d367"/>
-    <circle cx="360" cy="140" r="5" fill="#f5d367"/>
-    <circle cx="385" cy="210" r="5" fill="#f5d367"/>
-    <circle cx="380" cy="290" r="5" fill="#f5d367"/>
-    <circle cx="345" cy="360" r="5" fill="#f5d367"/>
+    <circle cx="325" cy="70" r="5" fill="#ded8cf"/>
+    <circle cx="360" cy="140" r="5" fill="#ded8cf"/>
+    <circle cx="385" cy="210" r="5" fill="#ded8cf"/>
+    <circle cx="380" cy="290" r="5" fill="#ded8cf"/>
+    <circle cx="345" cy="360" r="5" fill="#ded8cf"/>
   </g>
 
   <!-- Moño de Cinta Patria Argentina que une las dos ramas en la base -->
-  <g fill="url(#laurel-ribbon)" stroke="#2b6da8" stroke-width="2.5">
+  <g fill="url(#laurel-ribbon)" stroke="#14100c" stroke-width="2.5">
     <!-- Nudo central -->
     <ellipse cx="250" cy="410" rx="16" ry="14"/>
     <!-- Lazos laterales -->

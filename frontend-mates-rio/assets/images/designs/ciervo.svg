@@ -2,20 +2,20 @@
   <!-- Ciervo de los Pantanos Argentino (Blastocerus dichotomus) - Grabado Láser y Orfebrería HD -->
   <defs>
     <linearGradient id="ciervo-fur-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#c96f2e"/>
-      <stop offset="45%" stop-color="#994c16"/>
-      <stop offset="85%" stop-color="#5e2908"/>
-      <stop offset="100%" stop-color="#3b1703"/>
+      <stop offset="0%" stop-color="#3b3128"/>
+      <stop offset="45%" stop-color="#14100c"/>
+      <stop offset="85%" stop-color="#14100c"/>
+      <stop offset="100%" stop-color="#14100c"/>
     </linearGradient>
     <linearGradient id="ciervo-antler-grad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#ede3d5"/>
       <stop offset="45%" stop-color="#baa68f"/>
-      <stop offset="85%" stop-color="#735e49"/>
-      <stop offset="100%" stop-color="#423425"/>
+      <stop offset="85%" stop-color="#14100c"/>
+      <stop offset="100%" stop-color="#14100c"/>
     </linearGradient>
     <linearGradient id="ciervo-black-legs" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#693b18"/>
-      <stop offset="35%" stop-color="#241407"/>
+      <stop offset="0%" stop-color="#14100c"/>
+      <stop offset="35%" stop-color="#14100c"/>
       <stop offset="100%" stop-color="#0a0502"/>
     </linearGradient>
   </defs>

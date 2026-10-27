@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Preview Vectorized SVGs (Laser Engraving)</title>
+  <style>
+    body {
+      background: #12100e;
+      color: #fff;
+      font-family: sans-serif;
+      padding: 24px;
+    }
+    h1 { color: #d4af37; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #1e1b18;
+      border: 1px solid #332b24;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .thumb-wrap {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 8px;
+      border-radius: 8px;
+      background: radial-gradient(circle, #f4efe6 0%, #dbd4c7 100%);
+      border: 1.5px solid rgba(197, 155, 39, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .thumb-wrap img {
+      max-width: 50px;
+      max-height: 50px;
+      object-fit: contain;
+    }
+    .name {
+      font-size: 11px;
+      color: #dedede;
+    }
+  </style>
+</head>
+<body>
+  <h1>Catálogo Vectorial Grabado Láser (33 Íconos Oficiales)</h1>
+  <div class="grid" id="grid"></div>
+  <script>
+    const files = [
+      'afa.svg', 'boca.svg', 'river.svg', 'racing.svg', 'independiente.svg',
+      'sanlorenzo.svg', 'talleres.svg', 'belgrano.svg', 'central.svg',
+      'newells.svg', 'instituto.svg', 'racingcordoba.svg', 'soldemayo.svg',
+      'escarapela.svg', 'ceibo.svg', 'mate.svg', 'caballo.svg', 'cruz.svg',
+      'guardapampa.svg', 'malvinas.svg', 'mapa.svg', 'condor.svg',
+      'carpincho.svg', 'hornero.svg', 'guanaco.svg', 'ciervo.svg',
+      'corona.svg', 'laurel.svg', 'estrella_fed.svg', 'infinito.svg',
+      'corazon.svg'
+    ];
+    const grid = document.getElementById('grid');
+    grid.innerHTML = files.map(f => `
+      <div class="card">
+        <div class="thumb-wrap">
+          <img src="vectorized_test/${f}" alt="${f}">
+        </div>
+        <div class="name">${f}</div>
+      </div>
+    `).join('');
+  </script>
+</body>
+</html>

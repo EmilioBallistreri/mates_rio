@@ -9,9 +9,9 @@
       <stop offset="100%" stop-color="#7a6e5e"/>
     </linearGradient>
     <radialGradient id="cruz-centro-grad" cx="40%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#ffd56b"/>
-      <stop offset="70%" stop-color="#c59b27"/>
-      <stop offset="100%" stop-color="#694e09"/>
+      <stop offset="0%" stop-color="#ded8cf"/>
+      <stop offset="70%" stop-color="#14100c"/>
+      <stop offset="100%" stop-color="#14100c"/>
     </radialGradient>
   </defs>
 
@@ -62,8 +62,8 @@
   </g>
 
   <!-- Medallón Central Dorado con Flor del Ceibo / Sol de Mayo cincelado -->
-  <circle cx="250" cy="195" r="32" fill="url(#cruz-centro-grad)" stroke="#4a3707" stroke-width="3"/>
+  <circle cx="250" cy="195" r="32" fill="url(#cruz-centro-grad)" stroke="#14100c" stroke-width="3"/>
   <circle cx="250" cy="195" r="26" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="2,3"/>
-  <circle cx="250" cy="195" r="14" fill="#ffffff" stroke="#c59b27" stroke-width="2"/>
-  <circle cx="250" cy="195" r="5" fill="#4a3707"/>
+  <circle cx="250" cy="195" r="14" fill="#ffffff" stroke="#14100c" stroke-width="2"/>
+  <circle cx="250" cy="195" r="5" fill="#14100c"/>
 </svg>

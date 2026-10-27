@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Preview Replacement SVGs</title>
+  <style>
+    body { background: #12100e; color: #fff; font-family: sans-serif; padding: 24px; }
+    h1 { color: #d4af37; }
+    .row { display: flex; gap: 24px; margin-bottom: 30px; }
+    .card { background: #1e1b18; border: 1px solid #332b24; border-radius: 8px; padding: 14px; text-align: center; width: 220px; }
+    .thumb-wrap {
+      width: 140px; height: 140px; margin: 0 auto 12px; border-radius: 8px;
+      background: radial-gradient(circle, #f4efe6 0%, #dbd4c7 100%);
+      border: 1.5px solid rgba(197, 155, 39, 0.45);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .thumb-wrap img { max-width: 110px; max-height: 110px; object-fit: contain; }
+    .orig-img { max-width: 110px; max-height: 110px; object-fit: contain; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Validación de Escudos Reemplazados (Instituto, Rosario Central, San Lorenzo)</h1>
+  <div class="row">
+    <div class="card">
+      <h3>Instituto (Original Usuario)</h3>
+      <div class="thumb-wrap"><img src="user_uploads/instituto_user.png" class="orig-img"></div>
+    </div>
+    <div class="card">
+      <h3>Instituto (Vector Láser)</h3>
+      <div class="thumb-wrap"><img src="traced_instituto.svg"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card">
+      <h3>Central (Original Usuario)</h3>
+      <div class="thumb-wrap"><img src="user_uploads/central_user.jpg" class="orig-img"></div>
+    </div>
+    <div class="card">
+      <h3>Central (Vector Láser)</h3>
+      <div class="thumb-wrap"><img src="traced_central.svg"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card">
+      <h3>San Lorenzo (Original Usuario)</h3>
+      <div class="thumb-wrap"><img src="user_uploads/sanlorenzo_user.jpg" class="orig-img"></div>
+    </div>
+    <div class="card">
+      <h3>San Lorenzo (Vector Láser)</h3>
+      <div class="thumb-wrap"><img src="traced_sanlorenzo.svg"></div>
+    </div>
+  </div>
+</body>
+</html>
