@@ -12239,3 +12239,229 @@ body.theme-light .design-modal-card {
   image-rendering: crisp-edges !important;
   filter: contrast(120%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.45)) !important;
 }
+
+
+/* ==========================================================================
+   ESTANDARIZACIÓN DE DISEÑO BITONO (BLANCO Y NEGRO) & SIMPLIFICACIÓN VISUAL
+   Reemplazo de elementos amarillos/dorados por estética monocromática B&W,
+   reservando color exclusivamente para etiquetas de promociones y grabado bonificado.
+   ========================================================================== */
+
+:root,
+html.theme-dark,
+body.theme-dark {
+  --accent-gold: #ffffff !important;
+  --accent-gold-hover: #e2e2e2 !important;
+  --accent-leather: #ffffff !important;
+  --accent-leather-light: #d4d4d4 !important;
+  --bg-main: #0d0d0d !important;
+  --bg-surface: #151515 !important;
+  --bg-card: #181818 !important;
+  --text-main: #ffffff !important;
+  --text-secondary: #b5b5b5 !important;
+  --text-muted: #8a8a8a !important;
+  --border-light: rgba(255, 255, 255, 0.14) !important;
+  --border-color: rgba(255, 255, 255, 0.22) !important;
+  --badge-promo: #e11d48 !important;
+}
+
+html.theme-light,
+body.theme-light,
+body.theme-inverted {
+  --accent-gold: #111111 !important;
+  --accent-gold-hover: #2b2b2b !important;
+  --accent-leather: #111111 !important;
+  --accent-leather-light: #404040 !important;
+  --bg-main: #f6f6f6 !important;
+  --bg-surface: #ffffff !important;
+  --bg-card: #ffffff !important;
+  --text-main: #111111 !important;
+  --text-secondary: #4a4a4a !important;
+  --text-muted: #737373 !important;
+  --border-light: rgba(0, 0, 0, 0.1) !important;
+  --border-color: rgba(0, 0, 0, 0.2) !important;
+  --badge-promo: #e11d48 !important;
+}
+
+/* Botones principales y elementos antes amarillos -> Blanco y Negro puro */
+.btn-primary,
+.add-to-cart-btn,
+.btn-enter-studio,
+.btn-pers-main,
+.ribbon-tab-btn.active,
+.ribbon-btn.active,
+.stage-mode-btn.active {
+  background: #ffffff !important;
+  color: #0a0a0a !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+}
+
+.btn-primary:hover,
+.add-to-cart-btn:hover,
+.btn-enter-studio:hover,
+.btn-pers-main:hover {
+  background: #e5e5e5 !important;
+  color: #000000 !important;
+  border-color: #e5e5e5 !important;
+}
+
+html.theme-light .btn-primary,
+html.theme-light .add-to-cart-btn,
+html.theme-light .btn-enter-studio,
+html.theme-light .btn-pers-main,
+html.theme-light .ribbon-tab-btn.active,
+html.theme-light .ribbon-btn.active,
+html.theme-light .stage-mode-btn.active {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border-color: #111111 !important;
+}
+
+html.theme-light .btn-primary:hover,
+html.theme-light .add-to-cart-btn:hover {
+  background: #2b2b2b !important;
+  color: #ffffff !important;
+}
+
+/* Etiquetas reservadas con color tradicional: Promociones y Grabado Bonificado */
+.badge-tag.promo,
+.nav-badge-pill:not(.pill-gold) {
+  background: #e11d48 !important;
+  color: #ffffff !important;
+}
+
+.prod-card-free,
+.badge-mini-gold {
+  background: rgba(16, 185, 129, 0.16) !important;
+  color: #10b981 !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  padding: 2px 8px !important;
+  border-radius: 50px !important;
+  font-weight: 800 !important;
+}
+
+.pill-gold,
+.hero-tag,
+.studio-badge-pill,
+.banner-pers-badge {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+}
+
+html.theme-light .pill-gold,
+html.theme-light .hero-tag,
+html.theme-light .studio-badge-pill,
+html.theme-light .banner-pers-badge {
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #111111 !important;
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Ocultar opiniones / estrellas y etiquetas comerciales secundarias */
+.product-rating,
+#qv-rating,
+.reviews-section,
+.testimonials-section,
+.prod-card-badge,
+.prod-card-desc,
+.ribbon-tab-btn[data-tab="lines"],
+#ribbon-panel-lines,
+#toggle-snapping-btn,
+#toggle-clipping-btn,
+#canvas-snap-btn {
+  display: none !important;
+}
+
+/* Previsualización de imágenes sin zoom excesivo */
+.product-image-wrap {
+  background: #141414 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+html.theme-light .product-image-wrap {
+  background: #f4f4f4 !important;
+}
+
+.product-img {
+  object-fit: contain !important;
+  padding: 8px !important;
+}
+
+/* Tarjetas de selección en el personalizador simplificadas (Mate, Termo, Caja de presentación) */
+.prod-select-card {
+  background: #161616 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+  padding: 16px 20px !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease !important;
+}
+
+.prod-select-card.active {
+  background: #222222 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.theme-light .prod-select-card {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.15) !important;
+  color: #111111 !important;
+}
+
+html.theme-light .prod-select-card.active {
+  background: #f3f3f3 !important;
+  border-color: #111111 !important;
+}
+
+/* Estética bitono armónica en el Estudio de Personalización (sin contraste brusco) */
+.customizer-main-container,
+.page-customizer {
+  background: var(--bg-main) !important;
+  color: var(--text-main) !important;
+}
+
+.studio-ribbon-container,
+.studio-main-stage-full,
+.virola-active-item-controls {
+  background: #161616 !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+html.theme-light .studio-ribbon-container,
+html.theme-light .studio-main-stage-full {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Botones de Historial Deshacer / Rehacer (Undo / Redo) */
+.studio-history-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.studio-history-btn:hover:not(:disabled) {
+  background: #ffffff !important;
+  color: #0a0a0a !important;
+  border-color: #ffffff !important;
+}
+
+.studio-history-btn:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+}

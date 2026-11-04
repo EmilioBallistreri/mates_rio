@@ -2615,3 +2615,912 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
+
+
+// ==========================================================================
+// 11. ACTUALIZACIÓN INTEGRAL DEL ESTUDIO (MEETING FIXES: CAJA FRONTAL BLANCO,
+//     DESHACER/REHACER, NO SUPERPOSICIÓN, SIN CINCELADO Y PRECIOS DINÁMICOS)
+// ==========================================================================
+(function() {
+  // 1. Inicializar pilas de historial Deshacer / Rehacer y caché de imágenes 360
+  studio.historyStack = [];
+  studio.redoStack = [];
+  studio.circularLines = 'no';
+  studio.snappingEnabled = false;
+  studio._imgCache360 = {};
+
+  function cloneItemsState(items) {
+    return JSON.parse(JSON.stringify(items || []));
+  }
+
+  window.saveStudioHistoryState = function() {
+    studio.historyStack.push({
+      activeProduct: studio.activeProduct,
+      items: cloneItemsState(studio.items),
+      activeItemId: studio.activeItemId
+    });
+    if (studio.historyStack.length > 50) {
+      studio.historyStack.shift();
+    }
+    studio.redoStack = [];
+    updateHistoryButtonsUI();
+  };
+
+  window.undoStudioAction = function() {
+    if (!studio.historyStack || studio.historyStack.length === 0) {
+      showNotificationToast('No hay más acciones para deshacer', 'fa-rotate-left');
+      return;
+    }
+    studio.redoStack.push({
+      activeProduct: studio.activeProduct,
+      items: cloneItemsState(studio.items),
+      activeItemId: studio.activeItemId
+    });
+    const prevState = studio.historyStack.pop();
+    studio.items = cloneItemsState(prevState.items);
+    studio.activeItemId = prevState.activeItemId;
+
+    renderVirolaCanvas();
+    renderTextLayersUI();
+    updateActiveItemFloatingBar();
+    updatePriceDisplay();
+    updateHistoryButtonsUI();
+    if (studio.viewMode === '360') render360Canvas();
+    showNotificationToast('Acción deshecha (Ctrl+Z)', 'fa-rotate-left');
+  };
+
+  window.redoStudioAction = function() {
+    if (!studio.redoStack || studio.redoStack.length === 0) {
+      showNotificationToast('No hay acciones para rehacer', 'fa-rotate-right');
+      return;
+    }
+    studio.historyStack.push({
+      activeProduct: studio.activeProduct,
+      items: cloneItemsState(studio.items),
+      activeItemId: studio.activeItemId
+    });
+    const nextState = studio.redoStack.pop();
+    studio.items = cloneItemsState(nextState.items);
+    studio.activeItemId = nextState.activeItemId;
+
+    renderVirolaCanvas();
+    renderTextLayersUI();
+    updateActiveItemFloatingBar();
+    updatePriceDisplay();
+    updateHistoryButtonsUI();
+    if (studio.viewMode === '360') render360Canvas();
+    showNotificationToast('Acción rehecha (Ctrl+Y)', 'fa-rotate-right');
+  };
+
+  function updateHistoryButtonsUI() {
+    const canUndo = studio.historyStack && studio.historyStack.length > 0;
+    const canRedo = studio.redoStack && studio.redoStack.length > 0;
+    document.querySelectorAll('#btn-studio-undo, .btn-studio-undo-quick').forEach(btn => {
+      btn.disabled = !canUndo;
+      btn.style.opacity = canUndo ? '1' : '0.4';
+    });
+    document.querySelectorAll('#btn-studio-redo, .btn-studio-redo-quick').forEach(btn => {
+      btn.disabled = !canRedo;
+      btn.style.opacity = canRedo ? '1' : '0.4';
+    });
+  }
+
+  // Atajos de teclado globales: Ctrl+Z (Deshacer) y Ctrl+Y / Ctrl+Shift+Z (Rehacer)
+  document.addEventListener('keydown', (e) => {
+    const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+    if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') return;
+
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
+      e.preventDefault();
+      if (e.shiftKey) {
+        window.redoStudioAction();
+      } else {
+        window.undoStudioAction();
+      }
+    } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') {
+      e.preventDefault();
+      window.redoStudioAction();
+    }
+  });
+
+  // 2. Sincronizar nombres simplificados y precios dinámicos desde el Panel Admin
+  window.syncStudioPricingFromAdmin = function() {
+    PRODUCTS_CATALOG.mate.name = 'Mate';
+    PRODUCTS_CATALOG.termo.name = 'Termo';
+    PRODUCTS_CATALOG.caja.name = 'Caja de presentación';
+    PRODUCTS_CATALOG.caja.surfaceName = 'Frente de Caja de Presentación Rectangular (Grabado Blanco)';
+
+    if (typeof getCustomizationPricingConfig === 'function') {
+      const cfg = getCustomizationPricingConfig();
+      if (cfg && cfg.baseProducts) {
+        if (cfg.baseProducts.mate) {
+          const pMate = Number(cfg.baseProducts.mate.price) || 46500;
+          PRODUCTS_CATALOG.mate.models[0].price = pMate;
+          PRODUCTS_CATALOG.mate.models[0].name = 'Mate Imperial Personalizable';
+        }
+        if (cfg.baseProducts.termo) {
+          const pTermo = Number(cfg.baseProducts.termo.price) || 42900;
+          PRODUCTS_CATALOG.termo.models[0].price = pTermo;
+          PRODUCTS_CATALOG.termo.models[0].name = 'Termo de Acero 1L Personalizable';
+        }
+        if (cfg.baseProducts.caja) {
+          const pCaja = Number(cfg.baseProducts.caja.price) || 32000;
+          PRODUCTS_CATALOG.caja.models[0].price = pCaja;
+          PRODUCTS_CATALOG.caja.models[0].name = 'Caja de Presentación Personalizable';
+        }
+      }
+    }
+
+    const matePriceEl = document.getElementById('card-price-mate');
+    const termoPriceEl = document.getElementById('card-price-termo');
+    const cajaPriceEl = document.getElementById('card-price-caja');
+    if (matePriceEl) matePriceEl.textContent = `$ ${PRODUCTS_CATALOG.mate.models[0].price.toLocaleString('es-AR')}`;
+    if (termoPriceEl) termoPriceEl.textContent = `$ ${PRODUCTS_CATALOG.termo.models[0].price.toLocaleString('es-AR')}`;
+    if (cajaPriceEl) cajaPriceEl.textContent = `$ ${PRODUCTS_CATALOG.caja.models[0].price.toLocaleString('es-AR')}`;
+  };
+
+  // 3. Algoritmo anti-superposición para íconos, escudos y textos
+  window.findNonOverlappingPosition = function(itemType = 'icon', preferredPos = null) {
+    const { cx, cy, rRing } = STUDIO_CONFIG;
+    const minDistance = 54;
+
+    function isOccupied(tx, ty) {
+      return studio.items.some(existing => {
+        const ex = existing.x !== undefined ? existing.x : cx;
+        const ey = existing.y !== undefined ? existing.y : cy;
+        return Math.hypot(tx - ex, ty - ey) < minDistance;
+      });
+    }
+
+    // Caso 1: Caja de presentación rectangular (Frente únicamente: x entre 110..390, y entre 155..345)
+    if (studio.activeProduct === 'caja') {
+      const boxSlots = itemType === 'text'
+        ? [
+            { x: 250, y: 195, angle: 270 },
+            { x: 250, y: 305, angle: 90 },
+            { x: 250, y: 250, angle: 0 },
+            { x: 250, y: 160, angle: 270 },
+            { x: 250, y: 340, angle: 90 }
+          ]
+        : [
+            { x: 250, y: 255, angle: 90 },
+            { x: 165, y: 255, angle: 180 },
+            { x: 335, y: 255, angle: 0 },
+            { x: 205, y: 195, angle: 225 },
+            { x: 295, y: 195, angle: 315 },
+            { x: 205, y: 310, angle: 135 },
+            { x: 295, y: 310, angle: 45 },
+            { x: 135, y: 195, angle: 200 },
+            { x: 365, y: 195, angle: 340 }
+          ];
+
+      for (const slot of boxSlots) {
+        if (!isOccupied(slot.x, slot.y)) {
+          return { x: slot.x, y: slot.y, angle: slot.angle, radius: rRing };
+        }
+      }
+      const n = studio.items.length;
+      const col = n % 4;
+      const row = Math.floor(n / 4) % 3;
+      return {
+        x: 140 + col * 72,
+        y: 175 + row * 68,
+        angle: 90,
+        radius: rRing
+      };
+    }
+
+    // Caso 2: Termo cilíndrico (Cuerpo vertical: x entre 170..330, y entre 130..380)
+    if (studio.activeProduct === 'termo') {
+      const termoSlots = [
+        { x: 250, y: 180, angle: 270 },
+        { x: 250, y: 260, angle: 90 },
+        { x: 250, y: 340, angle: 90 },
+        { x: 190, y: 220, angle: 180 },
+        { x: 310, y: 220, angle: 0 },
+        { x: 190, y: 300, angle: 135 },
+        { x: 310, y: 300, angle: 45 },
+        { x: 250, y: 125, angle: 270 }
+      ];
+      for (const slot of termoSlots) {
+        if (!isOccupied(slot.x, slot.y)) {
+          return { x: slot.x, y: slot.y, angle: slot.angle, radius: rRing };
+        }
+      }
+    }
+
+    // Caso 3: Mate (Anillo de virola circular rRing = 197)
+    const candidateAngles = itemType === 'text'
+      ? (preferredPos === 'bottom' ? [90, 270, 180, 0, 135, 45, 225, 315] : [270, 90, 180, 0, 315, 225, 45, 135])
+      : [90, 180, 0, 270, 135, 45, 225, 315, 112, 68, 158, 22, 202, 338, 248, 292];
+
+    for (const ang of candidateAngles) {
+      const rad = (ang * Math.PI) / 180;
+      const tx = cx + rRing * Math.cos(rad);
+      const ty = cy + rRing * Math.sin(rad);
+      if (!isOccupied(tx, ty)) {
+        return {
+          x: parseFloat(tx.toFixed(2)),
+          y: parseFloat(ty.toFixed(2)),
+          angle: ang,
+          radius: rRing
+        };
+      }
+    }
+
+    // Si todos los ángulos principales están ocupados, buscar el siguiente hueco angular libre
+    for (let step = 0; step < 360; step += 18) {
+      const ang = (90 + step) % 360;
+      const rad = (ang * Math.PI) / 180;
+      const tx = cx + rRing * Math.cos(rad);
+      const ty = cy + rRing * Math.sin(rad);
+      if (!isOccupied(tx, ty)) {
+        return {
+          x: parseFloat(tx.toFixed(2)),
+          y: parseFloat(ty.toFixed(2)),
+          angle: ang,
+          radius: rRing
+        };
+      }
+    }
+
+    const fallbackAngle = (studio.items.length * 35) % 360;
+    const fallbackRad = (fallbackAngle * Math.PI) / 180;
+    return {
+      x: parseFloat((cx + rRing * Math.cos(fallbackRad)).toFixed(2)),
+      y: parseFloat((cy + rRing * Math.sin(fallbackRad)).toFixed(2)),
+      angle: fallbackAngle,
+      radius: rRing
+    };
+  };
+
+  // 4. Sobrescribir switchActiveProduct: Caja solo en el frente y sin opción 360°
+  window.switchActiveProduct = function(prodKey) {
+    if (!PRODUCTS_CATALOG[prodKey]) return;
+    studio.activeProduct = prodKey;
+    const prodDef = PRODUCTS_CATALOG[prodKey];
+    studio.selectedMateId = prodDef.defaultModel;
+
+    renderProductSelectorCardsUI();
+
+    document.querySelectorAll('[data-prod-btn]').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-prod-btn') === prodKey);
+    });
+
+    // Ocultar o mostrar botones de vista 360° (las cajas solo se personalizan en el frente)
+    const stageBtn360 = document.getElementById('stage-btn-360');
+    const ribbonBtn360 = document.getElementById('ribbon-view-360-btn');
+    const stageBtn2d = document.getElementById('stage-btn-2d');
+    const ribbonBtn2d = document.getElementById('ribbon-view-2d-btn');
+
+    if (prodKey === 'caja') {
+      if (stageBtn360) stageBtn360.style.display = 'none';
+      if (ribbonBtn360) ribbonBtn360.style.display = 'none';
+      if (stageBtn2d) stageBtn2d.innerHTML = '<i class="fas fa-box-open"></i> Vista Frontal (Caja)';
+      if (ribbonBtn2d) ribbonBtn2d.innerHTML = '<i class="fas fa-box-open"></i> Vista Frontal';
+      if (studio.viewMode === '360') {
+        setStudioViewMode('2d');
+      }
+      // En caja los textos se muestran rectos en el frente para máxima legibilidad
+      studio.items.forEach(it => {
+        if (it.type === 'text') {
+          it.arcPosition = 'straight';
+        }
+      });
+    } else {
+      if (stageBtn360) stageBtn360.style.display = 'inline-flex';
+      if (ribbonBtn360) ribbonBtn360.style.display = 'inline-flex';
+      if (stageBtn2d) stageBtn2d.innerHTML = '<i class="fas fa-pen-ruler"></i> Vista Grabado 2D';
+      if (ribbonBtn2d) ribbonBtn2d.innerHTML = '<i class="fas fa-pen-ruler"></i> Vista Grabado 2D';
+    }
+
+    renderModelsDropdown();
+    updateStageBadge();
+    updatePriceDisplay();
+
+    autoCenterAndBalanceVirola();
+    renderVirolaCanvas();
+    if (studio.viewMode === '360') render360Canvas();
+
+    showNotificationToast(`Personalizando: ${prodDef.name}`, 'fa-cube');
+  };
+
+  // Impedir activar 360° si el producto es caja
+  const _origSetStudioViewMode = window.setStudioViewMode;
+  window.setStudioViewMode = function(mode) {
+    if (studio.activeProduct === 'caja' && mode === '360') {
+      mode = '2d';
+      showNotificationToast('La caja de presentación se personaliza exclusivamente en el frente', 'fa-box-open');
+    }
+    return _origSetStudioViewMode(mode);
+  };
+
+  // 5. Sobrescribir agregado, duplicado y eliminación con Historial y No-Superposición
+  window.addNewTextBlock = function(initialText = '', preferredPos = null) {
+    saveStudioHistoryState();
+    const textItems = studio.items.filter(i => i.type === 'text');
+    const count = textItems.length + 1;
+    const defaultText = initialText || (count === 1 ? 'MATES RÍO' : (count === 2 ? 'TRADICIÓN & PASIÓN' : `TEXTO ${count}`));
+
+    let pos = preferredPos || (studio.activeProduct === 'caja' ? 'straight' : (count === 1 ? 'top' : (count === 2 ? 'bottom' : 'straight')));
+    if (studio.activeProduct === 'caja') {
+      pos = 'straight';
+    }
+
+    const placement = findNonOverlappingPosition('text', pos);
+
+    const newItem = {
+      id: 'text_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+      type: 'text',
+      text: defaultText,
+      font: studio.selectedFont || 'Cinzel',
+      fontSize: 22,
+      arcPosition: pos,
+      angle: placement.angle,
+      radius: placement.radius,
+      rotation: 0,
+      scale: 1.0,
+      x: placement.x,
+      y: placement.y
+    };
+
+    studio.items.push(newItem);
+    studio.activeItemId = newItem.id;
+
+    renderVirolaCanvas();
+    renderTextLayersUI();
+    updateActiveTextControls(newItem);
+    updatePriceDisplay();
+    if (studio.viewMode === '360') render360Canvas();
+    showNotificationToast(`Texto "${newItem.text}" agregado`, 'fa-font');
+  };
+
+  window.addVectorToVirola = function(itemId, catKey) {
+    let itemDef = null;
+    if (catKey && VECTOR_CATEGORIES[catKey]) {
+      itemDef = VECTOR_CATEGORIES[catKey].items.find(i => i.id === itemId);
+    }
+    if (!itemDef) {
+      for (const k of Object.keys(VECTOR_CATEGORIES)) {
+        const found = VECTOR_CATEGORIES[k].items.find(i => i.id === itemId);
+        if (found) {
+          itemDef = found;
+          break;
+        }
+      }
+    }
+    if (!itemDef) return;
+
+    saveStudioHistoryState();
+    const placement = findNonOverlappingPosition('icon');
+
+    const newItem = {
+      id: 'icon_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+      type: 'icon',
+      graphicId: itemDef.id,
+      name: itemDef.name,
+      file: itemDef.file,
+      angle: placement.angle,
+      radius: placement.radius,
+      rotation: 0,
+      scale: 1.0,
+      x: placement.x,
+      y: placement.y
+    };
+
+    studio.items.push(newItem);
+    studio.activeItemId = newItem.id;
+
+    renderVirolaCanvas();
+    updateActiveItemFloatingBar();
+    updatePriceDisplay();
+    if (studio.viewMode === '360') render360Canvas();
+    showNotificationToast(`Diseño "${itemDef.name}" ubicado sin superposición`, 'fa-shield-halved');
+  };
+
+  window.duplicateActiveItem = function() {
+    if (!studio.activeItemId) return;
+    const item = studio.items.find(i => i.id === studio.activeItemId);
+    if (!item) return;
+
+    saveStudioHistoryState();
+    const placement = findNonOverlappingPosition(item.type, item.arcPosition);
+
+    const newItem = {
+      ...item,
+      id: (item.type === 'text' ? 'text_' : 'icon_') + Date.now() + '_' + Math.floor(Math.random() * 1000),
+      angle: placement.angle,
+      radius: placement.radius,
+      x: placement.x,
+      y: placement.y
+    };
+    studio.items.push(newItem);
+    studio.activeItemId = newItem.id;
+
+    renderVirolaCanvas();
+    if (newItem.type === 'text') renderTextLayersUI();
+    updateActiveItemFloatingBar();
+    updatePriceDisplay();
+    if (studio.viewMode === '360') render360Canvas();
+    showNotificationToast('Elemento duplicado en posición libre', 'fa-clone');
+  };
+
+  const _origDeleteVirolaItem = window.deleteVirolaItem;
+  window.deleteVirolaItem = function(itemId, e) {
+    saveStudioHistoryState();
+    return _origDeleteVirolaItem(itemId, e);
+  };
+
+  const _origResetVirolaStudio = window.resetVirolaStudio;
+  window.resetVirolaStudio = function() {
+    if (studio.items.length > 0) saveStudioHistoryState();
+    return _origResetVirolaStudio();
+  };
+
+  const _origStartFreeItemDrag = window.startFreeItemDrag;
+  window.startFreeItemDrag = function(itemId, e) {
+    saveStudioHistoryState();
+    return _origStartFreeItemDrag(itemId, e);
+  };
+
+  // 6. Subida de imagen personalizada: eliminación total de bordes blancos y fondo
+  window.handleCustomImageUpload = function(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (loadEvent) => {
+      const rawDataUrl = loadEvent.target.result;
+      const img = new Image();
+      img.onload = () => {
+        let processedDataUrl = rawDataUrl;
+
+        if (file.type !== 'image/svg+xml') {
+          const cvs = document.createElement('canvas');
+          const ctx = cvs.getContext('2d');
+          const maxDim = 700;
+          let w = img.width, h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+            else { w = Math.round((w * maxDim) / h); h = maxDim; }
+          }
+          cvs.width = w;
+          cvs.height = h;
+          ctx.drawImage(img, 0, 0, w, h);
+
+          const imgData = ctx.getImageData(0, 0, w, h);
+          const d = imgData.data;
+
+          // Muestreo de todo el borde perimetral para eliminar cualquier marco o fondo blanco/claro
+          let rSum = 0, gSum = 0, bSum = 0, sampleCount = 0;
+          const borderStep = Math.max(1, Math.floor(Math.min(w, h) / 20));
+          for (let bx = 0; bx < w; bx += borderStep) {
+            const topIdx = bx * 4;
+            const botIdx = ((h - 1) * w + bx) * 4;
+            rSum += d[topIdx] + d[botIdx];
+            gSum += d[topIdx + 1] + d[botIdx + 1];
+            bSum += d[topIdx + 2] + d[botIdx + 2];
+            sampleCount += 2;
+          }
+          for (let by = 0; by < h; by += borderStep) {
+            const leftIdx = (by * w) * 4;
+            const rightIdx = (by * w + (w - 1)) * 4;
+            rSum += d[leftIdx] + d[rightIdx];
+            gSum += d[leftIdx + 1] + d[rightIdx + 1];
+            bSum += d[leftIdx + 2] + d[rightIdx + 2];
+            sampleCount += 2;
+          }
+
+          const bgR = Math.round(rSum / sampleCount);
+          const bgG = Math.round(gSum / sampleCount);
+          const bgB = Math.round(bSum / sampleCount);
+          const colorTolerance = 62;
+
+          for (let py = 0; py < h; py++) {
+            for (let px = 0; px < w; px++) {
+              const i = (py * w + px) * 4;
+              const r = d[i], g = d[i + 1], b = d[i + 2], a = d[i + 3];
+
+              // Recortar 2px del borde exterior para evitar líneas residuales blancas en el marco
+              if (px < 2 || px >= w - 2 || py < 2 || py >= h - 2 || a < 40) {
+                d[i + 3] = 0;
+                continue;
+              }
+
+              const colorDist = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
+              const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+
+              // Eliminar píxeles blancos/claros (> 195 lum) o similares al fondo
+              if (lum > 195 || colorDist < colorTolerance) {
+                d[i + 3] = 0;
+              } else {
+                d[i] = 16;
+                d[i + 1] = 16;
+                d[i + 2] = 16;
+                const contrastAlpha = Math.min(1, (205 - lum) / 85);
+                d[i + 3] = Math.round(255 * Math.max(0.25, contrastAlpha));
+              }
+            }
+          }
+
+          ctx.putImageData(imgData, 0, 0);
+          processedDataUrl = cvs.toDataURL('image/png');
+        }
+
+        saveStudioHistoryState();
+        const placement = findNonOverlappingPosition('icon');
+
+        const newItem = {
+          id: 'custom_img_' + Date.now(),
+          type: 'icon',
+          graphicId: 'custom_upload',
+          name: file.name.substring(0, 20),
+          file: processedDataUrl,
+          angle: placement.angle,
+          radius: placement.radius,
+          rotation: 0,
+          scale: 1.15,
+          x: placement.x,
+          y: placement.y
+        };
+
+        studio.items.push(newItem);
+        studio.activeItemId = newItem.id;
+
+        renderVirolaCanvas();
+        updateActiveItemFloatingBar();
+        updatePriceDisplay();
+        if (studio.viewMode === '360') render360Canvas();
+        showNotificationToast('Imagen vectorizada sin bordes blancos y lista para grabar', 'fa-circle-check');
+      };
+      img.src = rawDataUrl;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // 7. Sobrescribir renderVirolaCanvas: Caja rectangular frontal con grabado invertido en BLANCO
+  const _origRenderVirolaCanvas = window.renderVirolaCanvas;
+  window.renderVirolaCanvas = function() {
+    if (studio.activeProduct !== 'caja') {
+      return _origRenderVirolaCanvas();
+    }
+
+    const svg = document.getElementById('virola-studio-svg');
+    if (!svg) return;
+    const { cx, cy } = STUDIO_CONFIG;
+
+    // En la caja de presentación el grabado se muestra invertido en color blanco (#ffffff)
+    let textsHtml = '';
+    const textItems = studio.items.filter(i => i.type === 'text');
+    textItems.forEach(t => {
+      const isActive = t.id === studio.activeItemId;
+      const x = t.x !== undefined ? t.x : cx;
+      const y = t.y !== undefined ? t.y : cy - 45;
+      const rot = t.rotation !== undefined ? t.rotation : 0;
+
+      textsHtml += `
+        <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
+           data-item-id="${t.id}"
+           transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
+           onmousedown="startFreeItemDrag('${t.id}', event)"
+           ontouchstart="startFreeItemDrag('${t.id}', event)">
+          <text font-family="'${t.font || 'Cinzel'}', serif" 
+                font-size="${t.fontSize || 22}" 
+                font-weight="800" 
+                letter-spacing="2px" 
+                fill="#ffffff" 
+                text-anchor="middle" 
+                dominant-baseline="central" 
+                style="cursor: grab; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.65));" 
+                class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
+                data-item-id="${t.id}">
+            ${escapeHtml(t.text)}
+          </text>
+        </g>
+      `;
+    });
+
+    let iconsHtml = '';
+    const iconItems = studio.items.filter(i => i.type === 'icon');
+    iconItems.forEach(item => {
+      const scale = item.scale || 1.0;
+      const rot = item.rotation || 0;
+      const isActive = item.id === studio.activeItemId;
+      const x = item.x !== undefined ? item.x : cx;
+      const y = item.y !== undefined ? item.y : cy + 25;
+      const baseSize = 48;
+      const halfSize = (baseSize * scale) / 2;
+
+      // Filtro invertido blanco puro para los escudos e imágenes sobre la caja oscura
+      const contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,0.6));" />`;
+
+      let selectionBorderHtml = '';
+      if (isActive) {
+        selectionBorderHtml = `
+          <rect x="${(-halfSize - 5).toFixed(2)}" y="${(-halfSize - 5).toFixed(2)}" 
+                width="${(baseSize * scale + 10).toFixed(2)}" height="${(baseSize * scale + 10).toFixed(2)}" 
+                fill="none" stroke="#ffffff" stroke-width="1.6" stroke-dasharray="4,4" 
+                rx="6" ry="6" opacity="0.9" pointer-events="none" />
+        `;
+      }
+
+      iconsHtml += `
+        <g class="virola-sticker-group ${isActive ? 'active-sticker' : ''}" 
+           data-item-id="${item.id}" 
+           transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
+           onmousedown="startFreeItemDrag('${item.id}', event)"
+           ontouchstart="startFreeItemDrag('${item.id}', event)"
+           style="cursor: grab;">
+          ${contentHtml}
+          ${selectionBorderHtml}
+        </g>
+      `;
+    });
+
+    // Formato rectangular horizontal de la Caja de presentación (solo frente)
+    svg.innerHTML = `
+      <defs>
+        <linearGradient id="box-dark-finish" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1c1c1c" />
+          <stop offset="50%" stop-color="#121212" />
+          <stop offset="100%" stop-color="#0a0a0a" />
+        </linearGradient>
+      </defs>
+
+      <!-- Sombra exterior -->
+      <rect x="34" y="114" width="432" height="278" rx="12" fill="rgba(0,0,0,0.45)" />
+
+      <!-- Cuerpo Rectangular Frontal de la Caja de Presentación -->
+      <rect x="30" y="110" width="440" height="280" rx="10" fill="url(#box-dark-finish)" stroke="#333333" stroke-width="3" />
+
+      <!-- Marco interior sutil del frente -->
+      <rect x="48" y="128" width="404" height="244" rx="6" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
+      <text x="250" y="100" text-anchor="middle" fill="#ffffff" opacity="0.75" font-size="11" font-weight="700" letter-spacing="1.5">FRENTE DE CAJA DE PRESENTACIÓN (GRABADO BLANCO)</text>
+
+      <!-- Grabados invertidos en color blanco -->
+      <g class="virola-texts-layer">${textsHtml}</g>
+      <g class="virola-icons-layer">${iconsHtml}</g>
+    `;
+  };
+
+  // 8. Sobrescribir render360Canvas: solucionar contorno de textos al rotar 360° y caché de íconos
+  window.render360Canvas = function() {
+    const canvas = document.getElementById('studio-360-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+    const rotRad = (studio.rotation360 * Math.PI) / 180;
+
+    ctx.clearRect(0, 0, w, h);
+    studio.projected360Items = [];
+
+    function getCachedImage(src) {
+      if (!src) return null;
+      if (!studio._imgCache360[src]) {
+        const im = new Image();
+        im.onload = () => {
+          if (studio.viewMode === '360') window.render360Canvas();
+        };
+        im.src = src;
+        studio._imgCache360[src] = im;
+      }
+      return studio._imgCache360[src];
+    }
+
+    if (studio.activeProduct === 'mate') {
+      const centerX = w / 2;
+      const centerY = h / 2 - 20;
+
+      // Sombra
+      ctx.save();
+      ctx.beginPath();
+      ctx.ellipse(centerX, centerY + 220, 160, 36, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+      ctx.fill();
+      ctx.restore();
+
+      // Base de Alpaca
+      ctx.save();
+      const baseGrad = ctx.createLinearGradient(centerX - 90, centerY + 180, centerX + 90, centerY + 180);
+      baseGrad.addColorStop(0, '#555555');
+      baseGrad.addColorStop(0.5, '#e5e5e5');
+      baseGrad.addColorStop(1, '#333333');
+      ctx.beginPath();
+      ctx.ellipse(centerX, centerY + 180, 85, 26, 0, 0, Math.PI * 2);
+      ctx.fillStyle = baseGrad;
+      ctx.fill();
+      ctx.restore();
+
+      // Cuerpo de cuero negro bitono
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(centerX - 165, centerY + 20);
+      ctx.bezierCurveTo(centerX - 180, centerY + 110, centerX - 120, centerY + 175, centerX - 80, centerY + 180);
+      ctx.lineTo(centerX + 80, centerY + 180);
+      ctx.bezierCurveTo(centerX + 120, centerY + 175, centerX + 180, centerY + 110, centerX + 165, centerY + 20);
+      ctx.closePath();
+
+      const leatherGrad = ctx.createRadialGradient(centerX - 40, centerY + 80, 20, centerX, centerY + 100, 170);
+      leatherGrad.addColorStop(0, '#262626');
+      leatherGrad.addColorStop(0.6, '#141414');
+      leatherGrad.addColorStop(1, '#0a0a0a');
+      ctx.fillStyle = leatherGrad;
+      ctx.fill();
+      ctx.restore();
+
+      // Corona elíptica de Alpaca
+      ctx.save();
+      const rxOuter = 168;
+      const ryOuter = 46;
+      const rxInner = 118;
+      const ryInner = 32;
+
+      ctx.beginPath();
+      ctx.ellipse(centerX, centerY + 20, rxOuter, ryOuter, 0, 0, Math.PI * 2);
+      const metalGrad = ctx.createLinearGradient(centerX - rxOuter, centerY, centerX + rxOuter, centerY);
+      const specOffset = (Math.sin(rotRad) + 1) / 2;
+      metalGrad.addColorStop(0, '#666666');
+      metalGrad.addColorStop(Math.max(0.05, Math.min(0.95, specOffset * 0.8)), '#ffffff');
+      metalGrad.addColorStop(Math.max(0.1, Math.min(0.98, specOffset * 0.8 + 0.15)), '#d4d4d4');
+      metalGrad.addColorStop(1, '#444444');
+      ctx.fillStyle = metalGrad;
+      ctx.fill();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = '#222222';
+      ctx.stroke();
+
+      // Boca interior
+      ctx.beginPath();
+      ctx.ellipse(centerX, centerY + 20, rxInner, ryInner, 0, 0, Math.PI * 2);
+      ctx.fillStyle = '#0a0a0a';
+      ctx.fill();
+
+      // Proyección limpia de textos e íconos (sin contornos rotos al girar)
+      studio.items.forEach(item => {
+        const itemAngle = (item.angle || 0) + studio.rotation360;
+        const angleRad = (itemAngle * Math.PI) / 180;
+        const facing = Math.sin(angleRad);
+
+        if (facing > -0.15) {
+          const projX = centerX + Math.cos(angleRad) * (rxOuter + rxInner) / 2;
+          const projY = centerY + 20 + Math.sin(angleRad) * (ryOuter + ryInner) / 2;
+          const alpha = Math.max(0.22, Math.min(1, facing + 0.2));
+          const horizPerspective = Math.max(0.35, Math.abs(facing));
+
+          studio.projected360Items.push({
+            id: item.id,
+            projX: projX,
+            projY: projY,
+            radius: item.type === 'text' ? 36 : 28,
+            facing: facing
+          });
+
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.translate(projX, projY);
+          ctx.scale(horizPerspective, 1);
+
+          if (item.type === 'text') {
+            ctx.font = `800 ${Math.round((item.fontSize || 22) * 0.78)}px '${item.font || 'Cinzel'}', serif`;
+            ctx.fillStyle = '#111111';
+            ctx.strokeStyle = 'transparent';
+            ctx.lineWidth = 0;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(item.text || '', 0, 0);
+          } else if (item.type === 'icon') {
+            const imgEl = getCachedImage(item.file);
+            if (imgEl && imgEl.complete) {
+              const s = (item.scale || 1) * 30;
+              ctx.drawImage(imgEl, -s / 2, -s / 2, s, s);
+            }
+          }
+          ctx.restore();
+        }
+      });
+
+      ctx.restore();
+    } else if (studio.activeProduct === 'termo') {
+      const centerX = w / 2;
+      const centerY = h / 2 - 10;
+      const tWidth = 140;
+      const tHeight = 360;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.roundRect(centerX - tWidth / 2, centerY - tHeight / 2, tWidth, tHeight, 14);
+      const termoGrad = ctx.createLinearGradient(centerX - tWidth / 2, 0, centerX + tWidth / 2, 0);
+      termoGrad.addColorStop(0, '#1f1f1f');
+      termoGrad.addColorStop(0.25, '#4a4a4a');
+      termoGrad.addColorStop(0.5, '#ffffff');
+      termoGrad.addColorStop(0.75, '#3a3a3a');
+      termoGrad.addColorStop(1, '#141414');
+      ctx.fillStyle = termoGrad;
+      ctx.fill();
+      ctx.strokeStyle = '#2b2b2b';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Tapón superior
+      ctx.beginPath();
+      ctx.roundRect(centerX - 35, centerY - tHeight / 2 - 24, 70, 26, 6);
+      ctx.fillStyle = '#111111';
+      ctx.fill();
+
+      studio.items.forEach(item => {
+        const itemAngle = (item.angle || 0) + studio.rotation360;
+        const angleRad = (itemAngle * Math.PI) / 180;
+        const facing = Math.cos(angleRad);
+
+        if (facing > -0.15) {
+          const projX = centerX + Math.sin(angleRad) * (tWidth / 2 - 12);
+          const projY = centerY - 60 + ((item.y || 250) - 250) * 0.7;
+          const scaleComp = Math.max(0.28, facing);
+
+          studio.projected360Items.push({
+            id: item.id,
+            projX: projX,
+            projY: projY,
+            radius: 30,
+            facing: facing
+          });
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0.22, facing);
+          ctx.translate(projX, projY);
+          ctx.scale(scaleComp, 1);
+
+          if (item.type === 'text') {
+            ctx.font = `800 ${item.fontSize || 22}px '${item.font || 'Cinzel'}', serif`;
+            ctx.fillStyle = '#111111';
+            ctx.strokeStyle = 'transparent';
+            ctx.lineWidth = 0;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(item.text || '', 0, 0);
+          } else if (item.type === 'icon') {
+            const imgEl = getCachedImage(item.file);
+            if (imgEl && imgEl.complete) {
+              const s = (item.scale || 1) * 38;
+              ctx.drawImage(imgEl, -s / 2, -s / 2, s, s);
+            }
+          }
+          ctx.restore();
+        }
+      });
+
+      ctx.restore();
+    }
+  };
+
+  // 9. Inyectar controles rápidos de Deshacer/Rehacer también en la barra del elemento activo (móvil/desktop)
+  function injectQuickUndoRedoButtons() {
+    const activeBar = document.getElementById('virola-active-item-controls');
+    if (activeBar && !document.getElementById('quick-history-controls-wrap')) {
+      const wrap = document.createElement('div');
+      wrap.id = 'quick-history-controls-wrap';
+      wrap.style.cssText = 'display: inline-flex; align-items: center; gap: 6px; margin-right: 8px;';
+      wrap.innerHTML = `
+        <button type="button" class="item-quick-btn btn-studio-undo-quick" onclick="undoStudioAction()" title="Deshacer (Ctrl+Z)">
+          <i class="fas fa-rotate-left"></i>
+        </button>
+        <button type="button" class="item-quick-btn btn-studio-redo-quick" onclick="redoStudioAction()" title="Rehacer (Ctrl+Y)">
+          <i class="fas fa-rotate-right"></i>
+        </button>
+      `;
+      activeBar.insertBefore(wrap, activeBar.firstChild);
+    }
+    updateHistoryButtonsUI();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    studio.circularLines = 'no';
+    studio.snappingEnabled = false;
+    window.syncStudioPricingFromAdmin();
+    injectQuickUndoRedoButtons();
+    renderModelsDropdown();
+    updatePriceDisplay();
+    renderVirolaCanvas();
+  });
+})();

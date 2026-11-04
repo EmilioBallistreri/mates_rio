@@ -1,587 +1,847 @@
-// Base de datos de productos de Mates Río
+/**
+ * MATES RÍO - E-COMMERCE DATA & PERSISTENCE LAYER
+ * Categories: promos, mates, termos, accesorios, yerbas, equipos
+ */
+
 const PRODUCTS_DATA = [
+  // ==========================================================================
+  // 1. PROMOS & COMBOS (Etiquetas reservadas para promociones y descuentos)
+  // ==========================================================================
   {
     "id": "promo-1",
-    "name": "Combo Río Imperial Black + Termo 1L + Bombilla Alpaca",
+    "name": "Combo Imperial Deluxe Completo",
     "category": "promos",
-    "categoryName": "PROMOS",
-    "price": 84900,
-    "originalPrice": 99900,
-    "badge": "OFERTA TOP",
+    "subcategory": "Set Imperial",
+    "categoryName": "Promos",
+    "price": 94900,
+    "originalPrice": 115000,
+    "badge": "18% OFF",
     "badgeType": "promo",
-    "rating": 5,
-    "reviewsCount": 38,
     "image": "assets/images/cat_promos.jpg",
-    "description": "El combo definitivo para los amantes del buen mate. Incluye Mate Imperial forrado en cuero vacuno negro con virola de alpaca cincelada a mano, Termo de acero inoxidable 1L doble capa térmica (mantiene 24hs) y Bombilla pico de loro de alpaca maciza. ¡Viene en caja de madera de regalo!",
-    "specs": {
-      "material": "Calabaza gruesa de Brasil y cuero vacuno legítimo",
-      "virola": "Alpaca maciza cincelada artesanalmente",
-      "termo": "Acero inoxidable 18/8 de 1 Litro con tapón cebador",
-      "bombilla": "Alpaca pico de loro 19cm con filtro desarmable",
-      "garantia": "Garantía artesanal de 6 meses"
-    },
+    "description": "Set matero completo: Mate Imperial con virola de alpaca cincelada, Termo Media Manija 1L de acero inoxidable, Bombilla Pico de Loro de alpaca y Canasta Matera de cuero.",
+    "specs": [
+      "Mate Imperial calabaza y alpaca",
+      "Termo Acero Inox 1L + Bombilla Alpaca",
+      "Canasta Matera de cuero reforzada"
+    ],
+    "featured": true,
     "inStock": true,
-    "cost": 40800,
-    "wholesalePrice": 57700,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 41,
+    "cost": 52195,
+    "wholesalePrice": 66430,
+    "sku": "MR-PRO-001",
     "stock": 12
   },
   {
     "id": "promo-2",
-    "name": "Set Matero Camionero Marrón + Matera de Cuero Vacuno",
+    "name": "Set Matero Camionero + Termo 1L",
     "category": "promos",
-    "categoryName": "PROMOS",
-    "price": 72500,
-    "originalPrice": 85000,
-    "badge": "20% OFF",
+    "subcategory": "Set Camionero",
+    "categoryName": "Promos",
+    "price": 76500,
+    "originalPrice": 92000,
+    "badge": "17% OFF",
     "badgeType": "promo",
-    "rating": 4.9,
-    "reviewsCount": 26,
     "image": "assets/images/banner_2.jpg",
-    "description": "Llevá tu pasión matera a todos lados. Incluye Mate Camionero con virola lisa de acero quirúrgico, bombilla cincelada y la exclusiva Matera de cuero vacuno color suela con manija reforzada y compartimentos.",
-    "specs": {
-      "material": "Cuero vaqueta legítimo argentino",
-      "virola": "Acero inoxidable pulido espejo",
-      "matera": "Cuero vacuno curtido vegetal con herrajes de bronce",
-      "bombilla": "Bombillón curvo con resorte limpiable",
-      "garantia": "Garantía artesanal de 6 meses"
-    },
+    "description": "Combo ideal para la ruta y el día a día. Incluye Mate Camionero de cuero vacuno, Termo de acero inoxidable 1L y Bombilla chata de acero.",
+    "specs": [
+      "Mate Camionero boca ancha",
+      "Termo 1L Acero Inoxidable",
+      "Bombilla acero inoxidable incluida"
+    ],
+    "featured": true,
     "inStock": true,
-    "cost": 34800,
-    "wholesalePrice": 49300,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 42,
+    "cost": 42075,
+    "wholesalePrice": 53550,
+    "sku": "MR-PRO-002",
     "stock": 15
   },
   {
     "id": "promo-3",
-    "name": "Dúo Matero Amigos: 2 Mates Torpedo + 2 Bombillas Pico de Loro",
+    "name": "Pack Dúo: Mate Torpedo + Yerba + Bombilla",
     "category": "promos",
-    "categoryName": "PROMOS",
-    "price": 59900,
-    "originalPrice": 69900,
-    "badge": "COMBO DÚO",
+    "subcategory": "Pack Regalo",
+    "categoryName": "Promos",
+    "price": 46900,
+    "originalPrice": 56000,
+    "badge": "16% OFF",
     "badgeType": "promo",
-    "rating": 4.8,
-    "reviewsCount": 19,
-    "image": "assets/images/cat_mates.jpg",
-    "description": "Ideal para regalar o compartir. Dos mates modelo Torpedo uruguayo en tonos negro y tostado con virolas de alpaca pulida, acompañados por dos bombillas de alpaca maciza.",
-    "specs": {
-      "material": "Calabaza seleccionada con 4 patas de apoyo reforzadas",
-      "virola": "Alpaca maciza pulida",
-      "bombilla": "2 Bombillas pico de loro estándar de 18cm",
-      "garantia": "Garantía de satisfacción Mates Río"
-    },
+    "image": "assets/images/prod_mate_torpedo.jpg",
+    "description": "Kit listo para regalar o empezar a matear. Mate Torpedo uruguayo forrado en cuero, Bombilla Pico de Loro y Yerba Mate Seleccionada 500g.",
+    "specs": [
+      "Mate Torpedo cuero vacuno",
+      "Bombilla Pico de Loro",
+      "Yerba de Autor 500g + Caja de presentación"
+    ],
+    "featured": false,
     "inStock": true,
-    "cost": 28800,
-    "wholesalePrice": 40700,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 41,
+    "cost": 25795,
+    "wholesalePrice": 32830,
+    "sku": "MR-PRO-003",
     "stock": 18
   },
   {
     "id": "promo-4",
-    "name": "Set Imperial Master: Mate Imperial + Termo 1L + Bombilla + Canasta Cuero",
+    "name": "Combo Ejecutivo Mochila + Imperial + Termo",
     "category": "promos",
-    "categoryName": "PROMOS",
-    "price": 119000,
-    "originalPrice": 142000,
-    "badge": "SET COMPLETO",
-    "badgeType": "featured",
-    "rating": 5,
-    "reviewsCount": 42,
-    "image": "assets/images/prod_canasta_matera.jpg",
-    "description": "El equipamiento supremo para cebadores exigentes. Incluye Mate Imperial con virola cincelada, Termo de acero inox 1L doble capa, bombilla pico de loro de alpaca y canasta matera criolla de cuero vacuno legítimo.",
-    "specs": {
-      "material": "Calabaza brasileña + Cuero de suela 3mm",
-      "virola": "Alpaca maciza cincelada a mano",
-      "termo": "Acero inoxidable 18/8 doble pared",
-      "canasta": "Canasta con manija de madera torneada",
-      "garantia": "Garantía artesanal Mates Río de 1 año"
-    },
-    "inStock": true,
-    "cost": 57100,
-    "wholesalePrice": 80900,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 42,
-    "stock": 21
-  },
-  {
-    "id": "promo-5",
-    "name": "Combo Matero Express: Mate Torpedo + Yerbera de Cuero + Bombilla",
-    "category": "promos",
-    "categoryName": "PROMOS",
-    "price": 49900,
-    "originalPrice": 58000,
-    "badge": "SUPER PRECIO",
+    "subcategory": "Set Imperial",
+    "categoryName": "Promos",
+    "price": 118000,
+    "originalPrice": 148000,
+    "badge": "20% OFF",
     "badgeType": "promo",
-    "rating": 4.8,
-    "reviewsCount": 31,
-    "image": "assets/images/cat_promos.jpg",
-    "description": "Excelente set accesible para todos los días o para llevar a la oficina y facultad. Mate Torpedo en cuero vacuno, yerbera hermética de cuero con pico vertedor y bombilla de alpaca estándar.",
-    "specs": {
-      "material": "Calabaza mediana y cuero vaqueta",
-      "virola": "Acero pulido brillante",
-      "yerbera": "Cuero vacuno con cierre y forro antihumedad",
-      "bombilla": "Alpaca maciza con resorte limpiador",
-      "garantia": "Garantía oficial Mates Río"
-    },
+    "image": "assets/images/cat_equipos.jpg",
+    "description": "Equipamiento completo con Mochila Matera acolchada, Mate Imperial de alpaca, Termo 1L negro mate, Bombilla de alpaca y Yerbera.",
+    "specs": [
+      "Mochila Matera impermeable",
+      "Mate Imperial + Bombilla Alpaca",
+      "Termo 1L Negro Mate + Yerbera"
+    ],
+    "featured": true,
     "inStock": true,
-    "cost": 24000,
-    "wholesalePrice": 33900,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 41,
+    "cost": 64900,
+    "wholesalePrice": 82600,
+    "sku": "MR-PRO-004",
+    "stock": 8
+  },
+
+  // ==========================================================================
+  // 2. MATES (Sin etiquetas comerciales superfluas, nombre y precio limpios)
+  // ==========================================================================
+  {
+    "id": "mate-1",
+    "name": "Mate Imperial Virola Cincelada Alpaca",
+    "category": "mates",
+    "subcategory": "Imperial",
+    "categoryName": "Mates",
+    "price": 44500,
+    "originalPrice": null,
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/prod_mate_imperial.jpg",
+    "description": "Mate Imperial elaborado con calabaza seleccionada de pared gruesa, forrado en cuero vacuno legítimo con costura uruguaya artesanal y virola de alpaca cincelada a mano.",
+    "specs": [
+      "Calabaza brasilera seleccionada",
+      "Cuero vacuno legítimo y virola de alpaca",
+      "4 patas firmes reforzadas"
+    ],
+    "featured": true,
+    "inStock": true,
+    "cost": 24475,
+    "wholesalePrice": 31150,
+    "sku": "MR-MAT-001",
     "stock": 24
   },
   {
-    "id": "mate-1",
-    "name": "Mate Imperial Artesanal Cuero Negro & Virola Cincelada",
-    "category": "mates",
-    "categoryName": "MATES",
-    "price": 46500,
-    "originalPrice": null,
-    "badge": "MÁS VENDIDO",
-    "badgeType": "bestseller",
-    "rating": 5,
-    "reviewsCount": 84,
-    "image": "assets/images/prod_mate_imperial.jpg",
-    "description": "La joya de Mates Río. Elaborado a mano sobre calabaza gruesa de origen brasileño, forrado en cuero vacuno negro con costura uruguaya a la vista. Virola y base de alpaca cincelada con motivos florales gauchescos únicos.",
-    "specs": {
-      "material": "Calabaza gruesa de exportación",
-      "forrado": "Cuero vacuno seleccionado teñido en negro mate",
-      "virola": "Alpaca cincelada a mano por orfebres argentinos",
-      "base": "Fuelle con base de alpaca repujada",
-      "alturaAprox": "12 a 14 cm"
-    },
-    "inStock": true,
-    "cost": 22300,
-    "wholesalePrice": 31600,
-    "retailMarginPercent": 109,
-    "wholesaleMarginPercent": 42,
-    "stock": 27
-  },
-  {
     "id": "mate-2",
-    "name": "Mate Torpedo Uruguayo Cuero Tostado & Virola de Alpaca",
+    "name": "Mate Camionero Uruguayo Cuero Crudo",
     "category": "mates",
-    "categoryName": "MATES",
-    "price": 34200,
-    "originalPrice": 38000,
-    "badge": "CLÁSICO",
-    "badgeType": "new",
-    "rating": 4.9,
-    "reviewsCount": 52,
-    "image": "assets/images/cat_mates.jpg",
-    "description": "El formato tradicional uruguayo por excelencia. Forma estilizada con boca angosta que permite conservar la montañita de yerba mate por mucho más tiempo sin lavarse.",
-    "specs": {
-      "material": "Calabaza natural curada",
-      "forrado": "Cuero vaqueta color caramelo/tostado",
-      "virola": "Alpaca lisa pulida a mano",
-      "apoyo": "Costura reforzada con base firme",
-      "alturaAprox": "11 a 13 cm"
-    },
+    "subcategory": "Camionero",
+    "categoryName": "Mates",
+    "price": 34900,
+    "originalPrice": null,
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/prod_mate_camionero.jpg",
+    "description": "Mate Camionero de boca ancha que facilita el armado de la montañita. Virola de acero inoxidable pulido espejo y cuerpo de cuero vacuno.",
+    "specs": [
+      "Calabaza gruesa de boca ancha",
+      "Virola de acero inoxidable pulido",
+      "Forrado en cuero vacuno"
+    ],
+    "featured": true,
     "inStock": true,
-    "cost": 16400,
-    "wholesalePrice": 23300,
-    "retailMarginPercent": 109,
-    "wholesaleMarginPercent": 42,
+    "cost": 19195,
+    "wholesalePrice": 24430,
+    "sku": "MR-MAT-002",
     "stock": 30
   },
   {
     "id": "mate-3",
-    "name": "Mate Camionero Cuero Crudo con Costura Encerada",
+    "name": "Mate Torpedo Cincelado Cuero Marrón",
     "category": "mates",
-    "categoryName": "MATES",
+    "subcategory": "Torpedo",
+    "categoryName": "Mates",
     "price": 36800,
     "originalPrice": null,
-    "badge": "TRADICIÓN",
-    "badgeType": "featured",
-    "rating": 4.8,
-    "reviewsCount": 41,
-    "image": "assets/images/banner_1.jpg",
-    "description": "Boca ancha tipo camionero que facilita el cebado continuo y el cambio de yerba. Diseñado para acompañarte en tus jornadas de trabajo, viajes y rondas con amigos.",
-    "specs": {
-      "material": "Calabaza de paredes gruesas",
-      "forrado": "Cuero curtido vegetal de máxima resistencia",
-      "virola": "Acero inoxidable calidad quirúrgica",
-      "alturaAprox": "11 cm",
-      "diametroBoca": "9 cm"
-    },
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/prod_mate_torpedo.jpg",
+    "description": "Diseño ergonómico que calza cómodo en la mano. Calabaza seleccionada, forrado en cuero marrón suela y virola cincelada.",
+    "specs": [
+      "Formato Torpedo ergonómico",
+      "Cuero vacuno color suela",
+      "Virola de alpaca cincelada"
+    ],
+    "featured": true,
     "inStock": true,
-    "cost": 17700,
-    "wholesalePrice": 25000,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 41,
-    "stock": 14
+    "cost": 20240,
+    "wholesalePrice": 25760,
+    "sku": "MR-MAT-003",
+    "stock": 19
   },
   {
     "id": "mate-4",
-    "name": "Mate Imperial Deluxe Base Esculpida Alpaca 100%",
+    "name": "Mate Imperial Algarrobo Torneado & Alpaca",
     "category": "mates",
-    "categoryName": "MATES",
-    "price": 52000,
-    "originalPrice": 58000,
-    "badge": "EDICIÓN LIMITADA",
-    "badgeType": "promo",
-    "rating": 5,
-    "reviewsCount": 33,
-    "image": "assets/images/prod_mate_imperial.jpg",
-    "description": "Una pieza de colección. Cincelado completo en virola y base pie realzado. Cada pieza es irrepetible por tratarse de un fruto natural seleccionado entre cientos.",
-    "specs": {
-      "material": "Calabaza premium seleccionada",
-      "virolaYBase": "Alpaca maciza cincelada en relieve",
-      "cuero": "Cuero vacuno labrado con tratamiento antihumedad",
-      "incluye": "Certificado de autenticidad artesanal"
-    },
+    "subcategory": "Algarrobo",
+    "categoryName": "Mates",
+    "price": 38500,
+    "originalPrice": null,
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/cat_mates.jpg",
+    "description": "Madera de algarrobo estacionada y lustrada con cera natural de abejas. No requiere curado complejo ni genera hongos.",
+    "specs": [
+      "Madera maciza de algarrobo",
+      "Virola de alpaca cincelada",
+      "Listo para usar"
+    ],
+    "featured": false,
     "inStock": true,
-    "cost": 25000,
-    "wholesalePrice": 35400,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 42,
-    "stock": 17
+    "cost": 21175,
+    "wholesalePrice": 26950,
+    "sku": "MR-MAT-004",
+    "stock": 15
   },
   {
-    "id": "termo-1",
-    "name": "Termo Media Manija Cuero Acero Inoxidable 1L",
-    "category": "termos",
-    "categoryName": "TERMOS",
-    "price": 42900,
+    "id": "mate-5",
+    "name": "Mate Imperial Deluxe Bronce & Alpaca",
+    "category": "mates",
+    "subcategory": "Imperial",
+    "categoryName": "Mates",
+    "price": 51900,
     "originalPrice": null,
-    "badge": "MÁS VENDIDO",
-    "badgeType": "bestseller",
-    "rating": 4.9,
-    "reviewsCount": 67,
-    "image": "assets/images/cat_termos.jpg",
-    "description": "El termo preferido para cebar cómodamente con una sola mano. Fabricado en acero inoxidable 18/8 de doble pared con cámara de vacío. Manija ergonómica revestida en cuero vacuno artesanal y tapón vertedor de precisión a rosca.",
-    "specs": {
-      "capacidad": "1000 ml (1 Litro)",
-      "aislacion": "Doble pared con vacío térmico (24hs frío / 24hs calor)",
-      "manija": "Acero con funda de cuero vacuno cosido a mano",
-      "tapon": "Pico matero vertedor de flujo continuo libre de goteo",
-      "material": "Acero inoxidable grado alimenticio 18/8 libre de BPA"
-    },
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/banner_1.jpg",
+    "description": "Pieza de orfebrería criolla con apliques en bronce macizo sobre faja de alpaca labrada y cuero vacuno graneado negro.",
+    "specs": [
+      "Virola y fleje de alpaca con apliques en bronce",
+      "Calabaza extra gruesa seleccionada",
+      "Incluye caja de presentación"
+    ],
+    "featured": true,
     "inStock": true,
-    "cost": 20600,
-    "wholesalePrice": 29200,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 42,
-    "stock": 20
+    "cost": 28545,
+    "wholesalePrice": 36330,
+    "sku": "MR-MAT-005",
+    "stock": 10
+  },
+
+  // ==========================================================================
+  // 3. TERMOS
+  // ==========================================================================
+  {
+    "id": "termo-1",
+    "name": "Termo Media Manija Acero Inox 1 Litro",
+    "category": "termos",
+    "subcategory": "Media Manija",
+    "categoryName": "Termos",
+    "price": 46900,
+    "originalPrice": null,
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/prod_termo_acero.jpg",
+    "description": "Termo clásico uruguayo con media manija rebatible y pico cebador de precisión. Doble capa de acero inoxidable con aislamiento al vacío.",
+    "specs": [
+      "Capacidad 1 Litro • Acero Inoxidable 304",
+      "Conservación térmica 24 hs",
+      "Pico cebador a rosca incluido"
+    ],
+    "featured": true,
+    "inStock": true,
+    "cost": 25795,
+    "wholesalePrice": 32830,
+    "sku": "MR-TER-001",
+    "stock": 28
   },
   {
     "id": "termo-2",
-    "name": "Termo Adventure Acero 1.3L Verde Bosque",
+    "name": "Termo Térmico Negro Mate 1.2 Litros",
     "category": "termos",
-    "categoryName": "TERMOS",
-    "price": 64000,
-    "originalPrice": 72000,
-    "badge": "GRAN CAPACIDAD",
-    "badgeType": "promo",
-    "rating": 5,
-    "reviewsCount": 45,
-    "image": "assets/images/banner_3.jpg",
-    "description": "Capacidad de 1.3 litros pensado para viajes largos, campings o mateadas de todo el día. Resistente a golpes y caídas gracias a su cuerpo de acero reforzado con acabado en pintura en polvo texturada verde.",
-    "specs": {
-      "capacidad": "1300 ml (1.3 Litros)",
-      "resistencia": "Cuerpo de acero de alto impacto",
-      "mantenimiento": "Conserva agua caliente por más de 28 horas",
-      "tapa": "Tapa térmica que funciona como taza / vaso auxiliar"
-    },
+    "subcategory": "1.2 Litros",
+    "categoryName": "Termos",
+    "price": 54500,
+    "originalPrice": null,
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/cat_termos.jpg",
+    "description": "Termo de alta resistencia con recubrimiento Powder Coated negro mate antideslizante, manija rígida lateral y tapón cebador.",
+    "specs": [
+      "Capacidad 1.2 Litros",
+      "Acabado Negro Mate antideslizante",
+      "Tapa aislante utilizable como vaso"
+    ],
+    "featured": true,
     "inStock": true,
-    "cost": 30700,
-    "wholesalePrice": 43500,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 42,
-    "stock": 23
+    "cost": 29975,
+    "wholesalePrice": 38150,
+    "sku": "MR-TER-002",
+    "stock": 20
   },
   {
     "id": "termo-3",
-    "name": "Termo Bala Mate Black 1L con Pico Matero Precision",
+    "name": "Termo Bala Acero Pulido 1 Litro",
     "category": "termos",
-    "categoryName": "TERMOS",
-    "price": 38500,
+    "subcategory": "1 Litro",
+    "categoryName": "Termos",
+    "price": 38900,
     "originalPrice": null,
-    "badge": "NUEVO INGRESO",
-    "badgeType": "new",
-    "rating": 4.8,
-    "reviewsCount": 31,
-    "image": "assets/images/banner_1.jpg",
-    "description": "Diseño elegante y sobrio en acabado negro mate antideslizante. Silueta compacta que entra perfecto en cualquier matera o mochila. Tapón cebador que no salpica.",
-    "specs": {
-      "capacidad": "1000 ml",
-      "acabado": "Pintura texturada Matte Black de alta adherencia",
-      "tapon": "Pico vertedor 360 cebador exacto",
-      "garantia": "Garantía de hermeticidad total"
-    },
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/banner_3.jpg",
+    "description": "Diseño liviano y compacto que entra en cualquier matera o mochila. Aislamiento térmico de doble pared y pico vertedor.",
+    "specs": [
+      "Capacidad 1 Litro compacto",
+      "Acero inoxidable bicapa",
+      "Tapón vertedor matero"
+    ],
+    "featured": false,
     "inStock": true,
-    "cost": 18500,
-    "wholesalePrice": 26200,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 42,
-    "stock": 26
+    "cost": 21395,
+    "wholesalePrice": 27230,
+    "sku": "MR-TER-003",
+    "stock": 22
   },
+
+  // ==========================================================================
+  // 4. ACCESORIOS (BOMBILLAS, CAJA DE PRESENTACIÓN, YERBERAS)
+  // ==========================================================================
   {
     "id": "acc-1",
     "name": "Bombilla Pico de Loro Alpaca Maciza Cincelada",
     "category": "accesorios",
-    "categoryName": "ACCESORIOS",
-    "price": 16900,
-    "originalPrice": 19500,
-    "badge": "FAVORITO",
-    "badgeType": "featured",
-    "rating": 5,
-    "reviewsCount": 92,
-    "image": "assets/images/cat_accesorios.jpg",
-    "description": "Bombilla artesanal curva modelo Pico de Loro, labrada a mano en alpaca maciza. Su ángulo ergonómico permite tomar mate con máxima comodidad y su filtro tipo cuchara no se tapa jamás.",
-    "specs": {
-      "material": "Alpaca maciza de primera calidad",
-      "largo": "19 cm",
-      "boquilla": "Pico ancho pulido suave al tacto",
-      "filtro": "Filtro cuchara microperforado de alta densidad",
-      "limpieza": "Incluye cepillo limpiador de regalo"
-    },
+    "subcategory": "Bombillas",
+    "categoryName": "Accesorios",
+    "price": 18900,
+    "originalPrice": null,
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/prod_bombilla_alpaca.jpg",
+    "description": "Bombilla artesanal de alpaca maciza con curvatura Pico de Loro, caño grueso cincelado y filtro tipo cuchara.",
+    "specs": [
+      "Alpaca maciza 100% artesanal",
+      "Filtro cuchara de alto caudal",
+      "Largo 19 cm"
+    ],
+    "featured": true,
     "inStock": true,
-    "cost": 8100,
-    "wholesalePrice": 11500,
-    "retailMarginPercent": 109,
-    "wholesaleMarginPercent": 42,
-    "stock": 29
+    "cost": 10395,
+    "wholesalePrice": 13230,
+    "sku": "MR-ACC-001",
+    "stock": 40
   },
   {
     "id": "acc-2",
-    "name": "Bombillón Cuchara Cincelado Flor de Liz en Alpaca",
+    "name": "Caja de Presentación Personalizable",
     "category": "accesorios",
-    "categoryName": "ACCESORIOS",
-    "price": 18500,
+    "subcategory": "Cajas de Presentación",
+    "categoryName": "Accesorios",
+    "price": 24900,
     "originalPrice": null,
-    "badge": "ORFEBRERÍA",
-    "badgeType": "new",
-    "rating": 4.9,
-    "reviewsCount": 37,
+    "badge": "",
+    "badgeType": "",
     "image": "assets/images/cat_accesorios.jpg",
-    "description": "Trabajo fino de orfebrería tradicional con detalle en flor de liz y anillo central repujado. Ideal para mates camioneros e imperiales de boca amplia.",
-    "specs": {
-      "material": "Alpaca orfebre pulida brillo espejo",
-      "largo": "21 cm",
-      "filtro": "Cuchara amplia con doble ranurado"
-    },
+    "description": "Caja de presentación rectangular con interior acolchado y tapa frontal apta para grabado láser en blanco invertido.",
+    "specs": [
+      "Formato rectangular rígido",
+      "Grabado láser frontal en blanco",
+      "Interior para mate, termo o bombilla"
+    ],
+    "featured": true,
     "inStock": true,
-    "cost": 8900,
-    "wholesalePrice": 12600,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 42,
-    "stock": 13
-  },
-  {
-    "id": "acc-3",
-    "name": "Despolvillador de Yerba Mate Acrílico Premium",
-    "category": "accesorios",
-    "categoryName": "ACCESORIOS",
-    "price": 9200,
-    "originalPrice": 11000,
-    "badge": "INNOVADOR",
-    "badgeType": "promo",
-    "rating": 4.7,
-    "reviewsCount": 54,
-    "image": "assets/images/banner_2.jpg",
-    "description": "Disminuye la acidez y evita que el mate se lave rápido. Separa el polvo excesivo de la yerba en segundos mediante un suave movimiento, dejando las hojas y palos ideales para un cebado perfecto.",
-    "specs": {
-      "material": "Acrílico cristal de alto impacto con filtro interno de acero inoxidable",
-      "capacidad": "Hasta 250g de yerba",
-      "facilidad": "Lavable en segundos, sistema a rosca hermético"
-    },
-    "inStock": true,
-    "cost": 4400,
-    "wholesalePrice": 6300,
-    "retailMarginPercent": 109,
-    "wholesaleMarginPercent": 43,
-    "stock": 16
-  },
-  {
-    "id": "acc-4",
-    "name": "Set Yerbera y Azucarera de Cuero con Pico Vertedor",
-    "category": "accesorios",
-    "categoryName": "ACCESORIOS",
-    "price": 19800,
-    "originalPrice": null,
-    "badge": "ARTESANAL",
-    "badgeType": "new",
-    "rating": 4.9,
-    "reviewsCount": 28,
-    "image": "assets/images/banner_2.jpg",
-    "description": "Dúo contenedor forrado en cuero vacuno pespunteado. Picos vertedores de plástico reforzado anti derrame con tapa a presión para cebar sin ensuciar.",
-    "specs": {
-      "material": "Lata interna de hojalata sanitaria forrada en cuero vacuno",
-      "capacidad": "Yerbera 350g / Azucarera 250g",
-      "tapa": "Pico dosificador retráctil"
-    },
-    "inStock": true,
-    "cost": 9500,
-    "wholesalePrice": 13500,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 42,
-    "stock": 19
-  },
-  {
-    "id": "yerba-1",
-    "name": "Yerba Mate Artesanal Barbaquá Seleccionada 500g",
-    "category": "yerbas",
-    "categoryName": "YERBAS",
-    "price": 5200,
-    "originalPrice": null,
-    "badge": "SECADO A LEÑA",
-    "badgeType": "featured",
-    "rating": 5,
-    "reviewsCount": 63,
-    "image": "assets/images/cat_yerbas.jpg",
-    "description": "Elaborada con el ancestral método barbaquá: secado lento a leña durante 24 horas y estacionamiento natural prolongado de 24 meses. Notas ahumadas equilibradas, cuerpo robusto y cero acidez.",
-    "specs": {
-      "estacionamiento": "24 meses natural",
-      "tipoSecado": "Barbaquá con maderas nobles",
-      "origen": "Misiones, Argentina",
-      "peso": "500 gramos",
-      "molienda": "Tradicional con palo equilibrado"
-    },
-    "inStock": true,
-    "cost": 2500,
-    "wholesalePrice": 3500,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 40,
-    "stock": 22
-  },
-  {
-    "id": "yerba-2",
-    "name": "Yerba Mate Orgánica Certificada 100% Natural 500g",
-    "category": "yerbas",
-    "categoryName": "YERBAS",
-    "price": 5800,
-    "originalPrice": null,
-    "badge": "ORGÁNICA",
-    "badgeType": "new",
-    "rating": 4.9,
-    "reviewsCount": 42,
-    "image": "assets/images/cat_yerbas.jpg",
-    "description": "Cultivada sin agroquímicos ni pesticidas en campos protegidos. Cosecha manual de hojas maduras y estacionamiento natural. Sabor suave, herbáceo y duradero.",
-    "specs": {
-      "certificacion": "Orgánica Argentina y USDA Organic",
-      "estacionamiento": "18 meses en cámaras de madera",
-      "origen": "Oberá, Misiones",
-      "peso": "500 gramos"
-    },
-    "inStock": true,
-    "cost": 2800,
-    "wholesalePrice": 3900,
-    "retailMarginPercent": 107,
-    "wholesaleMarginPercent": 39,
+    "cost": 13695,
+    "wholesalePrice": 17430,
+    "sku": "MR-ACC-002",
     "stock": 25
   },
   {
-    "id": "yerba-3",
-    "name": "Blend Serrano Especial: Menta, Poleo & Peperina 500g",
-    "category": "yerbas",
-    "categoryName": "YERBAS",
-    "price": 4900,
-    "originalPrice": 5600,
-    "badge": "15% OFF",
-    "badgeType": "promo",
-    "rating": 4.8,
-    "reviewsCount": 39,
-    "image": "assets/images/cat_yerbas.jpg",
-    "description": "La combinación perfecta entre la mejor yerba mate estacionada y hierbas aromáticas serranas cosechadas a mano. Refrescante, digestiva y con aroma inconfundible.",
-    "specs": {
-      "ingredientes": "Yerba mate con palo, poleo silvestre, menta piperita y peperina cordobesa",
-      "beneficios": "Digestiva y refrescante",
-      "peso": "500 gramos"
-    },
+    "id": "acc-3",
+    "name": "Set Yerbera y Azucarera en Cuero",
+    "category": "accesorios",
+    "subcategory": "Yerberas",
+    "categoryName": "Accesorios",
+    "price": 24500,
+    "originalPrice": null,
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/cat_accesorios.jpg",
+    "description": "Dúo de envases rígidos forrados en cuero vacuno con pico vertedor plástico rebatible.",
+    "specs": [
+      "Capacidad 350g yerba / 250g azúcar",
+      "Forrado en cuero vacuno",
+      "Pico dosificador antivuelco"
+    ],
+    "featured": false,
     "inStock": true,
-    "cost": 2400,
-    "wholesalePrice": 3300,
-    "retailMarginPercent": 104,
-    "wholesaleMarginPercent": 38,
-    "stock": 28
+    "cost": 13475,
+    "wholesalePrice": 17150,
+    "sku": "MR-ACC-003",
+    "stock": 18
+  },
+
+  // ==========================================================================
+  // 5. YERBAS
+  // ==========================================================================
+  {
+    "id": "yerba-1",
+    "name": "Yerba Mate Despalada Tipo Uruguaya 500g",
+    "category": "yerbas",
+    "subcategory": "Uruguaya",
+    "categoryName": "Yerbas",
+    "price": 8900,
+    "originalPrice": null,
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/prod_yerba_organica.jpg",
+    "description": "Molienda fina tipo uruguaya (PU1) con estacionamiento natural de 24 meses. Cebadas rendidoras y espumosas.",
+    "specs": [
+      "Peso neto 500 gramos",
+      "Estacionamiento natural 24 meses",
+      "Molienda fina despalada"
+    ],
+    "featured": true,
+    "inStock": true,
+    "cost": 4895,
+    "wholesalePrice": 6230,
+    "sku": "MR-YER-001",
+    "stock": 50
   },
   {
-    "id": "equipo-1",
-    "name": "Mochila Matera Cuero Genuino Suela con Separadores",
-    "category": "equipos",
-    "categoryName": "EQUIPOS DE MATE",
-    "price": 89900,
-    "originalPrice": 105000,
-    "badge": "PREMIUM",
-    "badgeType": "bestseller",
-    "rating": 5,
-    "reviewsCount": 47,
-    "image": "assets/images/cat_equipos.jpg",
-    "description": "La cúspide del diseño matero. Confeccionada 100% en cuero vacuno flor con herrajes de bronce pulido y cierres metálicos YKK. Interior impermeable acolchado con separadores regulables para termo Stanley de hasta 1.9L, mate imperial, yerbera y accesorios.",
-    "specs": {
-      "material": "100% Cuero Vacuno Genuino Curtido Vegetal",
-      "medidas": "38cm alto x 26cm ancho x 16cm profundidad",
-      "interior": "Forro acolchado impermeable con sujetadores elásticos",
-      "correas": "Correas acolchadas reforzadas regulables",
-      "bolsillos": "Bolsillo frontal para llaves, celular y bombillas"
-    },
+    "id": "yerba-2",
+    "name": "Yerba Mate Orgánica Misionera Barbacuá 500g",
+    "category": "yerbas",
+    "subcategory": "Orgánica",
+    "categoryName": "Yerbas",
+    "price": 9500,
+    "originalPrice": null,
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/cat_yerbas.jpg",
+    "description": "Secanza tradicional lenta tipo Barbacuá con notas tostadas y ahumadas suaves.",
+    "specs": [
+      "Peso neto 500 gramos",
+      "Certificación Orgánica Argentina",
+      "Secado artesanal Barbacuá"
+    ],
+    "featured": false,
     "inStock": true,
-    "cost": 43200,
-    "wholesalePrice": 61100,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 41,
-    "stock": 12
+    "cost": 5225,
+    "wholesalePrice": 6650,
+    "sku": "MR-YER-002",
+    "stock": 35
+  },
+
+  // ==========================================================================
+  // 6. EQUIPOS DE MATE (CANASTAS Y MOCHILAS)
+  // ==========================================================================
+  {
+    "id": "equipo-1",
+    "name": "Canasta Matera Rígida Cuero Vacuno Legítimo",
+    "category": "equipos",
+    "subcategory": "Canastas",
+    "categoryName": "Equipos de Mate",
+    "price": 36900,
+    "originalPrice": null,
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/prod_canasta_cuero.jpg",
+    "description": "Canasta matera artesanal confeccionada en cuero vacuno grueso con separador interno para cuatro piezas.",
+    "specs": [
+      "100% Cuero vacuno legítimo",
+      "Divisor interno para 4 elementos",
+      "Base rígida reforzada"
+    ],
+    "featured": true,
+    "inStock": true,
+    "cost": 20295,
+    "wholesalePrice": 25830,
+    "sku": "MR-EQU-001",
+    "stock": 16
   },
   {
     "id": "equipo-2",
-    "name": "Canasta Matera Rústica de Cuero y Madera Maciza",
+    "name": "Bolso Mochila Matero Impermeable Urbano",
     "category": "equipos",
-    "categoryName": "EQUIPOS DE MATE",
-    "price": 44500,
+    "subcategory": "Mochilas",
+    "categoryName": "Equipos de Mate",
+    "price": 45900,
     "originalPrice": null,
-    "badge": "ARTESANAL",
-    "badgeType": "featured",
-    "rating": 4.9,
-    "reviewsCount": 35,
-    "image": "assets/images/prod_canasta_matera.jpg",
-    "description": "Canasta clásica criolla confeccionada en cuero de suela grueso de 3mm con remaches cobrizos y manija de madera noble torneada. Firmeza absoluta para que tu termo y mate viajen erguidos y sin riesgo de volcarse.",
-    "specs": {
-      "material": "Cuero de suela curtido artesanal",
-      "manija": "Madera de nogal torneada a mano",
-      "capacidad": "Entra termo de 1L a 1.9L + mate + yerbera",
-      "origen": "Fabricación 100% artesanal en Buenos Aires"
-    },
+    "badge": "",
+    "badgeType": "",
+    "image": "assets/images/cat_equipos.jpg",
+    "description": "Mochila matera con interior térmico impermeable, sujetadores elásticos para termo de hasta 1.3L y bolsillo para notebook.",
+    "specs": [
+      "Tela Cordura impermeable + detalles en cuero",
+      "Compartimento térmico para equipo completo",
+      "Bolsillo acolchado para notebook"
+    ],
+    "featured": false,
     "inStock": true,
-    "cost": 21400,
-    "wholesalePrice": 30300,
-    "retailMarginPercent": 108,
-    "wholesaleMarginPercent": 42,
-    "stock": 15
-  },
-  {
-    "id": "equipo-3",
-    "name": "Bolso Matero Térmico Impermeable Cordura Black",
-    "category": "equipos",
-    "categoryName": "EQUIPOS DE MATE",
-    "price": 37800,
-    "originalPrice": 42000,
-    "badge": "RESISTENTE",
-    "badgeType": "promo",
-    "rating": 4.8,
-    "reviewsCount": 29,
-    "image": "assets/images/banner_2.jpg",
-    "description": "Para quienes buscan practicidad y ligereza. Tela Cordura ripstop antidesgarro e impermeable con aislación térmica de espuma de polietileno. Mantiene la temperatura y protege tus piezas de golpes.",
-    "specs": {
-      "material": "Cordura 600D impermeable de alta densidad",
-      "correa": "Bandolera desmontable y regulable con hombrera acolchada",
-      "compartimentos": "Sujetador interno para termo y mate",
-      "lavable": "Apto lavado a mano"
-    },
-    "inStock": true,
-    "cost": 18100,
-    "wholesalePrice": 25700,
-    "retailMarginPercent": 109,
-    "wholesaleMarginPercent": 42,
-    "stock": 18
+    "cost": 25245,
+    "wholesalePrice": 32130,
+    "sku": "MR-EQU-002",
+    "stock": 14
   }
 ];
 
-(function initCustomProducts() {
+// ==========================================================================
+// CATEGORÍAS DE LA TIENDA Y PERSISTENCIA
+// ==========================================================================
+const CATEGORIES_DATA = [
+  {
+    id: 'promos',
+    name: 'Promos',
+    subtitle: 'Combos y sets con descuento',
+    badge: 'OFF',
+    image: 'assets/images/cat_promos.jpg',
+    subcategories: ['Set Imperial', 'Set Camionero', 'Pack Regalo']
+  },
+  {
+    id: 'mates',
+    name: 'Mates',
+    subtitle: 'Imperiales, camioneros y torpedos',
+    badge: '',
+    image: 'assets/images/cat_mates.jpg',
+    subcategories: ['Imperial', 'Camionero', 'Torpedo', 'Algarrobo']
+  },
+  {
+    id: 'termos',
+    name: 'Termos',
+    subtitle: 'Acero inoxidable y media manija',
+    badge: '',
+    image: 'assets/images/cat_termos.jpg',
+    subcategories: ['Media Manija', '1.2 Litros', '1 Litro']
+  },
+  {
+    id: 'accesorios',
+    name: 'Accesorios',
+    subtitle: 'Bombillas, cajas de presentación y yerberas',
+    badge: '',
+    image: 'assets/images/cat_accesorios.jpg',
+    subcategories: ['Bombillas', 'Cajas de Presentación', 'Yerberas']
+  },
+  {
+    id: 'yerbas',
+    name: 'Yerbas',
+    subtitle: 'Uruguaya despalada y orgánica',
+    badge: '',
+    image: 'assets/images/cat_yerbas.jpg',
+    subcategories: ['Uruguaya', 'Orgánica', 'Compuesta']
+  },
+  {
+    id: 'equipos',
+    name: 'Equipos de Mate',
+    subtitle: 'Canastas de cuero y mochilas materas',
+    badge: '',
+    image: 'assets/images/cat_equipos.jpg',
+    subcategories: ['Canastas', 'Mochilas']
+  }
+];
+
+function getActiveCategories() {
+  if (typeof localStorage === 'undefined') return CATEGORIES_DATA;
+  try {
+    const raw = localStorage.getItem('mates_rio_categories');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn('Error leyendo mates_rio_categories:', e);
+  }
+  return JSON.parse(JSON.stringify(CATEGORIES_DATA));
+}
+
+function saveActiveCategories(categories) {
+  if (typeof localStorage === 'undefined') return false;
+  try {
+    localStorage.setItem('mates_rio_categories', JSON.stringify(categories || []));
+    return true;
+  } catch (e) {
+    console.error('Error guardando mates_rio_categories:', e);
+    return false;
+  }
+}
+
+// ==========================================================================
+// BANNERS DEL CARRUSEL PRINCIPAL (HOME SLIDES) Y PERSISTENCIA
+// ==========================================================================
+const HOME_SLIDES_DATA = [
+  {
+    id: 'slide-1',
+    tag: 'Tradición & Diseño Argentino',
+    icon: 'fa-crown',
+    title: 'Mates Imperiales y Artesanales de Selección',
+    subtitle: 'Calabazas gruesas seleccionadas, cuero vacuno genuino con costura uruguaya y virolas de alpaca maciza.',
+    description: 'Calabazas gruesas seleccionadas, cuero vacuno genuino con costura uruguaya y virolas de alpaca maciza.',
+    image: 'assets/images/banner_1.jpg',
+    btnText: 'Explorar Mates',
+    btnLink: 'catalogo.html?categoria=mates',
+    btnPrimaryText: 'Explorar Mates',
+    btnPrimaryLink: 'catalogo.html?categoria=mates',
+    btnSecondaryText: 'Personalizar Ahora',
+    btnSecondaryLink: 'personaliza-tu-mate.html'
+  },
+  {
+    id: 'slide-2',
+    tag: 'Combos con hasta 25% OFF',
+    icon: 'fa-percent',
+    title: 'Equipate Completo para tus Rondas de Mate',
+    subtitle: 'Sets materos completos con termo de acero inoxidable 1L, mate imperial o camionero, bombilla de alpaca y matera de cuero.',
+    description: 'Sets materos completos con termo de acero inoxidable 1L, mate imperial o camionero, bombilla de alpaca y matera de cuero.',
+    image: 'assets/images/banner_2.jpg',
+    btnText: 'Aprovechar Ofertas',
+    btnLink: 'promos.html',
+    btnPrimaryText: 'Aprovechar Ofertas',
+    btnPrimaryLink: 'promos.html',
+    btnSecondaryText: 'Consultar por WhatsApp',
+    btnSecondaryLink: 'https://wa.me/5493513830111'
+  },
+  {
+    id: 'slide-3',
+    tag: 'Compañeros de Ruta',
+    icon: 'fa-mountain',
+    title: 'Termos Térmicos de Acero Inoxidable',
+    subtitle: 'Termos con pico vertedor de precisión y aislamiento al vacío que mantiene la temperatura por 24 horas.',
+    description: 'Termos con pico vertedor de precisión y aislamiento al vacío que mantiene la temperatura por 24 horas.',
+    image: 'assets/images/banner_3.jpg',
+    btnText: 'Ver Termos',
+    btnLink: 'catalogo.html?categoria=termos',
+    btnPrimaryText: 'Ver Termos',
+    btnPrimaryLink: 'catalogo.html?categoria=termos',
+    btnSecondaryText: 'Catálogo Completo',
+    btnSecondaryLink: 'catalogo.html'
+  }
+];
+
+function getActiveHomeSlides() {
+  if (typeof localStorage === 'undefined') return HOME_SLIDES_DATA;
+  try {
+    const raw = localStorage.getItem('mates_rio_home_slides');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map(s => Object.assign({}, s, {
+          subtitle: s.subtitle || s.description || '',
+          description: s.description || s.subtitle || '',
+          btnText: s.btnText || s.btnPrimaryText || 'Ver Catálogo',
+          btnLink: s.btnLink || s.btnPrimaryLink || 'catalogo.html',
+          btnPrimaryText: s.btnPrimaryText || s.btnText || 'Ver Catálogo',
+          btnPrimaryLink: s.btnPrimaryLink || s.btnLink || 'catalogo.html'
+        }));
+      }
+    }
+  } catch (e) {
+    console.warn('Error leyendo mates_rio_home_slides:', e);
+  }
+  return JSON.parse(JSON.stringify(HOME_SLIDES_DATA));
+}
+
+function saveActiveHomeSlides(slides) {
+  if (typeof localStorage === 'undefined') return false;
+  try {
+    const normalized = (slides || []).map(s => Object.assign({}, s, {
+      subtitle: s.subtitle || s.description || '',
+      description: s.description || s.subtitle || '',
+      btnText: s.btnText || s.btnPrimaryText || 'Ver Catálogo',
+      btnLink: s.btnLink || s.btnPrimaryLink || 'catalogo.html',
+      btnPrimaryText: s.btnPrimaryText || s.btnText || 'Ver Catálogo',
+      btnPrimaryLink: s.btnPrimaryLink || s.btnLink || 'catalogo.html'
+    }));
+    localStorage.setItem('mates_rio_home_slides', JSON.stringify(normalized));
+    return true;
+  } catch (e) {
+    console.error('Error guardando mates_rio_home_slides:', e);
+    return false;
+  }
+}
+
+// ==========================================================================
+// CONFIGURACIÓN DE BANNER DE FECHAS ESPECIALES / EVENTOS
+// ==========================================================================
+const DEFAULT_SPECIAL_OCCASION = {
+  active: false,
+  enabled: false,
+  presetId: 'custom',
+  position: 'top-bar',
+  emoji: '🧉',
+  badge: 'PROMO ESPECIAL',
+  title: 'Envío Gratis y Grabado Bonificado en Mates Imperiales',
+  subtitle: 'Aprovechá 3 cuotas sin interés y 10% OFF extra por transferencia',
+  btnText: 'Ver Promos',
+  btnLink: 'promos.html',
+  ctaText: 'Ver Promos',
+  ctaLink: 'promos.html',
+  couponCode: '',
+  theme: 'patria'
+};
+
+function getSpecialOccasionConfig() {
+  if (typeof localStorage === 'undefined') return DEFAULT_SPECIAL_OCCASION;
+  try {
+    const raw = localStorage.getItem('mates_rio_special_occasion');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        const merged = Object.assign({}, DEFAULT_SPECIAL_OCCASION, parsed);
+        merged.active = !!(merged.active || merged.enabled);
+        merged.enabled = merged.active;
+        merged.btnText = merged.btnText || merged.ctaText || 'Ver Promos';
+        merged.btnLink = merged.btnLink || merged.ctaLink || 'promos.html';
+        merged.ctaText = merged.btnText;
+        merged.ctaLink = merged.btnLink;
+        return merged;
+      }
+    }
+  } catch (e) {
+    console.warn('Error leyendo mates_rio_special_occasion:', e);
+  }
+  return Object.assign({}, DEFAULT_SPECIAL_OCCASION);
+}
+
+function saveSpecialOccasionConfig(config) {
+  if (typeof localStorage === 'undefined') return false;
+  try {
+    const merged = Object.assign({}, DEFAULT_SPECIAL_OCCASION, config || {});
+    merged.active = !!(config && (config.active !== undefined ? config.active : config.enabled));
+    merged.enabled = merged.active;
+    merged.btnText = merged.btnText || merged.ctaText || 'Ver Promos';
+    merged.btnLink = merged.btnLink || merged.ctaLink || 'promos.html';
+    merged.ctaText = merged.btnText;
+    merged.ctaLink = merged.btnLink;
+    localStorage.setItem('mates_rio_special_occasion', JSON.stringify(merged));
+    return true;
+  } catch (e) {
+    console.error('Error guardando mates_rio_special_occasion:', e);
+    return false;
+  }
+}
+
+// ==========================================================================
+// COMPRAS A PROVEEDORES (PANEL DE ADMINISTRACIÓN)
+// ==========================================================================
+const DEFAULT_SUPPLIER_PURCHASES = [
+  {
+    id: 'COMP-101',
+    date: '2026-11-01',
+    supplier: 'Orfebrería Criolla del Sur',
+    category: 'Mates / Insumos',
+    productId: 'mate-1',
+    item: 'Mate Imperial Virola Cincelada Alpaca',
+    items: '20x Mate Imperial Virola Cincelada Alpaca',
+    quantity: 20,
+    unitCost: 24475,
+    totalCost: 489500,
+    paymentMethod: 'Transferencia Bancaria',
+    status: 'Recibido',
+    notes: 'Remito #00124 - Lote seleccionado',
+    stockAdded: true
+  },
+  {
+    id: 'COMP-102',
+    date: '2026-11-02',
+    supplier: 'Importadora Térmica CBA',
+    category: 'Termos',
+    productId: 'termo-1',
+    item: 'Termo Media Manija Acero Inox 1 Litro',
+    items: '15x Termo Media Manija Acero Inox 1 Litro',
+    quantity: 15,
+    unitCost: 25795,
+    totalCost: 386925,
+    paymentMethod: 'Transferencia Bancaria',
+    status: 'Recibido',
+    notes: 'Factura A #00419',
+    stockAdded: true
+  }
+];
+
+function getSupplierPurchases() {
+  if (typeof localStorage === 'undefined') return DEFAULT_SUPPLIER_PURCHASES;
+  try {
+    const raw = localStorage.getItem('mates_rio_supplier_purchases');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn('Error leyendo mates_rio_supplier_purchases:', e);
+  }
+  return JSON.parse(JSON.stringify(DEFAULT_SUPPLIER_PURCHASES));
+}
+
+function saveSupplierPurchases(purchases) {
+  if (typeof localStorage === 'undefined') return false;
+  try {
+    localStorage.setItem('mates_rio_supplier_purchases', JSON.stringify(purchases || []));
+    return true;
+  } catch (e) {
+    console.error('Error guardando mates_rio_supplier_purchases:', e);
+    return false;
+  }
+}
+
+// ==========================================================================
+// CONFIGURACIÓN DINÁMICA DE PRECIOS DE PERSONALIZACIÓN Y GRABADO POR VOLUMEN
+// ==========================================================================
+const DEFAULT_CUSTOMIZATION_PRICING = {
+  matePrice: 44500,
+  termoPrice: 46900,
+  cajaPrice: 24900,
+  retailEngravingFee: 0, // Bonificado en minorista
+  volumeTiers: [
+    { minQty: 1, maxQty: 9, engravingCostPerUnit: 0, discountPercent: 0, label: 'Minorista (Grabado Bonificado)' },
+    { minQty: 10, maxQty: 24, engravingCostPerUnit: 2500, discountPercent: 25, label: 'Mayorista Inicial (10 a 24 u.)' },
+    { minQty: 25, maxQty: 49, engravingCostPerUnit: 1800, discountPercent: 30, label: 'Mayorista Intermedio (25 a 49 u.)' },
+    { minQty: 50, maxQty: 9999, engravingCostPerUnit: 1200, discountPercent: 35, label: 'Mayorista Corporativo (+50 u.)' }
+  ]
+};
+
+function getCustomizationPricingConfig() {
+  if (typeof localStorage === 'undefined') return DEFAULT_CUSTOMIZATION_PRICING;
+  try {
+    const raw = localStorage.getItem('mates_rio_customization_pricing');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        return Object.assign({}, DEFAULT_CUSTOMIZATION_PRICING, parsed);
+      }
+    }
+  } catch (e) {
+    console.warn('Error leyendo mates_rio_customization_pricing:', e);
+  }
+  return JSON.parse(JSON.stringify(DEFAULT_CUSTOMIZATION_PRICING));
+}
+
+function saveCustomizationPricingConfig(config) {
+  if (typeof localStorage === 'undefined') return false;
+  try {
+    const merged = Object.assign({}, DEFAULT_CUSTOMIZATION_PRICING, config || {});
+    localStorage.setItem('mates_rio_customization_pricing', JSON.stringify(merged));
+    return true;
+  } catch (e) {
+    console.error('Error guardando mates_rio_customization_pricing:', e);
+    return false;
+  }
+}
+
+// ==========================================================================
+// CUPONES DE DESCUENTO
+// ==========================================================================
+const COUPONS = {
+  'MATESRIO10': { discount: 0.10, description: '10% OFF en tu compra' },
+  'BIENVENIDO': { discount: 0.10, description: '10% OFF de bienvenida' },
+  'CORDOBA15': { discount: 0.15, description: '15% OFF especial Córdoba' }
+};
+
+// ==========================================================================
+// SINCRONIZACIÓN DE PRODUCTOS CON LOCALSTORAGE (ADMIN & TIENDA)
+// ==========================================================================
+function syncProductsFromStorage() {
   if (typeof localStorage === 'undefined') return;
   try {
     // 1. Filtrar productos eliminados por el administrador
@@ -597,18 +857,21 @@ const PRODUCTS_DATA = [
       }
     }
 
-    // 2. Cargar productos personalizados (excluyendo eliminados)
+    // 2. Cargar productos creados desde el panel (excluyendo eliminados)
     const raw = localStorage.getItem('mates_rio_custom_products');
     if (raw) {
       const customList = JSON.parse(raw);
       if (Array.isArray(customList) && customList.length > 0) {
-        const deletedRaw = localStorage.getItem('mates_rio_deleted_products');
         const deletedIds = new Set(deletedRaw ? (JSON.parse(deletedRaw) || []) : []);
-        const existingIds = new Set(PRODUCTS_DATA.map(p => p.id));
+        const existingMap = new Map(PRODUCTS_DATA.map((p, idx) => [p.id, idx]));
         customList.forEach(prod => {
-          if (prod && prod.id && !existingIds.has(prod.id) && !deletedIds.has(prod.id)) {
-            PRODUCTS_DATA.push(prod);
-            existingIds.add(prod.id);
+          if (prod && prod.id && !deletedIds.has(prod.id)) {
+            if (existingMap.has(prod.id)) {
+              Object.assign(PRODUCTS_DATA[existingMap.get(prod.id)], prod);
+            } else {
+              PRODUCTS_DATA.push(prod);
+              existingMap.set(prod.id, PRODUCTS_DATA.length - 1);
+            }
           }
         });
       }
@@ -625,29 +888,40 @@ const PRODUCTS_DATA = [
       });
     }
 
-    // 4. Sincronizar precios y stock actualizados en el panel de inventario
+    // 4. Sincronizar precios, fotos y stock actualizados en el panel de inventario
     const invRaw = localStorage.getItem('mates_rio_inventory');
     if (invRaw) {
       const inv = JSON.parse(invRaw);
       PRODUCTS_DATA.forEach(p => {
         if (inv[p.id]) {
-          if (typeof inv[p.id].name === 'string' && inv[p.id].name) p.name = inv[p.id].name;
-          if (typeof inv[p.id].price === 'number') p.price = inv[p.id].price;
-          if (typeof inv[p.id].cost === 'number') p.cost = inv[p.id].cost;
-          if (typeof inv[p.id].wholesalePrice === 'number') p.wholesalePrice = inv[p.id].wholesalePrice;
-          if (typeof inv[p.id].retailMarginPercent === 'number') p.retailMarginPercent = inv[p.id].retailMarginPercent;
-          if (typeof inv[p.id].wholesaleMarginPercent === 'number') p.wholesaleMarginPercent = inv[p.id].wholesaleMarginPercent;
-          if (typeof inv[p.id].inStock === 'boolean') p.inStock = inv[p.id].inStock;
-          if (typeof inv[p.id].stock === 'number') p.stock = inv[p.id].stock;
-          if (typeof inv[p.id].image === 'string' && inv[p.id].image) p.image = inv[p.id].image;
-          if (typeof inv[p.id].category === 'string') p.category = inv[p.id].category;
-          if (typeof inv[p.id].categoryName === 'string') p.categoryName = inv[p.id].categoryName;
-          if (typeof inv[p.id].subcategory === 'string') p.subcategory = inv[p.id].subcategory;
+          const item = inv[p.id];
+          if (typeof item.name === 'string' && item.name) p.name = item.name;
+          if (typeof item.price === 'number') p.price = item.price;
+          if (typeof item.originalPrice !== 'undefined') p.originalPrice = item.originalPrice;
+          if (typeof item.cost === 'number') p.cost = item.cost;
+          if (typeof item.wholesalePrice === 'number') p.wholesalePrice = item.wholesalePrice;
+          if (typeof item.retailMarginPercent === 'number') p.retailMarginPercent = item.retailMarginPercent;
+          if (typeof item.wholesaleMarginPercent === 'number') p.wholesaleMarginPercent = item.wholesaleMarginPercent;
+          if (typeof item.inStock === 'boolean') p.inStock = item.inStock;
+          if (typeof item.stock === 'number') p.stock = item.stock;
+          if (typeof item.sku === 'string' && item.sku) p.sku = item.sku;
+          if (typeof item.image === 'string' && item.image) p.image = item.image;
+          if (Array.isArray(item.images) && item.images.length > 0) p.images = item.images;
+          if (typeof item.category === 'string' && item.category) p.category = item.category;
+          if (typeof item.categoryName === 'string' && item.categoryName) p.categoryName = item.categoryName;
+          if (typeof item.subcategory === 'string') p.subcategory = item.subcategory;
+          if (typeof item.description === 'string') p.description = item.description;
+          if (Array.isArray(item.specs)) p.specs = item.specs;
+          if (typeof item.badge === 'string') p.badge = item.badge;
+          if (typeof item.badgeType === 'string') p.badgeType = item.badgeType;
+          if (typeof item.featured === 'boolean') p.featured = item.featured;
         }
       });
     }
   } catch (e) {
     console.warn('Error al sincronizar productos de catálogo e inventario:', e);
   }
-})();
+}
 
+syncProductsFromStorage();
+window.syncProductsFromStorage = syncProductsFromStorage;
