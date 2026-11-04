@@ -298,15 +298,15 @@
         
         <!-- Card 1: Mate Imperial -->
         <div class="prod-select-card active" data-product="mate" onclick="switchActiveProduct('mate')">
-          <span class="prod-card-badge">Más Popular</span>
+
           <div class="prod-card-icon-wrap">
             <i class="fas fa-mug-hot"></i>
           </div>
           <div class="prod-card-body">
-            <h3 class="prod-card-title">Mate Imperial</h3>
+            <h3 class="prod-card-title">Mate</h3>
             <p class="prod-card-desc">Corona de alpaca maciza / acero y cuero vacuno. Grabado láser milimétrico, cincelado y vista 360°.</p>
             <div class="prod-card-meta">
-              <span class="prod-card-price">Desde $ 46.500</span>
+              <span class="prod-card-price" id="card-price-mate">$ 46.500</span>
               <span class="prod-card-free">Grabado BONIFICADO</span>
             </div>
           </div>
@@ -315,15 +315,15 @@
 
         <!-- Card 2: Termo de Acero -->
         <div class="prod-select-card" data-product="termo" onclick="switchActiveProduct('termo')">
-          <span class="prod-card-badge">Doble Capa</span>
+
           <div class="prod-card-icon-wrap">
             <i class="fas fa-temperature-high"></i>
           </div>
           <div class="prod-card-body">
-            <h3 class="prod-card-title">Termo de Acero</h3>
+            <h3 class="prod-card-title">Termo</h3>
             <p class="prod-card-desc">Acero inoxidable 18/8 de 1 Litro térmico 24hs. Grabado indeleble de alta definición a lo largo del cuerpo.</p>
             <div class="prod-card-meta">
-              <span class="prod-card-price">Desde $ 42.900</span>
+              <span class="prod-card-price" id="card-price-termo">$ 42.900</span>
               <span class="prod-card-free">Grabado BONIFICADO</span>
             </div>
           </div>
@@ -332,15 +332,15 @@
 
         <!-- Card 3: Caja Matera Premium -->
         <div class="prod-select-card" data-product="caja" onclick="switchActiveProduct('caja')">
-          <span class="prod-card-badge">Ideal Regalo</span>
+
           <div class="prod-card-icon-wrap">
             <i class="fas fa-box-open"></i>
           </div>
           <div class="prod-card-body">
-            <h3 class="prod-card-title">Caja Matera Premium</h3>
+            <h3 class="prod-card-title">Caja de presentación</h3>
             <p class="prod-card-desc">Caja de madera noble para regalo o presentación. Pirograbado y láser de precisión en tapa y laterales.</p>
             <div class="prod-card-meta">
-              <span class="prod-card-price">Desde $ 32.000</span>
+              <span class="prod-card-price" id="card-price-caja">$ 32.000</span>
               <span class="prod-card-free">Grabado BONIFICADO</span>
             </div>
           </div>
@@ -805,7 +805,7 @@
         <!-- Barra Inferior de Herramientas del Escenario -->
         <div class="stage-bottombar-tools">
           <div class="stage-tools-pill-group">
-            <button type="button" class="stage-tool-pill" onclick="autoCenterAndBalanceVirola()" title="Centrar concéntricamente">
+            <button type="button" class="stage-tool-pill" id="btn-studio-undo" onclick="undoStudioAction()" title="Deshacer (Ctrl+Z)"><i class="fas fa-rotate-left"></i> Deshacer</button><button type="button" class="stage-tool-pill" id="btn-studio-redo" onclick="redoStudioAction()" title="Rehacer (Ctrl+Y)"><i class="fas fa-rotate-right"></i> Rehacer</button><button type="button" class="stage-tool-pill" onclick="autoCenterAndBalanceVirola()" title="Centrar concéntricamente">
               <i class="fas fa-crosshairs"></i> Centrar
             </button>
             <button type="button" class="stage-tool-pill" id="canvas-snap-btn" onclick="toggleSnappingGuides()" title="Guías magnéticas de imán">

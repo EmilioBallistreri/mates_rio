@@ -3396,3 +3396,606 @@ function exportWholesaleOrdersCSV() {
   URL.revokeObjectURL(url);
   showNotificationToast('Archivo CSV de Ventas Mayoristas descargado', 'fa-file-excel');
 }
+
+
+// ==========================================================================
+// 16. CORRECCIÓN DE SUBIDA DE FOTOS (COMPRESIÓN + VISTA PREVIA SIN ZOOM)
+//     Y GUARDADO PERSISTENTE DE PRODUCTOS, BANNERS, COMPRAS Y PRECIOS
+// ==========================================================================
+
+function compressImageFile(file, maxDim = 850, quality = 0.82) {
+  return new Promise((resolve) => {
+    if (!file || !file.type.startsWith('image/')) {
+      resolve(null);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const rawDataUrl = e.target.result;
+      const img = new Image();
+      img.onload = () => {
+        try {
+          let w = img.naturalWidth || img.width;
+          let h = img.naturalHeight || img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w >= h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          // Fondo blanco limpio para evitar bordes negros en transparencias JPEG
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+          const compressed = canvas.toDataURL('image/jpeg', quality);
+          resolve(compressed);
+        } catch (err) {
+          resolve(rawDataUrl);
+        }
+      };
+      img.onerror = () => resolve(rawDataUrl);
+      img.src = rawDataUrl;
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+
+// Sobrescribir selector de fotos de productos con compresión automática y previsualización proporcional
+handleProductFilesSelect = async function(event, mode) {
+  const files = event.target && event.target.files ? Array.from(event.target.files) : [];
+  if (files.length === 0) return;
+
+  const targetList = mode === 'edit' ? uploadedImagesEdit : uploadedImagesNew;
+
+  for (const file of files) {
+    if (!file.type.startsWith('image/')) continue;
+    const compressedUrl = await compressImageFile(file, 850, 0.82);
+    if (compressedUrl) {
+      targetList.push(compressedUrl);
+    }
+  }
+
+  renderUploadedImagesPreview(mode);
+  if (event.target && typeof event.target.value === 'string') {
+    event.target.value = '';
+  }
+  if (typeof showAdminToast === 'function') {
+    showAdminToast(`Foto(s) cargada(s) y optimizada(s) correctamente`, 'fa-camera');
+  }
+};
+
+function setPrimaryUploadedImage(mode, idx) {
+  const list = mode === 'edit' ? uploadedImagesEdit : uploadedImagesNew;
+  if (idx <= 0 || idx >= list.length) return;
+  const [chosen] = list.splice(idx, 1);
+  list.unshift(chosen);
+  renderUploadedImagesPreview(mode);
+}
+
+renderUploadedImagesPreview = function(mode) {
+  const container = document.getElementById(mode === 'edit' ? 'edit-prod-preview-grid' : 'new-prod-preview-grid');
+  if (!container) return;
+
+  const list = mode === 'edit' ? uploadedImagesEdit : uploadedImagesNew;
+  if (list.length === 0) {
+    container.innerHTML = '<p style="grid-column: 1/-1; font-size: 0.8rem; color: var(--admin-text-muted); text-align: center; margin: 6px 0;">Sin imágenes cargadas aún.</p>';
+    return;
+  }
+
+  container.innerHTML = list.map((imgSrc, idx) => `
+    <div class="preview-thumb-card ${idx === 0 ? 'is-primary primary' : ''}" title="${idx === 0 ? 'Foto de Portada Principal' : 'Hacé clic en la estrella para usar como portada'}">
+      <img src="${imgSrc}" class="preview-thumb-img" alt="Foto ${idx + 1}" style="width: 100%; height: 100%; object-fit: contain;" />
+      ${idx === 0
+        ? '<span class="thumb-badge-primary">Portada</span>'
+        : `<button type="button" onclick="setPrimaryUploadedImage('${mode}', ${idx})" title="Elegir como portada" style="position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,0.75);color:#fff;border:none;border-radius:4px;padding:2px 6px;font-size:0.62rem;font-weight:700;cursor:pointer;z-index:4;">Usar Portada</button>`
+      }
+      <button type="button" class="btn-remove-thumb" onclick="removeUploadedImage('${mode}', ${idx})" title="Eliminar foto">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  `).join('');
+
+  if (mode === 'edit') {
+    const previewThumb = document.getElementById('edit-prod-preview-thumb');
+    if (previewThumb && list.length > 0) {
+      previewThumb.src = list[0];
+      previewThumb.style.objectFit = 'contain';
+    }
+  }
+};
+
+// Sobrescribir carga de imagen de banner con compresión para evitar límite de localStorage
+handleSlideFileSelect = async function(event) {
+  const file = event.target && event.target.files && event.target.files[0];
+  if (!file) return;
+  const compressed = await compressImageFile(file, 1280, 0.84);
+  if (!compressed) return;
+  const preview = document.getElementById('slide-img-preview');
+  const input = document.getElementById('slide-img-url');
+  if (preview) {
+    preview.src = compressed;
+    preview.style.objectFit = 'contain';
+  }
+  if (input) input.value = compressed;
+  if (typeof showAdminToast === 'function') {
+    showAdminToast('Imagen de banner cargada y lista para guardar', 'fa-image');
+  }
+};
+
+// Guardado seguro de inventario
+saveInventory = function(inv) {
+  try {
+    localStorage.setItem('mates_rio_inventory', JSON.stringify(inv));
+  } catch (e) {
+    console.warn('Optimizando espacio en localStorage para guardar inventario:', e);
+    try {
+      // Si se excede la cuota por múltiples fotos secundarias pesadas, conservar la foto principal
+      Object.values(inv).forEach(item => {
+        if (Array.isArray(item.images) && item.images.length > 2) {
+          item.images = item.images.slice(0, 2);
+        }
+      });
+      localStorage.setItem('mates_rio_inventory', JSON.stringify(inv));
+    } catch (err2) {
+      console.error('Error guardando inventario:', err2);
+    }
+  }
+  updateInventoryBadges();
+};
+
+// Mejorar apertura del modal de edición para leer specs tanto Array como Objeto
+const _origOpenEditProductModal = openEditProductModal;
+openEditProductModal = function(productId) {
+  _origOpenEditProductModal(productId);
+  const fullProd = (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA.find(p => p.id === productId) : null) || getInventory()[productId];
+  if (fullProd && fullProd.specs) {
+    const specMatEl = document.getElementById('edit-prod-spec-material');
+    const specVirEl = document.getElementById('edit-prod-spec-virola');
+    const specExtraEl = document.getElementById('edit-prod-spec-extra');
+    if (Array.isArray(fullProd.specs)) {
+      if (specMatEl) specMatEl.value = fullProd.specs[0] || '';
+      if (specVirEl) specVirEl.value = fullProd.specs[1] || '';
+      if (specExtraEl) specExtraEl.value = fullProd.specs[2] || '';
+    } else if (typeof fullProd.specs === 'object') {
+      if (specMatEl) specMatEl.value = fullProd.specs.material || '';
+      if (specVirEl) specVirEl.value = fullProd.specs.virola || '';
+      if (specExtraEl) specExtraEl.value = fullProd.specs.garantia || fullProd.specs.extra || '';
+    }
+  }
+};
+
+// Sobrescribir saveProductEdits para garantizar persistencia completa de fotos y datos
+saveProductEdits = function() {
+  const id = document.getElementById('edit-product-id')?.value;
+  if (!id) return;
+
+  const name = document.getElementById('edit-prod-name')?.value.trim();
+  const category = document.getElementById('edit-prod-category')?.value || 'mates';
+  const subcategory = document.getElementById('edit-prod-subcategory')?.value || '';
+  const price = parseInt(document.getElementById('edit-prod-price')?.value, 10);
+  const origPriceVal = document.getElementById('edit-prod-orig-price')?.value;
+  const origPrice = origPriceVal ? parseInt(origPriceVal, 10) : null;
+  const badge = document.getElementById('edit-prod-badge')?.value.trim() || '';
+  const badgeType = document.getElementById('edit-prod-badge-type')?.value || 'promo';
+  const stockVal = parseInt(document.getElementById('edit-prod-stock')?.value, 10);
+  const stock = isNaN(stockVal) ? 10 : Math.max(0, stockVal);
+  const minStock = parseInt(document.getElementById('edit-prod-min-stock')?.value, 10) || 5;
+
+  if (!name || isNaN(price) || price <= 0) {
+    alert('Por favor completá el Nombre y un Precio válido para el producto.');
+    return;
+  }
+
+  const mainImage = uploadedImagesEdit.length > 0 ? uploadedImagesEdit[0] : 'assets/images/prod_mate_imperial.jpg';
+  const allImages = uploadedImagesEdit.length > 0 ? [...uploadedImagesEdit] : [mainImage];
+
+  const desc = document.getElementById('edit-prod-desc')?.value.trim() || name;
+  const specMaterial = document.getElementById('edit-prod-spec-material')?.value.trim();
+  const specVirola = document.getElementById('edit-prod-spec-virola')?.value.trim();
+  const specExtra = document.getElementById('edit-prod-spec-extra')?.value.trim();
+  const specsList = [specMaterial, specVirola, specExtra].filter(Boolean);
+
+  const catNamesMap = {
+    'mates': 'Mates',
+    'promos': 'Promos',
+    'termos': 'Termos',
+    'accesorios': 'Accesorios',
+    'yerbas': 'Yerbas',
+    'equipos': 'Equipos de Mate'
+  };
+  const categoryName = catNamesMap[category] || category.toUpperCase();
+
+  const inv = getInventory();
+  if (!inv[id]) inv[id] = { id };
+
+  Object.assign(inv[id], {
+    name,
+    category,
+    categoryName,
+    subcategory,
+    price,
+    originalPrice: origPrice,
+    stock,
+    minStock,
+    inStock: stock > 0,
+    image: mainImage,
+    images: allImages,
+    badge,
+    badgeType,
+    description: desc,
+    specs: specsList.length > 0 ? specsList : (inv[id].specs || [])
+  });
+
+  saveInventory(inv);
+
+  try {
+    const edited = JSON.parse(localStorage.getItem('mates_rio_edited_products') || '{}');
+    edited[id] = {
+      name,
+      category,
+      categoryName,
+      subcategory,
+      price,
+      originalPrice: origPrice,
+      stock,
+      minStock,
+      inStock: stock > 0,
+      image: mainImage,
+      images: allImages,
+      badge,
+      badgeType,
+      description: desc,
+      specs: specsList.length > 0 ? specsList : ['Calidad artesanal seleccionada']
+    };
+    localStorage.setItem('mates_rio_edited_products', JSON.stringify(edited));
+  } catch (e) {
+    console.warn('Error guardando en mates_rio_edited_products:', e);
+  }
+
+  try {
+    const customProducts = JSON.parse(localStorage.getItem('mates_rio_custom_products') || '[]');
+    const cp = customProducts.find(x => x.id === id);
+    if (cp) {
+      Object.assign(cp, {
+        name,
+        category,
+        categoryName,
+        subcategory,
+        price,
+        originalPrice: origPrice,
+        stock,
+        minStock,
+        inStock: stock > 0,
+        image: mainImage,
+        images: allImages,
+        badge,
+        badgeType,
+        description: desc,
+        specs: specsList.length > 0 ? specsList : (cp.specs || [])
+      });
+      localStorage.setItem('mates_rio_custom_products', JSON.stringify(customProducts));
+    }
+  } catch (e) {}
+
+  if (typeof window.syncProductsFromStorage === 'function') {
+    window.syncProductsFromStorage();
+  }
+
+  closeEditProductModal();
+  renderInventoryTable();
+  updateKPIs();
+
+  if (typeof renderProducts === 'function') renderProducts();
+  if (typeof renderCategoriesGrid === 'function') renderCategoriesGrid();
+
+  logAuditAction('Edición de Producto', `Producto "${name}" guardado (${formatARS(price)}, Stock: ${stock} un.)`);
+  showAdminToast(`¡"${name}" guardado correctamente!`, 'fa-circle-check');
+};
+
+// Sobrescribir handleCreateProduct para garantizar publicación sin fallos
+handleCreateProduct = function() {
+  const name = document.getElementById('new-prod-name')?.value.trim();
+  const category = document.getElementById('new-prod-category')?.value || 'mates';
+  const subcategory = document.getElementById('new-prod-subcategory')?.value || '';
+  const price = parseInt(document.getElementById('new-prod-price')?.value, 10);
+  const origPriceVal = document.getElementById('new-prod-orig-price')?.value;
+  const origPrice = origPriceVal ? parseInt(origPriceVal, 10) : null;
+  const badge = document.getElementById('new-prod-badge')?.value.trim() || '';
+  const badgeType = document.getElementById('new-prod-badge-type')?.value || 'promo';
+
+  const mainImage = uploadedImagesNew.length > 0 ? uploadedImagesNew[0] : 'assets/images/prod_mate_imperial.jpg';
+  const allImages = uploadedImagesNew.length > 0 ? [...uploadedImagesNew] : [mainImage];
+
+  const desc = document.getElementById('new-prod-desc')?.value.trim() || name;
+  const specMaterial = document.getElementById('new-prod-spec-material')?.value.trim();
+  const specVirola = document.getElementById('new-prod-spec-virola')?.value.trim();
+  const specExtra = document.getElementById('new-prod-spec-extra')?.value.trim();
+  const specsList = [specMaterial, specVirola, specExtra].filter(Boolean);
+
+  const stockVal = parseInt(document.getElementById('new-prod-stock')?.value, 10);
+  const stock = isNaN(stockVal) ? 10 : Math.max(0, stockVal);
+  const minStock = parseInt(document.getElementById('new-prod-min-stock')?.value, 10) || 5;
+
+  if (!name || isNaN(price) || price <= 0) {
+    alert('Por favor completá el Nombre y un Precio válido para publicar el producto.');
+    return;
+  }
+
+  const prodId = `prod-custom-${Date.now()}`;
+  const catNamesMap = {
+    'mates': 'Mates',
+    'promos': 'Promos',
+    'termos': 'Termos',
+    'accesorios': 'Accesorios',
+    'yerbas': 'Yerbas',
+    'equipos': 'Equipos de Mate'
+  };
+  const categoryName = catNamesMap[category] || category.toUpperCase();
+
+  const newProduct = {
+    id: prodId,
+    name,
+    category,
+    categoryName,
+    subcategory,
+    price,
+    originalPrice: origPrice && origPrice > price ? origPrice : null,
+    badge: badge,
+    badgeType,
+    image: mainImage,
+    images: allImages,
+    description: desc,
+    specs: specsList.length > 0 ? specsList : ['Elaboración artesanal seleccionada'],
+    stock,
+    minStock,
+    inStock: stock > 0,
+    cost: Math.round(price * 0.55),
+    wholesalePrice: Math.round(price * 0.70),
+    isCustom: true
+  };
+
+  try {
+    const customProducts = JSON.parse(localStorage.getItem('mates_rio_custom_products') || '[]');
+    customProducts.push(newProduct);
+    localStorage.setItem('mates_rio_custom_products', JSON.stringify(customProducts));
+  } catch (e) {
+    console.error('Error guardando nuevo producto:', e);
+  }
+
+  if (typeof PRODUCTS_DATA !== 'undefined' && !PRODUCTS_DATA.some(p => p.id === newProduct.id)) {
+    PRODUCTS_DATA.push(newProduct);
+  }
+
+  const inv = getInventory();
+  inv[newProduct.id] = Object.assign({}, newProduct);
+  saveInventory(inv);
+
+  closeCreateProductModal();
+  renderInventoryTable();
+  updateKPIs();
+
+  if (typeof renderProducts === 'function') renderProducts();
+  logAuditAction('Alta de Producto', `Nuevo producto publicado: "${name}" (${formatARS(price)})`);
+  showAdminToast(`¡Producto "${name}" publicado con éxito!`, 'fa-circle-check');
+};
+
+// Asegurar que las compras a proveedores soporten tanto p.item como p.items y persistan siempre
+handleCreatePurchase = function() {
+  const supplier = document.getElementById('purchase-supplier')?.value.trim();
+  const item = document.getElementById('purchase-item')?.value.trim();
+  const category = document.getElementById('purchase-category')?.value || 'Mates / Insumos';
+  const status = document.getElementById('purchase-status')?.value || 'Recibido';
+  const qty = parseInt(document.getElementById('purchase-qty')?.value, 10);
+  const unitCost = parseInt(document.getElementById('purchase-unit-cost')?.value, 10);
+  const notes = document.getElementById('purchase-notes')?.value.trim() || '';
+
+  if (!supplier || !item || isNaN(qty) || qty <= 0 || isNaN(unitCost) || unitCost <= 0) {
+    alert('Por favor completá Proveedor, Artículo, Cantidad y Costo Unitario.');
+    return;
+  }
+
+  const purchases = typeof getSupplierPurchases === 'function' ? getSupplierPurchases() : [];
+  const newPurchase = {
+    id: `COM-${Date.now().toString().slice(-4)}`,
+    date: new Date().toISOString().slice(0, 10),
+    supplier,
+    item,
+    items: `${qty}x ${item}`,
+    category,
+    quantity: qty,
+    unitCost,
+    totalCost: qty * unitCost,
+    status,
+    notes
+  };
+
+  purchases.unshift(newPurchase);
+  if (typeof saveSupplierPurchases === 'function') {
+    saveSupplierPurchases(purchases);
+  } else {
+    localStorage.setItem('mates_rio_supplier_purchases', JSON.stringify(purchases));
+  }
+
+  closeCreatePurchaseModal();
+  renderPurchasesSection();
+  logAuditAction('Registro de Compra', `Compra ${newPurchase.id} a ${supplier}: ${qty} un. de ${item} (${formatARS(newPurchase.totalCost)})`);
+  showAdminToast(`¡Compra a "${supplier}" guardada con éxito!`, 'fa-truck-ramp-box');
+};
+
+// ==========================================================================
+// 17. GESTIÓN DINÁMICA DE PRECIOS DEL PERSONALIZADOR Y COSTOS DE GRABADO POR VOLUMEN
+// ==========================================================================
+function injectCustomizerPricingAdminPanel() {
+  const tabsBar = document.querySelector('#sec-home-design .home-design-tabs');
+  const secDesign = document.getElementById('sec-home-design');
+  if (!tabsBar || !secDesign || document.getElementById('tab-btn-customizer-pricing')) return;
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'home-design-tab-btn';
+  btn.id = 'tab-btn-customizer-pricing';
+  btn.setAttribute('onclick', "switchDesignTab('customizer-pricing')");
+  btn.innerHTML = '<i class="fas fa-sliders"></i> Precios Personalizador & Grabado por Volumen';
+  tabsBar.appendChild(btn);
+
+  const panel = document.createElement('div');
+  panel.id = 'design-panel-customizer-pricing';
+  panel.className = 'design-panel';
+  panel.style.display = 'none';
+  panel.innerHTML = `
+    <div class="admin-card" style="padding: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--admin-border); flex-wrap: wrap; gap: 12px;">
+        <div>
+          <h3 style="font-size: 1.12rem; font-weight: 800; color: var(--admin-text-main);">
+            <i class="fas fa-wand-magic-sparkles" style="margin-right: 6px;"></i> Precios Base de Productos Personalizables y Grabado por Volumen
+          </h3>
+          <p style="font-size: 0.82rem; color: var(--admin-text-muted);">
+            Configurá de forma dinámica los precios de Mate, Termo y Caja de Presentación en el personalizador, y los costos de grabado según el volumen de compra.
+          </p>
+        </div>
+      </div>
+
+      <div class="admin-form-grid-2" style="margin-bottom: 22px;">
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="cfg-price-mate">Precio Base: Mate ($ ARS)</label>
+          <input type="number" id="cfg-price-mate" class="admin-input modal-input" min="1000" step="100" />
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="cfg-price-termo">Precio Base: Termo ($ ARS)</label>
+          <input type="number" id="cfg-price-termo" class="admin-input modal-input" min="1000" step="100" />
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="cfg-price-caja">Precio Base: Caja de presentación ($ ARS)</label>
+          <input type="number" id="cfg-price-caja" class="admin-input modal-input" min="1000" step="100" />
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="cfg-engraving-retail">Costo de Grabado Minorista ($ ARS • 0 = Bonificado)</label>
+          <input type="number" id="cfg-engraving-retail" class="admin-input modal-input" min="0" step="100" />
+        </div>
+      </div>
+
+      <h4 style="font-size: 0.95rem; font-weight: 800; margin-bottom: 12px; color: var(--admin-text-main);">
+        <i class="fas fa-layer-group"></i> Costos de Grabado Láser según Volumen de Compra (Mayorista / Corporativo)
+      </h4>
+      <div class="admin-form-grid-2" style="margin-bottom: 20px;">
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="cfg-vol-10-24">10 a 24 unidades (Costo Grabado por unidad $ ARS)</label>
+          <input type="number" id="cfg-vol-10-24" class="admin-input modal-input" min="0" step="100" />
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="cfg-vol-25-49">25 a 49 unidades (Costo Grabado por unidad $ ARS)</label>
+          <input type="number" id="cfg-vol-25-49" class="admin-input modal-input" min="0" step="100" />
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="cfg-vol-50-plus">+50 unidades (Costo Grabado por unidad $ ARS)</label>
+          <input type="number" id="cfg-vol-50-plus" class="admin-input modal-input" min="0" step="100" />
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 12px;">
+        <button type="button" class="btn-admin btn-admin-primary" onclick="saveCustomizerPricingFromAdmin()" style="padding: 11px 22px;">
+          <i class="fas fa-save"></i> Guardar Precios y Tarifas de Grabado
+        </button>
+      </div>
+    </div>
+  `;
+  secDesign.appendChild(panel);
+}
+
+function renderCustomizerPricingAdmin() {
+  injectCustomizerPricingAdminPanel();
+  const cfg = typeof getCustomizationPricingConfig === 'function' ? getCustomizationPricingConfig() : {};
+  const mateEl = document.getElementById('cfg-price-mate');
+  const termoEl = document.getElementById('cfg-price-termo');
+  const cajaEl = document.getElementById('cfg-price-caja');
+  const retEl = document.getElementById('cfg-engraving-retail');
+  if (mateEl) mateEl.value = cfg.matePrice || 44500;
+  if (termoEl) termoEl.value = cfg.termoPrice || 46900;
+  if (cajaEl) cajaEl.value = cfg.cajaPrice || 24900;
+  if (retEl) retEl.value = cfg.retailEngravingFee !== undefined ? cfg.retailEngravingFee : 0;
+
+  const tiers = Array.isArray(cfg.volumeTiers) ? cfg.volumeTiers : [];
+  const t1 = tiers.find(t => t.minQty === 10) || { engravingCostPerUnit: 2500 };
+  const t2 = tiers.find(t => t.minQty === 25) || { engravingCostPerUnit: 1800 };
+  const t3 = tiers.find(t => t.minQty === 50) || { engravingCostPerUnit: 1200 };
+
+  const v1El = document.getElementById('cfg-vol-10-24');
+  const v2El = document.getElementById('cfg-vol-25-49');
+  const v3El = document.getElementById('cfg-vol-50-plus');
+  if (v1El) v1El.value = t1.engravingCostPerUnit;
+  if (v2El) v2El.value = t2.engravingCostPerUnit;
+  if (v3El) v3El.value = t3.engravingCostPerUnit;
+}
+
+function saveCustomizerPricingFromAdmin() {
+  const matePrice = parseInt(document.getElementById('cfg-price-mate')?.value, 10) || 44500;
+  const termoPrice = parseInt(document.getElementById('cfg-price-termo')?.value, 10) || 46900;
+  const cajaPrice = parseInt(document.getElementById('cfg-price-caja')?.value, 10) || 24900;
+  const retailEngravingFee = parseInt(document.getElementById('cfg-engraving-retail')?.value, 10) || 0;
+  const vol10 = parseInt(document.getElementById('cfg-vol-10-24')?.value, 10) || 0;
+  const vol25 = parseInt(document.getElementById('cfg-vol-25-49')?.value, 10) || 0;
+  const vol50 = parseInt(document.getElementById('cfg-vol-50-plus')?.value, 10) || 0;
+
+  const newConfig = {
+    matePrice,
+    termoPrice,
+    cajaPrice,
+    retailEngravingFee,
+    volumeTiers: [
+      { minQty: 1, maxQty: 9, engravingCostPerUnit: retailEngravingFee, discountPercent: 0, label: 'Minorista (1 a 9 u.)' },
+      { minQty: 10, maxQty: 24, engravingCostPerUnit: vol10, discountPercent: 25, label: 'Mayorista Inicial (10 a 24 u.)' },
+      { minQty: 25, maxQty: 49, engravingCostPerUnit: vol25, discountPercent: 30, label: 'Mayorista Intermedio (25 a 49 u.)' },
+      { minQty: 50, maxQty: 9999, engravingCostPerUnit: vol50, discountPercent: 35, label: 'Mayorista Corporativo (+50 u.)' }
+    ]
+  };
+
+  if (typeof saveCustomizationPricingConfig === 'function') {
+    saveCustomizationPricingConfig(newConfig);
+  } else {
+    localStorage.setItem('mates_rio_customization_pricing', JSON.stringify(newConfig));
+  }
+
+  logAuditAction('Precios de Personalización', `Mate: ${formatARS(matePrice)}, Termo: ${formatARS(termoPrice)}, Caja: ${formatARS(cajaPrice)}`);
+  showAdminToast('¡Precios del personalizador y grabado por volumen actualizados!', 'fa-circle-check');
+}
+
+const _origSwitchDesignTab = switchDesignTab;
+switchDesignTab = function(tabName) {
+  injectCustomizerPricingAdminPanel();
+  currentDesignTab = tabName;
+
+  document.querySelectorAll('.home-design-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.id === `tab-btn-${tabName}`);
+  });
+
+  const panels = ['slides', 'categories', 'occasions', 'customizer-pricing'];
+  panels.forEach(p => {
+    const panel = document.getElementById(`design-panel-${p}`);
+    if (panel) {
+      if (p === tabName) {
+        panel.style.display = 'block';
+        panel.classList.add('active');
+      } else {
+        panel.style.display = 'none';
+        panel.classList.remove('active');
+      }
+    }
+  });
+
+  if (tabName === 'slides') renderAdminSlidesList();
+  if (tabName === 'categories') renderAdminCategoriesGrid();
+  if (tabName === 'occasions') renderOccasionSettings();
+  if (tabName === 'customizer-pricing') renderCustomizerPricingAdmin();
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  injectCustomizerPricingAdminPanel();
+});

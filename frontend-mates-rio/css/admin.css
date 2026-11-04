@@ -3312,3 +3312,131 @@ body.admin-dark-mode .admin-select:focus {
   border-color: #cfa83b;
   box-shadow: 0 0 0 2px rgba(207, 168, 59, 0.2);
 }
+
+
+/* ==========================================================================
+   CORRECCIÓN DE PREVISUALIZACIÓN DE FOTOS (SIN ZOOM EXCESIVO) Y ESTÉTICA BITONO
+   ========================================================================== */
+.image-preview-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)) !important;
+  gap: 12px !important;
+  margin-top: 14px !important;
+}
+
+.preview-thumb-card {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 1 !important;
+  border-radius: var(--radius-sm) !important;
+  border: 1.5px solid var(--admin-border) !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px !important;
+  box-sizing: border-box !important;
+}
+
+body.admin-dark-mode .preview-thumb-card {
+  background: #141414 !important;
+  border-color: #333333 !important;
+}
+
+.preview-thumb-card.primary,
+.preview-thumb-card.is-primary {
+  border-color: #111111 !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.admin-dark-mode .preview-thumb-card.primary,
+body.admin-dark-mode .preview-thumb-card.is-primary {
+  border-color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35) !important;
+}
+
+.preview-thumb-img,
+.preview-thumb-card img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+.preview-thumb-delete,
+.btn-remove-thumb {
+  position: absolute !important;
+  top: 5px !important;
+  right: 5px !important;
+  background: rgba(220, 38, 38, 0.92) !important;
+  color: #ffffff !important;
+  border: none !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.72rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  z-index: 4 !important;
+}
+
+.preview-thumb-delete:hover,
+.btn-remove-thumb:hover {
+  background: #b91c1c !important;
+  transform: scale(1.1) !important;
+}
+
+.preview-thumb-badge,
+.thumb-badge-primary {
+  position: absolute !important;
+  bottom: 5px !important;
+  left: 5px !important;
+  background: #111111 !important;
+  color: #ffffff !important;
+  font-size: 0.62rem !important;
+  font-weight: 800 !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  text-transform: uppercase !important;
+  z-index: 4 !important;
+}
+
+.table-product-thumb {
+  width: 50px !important;
+  height: 50px !important;
+  object-fit: contain !important;
+  background: #ffffff !important;
+  padding: 3px !important;
+  border-radius: 6px !important;
+}
+
+.admin-preview-avatar {
+  width: 68px !important;
+  height: 68px !important;
+  background: #ffffff !important;
+  padding: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.admin-preview-avatar img,
+#edit-prod-preview-thumb,
+#slide-img-preview {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+.admin-slide-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  background: #111111 !important;
+}

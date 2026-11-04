@@ -191,8 +191,8 @@ function toggleColorTheme() {
 
 function updateThemeToggleIcons(isLight) {
   document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
-    btn.innerHTML = isLight 
-      ? '<i class="fas fa-moon"></i>' 
+    btn.innerHTML = isLight
+      ? '<i class="fas fa-moon"></i>'
       : '<i class="fas fa-sun"></i>';
     btn.setAttribute('title', isLight ? 'Cambiar a Modo Oscuro' : 'Cambiar a Modo Claro');
     btn.setAttribute('aria-label', isLight ? 'Cambiar a Modo Oscuro' : 'Cambiar a Modo Claro');
@@ -586,7 +586,7 @@ function getFilteredProducts() {
   // 2. Filter by search query (Accent-insensitive)
   if (state.searchQuery && state.searchQuery.trim()) {
     const q = cleanStr(state.searchQuery);
-    list = list.filter(p => 
+    list = list.filter(p =>
       cleanStr(p.name).includes(q) ||
       cleanStr(p.description).includes(q) ||
       cleanStr(p.categoryName).includes(q) ||
@@ -631,11 +631,11 @@ function renderProducts() {
     countEl.innerHTML = `Mostrando <b>${products.length}</b> productos`;
   }
 
-  const isFiltered = state.activeCategory !== 'all' || 
-                     (state.activeSubcategory && state.activeSubcategory !== 'all') ||
-                     (state.searchQuery && state.searchQuery.trim().length > 0) || 
-                     state.priceRange !== 'all';
-                     
+  const isFiltered = state.activeCategory !== 'all' ||
+    (state.activeSubcategory && state.activeSubcategory !== 'all') ||
+    (state.searchQuery && state.searchQuery.trim().length > 0) ||
+    state.priceRange !== 'all';
+
   if (clearLink) {
     clearLink.classList.toggle('visible', isFiltered);
   }
@@ -719,7 +719,7 @@ function resetFilters() {
   state.activeCategory = 'all';
   state.searchQuery = '';
   state.priceRange = 'all';
-  
+
   const searchInput = document.getElementById('catalog-search-input');
   const clearBtn = document.getElementById('search-clear-btn');
   const priceSelect = document.getElementById('catalog-price-select');
@@ -1344,7 +1344,7 @@ function processWebCheckout(e) {
 
   const orderId = 'RIO-' + Math.floor(1000 + Math.random() * 9000);
   const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  
+
   let paymentDiscount = 0;
   if (paymentMethod === 'transferencia') {
     paymentDiscount = Math.round(subtotal * CONFIG.transferDiscountRate);
@@ -2279,7 +2279,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (urlParams.get('focus') === 'search' && searchInputInit) {
       setTimeout(() => searchInputInit.focus(), 350);
     }
-  } catch (e) {}
+  } catch (e) { }
 
   // 4. Update Cart & Auth state
   updateCartUI();
@@ -3144,3 +3144,242 @@ function filterPromosLive() {
 }
 
 
+
+// ==========================================================================
+// SIMPLIFICACIÓN DE TIENDA MINORISTA, FICHAS TÉCNICAS Y CARRITO (MEETING FIXES)
+// ==========================================================================
+(function () {
+  function isPromoOrBonifiedBadge(prod) {
+    if (!prod || !prod.badge) return false;
+    const b = String(prod.badge).toUpperCase();
+    return (
+      prod.category === 'promos' ||
+      b.includes('OFF') ||
+      b.includes('%') ||
+      b.includes('PROMO') ||
+      b.includes('BONIFICADO') ||
+      b.includes('AHORR')
+    );
+  }
+
+  window.renderProducts = function () {
+    if (typeof window.syncProductsFromStorage === 'function') {
+      window.syncProductsFromStorage();
+    }
+    const container = document.getElementById('products-grid');
+    if (!container || typeof PRODUCTS_DATA === 'undefined') return;
+
+    let products = [...PRODUCTS_DATA];
+
+    // 1. Category Filter
+    if (state.activeCategory && state.activeCategory !== 'all') {
+      products = products.filter(p => p.category === state.activeCategory);
+    }
+
+    // 1.2 Subcategory Filter
+    if (state.activeSubcategory && state.activeSubcategory !== 'all') {
+      products = products.filter(p => (p.subcategory || '').toLowerCase() === state.activeSubcategory.toLowerCase());
+    }
+
+    // 1.5 Promo subfilter
+    if (state.promoSubfilter && state.promoSubfilter !== 'all') {
+      const sub = state.promoSubfilter.toLowerCase();
+      products = products.filter(p =>
+        (p.name && p.name.toLowerCase().includes(sub)) ||
+        (p.description && p.description.toLowerCase().includes(sub)) ||
+        (p.badge && p.badge.toLowerCase().includes(sub))
+      );
+    }
+
+    // 2. Search Query Filter
+    if (state.searchQuery && state.searchQuery.trim() !== '') {
+      const q = state.searchQuery.toLowerCase().trim();
+      products = products.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        (p.description && p.description.toLowerCase().includes(q)) ||
+        (p.categoryName && p.categoryName.toLowerCase().includes(q))
+      );
+    }
+
+    // 3. Price Range Filter
+    if (state.priceRange === 'under-25k') {
+      products = products.filter(p => p.price <= 25000);
+    } else if (state.priceRange === '25k-45k') {
+      products = products.filter(p => p.price > 25000 && p.price <= 45000);
+    } else if (state.priceRange === 'over-45k') {
+      products = products.filter(p => p.price > 45000);
+    }
+
+    // 4. Sort
+    if (state.sortBy === 'price-asc') {
+      products.sort((a, b) => a.price - b.price);
+    } else if (state.sortBy === 'price-desc') {
+      products.sort((a, b) => b.price - a.price);
+    }
+
+    const countEl = document.getElementById('catalog-results-count');
+    if (countEl) {
+      countEl.textContent = `Mostrando ${products.length} ${products.length === 1 ? 'producto' : 'productos'}`;
+    }
+
+    if (products.length === 0) {
+      container.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+          <i class="fas fa-search" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 16px;"></i>
+          <h3 style="font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 8px;">No encontramos productos</h3>
+          <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto;">
+            Probá buscando con otros términos o restableciendo los filtros del catálogo.
+          </p>
+          <button class="btn btn-primary" style="margin-top: 20px;" onclick="resetFilters()">
+            <i class="fas fa-redo"></i> Ver todos los productos
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    // Tarjetas simplificadas: exclusivamente imagen, nombre, precio (y etiqueta solo si es promoción)
+    container.innerHTML = products.map(prod => {
+      const showPromoBadge = isPromoOrBonifiedBadge(prod);
+      return `
+        <div class="product-card" data-id="${prod.id}">
+          <div class="product-image-wrap" onclick="openQuickView('${prod.id}')">
+            <img src="${prod.image}" alt="${prod.name}" class="product-img" loading="lazy" />
+            ${showPromoBadge ? `
+              <div class="product-badges">
+                <span class="badge-tag promo">${prod.badge}</span>
+              </div>
+            ` : ''}
+            <button class="quick-view-btn" onclick="event.stopPropagation(); openQuickView('${prod.id}')">
+              <i class="far fa-eye"></i> Ver Ficha
+            </button>
+          </div>
+
+          <div class="product-info">
+            <h4 class="product-title" onclick="openQuickView('${prod.id}')" title="${prod.name}">${prod.name}</h4>
+
+            <div class="product-pricing">
+              <div class="product-price-row">
+                <span class="product-price">${formatARS(prod.price)}</span>
+                ${prod.originalPrice && prod.originalPrice > prod.price ? `<span class="product-original-price">${formatARS(prod.originalPrice)}</span>` : ''}
+              </div>
+            </div>
+
+            <div class="product-actions">
+              <button class="add-to-cart-btn" id="btn-add-${prod.id}" onclick="addToCart('${prod.id}', 1)">
+                <i class="fas fa-shopping-bag"></i> Agregar al Carrito
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  // Simplificación de Vista Rápida: Sin opiniones y ficha técnica concisa
+  window.openQuickView = function (productId) {
+    if (typeof window.syncProductsFromStorage === 'function') {
+      window.syncProductsFromStorage();
+    }
+    if (typeof PRODUCTS_DATA === 'undefined') return;
+    const product = PRODUCTS_DATA.find(p => p.id === productId);
+    if (!product) return;
+    currentQuickViewProduct = product;
+
+    const modal = document.getElementById('quick-view-modal');
+    if (!modal) return;
+
+    const imgEl = document.getElementById('qv-image');
+    const titleEl = document.getElementById('qv-title');
+    const catEl = document.getElementById('qv-category');
+    const priceEl = document.getElementById('qv-price');
+    const origPriceEl = document.getElementById('qv-orig-price');
+    const descEl = document.getElementById('qv-description');
+    const specsEl = document.getElementById('qv-specs');
+    const ratingEl = document.getElementById('qv-rating');
+    const badgeEl = document.getElementById('qv-badge');
+    const qtyInput = document.getElementById('qv-qty');
+
+    if (imgEl) {
+      imgEl.src = product.image;
+      imgEl.style.objectFit = 'contain';
+    }
+    if (titleEl) titleEl.textContent = product.name;
+    if (catEl) catEl.textContent = product.categoryName || '';
+    if (priceEl) priceEl.textContent = formatARS(product.price);
+    if (origPriceEl) {
+      if (product.originalPrice && product.originalPrice > product.price) {
+        origPriceEl.textContent = formatARS(product.originalPrice);
+        origPriceEl.style.display = 'inline';
+      } else {
+        origPriceEl.style.display = 'none';
+      }
+    }
+    if (descEl) descEl.textContent = product.description || '';
+    if (qtyInput) qtyInput.value = 1;
+
+    // Ocultar sección de opiniones / estrellas según solicitud
+    if (ratingEl) {
+      ratingEl.innerHTML = '';
+      ratingEl.style.display = 'none';
+    }
+
+    // Mostrar etiqueta únicamente si es promoción o grabado bonificado
+    if (badgeEl) {
+      if (isPromoOrBonifiedBadge(product)) {
+        badgeEl.textContent = product.badge;
+        badgeEl.className = 'badge-tag promo';
+        badgeEl.style.display = 'inline-block';
+      } else {
+        badgeEl.style.display = 'none';
+      }
+    }
+
+    // Ficha técnica simplificada (máximo 3 líneas esenciales)
+    if (specsEl) {
+      if (product.specs && typeof product.specs === 'object') {
+        const entries = Object.entries(product.specs).slice(0, 3);
+        specsEl.innerHTML = entries.map(([key, val]) => `
+          <li><b>${capitalizeFirstLetter(key)}:</b> ${val}</li>
+        `).join('');
+        specsEl.style.display = entries.length > 0 ? 'block' : 'none';
+      } else {
+        specsEl.innerHTML = '';
+        specsEl.style.display = 'none';
+      }
+    }
+
+    const btnPersonalize = document.getElementById('qv-btn-personalize');
+    if (btnPersonalize) {
+      const isCustomizable = product.category === 'mates' || product.category === 'termos' || product.id.includes('caja') || (product.specs && product.specs.virola);
+      btnPersonalize.style.display = isCustomizable ? 'flex' : 'none';
+    }
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Soporte en addToCart tanto para ID de producto como para objeto personalizado directo desde customizer-studio.js
+  const _origAddToCart = window.addToCart;
+  window.addToCart = function (productOrId, quantity = 1) {
+    if (productOrId && typeof productOrId === 'object') {
+      const customItem = productOrId;
+      state.cart.push({
+        id: customItem.id || ('custom_' + Date.now()),
+        name: customItem.name || 'Producto Personalizado',
+        price: Number(customItem.price) || 46500,
+        image: customItem.image || 'assets/images/prod_mate_imperial.jpg',
+        categoryName: customItem.categoryName || 'PERSONALIZADO',
+        quantity: Number(customItem.quantity) || 1,
+        customization: customItem.customization || null
+      });
+      lastAddedProductId = customItem.id;
+      saveCart();
+      updateCartUI();
+      showToast(`¡"${customItem.name}" agregado al carrito!`, 'fa-shopping-bag');
+      openCartDrawer();
+      return;
+    }
+    return _origAddToCart(productOrId, quantity);
+  };
+})();
