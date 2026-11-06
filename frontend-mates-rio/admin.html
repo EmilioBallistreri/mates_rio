@@ -149,7 +149,7 @@
         <a class="sidebar-nav-item" data-section="orders" onclick="switchAdminSection('orders')">
           <i class="fas fa-receipt"></i>
           <span>Ventas & Pedidos</span>
-          <span class="sidebar-badge badge-info" id="sidebar-orders-badge">0</span>
+          <span class="sidebar-badge badge-info" id="sidebar-orders-badge" style="display: none;">0</span>
         </a>
         <a class="sidebar-nav-item" data-section="purchases" onclick="switchAdminSection('purchases')">
           <i class="fas fa-truck-ramp-box"></i>
@@ -211,23 +211,32 @@
         </div>
 
         <div class="topbar-right">
-          <div class="topbar-live-clock" id="topbar-live-clock">
+          <div class="topbar-live-clock" id="topbar-live-clock" style="display: none;">
             <i class="fas fa-clock"></i> <span id="clock-display">--:--:--</span> (Bs. As.)
           </div>
 
-          <!-- Selector Modo Claro / Modo Oscuro en Admin -->
-          <button type="button" class="admin-theme-toggle-btn" id="admin-theme-toggle-btn" onclick="toggleAdminThemeMode()" title="Cambiar a Modo Oscuro / Modo Claro" aria-label="Cambiar Tema de Panel">
-            <i class="fas fa-moon" id="admin-theme-icon"></i>
-            <span class="admin-theme-label" id="admin-theme-label">Modo Oscuro</span>
+          <button type="button" class="topbar-icon-btn" onclick="switchAdminSection('inventory'); setTimeout(() => document.getElementById('inventory-search-input')?.focus(), 100);" title="Buscar Producto en Inventario" aria-label="Buscar">
+            <i class="fas fa-magnifying-glass"></i>
           </button>
 
-          <a href="personaliza-tu-mate.html" target="_blank" class="btn-store-preview" title="Ir al Estudio de Grabado">
-            <i class="fas fa-magic" style="color: var(--admin-gold);"></i> <span class="preview-btn-text">Taller de Grabado</span>
-          </a>
+          <button type="button" class="topbar-icon-btn topbar-notif-btn" onclick="switchAdminSection('orders')" title="Ver Pedidos Recientes" aria-label="Notificaciones de Pedidos">
+            <i class="far fa-bell"></i>
+            <span class="topbar-notif-dot"></span>
+          </button>
+
+          <!-- Selector Modo Claro / Modo Oscuro en Admin -->
+          <button type="button" class="admin-theme-toggle-btn topbar-icon-btn" id="admin-theme-toggle-btn" onclick="toggleAdminThemeMode()" title="Cambiar Tema de Panel" aria-label="Cambiar Tema de Panel">
+            <i class="fas fa-moon" id="admin-theme-icon"></i>
+            <span class="admin-theme-label" id="admin-theme-label" style="display: none;">Modo Oscuro</span>
+          </button>
 
           <a href="index.html" target="_blank" class="btn-store-preview" title="Ver Tienda Online">
-            <i class="fas fa-store"></i> <span class="preview-btn-text">Ver Tienda</span>
+            <i class="fas fa-store"></i> <span class="preview-btn-text">Tienda</span>
           </a>
+
+          <div class="topbar-user-avatar" onclick="switchAdminSection('users')" title="Administrador General">
+            <i class="far fa-user"></i>
+          </div>
         </div>
       </header>
 
@@ -240,18 +249,18 @@
         <section class="admin-section active" id="sec-dashboard">
           <div class="section-head-bar">
             <div>
-              <h2 class="section-page-title">Visión General del Negocio</h2>
-              <p class="section-page-desc">Métricas en tiempo real de facturación, volumen de pedidos y estado del inventario artesanal.</p>
+              <h2 class="section-page-title">VISIÓN GENERAL DEL NEGOCIO</h2>
+              <p class="section-page-desc">Métricas de facturación, pedidos activos y rendimiento de productos en tiempo real.</p>
             </div>
             <div class="section-actions">
-              <button class="btn-admin btn-admin-gold" onclick="openCreateProductModal()">
-                <i class="fas fa-plus-circle"></i> Nuevo Producto
+              <button class="btn-admin btn-admin-minimal" onclick="openCreateProductModal()">
+                <i class="fas fa-plus"></i> Nuevo Producto
               </button>
-              <button class="btn-admin btn-admin-outline" onclick="refreshDashboardData()">
+              <button class="btn-admin btn-admin-minimal" onclick="refreshDashboardData()">
                 <i class="fas fa-rotate"></i> Actualizar
               </button>
-              <button class="btn-admin btn-admin-primary" onclick="exportSalesReportCSV()">
-                <i class="fas fa-file-excel"></i> Exportar Ventas
+              <button class="btn-admin btn-admin-minimal" onclick="exportSalesReportCSV()">
+                <i class="fas fa-download"></i> Exportar Ventas
               </button>
             </div>
           </div>
@@ -261,9 +270,9 @@
             <!-- Facturación Total -->
             <div class="kpi-card kpi-gold">
               <div class="kpi-top-row">
-                <span class="kpi-title">Facturación Total</span>
-                <div class="kpi-icon-wrap icon-wrap-gold">
-                  <i class="fas fa-sack-dollar"></i>
+                <span class="kpi-title">FACTURACIÓN TOTAL</span>
+                <div class="kpi-icon-wrap icon-wrap-minimal">
+                  <i class="fas fa-dollar-sign"></i>
                 </div>
               </div>
               <div class="kpi-value" id="kpi-total-revenue">$ 0</div>
@@ -276,8 +285,8 @@
             <!-- Total de Pedidos -->
             <div class="kpi-card kpi-success">
               <div class="kpi-top-row">
-                <span class="kpi-title">Pedidos Totales</span>
-                <div class="kpi-icon-wrap icon-wrap-success">
+                <span class="kpi-title">PEDIDOS TOTALES</span>
+                <div class="kpi-icon-wrap icon-wrap-minimal">
                   <i class="fas fa-bag-shopping"></i>
                 </div>
               </div>
@@ -290,28 +299,28 @@
             <!-- Ticket Promedio -->
             <div class="kpi-card kpi-leather">
               <div class="kpi-top-row">
-                <span class="kpi-title">Ticket Promedio</span>
-                <div class="kpi-icon-wrap icon-wrap-leather">
+                <span class="kpi-title">TICKET PROMEDIO</span>
+                <div class="kpi-icon-wrap icon-wrap-minimal">
                   <i class="fas fa-receipt"></i>
                 </div>
               </div>
               <div class="kpi-value" id="kpi-avg-ticket">$ 0</div>
               <div class="kpi-footer-sub">
-                <span>Por compra finalizada</span>
+                <span>Combos &amp; Mates Imperiales</span>
               </div>
             </div>
 
             <!-- Tasa de Grabado en Virola -->
             <div class="kpi-card kpi-warning">
               <div class="kpi-top-row">
-                <span class="kpi-title">Tasa Grabado Virola</span>
-                <div class="kpi-icon-wrap icon-wrap-warning">
-                  <i class="fas fa-magic"></i>
+                <span class="kpi-title">TASA DE GRABADO VIROLA</span>
+                <div class="kpi-icon-wrap icon-wrap-minimal">
+                  <i class="fas fa-wand-magic-sparkles"></i>
                 </div>
               </div>
               <div class="kpi-value" id="kpi-engraving-rate">0%</div>
               <div class="kpi-footer-sub">
-                <span>Mates con personalización</span>
+                <span>Personalización láser activa</span>
               </div>
             </div>
           </div>
@@ -322,10 +331,10 @@
             <div class="stat-box-card">
               <div class="stat-box-header">
                 <div>
-                  <h3 class="stat-box-title">Ventas por Categoría de Producto</h3>
-                  <p class="stat-box-subtitle">Distribución porcentual de la demanda artesanal</p>
+                  <h3 class="stat-box-title">VENTAS POR CATEGORÍA DE PRODUCTO</h3>
+                  <p class="stat-box-subtitle">Distribución porcentual de la demanda</p>
                 </div>
-                <span class="sidebar-badge badge-info" id="dash-cat-count-badge">6 Líneas</span>
+                <span class="sidebar-badge badge-info" id="dash-cat-count-badge" style="display: none;">6 Líneas</span>
               </div>
 
               <div class="category-bars-list" id="category-bars-list">
@@ -337,8 +346,8 @@
             <div class="stat-box-card">
               <div class="stat-box-header">
                 <div>
-                  <h3 class="stat-box-title">Métodos de Pago</h3>
-                  <p class="stat-box-subtitle">Preferencia de los clientes al pagar</p>
+                  <h3 class="stat-box-title">MÉTODOS DE PAGO</h3>
+                  <p class="stat-box-subtitle">Preferencia de pago de clientes</p>
                 </div>
               </div>
 
@@ -350,14 +359,22 @@
 
           <!-- Recent Orders Preview & Stock Alert Table -->
           <div class="stat-box-card">
-            <div class="stat-box-header">
+            <div class="stat-box-header" style="flex-wrap: wrap; gap: 10px;">
               <div>
-                <h3 class="stat-box-title">Últimos Pedidos Recibidos</h3>
-                <p class="stat-box-subtitle">Órdenes más recientes que requieren atención o despacho</p>
+                <h3 class="stat-box-title">ÚLTIMOS PEDIDOS</h3>
+                <p class="stat-box-subtitle">Actividad reciente de clientes en la tienda online</p>
               </div>
-              <button class="btn-admin btn-admin-outline" onclick="switchAdminSection('orders')">
-                Ver Todos <i class="fas fa-arrow-right"></i>
-              </button>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <select class="admin-select" id="dashboard-orders-status-filter" onchange="renderDashboardRecentOrders()" style="height: 34px; font-size: 0.76rem; padding: 0 10px;">
+                  <option value="all">Todos los estados</option>
+                  <option value="preparación">En preparación</option>
+                  <option value="enviado">Enviados</option>
+                  <option value="entregado">Entregados</option>
+                </select>
+                <button class="btn-admin btn-admin-minimal" onclick="switchAdminSection('orders')" style="padding: 6px 12px; font-size: 0.76rem;">
+                  Ver Todos <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
             </div>
 
             <div class="table-responsive-card">

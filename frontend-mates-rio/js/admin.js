@@ -1674,23 +1674,21 @@ function renderCategoryBars() {
   if (!container) return;
 
   const categories = [
-    { id: 'promos', name: 'Combos & Promos', pct: 38, count: '38% de ventas' },
-    { id: 'mates', name: 'Mates Imperiales & Torpedos', pct: 31, count: '31% de ventas' },
-    { id: 'termos', name: 'Termos de Acero & Cuero', pct: 15, count: '15% de ventas' },
-    { id: 'accesorios', name: 'Bombillas & Accesorios', pct: 8, count: '8% de ventas' },
-    { id: 'equipos', name: 'Equipos & Materas', pct: 5, count: '5% de ventas' },
-    { id: 'yerbas', name: 'Yerbas Seleccionadas', pct: 3, count: '3% de ventas' }
+    { id: 'promos', name: 'Combos & Promos', pct: 38.0, color: '#d4b483' },
+    { id: 'mates', name: 'Mates Imperiales', pct: 31.0, color: '#c8a97e' },
+    { id: 'termos', name: 'Termos', pct: 15.0, color: '#bda078' },
+    { id: 'accesorios', name: 'Bombillas & Accesorios', pct: 8.0, color: '#a89070' },
+    { id: 'equipos', name: 'Equipos & Materas', pct: 5.0, color: '#8f7b60' },
+    { id: 'yerbas', name: 'Yerbas', pct: 3.0, color: '#786852' }
   ];
 
   container.innerHTML = categories.map(cat => `
-    <div class="bar-row">
-      <div class="bar-labels">
-        <span style="color: var(--admin-text-main);">${cat.name}</span>
-        <span style="color: var(--admin-text-muted); font-size: 0.72rem;">${cat.count}</span>
+    <div class="minimal-horiz-bar-row">
+      <span class="minimal-bar-label" title="${cat.name}">${cat.name}</span>
+      <div class="minimal-bar-track">
+        <div class="minimal-bar-fill" style="width: ${cat.pct}%; background: ${cat.color};"></div>
       </div>
-      <div class="bar-track">
-        <div class="bar-fill" style="width: ${cat.pct}%;"></div>
-      </div>
+      <span class="minimal-bar-pct">${cat.pct.toFixed(1)}%</span>
     </div>
   `).join('');
 }
@@ -1705,68 +1703,69 @@ function renderPaymentMethods() {
   const cardCount = total - transferCount;
 
   const transferPct = Math.round((transferCount / total) * 100);
-  const cardPct = 100 - transferPct;
+  const cardPct = Math.max(0, 100 - transferPct);
 
-  container.innerHTML = `
-    <div class="payment-method-row">
-      <div class="payment-method-info">
-        <div class="payment-method-icon"><i class="fas fa-building-columns"></i></div>
-        <div>
-          <div class="payment-method-name">Transferencia Bancaria</div>
-          <div class="payment-method-sub">Con 10% de Bonificación</div>
-        </div>
-      </div>
-      <div class="payment-method-stat">
-        <div class="payment-method-pct">${transferPct}%</div>
-        <div class="payment-method-count">${transferCount} pedidos</div>
-      </div>
-    </div>
+  const methods = [
+    { name: 'Transferencia (10% OFF)', pct: transferPct, color: '#68b88e' },
+    { name: 'Tarjetas (3 Cuotas)', pct: cardPct, color: '#d4b483' },
+    { name: 'Efectivo / Rapipago', pct: 0, color: '#5a6570' }
+  ];
 
-    <div class="payment-method-row">
-      <div class="payment-method-info">
-        <div class="payment-method-icon"><i class="fas fa-credit-card"></i></div>
-        <div>
-          <div class="payment-method-name">Tarjetas de Crédito</div>
-          <div class="payment-method-sub">3 Cuotas Sin Interés</div>
-        </div>
+  container.innerHTML = methods.map(m => `
+    <div class="minimal-horiz-bar-row">
+      <span class="minimal-bar-label" title="${m.name}">${m.name}</span>
+      <div class="minimal-bar-track">
+        <div class="minimal-bar-fill" style="width: ${Math.max(m.pct, m.pct > 0 ? m.pct : 4)}%; background: ${m.color}; opacity: ${m.pct > 0 ? 1 : 0.35};"></div>
       </div>
-      <div class="payment-method-stat">
-        <div class="payment-method-pct">${cardPct}%</div>
-        <div class="payment-method-count">${cardCount} pedidos</div>
-      </div>
+      <span class="minimal-bar-pct">${m.pct.toFixed(1)}%</span>
     </div>
-  `;
+  `).join('');
 }
 
 function renderDashboardRecentOrders() {
-  const orders = getOrders().slice(0, 5);
+  const allOrders = getOrders();
+  const statusFilter = document.getElementById('dashboard-orders-status-filter')?.value || 'all';
+  const filtered = statusFilter === 'all'
+    ? allOrders
+    : allOrders.filter(o => (o.status || '').toLowerCase().includes(statusFilter.toLowerCase()));
+
+  const orders = filtered.slice(0, 5);
   const tbody = document.getElementById('dashboard-recent-orders-tbody');
   if (!tbody) return;
 
   if (orders.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">Sin pedidos registrados.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px; color: var(--admin-text-muted);">Sin pedidos registrados para este filtro.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = orders.map(order => {
     let statusClass = 'status-prep';
-    if (order.status.toLowerCase().includes('enviado')) statusClass = 'status-shipped';
-    if (order.status.toLowerCase().includes('entregado')) statusClass = 'status-delivered';
+    let shortStatus = order.status.split('-')[0].trim();
+    if (order.status.toLowerCase().includes('preparación')) {
+      statusClass = 'status-prep';
+      shortStatus = 'En preparación';
+    } else if (order.status.toLowerCase().includes('enviado')) {
+      statusClass = 'status-shipped';
+      shortStatus = 'Enviado';
+    } else if (order.status.toLowerCase().includes('entregado')) {
+      statusClass = 'status-delivered';
+      shortStatus = 'Entregado';
+    }
 
     return `
       <tr>
-        <td><strong style="color: var(--admin-leather); font-family: var(--font-heading);">${order.id}</strong></td>
-        <td style="color: var(--admin-text-muted); font-size: 0.74rem;">${order.date}</td>
+        <td><strong class="minimal-order-id">#${order.id}</strong></td>
+        <td style="color: var(--admin-text-muted); font-size: 0.76rem;">${order.date}</td>
         <td><strong>${order.customerName || 'Cliente'}</strong></td>
         <td>
-          <span style="font-size: 0.78rem;">${order.items.substring(0, 48)}${order.items.length > 48 ? '...' : ''}</span>
-          ${order.hasCustomEngraving ? `<span class="engraving-tag"><i class="fas fa-magic"></i> Grabado</span>` : ''}
+          <span style="font-size: 0.78rem;">${order.items.substring(0, 46)}${order.items.length > 46 ? '...' : ''}</span>
+          ${order.hasCustomEngraving ? `<span class="engraving-tag"><i class="fas fa-wand-magic-sparkles"></i> Grabado</span>` : ''}
         </td>
         <td><strong>${formatARS(order.total)}</strong></td>
-        <td><span class="badge-stock ${statusClass}">${order.status.split('-')[0].trim()}</span></td>
+        <td><span class="badge-stock ${statusClass}">${shortStatus}</span></td>
         <td>
           <button type="button" class="btn-table-action" onclick="openOrderDetailModal('${order.id}')" title="Ver Detalle">
-            <i class="fas fa-eye"></i>
+            <i class="far fa-eye"></i>
           </button>
         </td>
       </tr>

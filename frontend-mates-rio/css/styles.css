@@ -6086,11 +6086,22 @@ body.theme-dark .purchase-type-card {
 }
 
 .virola-curved-text {
-  fill: #120e0a !important;
+  fill: #120e0a;
   font-weight: 800;
   user-select: none;
   cursor: grab;
   transition: filter 0.15s ease;
+}
+
+#virola-studio-svg:not([data-product="caja"]) .virola-curved-text {
+  fill: #120e0a !important;
+}
+
+#virola-studio-svg[data-product="caja"] .virola-curved-text,
+.virola-curved-text.box-white-text {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.7)) !important;
 }
 
 .virola-curved-text:active {
@@ -12232,12 +12243,20 @@ body.theme-light .design-modal-card {
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25)) !important;
 }
 
-/* 6. Grabado Láser Vectorial en la Virola Metálica */
+/* 6. Grabado Láser Vectorial en la Virola Metálica y Caja */
 .virola-sticker-group image {
   /* Nitidez de grabado láser CNC */
   image-rendering: -webkit-optimize-contrast !important;
   image-rendering: crisp-edges !important;
-  filter: contrast(120%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.45)) !important;
+}
+
+#virola-studio-svg:not([data-product="caja"]) .virola-sticker-group:not(.box-white-sticker) image {
+  filter: brightness(0) contrast(120%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.45)) !important;
+}
+
+#virola-studio-svg[data-product="caja"] .virola-sticker-group image,
+.virola-sticker-group.box-white-sticker image {
+  filter: brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,0.75)) !important;
 }
 
 
@@ -12464,4 +12483,273 @@ html.theme-light .studio-main-stage-full {
 .studio-history-btn:disabled {
   opacity: 0.35 !important;
   cursor: not-allowed !important;
+}
+
+/* ==========================================================================
+   CORRECCIÓN MENÚ LATERAL MÓVIL (MOBILE NAV DRAWER) - CONTRASTE TOTAL
+   Garantiza visibilidad inmediata de todas las secciones, íconos y textos
+   tanto en Modo Oscuro como en Modo Claro sin necesidad de hacer clic.
+   ========================================================================== */
+.mobile-nav-drawer {
+  background-color: #111111 !important;
+  color: #ffffff !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+.mobile-drawer-header {
+  background: #0a0a0a !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.mobile-nav-list {
+  background-color: #111111 !important;
+}
+
+.mobile-nav-item a {
+  background: transparent !important;
+  color: #f4f4f5 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.mobile-nav-item a span,
+.mobile-nav-item a b,
+.mobile-nav-item a strong {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.mobile-nav-item a i:not(.fa-fire-flame-curved):not(.fa-leaf) {
+  color: #e4e4e7 !important;
+}
+
+.mobile-nav-item a i.fa-chevron-right {
+  color: #71717a !important;
+}
+
+#mobile-admin-nav-item a {
+  background: #1a1a1e !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+#mobile-admin-nav-item a span {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+.mobile-nav-item a:hover,
+.mobile-nav-item a:active,
+.mobile-nav-item a:focus,
+.mobile-nav-item a.active {
+  background: #222225 !important;
+  color: #ffffff !important;
+}
+
+.mobile-nav-footer {
+  background-color: #0b0b0b !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #a1a1aa !important;
+}
+
+/* Soporte explícito para Modo Claro en el menú móvil */
+html.theme-light .mobile-nav-drawer,
+body.theme-light .mobile-nav-drawer,
+body.theme-inverted .mobile-nav-drawer {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+html.theme-light .mobile-nav-list,
+body.theme-light .mobile-nav-list,
+body.theme-inverted .mobile-nav-list {
+  background-color: #ffffff !important;
+}
+
+html.theme-light .mobile-nav-item a,
+body.theme-light .mobile-nav-item a,
+body.theme-inverted .mobile-nav-item a {
+  background: #ffffff !important;
+  color: #111111 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.theme-light .mobile-nav-item a span,
+html.theme-light .mobile-nav-item a b,
+html.theme-light .mobile-nav-item a strong,
+body.theme-light .mobile-nav-item a span,
+body.theme-light .mobile-nav-item a b,
+body.theme-light .mobile-nav-item a strong,
+body.theme-inverted .mobile-nav-item a span,
+body.theme-inverted .mobile-nav-item a b,
+body.theme-inverted .mobile-nav-item a strong {
+  color: #111111 !important;
+}
+
+html.theme-light .mobile-nav-item a i:not(.fa-fire-flame-curved):not(.fa-leaf),
+body.theme-light .mobile-nav-item a i:not(.fa-fire-flame-curved):not(.fa-leaf),
+body.theme-inverted .mobile-nav-item a i:not(.fa-fire-flame-curved):not(.fa-leaf) {
+  color: #18181b !important;
+}
+
+html.theme-light .mobile-nav-item a i.fa-chevron-right,
+body.theme-light .mobile-nav-item a i.fa-chevron-right,
+body.theme-inverted .mobile-nav-item a i.fa-chevron-right {
+  color: #71717a !important;
+}
+
+html.theme-light #mobile-admin-nav-item a,
+body.theme-light #mobile-admin-nav-item a,
+body.theme-inverted #mobile-admin-nav-item a {
+  background: #f4f4f5 !important;
+  color: #111111 !important;
+}
+
+html.theme-light #mobile-admin-nav-item a span,
+body.theme-light #mobile-admin-nav-item a span,
+body.theme-inverted #mobile-admin-nav-item a span {
+  background: #111111 !important;
+  color: #ffffff !important;
+}
+
+html.theme-light .mobile-nav-item a:hover,
+html.theme-light .mobile-nav-item a:active,
+html.theme-light .mobile-nav-item a.active,
+body.theme-light .mobile-nav-item a:hover,
+body.theme-light .mobile-nav-item a:active,
+body.theme-light .mobile-nav-item a.active,
+body.theme-inverted .mobile-nav-item a:hover,
+body.theme-inverted .mobile-nav-item a:active,
+body.theme-inverted .mobile-nav-item a.active {
+  background: #111111 !important;
+  color: #ffffff !important;
+}
+
+html.theme-light .mobile-nav-item a:hover span,
+html.theme-light .mobile-nav-item a:hover b,
+html.theme-light .mobile-nav-item a:hover i:not(.fa-fire-flame-curved):not(.fa-leaf),
+html.theme-light .mobile-nav-item a:active span,
+html.theme-light .mobile-nav-item a:active b,
+html.theme-light .mobile-nav-item a:active i:not(.fa-fire-flame-curved):not(.fa-leaf),
+body.theme-light .mobile-nav-item a:hover span,
+body.theme-light .mobile-nav-item a:hover b,
+body.theme-light .mobile-nav-item a:hover i:not(.fa-fire-flame-curved):not(.fa-leaf),
+body.theme-inverted .mobile-nav-item a:hover span,
+body.theme-inverted .mobile-nav-item a:hover b,
+body.theme-inverted .mobile-nav-item a:hover i:not(.fa-fire-flame-curved):not(.fa-leaf) {
+  color: #ffffff !important;
+}
+
+html.theme-light .mobile-nav-footer,
+body.theme-light .mobile-nav-footer,
+body.theme-inverted .mobile-nav-footer {
+  background-color: #f4f4f5 !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #52525b !important;
+}
+
+/* ==========================================================================
+   SIMPLIFICACIÓN INTEGRAL SOLICITADA POR EL CLIENTE (PUNTOS 1 AL 14)
+   Eliminación de barras superiores repetidas, elementos decorativos redundantes,
+   secciones informativas extensas y controles técnicos innecesarios para el comprador.
+   ========================================================================== */
+
+/* 1. Barra de anuncios de arriba de todo (Announcement / Top Bar) */
+.announcement-bar,
+.top-bar {
+  display: none !important;
+}
+
+/* 2. Doble buscador y controles redundantes en encabezados / secciones */
+.header-search-wrapper,
+.promos-all-catalog-btn {
+  display: none !important;
+}
+
+/* 3. Botón flotante de "Subir arriba" y elementos flotantes superpuestos */
+.scroll-top-btn,
+#scroll-top-btn,
+.scroll-progress-bar {
+  display: none !important;
+}
+
+/* 4. Etiquetas chicas y carteles internos repetidos en banners */
+.hero-features-pills,
+.hero-tag,
+.promos-hero-badge,
+.catalog-hero-badge,
+.studio-badge-pill,
+.banner-pers-badge,
+.banner-pers-perks,
+.banner-pers-floating-tag {
+  display: none !important;
+}
+
+/* 5. Franja de 4 beneficios debajo de portada y recuadros grandes en Promos */
+.trust-bar,
+.trust-strip,
+.promos-perks-grid,
+.promos-urgency-banner {
+  display: none !important;
+}
+
+/* 6, 7 y 8. Textos redundantes en Categorías, Historia/Taller, Comunidad y Preguntas Frecuentes */
+.categories-bottom-info .section-tag,
+.categories-bottom-info .section-title,
+.categories-bottom-info .section-subtitle,
+.historia-section,
+#historia,
+.instagram-section,
+#comunidad,
+.faq-section,
+#faq {
+  display: none !important;
+}
+
+.categories-bottom-info {
+  margin-top: 22px !important;
+  padding-top: 0 !important;
+}
+
+/* 9 y 10. Cabeceras compactas en Promos / Catálogo y eliminación de bloques informativos al final de Promos */
+.why-combo-section,
+.promos-cta-section,
+.catalog-breadcrumb-bar {
+  display: none !important;
+}
+
+.promos-hero-section,
+.catalog-hero-section {
+  padding: 26px 0 20px !important;
+}
+
+.promos-hero-subtitle,
+.catalog-hero-subtitle {
+  display: none !important;
+}
+
+/* 11, 12 y 13. Simplificación del Taller de Grabado: ocultar botón técnico SVG, subtítulos largos y pasos inferiores */
+button[onclick*="downloadVectorLaserFile"],
+.stage-tool-pill[onclick*="downloadVectorLaserFile"],
+.pers-steps-section,
+.pers-steps-grid,
+.customizer-steps-section,
+.customizer-hero-head .studio-page-subtitle,
+#stage-badge-status {
+  display: none !important;
+}
+
+.customizer-hero-head {
+  margin-bottom: 16px !important;
+  padding: 10px 0 4px !important;
+}
+
+/* 14. Simplificación de cuadros de beneficios corporativos en Mayorista */
+.wholesale-benefits-section,
+.wholesale-benefits-grid {
+  display: none !important;
 }

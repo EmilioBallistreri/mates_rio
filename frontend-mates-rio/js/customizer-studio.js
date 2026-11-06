@@ -3063,7 +3063,7 @@ function escapeHtml(str) {
     return _origStartFreeItemDrag(itemId, e);
   };
 
-  // 6. Subida de imagen personalizada: eliminación total de bordes blancos y fondo
+  // 6. Subida de imagen personalizada: eliminación total de bordes blancos y generación automática en Negro (Mate/Termo) y Blanco (Caja)
   window.handleCustomImageUpload = function(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
@@ -3073,7 +3073,8 @@ function escapeHtml(str) {
       const rawDataUrl = loadEvent.target.result;
       const img = new Image();
       img.onload = () => {
-        let processedDataUrl = rawDataUrl;
+        let processedBlackDataUrl = rawDataUrl;
+        let processedWhiteDataUrl = rawDataUrl;
 
         if (file.type !== 'image/svg+xml') {
           const cvs = document.createElement('canvas');
@@ -3090,6 +3091,8 @@ function escapeHtml(str) {
 
           const imgData = ctx.getImageData(0, 0, w, h);
           const d = imgData.data;
+          const whiteImgData = ctx.createImageData(w, h);
+          const dw = whiteImgData.data;
 
           // Muestreo de todo el borde perimetral para eliminar cualquier marco o fondo blanco/claro
           let rSum = 0, gSum = 0, bSum = 0, sampleCount = 0;
@@ -3124,6 +3127,7 @@ function escapeHtml(str) {
               // Recortar 2px del borde exterior para evitar líneas residuales blancas en el marco
               if (px < 2 || px >= w - 2 || py < 2 || py >= h - 2 || a < 40) {
                 d[i + 3] = 0;
+                dw[i + 3] = 0;
                 continue;
               }
 
@@ -3133,35 +3137,49 @@ function escapeHtml(str) {
               // Eliminar píxeles blancos/claros (> 195 lum) o similares al fondo
               if (lum > 195 || colorDist < colorTolerance) {
                 d[i + 3] = 0;
+                dw[i + 3] = 0;
               } else {
+                const contrastAlpha = Math.min(1, (205 - lum) / 85);
+                const finalAlpha = Math.round(255 * Math.max(0.25, contrastAlpha));
+                // Versión grabada en negro (para Mate y Termo)
                 d[i] = 16;
                 d[i + 1] = 16;
                 d[i + 2] = 16;
-                const contrastAlpha = Math.min(1, (205 - lum) / 85);
-                d[i + 3] = Math.round(255 * Math.max(0.25, contrastAlpha));
+                d[i + 3] = finalAlpha;
+                // Versión grabada en blanco puro (para Caja de presentación)
+                dw[i] = 255;
+                dw[i + 1] = 255;
+                dw[i + 2] = 255;
+                dw[i + 3] = finalAlpha;
               }
             }
           }
 
           ctx.putImageData(imgData, 0, 0);
-          processedDataUrl = cvs.toDataURL('image/png');
+          processedBlackDataUrl = cvs.toDataURL('image/png');
+
+          ctx.putImageData(whiteImgData, 0, 0);
+          processedWhiteDataUrl = cvs.toDataURL('image/png');
         }
 
         saveStudioHistoryState();
         const placement = findNonOverlappingPosition('icon');
+        const isBox = studio.activeProduct === 'caja';
 
         const newItem = {
           id: 'custom_img_' + Date.now(),
           type: 'icon',
           graphicId: 'custom_upload',
           name: file.name.substring(0, 20),
-          file: processedDataUrl,
-          angle: placement.angle,
+          file: isBox ? processedWhiteDataUrl : processedBlackDataUrl,
+          fileBlack: processedBlackDataUrl,
+          fileWhite: processedWhiteDataUrl,
+          angle: studio.activeProduct === 'termo' ? 0 : placement.angle,
           radius: placement.radius,
           rotation: 0,
           scale: 1.15,
-          x: placement.x,
-          y: placement.y
+          x: studio.activeProduct === 'mate' ? placement.x : 250,
+          y: studio.activeProduct === 'mate' ? placement.y : 265
         };
 
         studio.items.push(newItem);
@@ -3171,32 +3189,289 @@ function escapeHtml(str) {
         updateActiveItemFloatingBar();
         updatePriceDisplay();
         if (studio.viewMode === '360') render360Canvas();
-        showNotificationToast('Imagen vectorizada sin bordes blancos y lista para grabar', 'fa-circle-check');
+        showNotificationToast(
+          isBox
+            ? 'Imagen vectorizada en color blanco para grabado en Caja'
+            : 'Imagen vectorizada sin bordes blancos y lista para grabar',
+          'fa-circle-check'
+        );
       };
       img.src = rawDataUrl;
     };
     reader.readAsDataURL(file);
   };
 
-  // 7. Sobrescribir renderVirolaCanvas: Caja rectangular frontal con grabado invertido en BLANCO
+  function syncCurvatureControlsVisibility() {
+    const curveBtn = document.querySelector('.active-text-curve-btn');
+    const curveGroup = curveBtn ? curveBtn.closest('.ribbon-group') : null;
+    if (curveGroup) {
+      curveGroup.style.display = studio.activeProduct === 'mate' ? '' : 'none';
+    }
+  }
+
+  // Sincronización automática al cambiar de producto (Mate / Termo en negro, Caja en blanco; coordenadas centradas)
+  const _origSwitchActiveProduct = window.switchActiveProduct;
+  window.switchActiveProduct = function(prodType) {
+    const prevProduct = studio.activeProduct;
+    _origSwitchActiveProduct(prodType);
+    syncCurvatureControlsVisibility();
+
+    const svg = document.getElementById('virola-studio-svg');
+    if (svg) svg.setAttribute('data-product', studio.activeProduct);
+
+    const textItems = studio.items.filter(i => i.type === 'text');
+    const iconItems = studio.items.filter(i => i.type === 'icon');
+
+    // Actualizar automáticamente el archivo de imágenes cargadas según el color de grabado del producto
+    iconItems.forEach(item => {
+      if (studio.activeProduct === 'caja') {
+        if (item.fileWhite) item.file = item.fileWhite;
+      } else {
+        if (item.fileBlack) item.file = item.fileBlack;
+      }
+    });
+
+    // Ajustar coordenadas al pasar entre virola circular (mate) y superficies frontales (termo / caja)
+    if (studio.activeProduct === 'termo') {
+      textItems.forEach((t, idx) => {
+        if (prevProduct === 'mate' || t.x === undefined || t.x < 185 || t.x > 315 || t.y < 95 || t.y > 415) {
+          t.x = 250;
+          t.y = 175 + idx * 42;
+        }
+        t.angle = 0;
+        t.rotation = 0;
+      });
+      iconItems.forEach((ic, idx) => {
+        if (prevProduct === 'mate' || ic.x === undefined || ic.x < 185 || ic.x > 315 || ic.y < 95 || ic.y > 415) {
+          ic.x = 250;
+          ic.y = 285 + idx * 58;
+        }
+        ic.angle = 0;
+      });
+    } else if (studio.activeProduct === 'caja') {
+      textItems.forEach((t, idx) => {
+        if (prevProduct === 'mate' || t.x === undefined || t.y < 135 || t.y > 365) {
+          t.x = 250;
+          t.y = 195 + idx * 42;
+        }
+        t.rotation = 0;
+      });
+      iconItems.forEach((ic, idx) => {
+        if (prevProduct === 'mate' || ic.x === undefined || ic.y < 135 || ic.y > 365) {
+          ic.x = 250;
+          ic.y = 285 + idx * 55;
+        }
+      });
+    } else if (studio.activeProduct === 'mate' && prevProduct !== 'mate') {
+      const { cx, cy, rRing } = STUDIO_CONFIG;
+      textItems.forEach((t, idx) => {
+        const ang = idx % 2 === 0 ? 270 : 90;
+        const rad = (ang * Math.PI) / 180;
+        t.angle = ang;
+        t.radius = rRing;
+        t.arcPosition = idx % 2 === 0 ? 'top' : 'bottom';
+        t.x = cx + rRing * Math.cos(rad);
+        t.y = cy + rRing * Math.sin(rad);
+      });
+      iconItems.forEach((ic, idx) => {
+        const ang = idx === 0 ? 90 : (idx * 90) % 360;
+        const rad = (ang * Math.PI) / 180;
+        ic.angle = ang;
+        ic.radius = rRing;
+        ic.x = cx + rRing * Math.cos(rad);
+        ic.y = cy + rRing * Math.sin(rad);
+      });
+    }
+
+    renderVirolaCanvas();
+    if (studio.viewMode === '360') render360Canvas();
+  };
+
+  // Helper para renderizar controles interactivos (escalar, rotar, eliminar) en Termo y Caja 2D
+  function build2DItemHandlesHtml(item, halfW, halfH, isWhiteTheme) {
+    if (item.id !== studio.activeItemId) return '';
+    const strokeCol = isWhiteTheme ? '#ffffff' : '#111111';
+    const scaleX = halfW + 8;
+    const scaleY = halfH + 8;
+    const rotX = -halfW - 8;
+    const rotY = -halfH - 8;
+    const delX = halfW + 8;
+    const delY = -halfH - 8;
+
+    return `
+      <rect x="${(-halfW - 6).toFixed(2)}" y="${(-halfH - 6).toFixed(2)}"
+            width="${(halfW * 2 + 12).toFixed(2)}" height="${(halfH * 2 + 12).toFixed(2)}"
+            fill="none" stroke="${strokeCol}" stroke-width="1.5" stroke-dasharray="4,4"
+            rx="6" ry="6" opacity="0.88" pointer-events="none" />
+      <g class="virola-handle handle-delete" data-handle="delete" transform="translate(${delX.toFixed(2)}, ${delY.toFixed(2)})">
+        <circle r="10" fill="#dc2626" stroke="#ffffff" stroke-width="1.5" />
+        <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">✕</text>
+      </g>
+      <g class="virola-handle handle-rotate" data-handle="rotate" transform="translate(${rotX.toFixed(2)}, ${rotY.toFixed(2)})">
+        <circle r="10" fill="#18181b" stroke="#ffffff" stroke-width="1.5" />
+        <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">↻</text>
+      </g>
+      <g class="virola-handle handle-scale" data-handle="scale" transform="translate(${scaleX.toFixed(2)}, ${scaleY.toFixed(2)})">
+        <circle r="10" fill="#18181b" stroke="#ffffff" stroke-width="1.5" />
+        <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">⤡</text>
+      </g>
+    `;
+  }
+
+  // 7. Sobrescribir renderVirolaCanvas:
+  //    - Mate: grabado negro en virola circular
+  //    - Termo: cilindro real idéntico en tamaño/proporción a la vista 360° con grabado en negro
+  //    - Caja: frente negro con todas las frases, letras, íconos e imágenes subidas automáticamente en BLANCO
   const _origRenderVirolaCanvas = window.renderVirolaCanvas;
   window.renderVirolaCanvas = function() {
-    if (studio.activeProduct !== 'caja') {
+    const svg = document.getElementById('virola-studio-svg');
+    if (!svg) return;
+    svg.setAttribute('data-product', studio.activeProduct);
+
+    if (studio.activeProduct === 'mate') {
+      studio.items.forEach(it => {
+        if (it.type === 'icon' && it.fileBlack) it.file = it.fileBlack;
+      });
       return _origRenderVirolaCanvas();
     }
 
-    const svg = document.getElementById('virola-studio-svg');
-    if (!svg) return;
     const { cx, cy } = STUDIO_CONFIG;
 
-    // En la caja de presentación el grabado se muestra invertido en color blanco (#ffffff)
+    // -------------------------------------------------------------------------
+    // VISTA 2D DEL TERMO (Mismo tamaño y proporciones reales que la vista 360°)
+    // -------------------------------------------------------------------------
+    if (studio.activeProduct === 'termo') {
+      const tWidth = 170;
+      const tHeight = 390;
+      const tX = cx - tWidth / 2; // 165
+      const tY = 66;              // 66..456
+
+      let textsHtml = '';
+      const textItems = studio.items.filter(i => i.type === 'text');
+      textItems.forEach((t, idx) => {
+        const isActive = t.id === studio.activeItemId;
+        if (t.x === undefined || t.y < 85 || t.y > 435) {
+          t.x = cx;
+          t.y = 175 + idx * 42;
+        }
+        const x = Math.max(tX + 20, Math.min(tX + tWidth - 20, t.x));
+        const y = Math.max(tY + 28, Math.min(tY + tHeight - 28, t.y));
+        t.x = x;
+        t.y = y;
+        const rot = t.rotation || 0;
+        const fSize = Math.round((t.fontSize || 22) * (t.scale || 1));
+        const approxHalfW = Math.max(36, ((t.text || '').length * fSize * 0.34));
+        const approxHalfH = Math.max(14, fSize * 0.65);
+
+        textsHtml += `
+          <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
+             data-item-id="${t.id}"
+             transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
+             onmousedown="startFreeItemDrag('${t.id}', event)"
+             ontouchstart="startFreeItemDrag('${t.id}', event)">
+            <text font-family="'${t.font || 'Cinzel'}', serif" 
+                  font-size="${fSize}" 
+                  font-weight="800" 
+                  letter-spacing="1.5px" 
+                  fill="#120e0a" 
+                  text-anchor="middle" 
+                  dominant-baseline="central" 
+                  style="cursor: grab; fill: #120e0a !important;" 
+                  class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
+                  data-item-id="${t.id}">
+              ${escapeHtml(t.text)}
+            </text>
+            ${build2DItemHandlesHtml(t, approxHalfW, approxHalfH, false)}
+          </g>
+        `;
+      });
+
+      let iconsHtml = '';
+      const iconItems = studio.items.filter(i => i.type === 'icon');
+      iconItems.forEach((item, idx) => {
+        if (item.fileBlack) item.file = item.fileBlack;
+        const scale = item.scale || 1.0;
+        const rot = item.rotation || 0;
+        const isActive = item.id === studio.activeItemId;
+        if (item.x === undefined || item.y < 85 || item.y > 435) {
+          item.x = cx;
+          item.y = 285 + idx * 58;
+        }
+        const x = Math.max(tX + 22, Math.min(tX + tWidth - 22, item.x));
+        const y = Math.max(tY + 28, Math.min(tY + tHeight - 28, item.y));
+        item.x = x;
+        item.y = y;
+        const baseSize = 44;
+        const halfSize = (baseSize * scale) / 2;
+
+        const contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: brightness(0) contrast(120%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.35));" />`;
+
+        iconsHtml += `
+          <g class="virola-sticker-group ${isActive ? 'active-sticker' : ''}" 
+             data-item-id="${item.id}" 
+             transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
+             onmousedown="startFreeItemDrag('${item.id}', event)"
+             ontouchstart="startFreeItemDrag('${item.id}', event)"
+             style="cursor: grab;">
+            ${contentHtml}
+            ${build2DItemHandlesHtml(item, halfSize, halfSize, false)}
+          </g>
+        `;
+      });
+
+      svg.innerHTML = `
+        <defs>
+          <linearGradient id="termo-real-2d-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#1f1f1f" />
+            <stop offset="22%" stop-color="#525252" />
+            <stop offset="50%" stop-color="#f8f8f8" />
+            <stop offset="78%" stop-color="#404040" />
+            <stop offset="100%" stop-color="#141414" />
+          </linearGradient>
+        </defs>
+
+        <!-- Sombra inferior del termo -->
+        <ellipse cx="${cx}" cy="${tY + tHeight + 12}" rx="84" ry="16" fill="rgba(0,0,0,0.45)" />
+
+        <!-- Pico vertedor y tapón cebador superior (idéntico a la vista 360°) -->
+        <rect x="${cx - 21}" y="${tY - 36}" width="42" height="12" rx="3" fill="#262626" stroke="#404040" stroke-width="1" />
+        <rect x="${cx - 40}" y="${tY - 26}" width="80" height="28" rx="6" fill="#111111" stroke="#2b2b2b" stroke-width="1.5" />
+
+        <!-- Cuerpo cilíndrico real del Termo 1L (170x390, igual al 360°) -->
+        <rect x="${tX}" y="${tY}" width="${tWidth}" height="${tHeight}" rx="16" fill="url(#termo-real-2d-grad)" stroke="#2b2b2b" stroke-width="2.2" />
+
+        <!-- Banda de base inferior reforzada -->
+        <rect x="${tX + 3}" y="${tY + tHeight - 18}" width="${tWidth - 6}" height="18" rx="8" fill="#141414" />
+
+        <!-- Guía sutil del área de grabado láser vertical -->
+        <rect x="${tX + 14}" y="${tY + 24}" width="${tWidth - 28}" height="${tHeight - 52}" rx="8" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.1" stroke-dasharray="5,5" />
+
+        <!-- Grabados en color negro sobre el acero del termo -->
+        <g class="virola-texts-layer">${textsHtml}</g>
+        <g class="virola-icons-layer">${iconsHtml}</g>
+      `;
+      return;
+    }
+
+    // -------------------------------------------------------------------------
+    // VISTA 2D DE LA CAJA DE PRESENTACIÓN (Grabado 100% en BLANCO automático)
+    // -------------------------------------------------------------------------
     let textsHtml = '';
     const textItems = studio.items.filter(i => i.type === 'text');
-    textItems.forEach(t => {
+    textItems.forEach((t, idx) => {
       const isActive = t.id === studio.activeItemId;
-      const x = t.x !== undefined ? t.x : cx;
-      const y = t.y !== undefined ? t.y : cy - 45;
+      if (t.x === undefined || t.y < 120 || t.y > 380) {
+        t.x = cx;
+        t.y = 195 + idx * 42;
+      }
+      const x = Math.max(65, Math.min(435, t.x));
+      const y = Math.max(138, Math.min(362, t.y));
+      t.x = x;
+      t.y = y;
       const rot = t.rotation !== undefined ? t.rotation : 0;
+      const fSize = Math.round((t.fontSize || 22) * (t.scale || 1));
+      const approxHalfW = Math.max(38, ((t.text || '').length * fSize * 0.34));
+      const approxHalfH = Math.max(14, fSize * 0.65);
 
       textsHtml += `
         <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
@@ -3205,59 +3480,58 @@ function escapeHtml(str) {
            onmousedown="startFreeItemDrag('${t.id}', event)"
            ontouchstart="startFreeItemDrag('${t.id}', event)">
           <text font-family="'${t.font || 'Cinzel'}', serif" 
-                font-size="${t.fontSize || 22}" 
+                font-size="${fSize}" 
                 font-weight="800" 
                 letter-spacing="2px" 
                 fill="#ffffff" 
                 text-anchor="middle" 
                 dominant-baseline="central" 
-                style="cursor: grab; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.65));" 
-                class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
+                style="cursor: grab; fill: #ffffff !important; color: #ffffff !important; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.75));" 
+                class="virola-curved-text box-white-text ${isActive ? 'active-text-element' : ''}" 
                 data-item-id="${t.id}">
             ${escapeHtml(t.text)}
           </text>
+          ${build2DItemHandlesHtml(t, approxHalfW, approxHalfH, true)}
         </g>
       `;
     });
 
     let iconsHtml = '';
     const iconItems = studio.items.filter(i => i.type === 'icon');
-    iconItems.forEach(item => {
+    iconItems.forEach((item, idx) => {
+      if (item.fileWhite) item.file = item.fileWhite;
+      const imgSrc = item.fileWhite || item.file;
       const scale = item.scale || 1.0;
       const rot = item.rotation || 0;
       const isActive = item.id === studio.activeItemId;
-      const x = item.x !== undefined ? item.x : cx;
-      const y = item.y !== undefined ? item.y : cy + 25;
+      if (item.x === undefined || item.y < 120 || item.y > 380) {
+        item.x = cx;
+        item.y = 285 + idx * 55;
+      }
+      const x = Math.max(68, Math.min(432, item.x));
+      const y = Math.max(142, Math.min(358, item.y));
+      item.x = x;
+      item.y = y;
       const baseSize = 48;
       const halfSize = (baseSize * scale) / 2;
 
-      // Filtro invertido blanco puro para los escudos e imágenes sobre la caja oscura
-      const contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,0.6));" />`;
-
-      let selectionBorderHtml = '';
-      if (isActive) {
-        selectionBorderHtml = `
-          <rect x="${(-halfSize - 5).toFixed(2)}" y="${(-halfSize - 5).toFixed(2)}" 
-                width="${(baseSize * scale + 10).toFixed(2)}" height="${(baseSize * scale + 10).toFixed(2)}" 
-                fill="none" stroke="#ffffff" stroke-width="1.6" stroke-dasharray="4,4" 
-                rx="6" ry="6" opacity="0.9" pointer-events="none" />
-        `;
-      }
+      // Filtro blanco puro para todos los íconos, escudos e imágenes cargadas desde el dispositivo
+      const contentHtml = `<image href="${imgSrc}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,0.75)) !important;" />`;
 
       iconsHtml += `
-        <g class="virola-sticker-group ${isActive ? 'active-sticker' : ''}" 
+        <g class="virola-sticker-group box-white-sticker ${isActive ? 'active-sticker' : ''}" 
            data-item-id="${item.id}" 
            transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
            onmousedown="startFreeItemDrag('${item.id}', event)"
            ontouchstart="startFreeItemDrag('${item.id}', event)"
            style="cursor: grab;">
           ${contentHtml}
-          ${selectionBorderHtml}
+          ${build2DItemHandlesHtml(item, halfSize, halfSize, true)}
         </g>
       `;
     });
 
-    // Formato rectangular horizontal de la Caja de presentación (solo frente)
+    // Formato rectangular horizontal de la Caja de presentación negra con grabado en blanco
     svg.innerHTML = `
       <defs>
         <linearGradient id="box-dark-finish" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -3275,7 +3549,7 @@ function escapeHtml(str) {
 
       <!-- Marco interior sutil del frente -->
       <rect x="48" y="128" width="404" height="244" rx="6" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
-      <text x="250" y="100" text-anchor="middle" fill="#ffffff" opacity="0.75" font-size="11" font-weight="700" letter-spacing="1.5">FRENTE DE CAJA DE PRESENTACIÓN (GRABADO BLANCO)</text>
+      <text x="250" y="100" text-anchor="middle" fill="#ffffff" opacity="0.75" font-size="11" font-weight="700" letter-spacing="1.5">FRENTE DE CAJA DE PRESENTACIÓN (GRABADO EN BLANCO)</text>
 
       <!-- Grabados invertidos en color blanco -->
       <g class="virola-texts-layer">${textsHtml}</g>
@@ -3283,7 +3557,7 @@ function escapeHtml(str) {
     `;
   };
 
-  // 8. Sobrescribir render360Canvas: solucionar contorno de textos al rotar 360° y caché de íconos
+  // 8. Sobrescribir render360Canvas: mismo tamaño real del termo (170x390) y proyección sincronizada 1:1 con 2D
   window.render360Canvas = function() {
     const canvas = document.getElementById('studio-360-canvas');
     if (!canvas) return;
@@ -3410,7 +3684,7 @@ function escapeHtml(str) {
             ctx.textBaseline = 'middle';
             ctx.fillText(item.text || '', 0, 0);
           } else if (item.type === 'icon') {
-            const imgEl = getCachedImage(item.file);
+            const imgEl = getCachedImage(item.fileBlack || item.file);
             if (imgEl && imgEl.complete) {
               const s = (item.scale || 1) * 30;
               ctx.drawImage(imgEl, -s / 2, -s / 2, s, s);
@@ -3422,40 +3696,61 @@ function escapeHtml(str) {
 
       ctx.restore();
     } else if (studio.activeProduct === 'termo') {
+      // Mismo tamaño exacto que en la vista 2D (tWidth = 170, tHeight = 390)
       const centerX = w / 2;
-      const centerY = h / 2 - 10;
-      const tWidth = 140;
-      const tHeight = 360;
+      const centerY = h / 2 + 6;
+      const tWidth = 170;
+      const tHeight = 390;
+      const tTop = centerY - tHeight / 2;
 
       ctx.save();
+      // Sombra inferior
       ctx.beginPath();
-      ctx.roundRect(centerX - tWidth / 2, centerY - tHeight / 2, tWidth, tHeight, 14);
+      ctx.ellipse(centerX, tTop + tHeight + 12, 84, 16, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+      ctx.fill();
+
+      // Pico vertedor y tapón superior
+      ctx.beginPath();
+      ctx.roundRect(centerX - 21, tTop - 36, 42, 12, 3);
+      ctx.fillStyle = '#262626';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.roundRect(centerX - 40, tTop - 26, 80, 28, 6);
+      ctx.fillStyle = '#111111';
+      ctx.fill();
+
+      // Cuerpo cilíndrico
+      ctx.beginPath();
+      ctx.roundRect(centerX - tWidth / 2, tTop, tWidth, tHeight, 16);
       const termoGrad = ctx.createLinearGradient(centerX - tWidth / 2, 0, centerX + tWidth / 2, 0);
       termoGrad.addColorStop(0, '#1f1f1f');
-      termoGrad.addColorStop(0.25, '#4a4a4a');
-      termoGrad.addColorStop(0.5, '#ffffff');
-      termoGrad.addColorStop(0.75, '#3a3a3a');
+      termoGrad.addColorStop(0.22, '#525252');
+      termoGrad.addColorStop(0.5, '#f8f8f8');
+      termoGrad.addColorStop(0.78, '#404040');
       termoGrad.addColorStop(1, '#141414');
       ctx.fillStyle = termoGrad;
       ctx.fill();
       ctx.strokeStyle = '#2b2b2b';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2.2;
       ctx.stroke();
 
-      // Tapón superior
+      // Base inferior reforzada
       ctx.beginPath();
-      ctx.roundRect(centerX - 35, centerY - tHeight / 2 - 24, 70, 26, 6);
-      ctx.fillStyle = '#111111';
+      ctx.roundRect(centerX - tWidth / 2 + 3, tTop + tHeight - 18, tWidth - 6, 18, 8);
+      ctx.fillStyle = '#141414';
       ctx.fill();
 
       studio.items.forEach(item => {
-        const itemAngle = (item.angle || 0) + studio.rotation360;
+        const horizOffsetAngle = (((item.x !== undefined ? item.x : 250) - 250) / (tWidth / 2)) * 60;
+        const itemAngle = horizOffsetAngle + studio.rotation360;
         const angleRad = (itemAngle * Math.PI) / 180;
         const facing = Math.cos(angleRad);
 
         if (facing > -0.15) {
-          const projX = centerX + Math.sin(angleRad) * (tWidth / 2 - 12);
-          const projY = centerY - 60 + ((item.y || 250) - 250) * 0.7;
+          const projX = centerX + Math.sin(angleRad) * (tWidth / 2 - 14);
+          const projY = tTop + ((item.y !== undefined ? item.y : 250) - 66);
           const scaleComp = Math.max(0.28, facing);
 
           studio.projected360Items.push({
@@ -3470,19 +3765,21 @@ function escapeHtml(str) {
           ctx.globalAlpha = Math.max(0.22, facing);
           ctx.translate(projX, projY);
           ctx.scale(scaleComp, 1);
+          if (item.rotation) ctx.rotate((item.rotation * Math.PI) / 180);
 
           if (item.type === 'text') {
-            ctx.font = `800 ${item.fontSize || 22}px '${item.font || 'Cinzel'}', serif`;
-            ctx.fillStyle = '#111111';
+            const fSize = Math.round((item.fontSize || 22) * (item.scale || 1));
+            ctx.font = `800 ${fSize}px '${item.font || 'Cinzel'}', serif`;
+            ctx.fillStyle = '#120e0a';
             ctx.strokeStyle = 'transparent';
             ctx.lineWidth = 0;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(item.text || '', 0, 0);
           } else if (item.type === 'icon') {
-            const imgEl = getCachedImage(item.file);
+            const imgEl = getCachedImage(item.fileBlack || item.file);
             if (imgEl && imgEl.complete) {
-              const s = (item.scale || 1) * 38;
+              const s = (item.scale || 1) * 44;
               ctx.drawImage(imgEl, -s / 2, -s / 2, s, s);
             }
           }
@@ -3492,6 +3789,60 @@ function escapeHtml(str) {
 
       ctx.restore();
     }
+  };
+
+  const _origCenterActiveItem = window.centerActiveItem;
+  window.centerActiveItem = function() {
+    if (studio.activeProduct === 'mate') {
+      return _origCenterActiveItem();
+    }
+    const item = studio.items.find(i => i.id === studio.activeItemId);
+    if (!item) return;
+    saveStudioHistoryState();
+    item.x = STUDIO_CONFIG.cx;
+    item.rotation = 0;
+    renderVirolaCanvas();
+    updateActiveItemFloatingBar();
+    if (studio.viewMode === '360') render360Canvas();
+    showNotificationToast('Elemento alineado al centro', 'fa-crosshairs');
+  };
+
+  const _origStepItemRotation = window.stepItemRotation;
+  window.stepItemRotation = function(degDelta) {
+    if (studio.activeProduct === 'mate') {
+      return _origStepItemRotation(degDelta);
+    }
+    const item = studio.items.find(i => i.id === studio.activeItemId);
+    if (!item) return;
+    saveStudioHistoryState();
+    item.rotation = ((item.rotation || 0) + degDelta) % 360;
+    renderVirolaCanvas();
+    updateActiveItemFloatingBar();
+    if (studio.viewMode === '360') render360Canvas();
+  };
+
+  const _origAutoCenter = window.autoCenterAndBalanceVirola;
+  window.autoCenterAndBalanceVirola = function() {
+    if (studio.activeProduct === 'mate') {
+      return _origAutoCenter();
+    }
+    saveStudioHistoryState();
+    const { cx } = STUDIO_CONFIG;
+    const texts = studio.items.filter(i => i.type === 'text');
+    const icons = studio.items.filter(i => i.type === 'icon');
+    texts.forEach((t, idx) => {
+      t.x = cx;
+      t.y = (studio.activeProduct === 'termo' ? 175 : 195) + idx * 42;
+      t.rotation = 0;
+    });
+    icons.forEach((ic, idx) => {
+      ic.x = cx;
+      ic.y = 285 + idx * 56;
+      ic.rotation = 0;
+    });
+    renderVirolaCanvas();
+    if (studio.viewMode === '360') render360Canvas();
+    showNotificationToast('Elementos centrados y equilibrados', 'fa-crosshairs');
   };
 
   // 9. Inyectar controles rápidos de Deshacer/Rehacer también en la barra del elemento activo (móvil/desktop)
@@ -3519,6 +3870,7 @@ function escapeHtml(str) {
     studio.snappingEnabled = false;
     window.syncStudioPricingFromAdmin();
     injectQuickUndoRedoButtons();
+    syncCurvatureControlsVisibility();
     renderModelsDropdown();
     updatePriceDisplay();
     renderVirolaCanvas();
