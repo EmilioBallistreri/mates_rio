@@ -403,7 +403,7 @@ function renderCategoriesGrid() {
       <img src="${cat.image}" alt="${cat.name}" class="category-card-bg" loading="lazy" />
       <div class="category-card-overlay"></div>
       <div class="category-card-content">
-        <span class="category-badge">${cat.badge || ''}</span>
+
         <h3 class="category-name">${cat.name}</h3>
         <div class="category-footer-row">
           <span class="category-sub">${cat.label || ''}</span>

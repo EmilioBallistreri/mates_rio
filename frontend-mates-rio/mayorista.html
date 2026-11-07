@@ -365,6 +365,114 @@
       background: #000000;
       color: #ffffff;
     }
+    @media (max-width: 768px) {
+      .wholesale-main-wrap {
+        padding: 20px 0 50px !important;
+      }
+
+      body.wholesale-page #open-b2b-cart-btn {
+        width: auto !important;
+        height: 38px !important;
+        padding: 0 12px !important;
+        border-radius: 30px !important;
+        font-size: 0.75rem !important;
+        gap: 6px !important;
+      }
+
+      .wholesale-auth-card {
+        padding: 20px 14px !important;
+        border-radius: 14px !important;
+      }
+
+      .wholesale-auth-header h1 {
+        font-size: 1.38rem !important;
+      }
+
+      .wholesale-auth-header p {
+        font-size: 0.82rem !important;
+      }
+
+      .wholesale-auth-tabs {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6px !important;
+        padding: 4px !important;
+      }
+
+      .wholesale-tab-btn {
+        padding: 10px 8px !important;
+        font-size: 0.76rem !important;
+        gap: 5px !important;
+        white-space: nowrap !important;
+      }
+
+      .btn-ws-submit {
+        height: 46px !important;
+        font-size: 0.82rem !important;
+        padding: 0 12px !important;
+        white-space: normal !important;
+        text-align: center !important;
+      }
+
+      .wholesale-welcome-banner {
+        padding: 16px 14px !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+
+      .ws-filter-bar {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        padding-bottom: 6px !important;
+        gap: 8px !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+
+      .ws-filter-pill {
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
+        padding: 8px 14px !important;
+        font-size: 0.78rem !important;
+      }
+
+      .ws-product-img-wrap {
+        height: 185px !important;
+      }
+
+      .ws-product-body {
+        padding: 14px !important;
+      }
+
+      .ws-product-title {
+        font-size: 0.94rem !important;
+      }
+
+      .ws-price-val {
+        font-size: 1.2rem !important;
+      }
+
+      .ws-qty-row {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+      }
+
+      .ws-qty-stepper {
+        flex: 0 0 auto !important;
+      }
+
+      .btn-ws-add-cart {
+        flex: 1 1 130px !important;
+        font-size: 0.78rem !important;
+        padding: 0 10px !important;
+      }
+    }
+
+    @media (max-width: 420px) {
+      body.wholesale-page #open-b2b-cart-btn span:not(#b2b-cart-badge) {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body class="wholesale-page">

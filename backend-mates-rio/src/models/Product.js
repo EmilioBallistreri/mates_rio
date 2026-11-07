@@ -5,15 +5,27 @@ const dataFilePath = path.join(__dirname, '../data/initialProducts.json');
 
 // Cargar productos en memoria desde el archivo JSON inicial
 let products = [];
-try {
-  if (fs.existsSync(dataFilePath)) {
-    const raw = fs.readFileSync(dataFilePath, 'utf8');
-    products = JSON.parse(raw);
+function loadProductsFromDisk() {
+  try {
+    if (fs.existsSync(dataFilePath)) {
+      const raw = fs.readFileSync(dataFilePath, 'utf8');
+      products = JSON.parse(raw);
+    }
+  } catch (e) {
+    console.error('Error cargando initialProducts.json:', e.message);
+    products = [];
   }
-} catch (e) {
-  console.error('Error cargando initialProducts.json:', e.message);
-  products = [];
 }
+
+function saveProductsToDisk() {
+  try {
+    fs.writeFileSync(dataFilePath, JSON.stringify(products, null, 2), 'utf8');
+  } catch (e) {
+    console.error('Error guardando initialProducts.json:', e.message);
+  }
+}
+
+loadProductsFromDisk();
 
 const Product = {
   findAll: (filter = {}) => {
@@ -70,12 +82,14 @@ const Product = {
       rating: Number(data.rating) || 5.0,
       reviewsCount: Number(data.reviewsCount) || 0,
       image: data.image || 'assets/images/prod_mate_imperial.jpg',
+      images: Array.isArray(data.images) ? data.images : [data.image || 'assets/images/prod_mate_imperial.jpg'],
       description: data.description || '',
       specs: data.specs || {},
       inStock: data.inStock !== undefined ? Boolean(data.inStock) : true,
       createdAt: new Date().toISOString()
     };
     products.unshift(newProduct);
+    saveProductsToDisk();
     return newProduct;
   },
 
@@ -86,9 +100,10 @@ const Product = {
     products[index] = {
       ...products[index],
       ...updateData,
-      id: products[index].id, // preservar id
+      id: products[index].id,
       updatedAt: new Date().toISOString()
     };
+    saveProductsToDisk();
     return products[index];
   },
 
@@ -96,6 +111,7 @@ const Product = {
     const index = products.findIndex(p => p.id === id || String(p.id) === String(id));
     if (index === -1) return false;
     products.splice(index, 1);
+    saveProductsToDisk();
     return true;
   }
 };

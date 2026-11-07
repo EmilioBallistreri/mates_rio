@@ -925,3 +925,295 @@ function syncProductsFromStorage() {
 
 syncProductsFromStorage();
 window.syncProductsFromStorage = syncProductsFromStorage;
+
+
+// ==========================================================================
+// 8. MOTOR DE SINCRONIZACIÓN GLOBAL CON SERVIDOR (BACKEND + MULTI-DISPOSITIVO)
+// Garantiza que cualquier cambio realizado por un administrador (productos,
+// fotos, precios, banners, categorías, etc.) se guarde en el servidor y se vea
+// reflejado para clientes registrados, otros administradores y visitantes sin
+// iniciar sesión en cualquier navegador o dispositivo.
+// ==========================================================================
+(function() {
+  const KEY_MAP = {
+    mates_rio_custom_products: 'customProducts',
+    mates_rio_deleted_products: 'deletedProducts',
+    mates_rio_inventory: 'inventory',
+    mates_rio_categories: 'categories',
+    mates_rio_home_slides: 'homeSlides',
+    mates_rio_special_occasion: 'specialOccasion',
+    mates_rio_customization_pricing: 'customizationPricing',
+    mates_rio_theme_mode: 'themeMode',
+    mates_rio_supplier_purchases: 'supplierPurchases',
+    mates_rio_orders: 'orders',
+    mates_rio_wholesale_clients: 'wholesaleClients'
+  };
+
+  const REVERSE_KEY_MAP = {};
+  Object.keys(KEY_MAP).forEach((lsKey) => {
+    REVERSE_KEY_MAP[KEY_MAP[lsKey]] = lsKey;
+  });
+
+  function getCandidateApiUrls() {
+    const urls = [];
+    if (window.MATES_RIO_API_URL) {
+      urls.push(window.MATES_RIO_API_URL.replace(/\/$/, '') + '/store-state');
+    }
+    if (window.location && window.location.protocol.startsWith('http')) {
+      if (window.location.port === '5000') {
+        urls.push(window.location.origin + '/api/store-state');
+      } else {
+        urls.push('http://localhost:5000/api/store-state');
+        urls.push(window.location.origin + '/api/store-state');
+      }
+    } else {
+      urls.push('http://localhost:5000/api/store-state');
+    }
+    return [...new Set(urls)];
+  }
+
+  let activeApiUrl = null;
+  let lastAppliedTimestamp = Number(localStorage.getItem('mates_rio_state_updated_at') || 0);
+  let pushDebounceTimer = null;
+  let pendingPatch = {};
+
+  const syncChannel = typeof BroadcastChannel !== 'undefined'
+    ? new BroadcastChannel('mates_rio_live_sync')
+    : null;
+
+  function collectLocalStoreState() {
+    const payload = {};
+    let hasAnyData = false;
+    Object.keys(KEY_MAP).forEach((lsKey) => {
+      const raw = localStorage.getItem(lsKey);
+      if (raw !== null) {
+        hasAnyData = true;
+        try {
+          payload[KEY_MAP[lsKey]] = JSON.parse(raw);
+        } catch (e) {
+          payload[KEY_MAP[lsKey]] = raw;
+        }
+      }
+    });
+    return { payload, hasAnyData };
+  }
+
+  function refreshAllPageViews() {
+    try {
+      if (typeof window.syncProductsFromStorage === 'function') {
+        window.syncProductsFromStorage();
+      }
+      if (typeof window.initThemeMode === 'function') {
+        window.initThemeMode();
+      }
+      if (typeof window.renderSpecialOccasionBanner === 'function') {
+        window.renderSpecialOccasionBanner();
+      }
+      if (typeof window.initSlider === 'function') {
+        window.initSlider();
+      }
+      if (typeof window.renderCategoriesGrid === 'function') {
+        window.renderCategoriesGrid();
+      }
+      if (typeof window.renderProducts === 'function') {
+        window.renderProducts();
+      }
+      if (typeof window.syncStudioPricingFromAdmin === 'function') {
+        window.syncStudioPricingFromAdmin();
+      }
+      if (typeof window.renderWholesaleProducts === 'function') {
+        window.renderWholesaleProducts();
+      }
+      if (typeof window.renderInventoryTable === 'function') {
+        window.renderInventoryTable();
+      }
+      if (typeof window.renderHomeSlidesAdmin === 'function') {
+        window.renderHomeSlidesAdmin();
+      }
+      if (typeof window.renderCategoriesAdmin === 'function') {
+        window.renderCategoriesAdmin();
+      }
+    } catch (e) {
+      console.warn('Error refrescando vistas tras sincronización:', e);
+    }
+  }
+
+  function applyRemoteStateToLocal(remoteData) {
+    if (!remoteData || typeof remoteData !== 'object') return false;
+    let anyChanged = false;
+    window._isApplyingCloudSync = true;
+    try {
+      Object.keys(REVERSE_KEY_MAP).forEach((serverKey) => {
+        if (remoteData[serverKey] !== undefined && remoteData[serverKey] !== null) {
+          const lsKey = REVERSE_KEY_MAP[serverKey];
+          const serialized = typeof remoteData[serverKey] === 'string'
+            ? remoteData[serverKey]
+            : JSON.stringify(remoteData[serverKey]);
+          if (localStorage.getItem(lsKey) !== serialized) {
+            localStorage.setItem(lsKey, serialized);
+            anyChanged = true;
+          }
+          if (lsKey === 'mates_rio_theme_mode') {
+            localStorage.setItem('mates_rio_admin_theme', serialized.replace(/^"|"$/g, ''));
+          }
+        }
+      });
+      if (remoteData.updatedAt) {
+        lastAppliedTimestamp = Number(remoteData.updatedAt);
+        localStorage.setItem('mates_rio_state_updated_at', String(lastAppliedTimestamp));
+      }
+    } finally {
+      window._isApplyingCloudSync = false;
+    }
+
+    if (anyChanged) {
+      refreshAllPageViews();
+    }
+    return anyChanged;
+  }
+
+  async function fetchWithFallback(options = {}) {
+    const candidates = activeApiUrl ? [activeApiUrl, ...getCandidateApiUrls()] : getCandidateApiUrls();
+    for (const url of [...new Set(candidates)]) {
+      try {
+        const res = await fetch(url, options);
+        if (res.ok) {
+          activeApiUrl = url;
+          return await res.json();
+        }
+      } catch (e) {
+        // Intentar siguiente URL candidata
+      }
+    }
+    return null;
+  }
+
+  async function pushStoreStateToServer(patchObj) {
+    const bodyObj = patchObj || collectLocalStoreState().payload;
+    if (!bodyObj || Object.keys(bodyObj).length === 0) return;
+
+    const json = await fetchWithFallback({
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bodyObj)
+    });
+
+    if (json && json.success && json.data && json.data.updatedAt) {
+      lastAppliedTimestamp = Number(json.data.updatedAt);
+      window._isApplyingCloudSync = true;
+      localStorage.setItem('mates_rio_state_updated_at', String(lastAppliedTimestamp));
+      window._isApplyingCloudSync = false;
+    }
+
+    if (syncChannel) {
+      try {
+        syncChannel.postMessage({ type: 'STORE_STATE_UPDATED', updatedAt: lastAppliedTimestamp });
+      } catch (e) {}
+    }
+  }
+
+  async function pullStoreStateFromServer() {
+    const json = await fetchWithFallback({ method: 'GET', cache: 'no-store' });
+    if (!json || !json.success || !json.data) return;
+
+    const serverState = json.data;
+    const serverUpdated = Number(serverState.updatedAt || 0);
+    const localUpdated = Number(localStorage.getItem('mates_rio_state_updated_at') || 0);
+    const { payload, hasAnyData } = collectLocalStoreState();
+
+    // Si el servidor aún está vacío pero este navegador tiene cambios locales del admin, subirlos al servidor
+    if (serverUpdated === 0 && hasAnyData) {
+      await pushStoreStateToServer(payload);
+      return;
+    }
+
+    // Si el servidor tiene cambios más recientes (o este navegador es un visitante nuevo), aplicarlos
+    if (serverUpdated > 0 && (serverUpdated > localUpdated || !hasAnyData)) {
+      applyRemoteStateToLocal(serverState);
+    } else if (localUpdated > serverUpdated && hasAnyData) {
+      await pushStoreStateToServer(payload);
+    }
+  }
+
+  // Interceptar localStorage.setItem para detectar automáticamente cualquier cambio hecho en el Admin
+  const _origSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function(key, value) {
+    _origSetItem.call(this, key, value);
+
+    if (this === window.localStorage && !window._isApplyingCloudSync) {
+      let mappedKey = KEY_MAP[key];
+      let finalVal = value;
+
+      if (key === 'mates_rio_admin_theme') {
+        mappedKey = 'themeMode';
+        _origSetItem.call(this, 'mates_rio_theme_mode', value);
+      }
+
+      if (mappedKey) {
+        const now = Date.now();
+        lastAppliedTimestamp = now;
+        _origSetItem.call(this, 'mates_rio_state_updated_at', String(now));
+
+        try {
+          pendingPatch[mappedKey] = JSON.parse(finalVal);
+        } catch (e) {
+          pendingPatch[mappedKey] = finalVal;
+        }
+
+        if (syncChannel) {
+          try {
+            syncChannel.postMessage({ type: 'STORE_STATE_UPDATED', updatedAt: now });
+          } catch (e) {}
+        }
+
+        clearTimeout(pushDebounceTimer);
+        pushDebounceTimer = setTimeout(() => {
+          const patchToSend = { ...pendingPatch };
+          pendingPatch = {};
+          pushStoreStateToServer(patchToSend);
+        }, 120);
+      }
+    }
+  };
+
+  // Escuchar cambios instantáneos entre pestañas abiertas del mismo navegador (incluso sin sesión)
+  window.addEventListener('storage', (e) => {
+    if (e.key && (KEY_MAP[e.key] || e.key === 'mates_rio_state_updated_at')) {
+      refreshAllPageViews();
+    }
+  });
+
+  if (syncChannel) {
+    syncChannel.onmessage = (event) => {
+      if (event.data && event.data.type === 'STORE_STATE_UPDATED') {
+        pullStoreStateFromServer();
+        refreshAllPageViews();
+      }
+    };
+  }
+
+  // Sincronizar al cargar la página, al volver a la pestaña y periódicamente cada 6 segundos
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      pullStoreStateFromServer();
+    });
+  } else {
+    pullStoreStateFromServer();
+  }
+
+  window.addEventListener('focus', () => {
+    pullStoreStateFromServer();
+  });
+
+  setInterval(() => {
+    if (!document.hidden) {
+      pullStoreStateFromServer();
+    }
+  }, 6000);
+
+  window.MatesRioCloudSync = {
+    pull: pullStoreStateFromServer,
+    push: pushStoreStateToServer,
+    refresh: refreshAllPageViews
+  };
+})();

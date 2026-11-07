@@ -3879,3 +3879,298 @@ body.admin-dark-mode .btn-table-action:hover {
   color: #ffffff !important;
   border-color: #45454a !important;
 }
+
+
+/* ==========================================================================
+   CORRECCIÓN INTEGRAL VISTA MÓVIL (CELULAR) EN PANEL DE ADMINISTRACIÓN
+   Evita desbordes horizontales, superposiciones y cortes de texto, botones,
+   formularios, tarjetas KPI, tablas y modales vistos desde el celular.
+   ========================================================================== */
+
+html,
+body.admin-body {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+}
+
+@media (max-width: 992px) {
+  .admin-sidebar {
+    transform: translateX(-100%) !important;
+    width: min(84vw, 290px) !important;
+    max-width: 100vw !important;
+    z-index: 10050 !important;
+  }
+
+  .admin-sidebar.sidebar-open {
+    transform: translateX(0) !important;
+  }
+
+  .admin-main-stage {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    flex: 1 1 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .btn-toggle-sidebar-mobile {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .btn-close-sidebar-mobile {
+    display: inline-flex !important;
+  }
+
+  .stats-two-col {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Topbar compacto y encuadrado en celular */
+  .admin-topbar,
+  body.admin-dark-mode .admin-topbar {
+    height: 54px !important;
+    padding: 0 12px !important;
+    gap: 6px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .topbar-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+
+  .topbar-breadcrumb {
+    font-size: 0.74rem !important;
+    max-width: 150px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .topbar-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .topbar-icon-btn {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.85rem !important;
+  }
+
+  .btn-store-preview,
+  body.admin-dark-mode .btn-store-preview {
+    padding: 6px 10px !important;
+    font-size: 0.72rem !important;
+    gap: 4px !important;
+  }
+
+  /* Contenedor principal y cabeceras de sección */
+  .admin-content-container {
+    padding: 14px 12px 36px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+
+  .section-head-bar {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .section-page-title {
+    font-size: 1.05rem !important;
+    line-height: 1.25 !important;
+    word-break: break-word !important;
+  }
+
+  .section-page-desc {
+    font-size: 0.76rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .section-actions {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .section-actions .btn-admin {
+    flex: 1 1 auto !important;
+    justify-content: center !important;
+    font-size: 0.74rem !important;
+    padding: 8px 10px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Tarjetas KPI y Gráficos en celular */
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .kpi-card,
+  body.admin-dark-mode .kpi-card {
+    padding: 14px 12px !important;
+    min-width: 0 !important;
+  }
+
+  .kpi-title {
+    font-size: 0.65rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .kpi-value,
+  body.admin-dark-mode .kpi-value {
+    font-size: 1.32rem !important;
+    word-break: break-word !important;
+  }
+
+  .stat-box-card,
+  body.admin-dark-mode .stat-box-card {
+    padding: 16px 14px !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .minimal-horiz-bar-row {
+    grid-template-columns: 110px 1fr 40px !important;
+    gap: 8px !important;
+  }
+
+  /* Barra de filtros e inputs de búsqueda en tablas */
+  .toolbar-card {
+    padding: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .toolbar-search-wrap,
+  .toolbar-filters-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .toolbar-filters-wrap select,
+  .toolbar-filters-wrap button {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  /* Tablas con scroll horizontal fluido encuadrado */
+  .table-responsive-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Formularios de 2 columnas pasan a 1 columna en celular */
+  .admin-form-grid-2,
+  .form-row-2col {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Acordeones de Diseño Web y Banners en celular */
+  .admin-design-accordion-header {
+    padding: 12px 14px !important;
+  }
+
+  .admin-design-accordion-title {
+    font-size: 0.82rem !important;
+  }
+
+  .admin-design-accordion-body {
+    padding: 14px 12px !important;
+  }
+
+  /* Modales de Creación/Edición de Producto y Detalle de Pedido */
+  .admin-modal-overlay {
+    padding: 10px !important;
+  }
+
+  .admin-modal-card,
+  .admin-modal-card.admin-modal-lg {
+    width: 100% !important;
+    max-width: calc(100vw - 20px) !important;
+    max-height: 90vh !important;
+    margin: 0 auto !important;
+  }
+
+  .admin-modal-header {
+    padding: 12px 14px !important;
+  }
+
+  .admin-modal-title {
+    font-size: 0.92rem !important;
+  }
+
+  .admin-modal-body {
+    padding: 14px !important;
+    max-height: calc(90vh - 115px) !important;
+  }
+
+  .admin-modal-footer {
+    padding: 10px 14px !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .admin-modal-footer button {
+    flex: 1 1 auto !important;
+    justify-content: center !important;
+  }
+
+  /* Pantalla de Login Admin en celular */
+  .admin-gate-screen {
+    padding: 14px !important;
+  }
+
+  .admin-gate-box {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .admin-gate-header,
+  .admin-gate-body {
+    padding: 20px 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .kpi-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .topbar-breadcrumb {
+    max-width: 115px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .btn-store-preview .preview-btn-text {
+    display: none !important;
+  }
+}

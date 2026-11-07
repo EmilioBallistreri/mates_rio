@@ -3865,6 +3865,24 @@ function escapeHtml(str) {
     updateHistoryButtonsUI();
   }
 
+  window.openCompletionModal = function() {
+    if (typeof window.finalizeAndAddToCart === 'function') {
+      window.finalizeAndAddToCart();
+    }
+  };
+
+  const _origUpdatePriceDisplay = window.updatePriceDisplay;
+  if (typeof _origUpdatePriceDisplay === 'function') {
+    window.updatePriceDisplay = function() {
+      _origUpdatePriceDisplay();
+      const confirmPriceEl = document.getElementById('confirm-mate-price');
+      const mobileBarPriceEl = document.getElementById('mobile-bar-price');
+      if (confirmPriceEl && mobileBarPriceEl) {
+        mobileBarPriceEl.textContent = confirmPriceEl.textContent;
+      }
+    };
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     studio.circularLines = 'no';
     studio.snappingEnabled = false;
