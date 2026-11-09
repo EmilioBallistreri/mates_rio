@@ -4174,3 +4174,239 @@ body.admin-body {
     display: none !important;
   }
 }
+
+/* ==========================================================================
+   ESTÉTICA 100% BITONO BLANCO Y NEGRO EN PANEL DE ADMINISTRACIÓN
+   Eliminación total de tonos amarillos/dorados/marrones tanto en Modo Claro
+   como en Modo Oscuro, y estilos para botón de "Volver a sección anterior".
+   ========================================================================== */
+
+:root,
+body.admin-body,
+body.admin-body.theme-light,
+body.admin-body:not(.admin-dark-mode) {
+  --admin-bg-sidebar: #111111 !important;
+  --admin-sidebar-hover: #1f1f22 !important;
+  --admin-sidebar-active: #27272a !important;
+  --admin-bg-main: #f4f4f5 !important;
+  --admin-card-bg: #ffffff !important;
+  --admin-border: #e4e4e7 !important;
+  --admin-border-focus: #000000 !important;
+  --admin-text-main: #111111 !important;
+  --admin-text-muted: #52525b !important;
+  --admin-text-light: #ffffff !important;
+  --admin-gold: #111111 !important;
+  --admin-gold-hover: #000000 !important;
+  --admin-gold-light: #f4f4f5 !important;
+  --admin-leather: #111111 !important;
+  --admin-leather-dark: #000000 !important;
+  --admin-warning: #111111 !important;
+  --admin-warning-light: #f4f4f5 !important;
+}
+
+body.admin-dark-mode,
+html.admin-dark-mode body.admin-body {
+  --admin-bg-sidebar: #0d0d0d !important;
+  --admin-sidebar-hover: #1c1c1e !important;
+  --admin-sidebar-active: #27272a !important;
+  --admin-bg-main: #0d0d0d !important;
+  --admin-card-bg: #141414 !important;
+  --admin-border: #27272a !important;
+  --admin-border-focus: #ffffff !important;
+  --admin-text-main: #ffffff !important;
+  --admin-text-muted: #a1a1aa !important;
+  --admin-text-light: #ffffff !important;
+  --admin-gold: #ffffff !important;
+  --admin-gold-hover: #e4e4e7 !important;
+  --admin-gold-light: #1f1f22 !important;
+  --admin-leather: #ffffff !important;
+  --admin-leather-dark: #e4e4e7 !important;
+  --admin-warning: #ffffff !important;
+  --admin-warning-light: #1f1f22 !important;
+}
+
+/* Eliminación de gradientes amarillos/marrones en pantalla de ingreso y botones */
+.admin-gate-screen {
+  background: #0a0a0a !important;
+}
+
+.admin-gate-screen::before {
+  background: none !important;
+}
+
+.admin-gate-box {
+  border: 1.5px solid #27272a !important;
+}
+
+.admin-gate-header {
+  background: #111111 !important;
+  border-bottom: 1.5px solid #27272a !important;
+}
+
+.admin-gate-badge,
+.sidebar-badge.badge-gold,
+.sidebar-badge.badge-info,
+.sidebar-badge.badge-warning {
+  background: #27272a !important;
+  color: #ffffff !important;
+  border: 1px solid #3f3f46 !important;
+}
+
+body.admin-body:not(.admin-dark-mode) .sidebar-badge.badge-gold,
+body.admin-body:not(.admin-dark-mode) .sidebar-badge.badge-info,
+body.admin-body:not(.admin-dark-mode) .sidebar-badge.badge-warning {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border: 1px solid #111111 !important;
+}
+
+/* Botones principales y antes "dorados" ahora 100% Bitono Negro / Blanco */
+body.admin-body:not(.admin-dark-mode) .btn-admin-gold,
+body.admin-body:not(.admin-dark-mode) .btn-admin-primary,
+body.admin-body:not(.admin-dark-mode) .btn-gate-submit {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1.5px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+body.admin-body:not(.admin-dark-mode) .btn-admin-gold:hover,
+body.admin-body:not(.admin-dark-mode) .btn-admin-primary:hover,
+body.admin-body:not(.admin-dark-mode) .btn-gate-submit:hover {
+  background: #27272a !important;
+  border-color: #27272a !important;
+  color: #ffffff !important;
+}
+
+body.admin-dark-mode .btn-admin-gold,
+body.admin-dark-mode .btn-admin-primary,
+body.admin-dark-mode .btn-gate-submit {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1.5px solid #ffffff !important;
+  box-shadow: none !important;
+}
+
+body.admin-dark-mode .btn-admin-gold i,
+body.admin-dark-mode .btn-admin-primary i,
+body.admin-dark-mode .btn-gate-submit i {
+  color: #000000 !important;
+}
+
+body.admin-dark-mode .btn-admin-gold:hover,
+body.admin-dark-mode .btn-admin-primary:hover,
+body.admin-dark-mode .btn-gate-submit:hover {
+  background: #e4e4e7 !important;
+  border-color: #e4e4e7 !important;
+  color: #000000 !important;
+}
+
+/* Sidebar activo en Modo Claro sin amarillo */
+.admin-sidebar {
+  background: #111111 !important;
+  border-right: 1px solid #27272a !important;
+}
+
+.sidebar-nav-item.active {
+  background: #27272a !important;
+  color: #ffffff !important;
+  border-left-color: #ffffff !important;
+}
+
+.sidebar-nav-item.active i,
+.sidebar-nav-item:hover i {
+  color: #ffffff !important;
+}
+
+/* KPIs, íconos, barras y estados sin amarillo */
+.kpi-card.kpi-gold,
+.kpi-card.kpi-warning,
+.kpi-card.kpi-leather,
+.kpi-card.kpi-success {
+  border-left: 1px solid var(--admin-border) !important;
+}
+
+.icon-wrap-gold,
+.icon-wrap-warning,
+.icon-wrap-leather,
+.icon-wrap-success {
+  background: var(--admin-gold-light) !important;
+  color: var(--admin-text-main) !important;
+}
+
+.bar-fill,
+.minimal-bar-fill {
+  background: var(--admin-text-main) !important;
+}
+
+.status-prep,
+.stock-low {
+  background: var(--admin-gold-light) !important;
+  color: var(--admin-text-main) !important;
+  border: 1px solid var(--admin-border) !important;
+}
+
+/* Botón "← Volver" en Topbar y Banner de retorno en Notificaciones/Pedidos */
+.admin-topbar-back-btn {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: 1.5px solid var(--admin-text-main);
+  background: var(--admin-text-main);
+  color: var(--admin-card-bg);
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.admin-topbar-back-btn:hover {
+  opacity: 0.88;
+  transform: translateX(-2px);
+}
+
+.admin-notif-back-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  background: var(--admin-card-bg);
+  border: 1.5px solid var(--admin-border);
+}
+
+.admin-notif-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  background: var(--admin-text-main);
+  color: var(--admin-card-bg);
+  border: 1.5px solid var(--admin-text-main);
+  transition: all 0.18s ease;
+}
+
+.admin-notif-back-btn:hover {
+  opacity: 0.88;
+  transform: translateX(-2px);
+}
+
+@media (max-width: 576px) {
+  .admin-topbar-back-btn span {
+    display: none;
+  }
+  .admin-topbar-back-btn {
+    padding: 6px 9px;
+  }
+}
+

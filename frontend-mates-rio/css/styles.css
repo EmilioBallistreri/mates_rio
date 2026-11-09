@@ -12825,6 +12825,8 @@ body {
   .site-header {
     height: auto !important;
     min-height: 62px !important;
+    overflow: visible !important;
+    z-index: 1200 !important;
   }
 
   .header-inner {
@@ -12835,6 +12837,8 @@ body {
     align-items: center !important;
     justify-content: space-between !important;
     flex-wrap: nowrap !important;
+    overflow: visible !important;
+    position: relative !important;
   }
 
   .header-left {
@@ -12882,6 +12886,38 @@ body {
     align-items: center !important;
     gap: 6px !important;
     flex-shrink: 0 !important;
+    overflow: visible !important;
+    position: relative !important;
+  }
+
+  .user-btn-wrap {
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  /* Menú desplegable de usuario siempre por encima del carrusel / imágenes */
+  .user-dropdown-menu,
+  #user-dropdown-menu {
+    position: absolute !important;
+    top: calc(100% + 10px) !important;
+    right: 0 !important;
+    left: auto !important;
+    min-width: 225px !important;
+    z-index: 3500 !important;
+    background: #141414 !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.78) !important;
+  }
+
+  html.theme-light .user-dropdown-menu,
+  body.theme-light .user-dropdown-menu,
+  body.theme-inverted .user-dropdown-menu {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border-color: rgba(0, 0, 0, 0.22) !important;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.25) !important;
   }
 
   .header-right .instagram-btn,
@@ -12907,65 +12943,93 @@ body {
     max-width: 100vw !important;
   }
 
-  /* Hero Slider Principal en Celular */
-  .hero-slider-section {
+  /* Carrusel de Imágenes Inicial en Celular: Formato Horizontal Compacto sin espacio sobrante */
+  .hero-slider-section,
+  .hero-slider,
+  .hero-slider-container {
     height: auto !important;
-    min-height: 390px !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    position: relative !important;
+    overflow: hidden !important;
   }
 
-  .hero-slider-container,
   .hero-slide {
+    position: relative !important;
+    inset: auto !important;
+    display: none !important;
     height: auto !important;
-    min-height: 390px !important;
-  }
-
-  .hero-slide {
-    display: none;
-    padding: 40px 0 54px !important;
+    min-height: 240px !important;
+    padding: 20px 0 32px !important;
     align-items: center !important;
+    justify-content: center !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   .hero-slide.active {
     display: flex !important;
   }
 
+  .hero-slide-bg {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+
   .hero-content {
+    position: relative !important;
+    z-index: 3 !important;
     width: 100% !important;
     max-width: 100% !important;
-    padding: 0 6px !important;
+    padding: 0 4px !important;
     text-align: center !important;
     margin: 0 auto !important;
   }
 
+  .hero-tag {
+    font-size: 0.68rem !important;
+    padding: 4px 10px !important;
+    margin-bottom: 8px !important;
+  }
+
   .hero-title {
-    font-size: clamp(1.38rem, 6vw, 1.85rem) !important;
-    line-height: 1.22 !important;
-    margin-bottom: 10px !important;
+    font-size: clamp(1.22rem, 5.4vw, 1.55rem) !important;
+    line-height: 1.18 !important;
+    margin-bottom: 6px !important;
     word-break: break-word !important;
     overflow-wrap: break-word !important;
   }
 
   .hero-description {
-    font-size: 0.86rem !important;
-    line-height: 1.45 !important;
-    margin: 0 auto 18px !important;
+    font-size: 0.8rem !important;
+    line-height: 1.38 !important;
+    margin: 0 auto 12px !important;
     max-width: 100% !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
   }
 
   .hero-cta-group {
     display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
-    gap: 10px !important;
+    gap: 8px !important;
     width: 100% !important;
+    margin: 0 !important;
   }
 
   .hero-cta-group .btn {
     width: 100% !important;
     max-width: 100% !important;
     justify-content: center !important;
-    padding: 12px 14px !important;
-    font-size: 0.84rem !important;
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
     white-space: normal !important;
     text-align: center !important;
   }
@@ -12975,12 +13039,12 @@ body {
   }
 
   .slider-dots {
-    bottom: 14px !important;
+    bottom: 8px !important;
   }
 
-  /* Categorías (PROMOS, MATES, TERMOS, ACCESORIOS, YERBAS, EQUIPOS DE MATE) */
+  /* Categorías (PROMOS, MATES, TERMOS, ACCESORIOS, YERBAS, EQUIPOS DE MATE) pegadas prolijamente al carrusel */
   .categories-section {
-    padding: 28px 0 !important;
+    padding: 14px 0 24px !important;
   }
 
   .categories-grid {
@@ -13462,22 +13526,33 @@ body {
     white-space: nowrap !important;
   }
 
-  /* Lienzo Cuadrado Responsivo: Encuadra perfectamente el círculo de la virola y la caja */
+  /* Lienzo Cuadrado Responsivo: Encuadra perfectamente el círculo de la virola, el termo y la caja */
   .studio-canvas-wrap {
-    width: 100% !important;
-    max-width: min(100%, 340px) !important;
-    height: auto !important;
+    width: min(88vw, 330px) !important;
+    max-width: min(88vw, 330px) !important;
+    height: min(88vw, 330px) !important;
+    min-height: 280px !important;
     aspect-ratio: 1 / 1 !important;
     margin: 0 auto 8px auto !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    position: relative !important;
   }
 
+  /* NO forzar display: block !important en #studio-2d-viewport ni #studio-360-viewport
+     para que la vista 360° permanezca oculta cuando el usuario diseña en 2D */
   #studio-2d-viewport,
+  .studio-360-viewport {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    margin: 0 auto !important;
+  }
+
   .studio-svg-viewport,
   #virola-studio-svg,
-  .studio-360-viewport,
   #studio-360-canvas {
     width: 100% !important;
     height: 100% !important;
@@ -13486,6 +13561,9 @@ body {
     aspect-ratio: 1 / 1 !important;
     display: block !important;
     margin: 0 auto !important;
+    touch-action: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
   }
 
   .rotation-guide-overlay {
@@ -13595,20 +13673,133 @@ body {
     grid-template-columns: 1fr !important;
   }
 
-  /* Footer y Contacto en Celular */
+  /* Notificación Toast en un costado inferior donde no tape la barra superior */
+  .toast-container,
+  #toast-container {
+    top: auto !important;
+    bottom: 82px !important;
+    left: 12px !important;
+    right: auto !important;
+    width: auto !important;
+    max-width: calc(100vw - 86px) !important;
+    z-index: 4500 !important;
+    pointer-events: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+
+  .toast-container .toast,
+  #toast-container .toast {
+    width: auto !important;
+    max-width: 100% !important;
+    padding: 8px 14px !important;
+    border-radius: 999px !important;
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background: rgba(18, 18, 18, 0.96) !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  html.theme-light .toast-container .toast,
+  body.theme-light .toast-container .toast,
+  body.theme-inverted .toast-container .toast {
+    background: rgba(18, 18, 18, 0.96) !important;
+    color: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.2) !important;
+  }
+
+  /* Footer Reducido y Minimalista en Celular */
   .site-footer {
-    padding: 32px 0 24px !important;
+    padding: 20px 0 18px !important;
   }
 
   .footer-top-grid {
     grid-template-columns: 1fr !important;
-    gap: 22px !important;
+    gap: 14px !important;
+    text-align: center !important;
+  }
+
+  .footer-brand {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .footer-logo-wrap {
+    justify-content: center !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Ocultar textos largos y columnas redundantes del footer en celular */
+  .footer-brand-desc,
+  .footer-top-grid > div:nth-child(2),
+  .shipping-methods-info,
+  .contact-info-list .contact-item:nth-child(2),
+  .contact-info-list .contact-item:nth-child(4) {
+    display: none !important;
+  }
+
+  .footer-title {
+    font-size: 0.78rem !important;
+    margin-bottom: 6px !important;
+    text-align: center !important;
+  }
+
+  .footer-title::after {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .social-links {
+    justify-content: center !important;
+    gap: 10px !important;
+    margin-top: 2px !important;
+  }
+
+  .payment-badges-wrap {
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+
+  .pay-badge {
+    font-size: 0.68rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .contact-info-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 10px 16px !important;
+  }
+
+  .contact-info-list .contact-item {
+    margin-bottom: 0 !important;
+    font-size: 0.76rem !important;
+    align-items: center !important;
+    text-align: left !important;
   }
 
   .footer-bottom-bar {
     flex-direction: column !important;
     text-align: center !important;
-    gap: 8px !important;
+    gap: 4px !important;
+    padding-top: 12px !important;
+    margin-top: 12px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .footer-bottom-bar span:nth-child(2) {
+    display: none !important;
   }
 
   /* Botones flotantes sin superposición */
@@ -13618,9 +13809,9 @@ body {
   }
 
   .floating-whatsapp-btn {
-    width: 52px !important;
-    height: 52px !important;
-    font-size: 1.65rem !important;
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 1.55rem !important;
   }
 
   .page-customizer .floating-whatsapp-container {
@@ -13634,7 +13825,212 @@ body {
   }
 }
 
-/* 5. Ajustes para Celulares Compactos (<= 420px) */
+/* ==========================================================================
+   6. REGLAS GLOBALES DE CONTRASTE BITONO, BOTÓN DE TEMA Y REDES EN CÍRCULO
+   ========================================================================== */
+
+/* Botón de Modo Claro / Modo Oscuro: ícono siempre visible al instante sin quedar oculto por focus/hover */
+.action-btn.theme-toggle-btn,
+.action-btn.theme-toggle-btn:hover,
+.action-btn.theme-toggle-btn:focus,
+.action-btn.theme-toggle-btn:active,
+.action-btn.theme-toggle-btn:focus-visible {
+  background: #181818 !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.38) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.action-btn.theme-toggle-btn i {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: inline-block !important;
+  font-size: 0.95rem !important;
+}
+
+html.theme-light .action-btn.theme-toggle-btn,
+html.theme-light .action-btn.theme-toggle-btn:hover,
+html.theme-light .action-btn.theme-toggle-btn:focus,
+html.theme-light .action-btn.theme-toggle-btn:active,
+body.theme-light .action-btn.theme-toggle-btn,
+body.theme-light .action-btn.theme-toggle-btn:hover,
+body.theme-light .action-btn.theme-toggle-btn:focus,
+body.theme-light .action-btn.theme-toggle-btn:active,
+body.theme-inverted .action-btn.theme-toggle-btn,
+body.theme-inverted .action-btn.theme-toggle-btn:hover,
+body.theme-inverted .action-btn.theme-toggle-btn:focus,
+body.theme-inverted .action-btn.theme-toggle-btn:active {
+  background: #f0f0f0 !important;
+  color: #111111 !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.32) !important;
+}
+
+html.theme-light .action-btn.theme-toggle-btn i,
+body.theme-light .action-btn.theme-toggle-btn i,
+body.theme-inverted .action-btn.theme-toggle-btn i {
+  color: #111111 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Redes Sociales en 3 Círculos Prolijos en el Menú Lateral Móvil (WhatsApp, TikTok, Instagram) */
+.mobile-nav-footer {
+  padding: 14px 16px 18px !important;
+  overflow-x: hidden !important;
+}
+
+.mobile-drawer-social-circles {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  margin-bottom: 10px !important;
+  width: 100% !important;
+}
+
+.mobile-social-circle {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #161616 !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+  font-size: 1.2rem !important;
+  text-decoration: none !important;
+  transition: transform 0.2s ease, background 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.mobile-social-circle:hover,
+.mobile-social-circle:active {
+  background: #ffffff !important;
+  color: #000000 !important;
+  transform: scale(1.06) !important;
+}
+
+html.theme-light .mobile-social-circle,
+body.theme-light .mobile-social-circle,
+body.theme-inverted .mobile-social-circle {
+  background: #141414 !important;
+  color: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Personalizador: Barra Inferior "Total Personalizado" con Precio en NEGRO sobre Fondo Blanco (Modo Oscuro y Modo Claro) */
+.mobile-sticky-action-bar,
+#mobile-sticky-bar {
+  background: #ffffff !important;
+  border-top: 2px solid #000000 !important;
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.35) !important;
+}
+
+.mobile-sticky-action-bar .mobile-sticky-label,
+#mobile-sticky-bar .mobile-sticky-label {
+  color: #222222 !important;
+  font-weight: 800 !important;
+}
+
+.mobile-sticky-action-bar .mobile-sticky-price,
+#mobile-sticky-bar .mobile-sticky-price,
+#mobile-bar-price {
+  color: #000000 !important;
+  font-weight: 900 !important;
+}
+
+.mobile-sticky-action-bar .btn-mobile-finish,
+#mobile-sticky-bar .btn-mobile-finish {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1.5px solid #000000 !important;
+  font-weight: 800 !important;
+}
+
+/* Personalizador: Tarjetas de Elección de Producto (Mate, Termo, Caja de presentación)
+   Letras y números SIEMPRE en BLANCO sobre tarjeta negra tanto en Modo Claro como en Modo Oscuro */
+.prod-select-card,
+html.theme-light .prod-select-card,
+body.theme-light .prod-select-card,
+body.theme-inverted .prod-select-card {
+  background: #141414 !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+.prod-select-card.active,
+html.theme-light .prod-select-card.active,
+body.theme-light .prod-select-card.active,
+body.theme-inverted .prod-select-card.active {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32) !important;
+}
+
+.prod-select-card .prod-card-title,
+.prod-select-card .prod-card-price,
+.prod-select-card .prod-card-meta,
+.prod-select-card .prod-card-body,
+html.theme-light .prod-select-card .prod-card-title,
+html.theme-light .prod-select-card .prod-card-price,
+body.theme-light .prod-select-card .prod-card-title,
+body.theme-light .prod-select-card .prod-card-price,
+body.theme-inverted .prod-select-card .prod-card-title,
+body.theme-inverted .prod-select-card .prod-card-price {
+  color: #ffffff !important;
+}
+
+.prod-select-card .prod-card-free,
+html.theme-light .prod-select-card .prod-card-free,
+body.theme-light .prod-select-card .prod-card-free,
+body.theme-inverted .prod-select-card .prod-card-free {
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.prod-select-card .prod-card-icon-wrap,
+html.theme-light .prod-select-card .prod-card-icon-wrap,
+body.theme-light .prod-select-card .prod-card-icon-wrap,
+body.theme-inverted .prod-select-card .prod-card-icon-wrap {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+.prod-select-card.active .prod-card-icon-wrap,
+.prod-select-card.active .prod-card-check,
+html.theme-light .prod-select-card.active .prod-card-icon-wrap,
+html.theme-light .prod-select-card.active .prod-card-check,
+body.theme-light .prod-select-card.active .prod-card-icon-wrap,
+body.theme-light .prod-select-card.active .prod-card-check,
+body.theme-inverted .prod-select-card.active .prod-card-icon-wrap,
+body.theme-inverted .prod-select-card.active .prod-card-check {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Selector desplegable del modelo de Mate/Termo/Caja siempre legible en blanco sobre negro */
+#mate-model-select,
+html.theme-light #mate-model-select,
+body.theme-light #mate-model-select,
+body.theme-inverted #mate-model-select {
+  background: #141414 !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+#mate-model-select option {
+  background: #141414 !important;
+  color: #ffffff !important;
+}
+
+/* 7. Ajustes para Celulares Compactos (<= 420px) */
 @media (max-width: 420px) {
   .products-grid {
     grid-template-columns: 1fr !important;
@@ -13659,3 +14055,128 @@ body {
     font-size: 0.88rem !important;
   }
 }
+
+/* ==========================================================================
+   CORRECCIÓN DE CONTRASTE EN MODO CLARO Y MODO OSCURO PARA CATEGORÍAS,
+   SUBCATEGORÍAS Y MENÚ MÓVIL SIMPLIFICADO (BITONO BLANCO Y NEGRO)
+   ========================================================================== */
+
+/* Modo Claro: Botones de Categoría (.filter-pill), Subcategoría (.subcat-chip) y Promos (.promo-filter-chip) */
+html.theme-light .filter-pill,
+body.theme-light .filter-pill,
+body.theme-inverted .filter-pill,
+html.theme-light .subcat-chip,
+body.theme-light .subcat-chip,
+body.theme-inverted .subcat-chip,
+html.theme-light .promo-filter-chip,
+body.theme-light .promo-filter-chip,
+body.theme-inverted .promo-filter-chip {
+  background: #f4f4f5 !important;
+  color: #111111 !important;
+  border: 1.5px solid #d4d4d8 !important;
+}
+
+html.theme-light .filter-pill:hover,
+body.theme-light .filter-pill:hover,
+body.theme-inverted .filter-pill:hover,
+html.theme-light .subcat-chip:hover,
+body.theme-light .subcat-chip:hover,
+body.theme-inverted .subcat-chip:hover,
+html.theme-light .promo-filter-chip:hover,
+body.theme-light .promo-filter-chip:hover,
+body.theme-inverted .promo-filter-chip:hover {
+  background: #e4e4e7 !important;
+  color: #000000 !important;
+  border-color: #111111 !important;
+}
+
+html.theme-light .filter-pill.active,
+body.theme-light .filter-pill.active,
+body.theme-inverted .filter-pill.active,
+html.theme-light .subcat-chip.active,
+body.theme-light .subcat-chip.active,
+body.theme-inverted .subcat-chip.active,
+html.theme-light .promo-filter-chip.active,
+body.theme-light .promo-filter-chip.active,
+body.theme-inverted .promo-filter-chip.active {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+html.theme-light .filter-pill.active *,
+body.theme-light .filter-pill.active *,
+body.theme-inverted .filter-pill.active *,
+html.theme-light .subcat-chip.active *,
+body.theme-light .subcat-chip.active *,
+body.theme-inverted .subcat-chip.active *,
+html.theme-light .promo-filter-chip.active *,
+body.theme-light .promo-filter-chip.active *,
+body.theme-inverted .promo-filter-chip.active * {
+  color: #ffffff !important;
+}
+
+/* Modo Oscuro: Botones de Categoría, Subcategoría y Promos */
+body:not(.theme-light):not(.theme-inverted) .filter-pill,
+body.theme-dark .filter-pill,
+body:not(.theme-light):not(.theme-inverted) .subcat-chip,
+body.theme-dark .subcat-chip,
+body:not(.theme-light):not(.theme-inverted) .promo-filter-chip,
+body.theme-dark .promo-filter-chip {
+  background: #161616 !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .filter-pill.active,
+body.theme-dark .filter-pill.active,
+body:not(.theme-light):not(.theme-inverted) .subcat-chip.active,
+body.theme-dark .subcat-chip.active,
+body:not(.theme-light):not(.theme-inverted) .promo-filter-chip.active,
+body.theme-dark .promo-filter-chip.active {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+body:not(.theme-light):not(.theme-inverted) .filter-pill.active *,
+body.theme-dark .filter-pill.active *,
+body:not(.theme-light):not(.theme-inverted) .subcat-chip.active *,
+body.theme-dark .subcat-chip.active *,
+body:not(.theme-light):not(.theme-inverted) .promo-filter-chip.active *,
+body.theme-dark .promo-filter-chip.active * {
+  color: #000000 !important;
+}
+
+/* Contraste de etiquetas y botones en Modo Claro cuando usan fondo negro */
+body.theme-light .hero-tag,
+body.theme-inverted .hero-tag,
+body.theme-light .category-badge,
+body.theme-inverted .category-badge,
+body.theme-light .action-btn:hover,
+body.theme-inverted .action-btn:hover {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+
+/* Saludo estático "Hola, Administrador" en el menú lateral móvil (sin flecha ni acción de clic) */
+#mobile-nav-auth-item.is-static-greeting > a {
+  pointer-events: none !important;
+  cursor: default !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 10px !important;
+}
+
+body.theme-light #mobile-nav-auth-item.is-static-greeting > a,
+body.theme-inverted #mobile-nav-auth-item.is-static-greeting > a {
+  background: #f4f4f5 !important;
+  color: #111111 !important;
+}
+
+#mobile-nav-auth-item.is-static-greeting .fa-chevron-right {
+  display: none !important;
+}
+

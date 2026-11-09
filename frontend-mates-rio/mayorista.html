@@ -497,6 +497,9 @@
   <header class="site-header" id="site-header" style="background: #0a0a0a; border-bottom: 1px solid rgba(255,255,255,0.18);">
     <div class="container header-inner">
       <div class="header-left">
+        <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="openMobileDrawer()" aria-label="Abrir Menú">
+          <i class="fas fa-bars"></i>
+        </button>
         <a href="index.html" class="brand-logo-wrap" title="Mates Río - Inicio">
           <img src="assets/images/logo.jpg" alt="Logo de Mates Río" class="brand-logo-img" style="border-color: #ffffff;" />
           <div class="brand-name-group">
@@ -526,6 +529,70 @@
       </div>
     </div>
   </header>
+
+  <!-- Menú Lateral Móvil Simplificado con los 3 Círculos de Redes -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileDrawer()"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Menú Móvil">
+    <div class="mobile-drawer-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="assets/images/logo.jpg" alt="Logo Mates Río" style="width: 36px; height: 36px; border-radius: 6px; border: 1px solid #ffffff; object-fit: contain; background: #000; padding: 2px;" />
+        <span style="font-family: var(--font-heading); font-weight: 800; font-size: 1.15rem; letter-spacing: 1px; color: #ffffff;">MATES RÍO</span>
+      </div>
+      <button class="mobile-drawer-close" onclick="closeMobileDrawer()" aria-label="Cerrar menú">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <ul class="mobile-nav-list">
+      <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
+        <a href="index.html" id="mobile-nav-auth-link">
+          <span><i class="fas fa-user-circle" style="width: 22px;"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-admin" id="mobile-nav-admin-item" style="display: none;">
+        <a href="admin.html" onclick="closeMobileDrawer();">
+          <span><i class="fas fa-shield-halved" style="width: 22px;"></i> <b>Panel de Administración</b></span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="index.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-home" style="width: 22px;"></i> Inicio</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="mayorista.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-boxes-packing" style="width: 22px;"></i> Portal Mayorista</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="personaliza-tu-mate.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-magic" style="width: 22px;"></i> Personalización</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html#catalogo" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-th-large" style="width: 22px;"></i> Catálogo Completo</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="mobile-nav-footer">
+      <div class="mobile-drawer-social-circles">
+        <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="mobile-social-circle whatsapp" title="WhatsApp Oficial" aria-label="WhatsApp Oficial">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="mobile-social-circle tiktok" title="TikTok @Mates_rio" aria-label="TikTok Oficial">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="mobile-social-circle instagram" title="Instagram @mates_rio_" aria-label="Instagram Oficial">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+      <p style="font-size: 0.72rem; color: var(--text-secondary); text-align: center; margin: 0;">
+        Río Ceballos, Córdoba • Envíos a todo el país
+      </p>
+    </div>
+  </aside>
 
   <main class="wholesale-main-wrap">
     <div class="container">
@@ -1073,9 +1140,45 @@
       window.open(`https://wa.me/5493513830111?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
+    function openMobileDrawer() {
+      document.getElementById('mobile-nav-drawer')?.classList.add('active');
+      document.getElementById('mobile-nav-overlay')?.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileDrawer() {
+      document.getElementById('mobile-nav-drawer')?.classList.remove('active');
+      document.getElementById('mobile-nav-overlay')?.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function syncMayoristaMobileMenuAuth() {
+      try {
+        const rawUser = localStorage.getItem('mates_rio_user') || localStorage.getItem('mates_rio_admin_session');
+        const authItem = document.getElementById('mobile-nav-auth-item');
+        const authLink = document.getElementById('mobile-nav-auth-link');
+        const authText = document.getElementById('mobile-nav-auth-text');
+        const adminItem = document.getElementById('mobile-nav-admin-item');
+        if (rawUser) {
+          const u = JSON.parse(rawUser);
+          const isAdmin = u && ((u.role || '').toLowerCase().includes('admin') || (u.email || '').toLowerCase() === 'mates.rio6@gmail.com');
+          const firstName = isAdmin ? 'Administrador' : ((u.name || 'Usuario').split(' ')[0]);
+          if (authText) authText.textContent = `Hola, ${firstName}`;
+          if (authLink) {
+            authLink.removeAttribute('href');
+            authLink.style.pointerEvents = 'none';
+            authLink.style.cursor = 'default';
+          }
+          if (authItem) authItem.classList.add('is-static-greeting');
+          if (adminItem) adminItem.style.display = isAdmin ? 'block' : 'none';
+        }
+      } catch (e) {}
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       loadB2BCart();
       checkWholesaleSession();
+      syncMayoristaMobileMenuAuth();
     });
   </script>
 </body>

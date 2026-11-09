@@ -108,10 +108,10 @@
       flex-shrink: 0;
     }
     .promos-urgency-banner {
-      background: #17110c;
-      color: #f7e7ce;
+      background: #111111;
+      color: #ffffff;
       padding: 12px 20px;
-      border-bottom: 1px solid rgba(197, 155, 39, 0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       font-size: 0.88rem;
       text-align: center;
       display: flex;
@@ -154,11 +154,11 @@
     .promo-filter-chip:hover,
     .promo-filter-chip.active {
       background: var(--accent-gold);
-      color: #121212;
+      color: var(--bg-main);
       border-color: var(--accent-gold);
     }
     .promo-filter-chip.active i {
-      color: #121212;
+      color: var(--bg-main);
     }
     .why-combo-section {
       background: var(--bg-surface);
@@ -190,7 +190,7 @@
       width: 56px;
       height: 56px;
       border-radius: 50%;
-      background: rgba(197, 155, 39, 0.15);
+      background: rgba(255, 255, 255, 0.08);
       border: 1.5px solid var(--accent-gold);
       color: var(--accent-gold);
       display: flex;
@@ -351,96 +351,52 @@
 
     <ul class="mobile-nav-list">
       <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
-        <a href="javascript:void(0)" onclick="handleMobileAuthClick()">
-          <span><i class="fas fa-user-circle" style="width: 22px; color: var(--accent-leather);"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        <a href="javascript:void(0)" id="mobile-nav-auth-link" onclick="handleMobileAuthClick()">
+          <span><i class="fas fa-user-circle" style="width: 22px;"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
         </a>
       </li>
       <li class="mobile-nav-item mobile-nav-admin" id="mobile-nav-admin-item" style="display: none;">
         <a href="admin.html" onclick="closeMobileDrawer();">
-          <span><i class="fas fa-shield-halved" style="width: 22px; color: var(--accent-gold);"></i> <b style="color: var(--accent-leather);">Panel Admin</b></span>
-          <span class="nav-badge-pill pill-gold">STAFF</span>
+          <span><i class="fas fa-shield-halved" style="width: 22px;"></i> <b>Panel de Administración</b></span>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="index.html">
-          <span><i class="fas fa-home" style="width: 22px; color: var(--accent-gold);"></i> Inicio</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="index.html#categorias">
-          <span><i class="fas fa-th-large" style="width: 22px; color: var(--accent-gold);"></i> Todas las Categorías</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item mobile-nav-highlight"><a href="mayorista.html"><span style="color: var(--accent-gold);"><i class="fas fa-boxes-packing" style="width: 22px;"></i> Portal Mayorista B2B</span><span class="nav-badge-pill pill-gold">B2B</span></a></li>
-      <li class="mobile-nav-item active mobile-nav-promo-active">
-        <a href="promos.html" onclick="closeMobileDrawer()">
-          <span><i class="fas fa-fire" style="width: 22px; color: var(--badge-promo);"></i> <b>PROMOS & COMBOS</b></span>
-          <span class="nav-badge-pill">Hasta 25% OFF</span>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="catalogo.html?categoria=mates">
-          <span><i class="fas fa-mug-hot" style="width: 22px; color: var(--accent-leather);"></i> Mates Imperiales</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        <a href="index.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-home" style="width: 22px;"></i> Inicio</span>
         </a>
       </li>
       <li class="mobile-nav-item mobile-nav-highlight">
-        <a href="personaliza-tu-mate.html">
-          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Personalización</span>
-          <span class="nav-badge-pill pill-gold">VIROLA</span>
+        <a href="mayorista.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-boxes-packing" style="width: 22px;"></i> Portal Mayorista</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="personaliza-tu-mate.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-magic" style="width: 22px;"></i> Personalización</span>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="catalogo.html?categoria=termos">
-          <span><i class="fas fa-temperature-high" style="width: 22px; color: var(--accent-gold);"></i> Termos de Acero</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="catalogo.html?categoria=accesorios">
-          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Bombillas & Accesorios</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="catalogo.html?categoria=yerbas">
-          <span><i class="fas fa-leaf" style="width: 22px; color: #27ae60;"></i> Yerbas Seleccionadas</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="catalogo.html?categoria=equipos">
-          <span><i class="fas fa-briefcase" style="width: 22px; color: var(--accent-leather);"></i> Equipos de Mate</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="javascript:void(0)" onclick="toggleColorTheme(); closeMobileDrawer();">
-          <span><i class="fas fa-sun" id="mobile-theme-icon" style="width: 22px; color: var(--accent-gold);"></i> <span id="mobile-theme-label">Cambiar a Modo Claro</span></span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="index.html#contacto">
-          <span><i class="fas fa-envelope" style="width: 22px; color: var(--accent-gold);"></i> Contacto & Ubicación</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        <a href="catalogo.html#catalogo" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-th-large" style="width: 22px;"></i> Catálogo Completo</span>
         </a>
       </li>
     </ul>
 
-    <div class="mobile-drawer-socials">
-      <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="btn-social-mobile wa">
-        <i class="fab fa-whatsapp"></i> WhatsApp
-      </a>
-      <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="btn-social-mobile" style="color: #fff; background: #000;">
-        <i class="fab fa-tiktok"></i> TikTok
-      </a>
-      <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn-social-mobile ig">
-        <i class="fab fa-instagram"></i> Instagram
-      </a>
+    <div class="mobile-nav-footer">
+      <div class="mobile-drawer-social-circles">
+        <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="mobile-social-circle whatsapp" title="WhatsApp Oficial" aria-label="WhatsApp Oficial">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="mobile-social-circle tiktok" title="TikTok @Mates_rio" aria-label="TikTok Oficial">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="mobile-social-circle instagram" title="Instagram @mates_rio_" aria-label="Instagram Oficial">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+      <p style="font-size: 0.72rem; color: var(--text-secondary); text-align: center; margin: 0;">
+        Río Ceballos, Córdoba • Envíos a todo el país
+      </p>
     </div>
   </aside>
 

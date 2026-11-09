@@ -937,16 +937,19 @@ window.syncProductsFromStorage = syncProductsFromStorage;
 (function() {
   const KEY_MAP = {
     mates_rio_custom_products: 'customProducts',
+    mates_rio_edited_products: 'editedProducts',
     mates_rio_deleted_products: 'deletedProducts',
     mates_rio_inventory: 'inventory',
     mates_rio_categories: 'categories',
     mates_rio_home_slides: 'homeSlides',
     mates_rio_special_occasion: 'specialOccasion',
     mates_rio_customization_pricing: 'customizationPricing',
-    mates_rio_theme_mode: 'themeMode',
     mates_rio_supplier_purchases: 'supplierPurchases',
     mates_rio_orders: 'orders',
-    mates_rio_wholesale_clients: 'wholesaleClients'
+    mates_rio_wholesale_clients: 'wholesaleClients',
+    mates_rio_wholesale_accounts: 'wholesaleAccounts',
+    mates_rio_users_db: 'usersDb',
+    mates_rio_audit_log: 'auditLog'
   };
 
   const REVERSE_KEY_MAP = {};

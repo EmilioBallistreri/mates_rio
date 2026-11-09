@@ -256,105 +256,51 @@
 
     <ul class="mobile-nav-list">
       <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
-        <a href="javascript:void(0)" onclick="handleMobileAuthClick()">
-          <span><i class="fas fa-user-circle" style="width: 22px; color: var(--accent-leather);"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        <a href="javascript:void(0)" id="mobile-nav-auth-link" onclick="handleMobileAuthClick()">
+          <span><i class="fas fa-user-circle" style="width: 22px;"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
         </a>
       </li>
       <li class="mobile-nav-item mobile-nav-admin" id="mobile-nav-admin-item" style="display: none;">
         <a href="admin.html" onclick="closeMobileDrawer();">
-          <span><i class="fas fa-shield-halved" style="width: 22px; color: var(--accent-gold);"></i> <b style="color: var(--accent-leather);">Panel Admin</b></span>
-          <span class="nav-badge-pill pill-gold">STAFF</span>
+          <span><i class="fas fa-shield-halved" style="width: 22px;"></i> <b>Panel de Administración</b></span>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="#inicio" onclick="closeMobileDrawer()">
-          <span><i class="fas fa-home" style="width: 22px; color: var(--accent-gold);"></i> Inicio</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="#categorias" onclick="closeMobileDrawer()">
-          <span><i class="fas fa-th-large" style="width: 22px; color: var(--accent-gold);"></i> Categorías</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        <a href="index.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-home" style="width: 22px;"></i> Inicio</span>
         </a>
       </li>
       <li class="mobile-nav-item mobile-nav-highlight">
         <a href="mayorista.html" onclick="closeMobileDrawer()">
-          <span><i class="fas fa-boxes-packing" style="width: 22px; color: var(--accent-gold);"></i> Portal Mayorista</span>
-          <span class="nav-badge-pill pill-gold">B2B</span>
+          <span><i class="fas fa-boxes-packing" style="width: 22px;"></i> Portal Mayorista</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="personaliza-tu-mate.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-magic" style="width: 22px;"></i> Personalización</span>
         </a>
       </li>
       <li class="mobile-nav-item">
-        <a href="promos.html" onclick="closeMobileDrawer()">
-          <span><i class="fas fa-fire" style="width: 22px; color: var(--badge-promo);"></i> PROMOS</span>
-          <span class="nav-badge-pill">Hasta 25% OFF</span>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="catalogo.html" onclick="setCategoryFilter('all'); closeMobileDrawer()">
-          <span><i class="fas fa-th-large" style="width: 22px; color: var(--accent-gold);"></i> Catálogo Completo</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="catalogo.html?categoria=mates" onclick="setCategoryFilter('mates'); closeMobileDrawer()">
-          <span><i class="fas fa-mug-hot" style="width: 22px; color: var(--accent-leather);"></i> Mates Imperiales</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="catalogo.html?categoria=termos" onclick="setCategoryFilter('termos'); closeMobileDrawer()">
-          <span><i class="fas fa-temperature-high" style="width: 22px; color: var(--accent-gold);"></i> Termos de Acero</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="catalogo.html?categoria=accesorios" onclick="setCategoryFilter('accesorios'); closeMobileDrawer()">
-          <span><i class="fas fa-magic" style="width: 22px; color: var(--accent-gold);"></i> Bombillas & Accesorios</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="catalogo.html?categoria=yerbas" onclick="setCategoryFilter('yerbas'); closeMobileDrawer()">
-          <span><i class="fas fa-leaf" style="width: 22px; color: #27ae60;"></i> Yerbas Seleccionadas</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="catalogo.html?categoria=equipos" onclick="setCategoryFilter('equipos'); closeMobileDrawer()">
-          <span><i class="fas fa-briefcase" style="width: 22px; color: var(--accent-leather);"></i> Equipos de Mate</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="javascript:void(0)" onclick="toggleColorTheme(); closeMobileDrawer();">
-          <span><i class="fas fa-sun" id="mobile-theme-icon" style="width: 22px; color: var(--accent-gold);"></i> <span id="mobile-theme-label">Cambiar a Modo Claro</span></span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
-        </a>
-      </li>
-      <li class="mobile-nav-item">
-        <a href="#contacto" onclick="closeMobileDrawer()">
-          <span><i class="fas fa-envelope" style="width: 22px; color: var(--accent-gold);"></i> Contacto & Ubicación</span>
-          <i class="fas fa-chevron-right" style="font-size: 0.75rem; color: #bbb;"></i>
+        <a href="catalogo.html#catalogo" onclick="setCategoryFilter('all'); closeMobileDrawer()">
+          <span><i class="fas fa-th-large" style="width: 22px;"></i> Catálogo Completo</span>
         </a>
       </li>
     </ul>
 
     <div class="mobile-nav-footer">
-      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-        <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp" style="flex: 1; padding: 10px; font-size: 0.78rem;">
-          <i class="fab fa-whatsapp"></i> WhatsApp
+      <div class="mobile-drawer-social-circles">
+        <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="mobile-social-circle whatsapp" title="WhatsApp Oficial" aria-label="WhatsApp Oficial">
+          <i class="fab fa-whatsapp"></i>
         </a>
-        <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="btn btn-tiktok" style="flex: 1; padding: 10px; font-size: 0.78rem;">
-          <i class="fab fa-tiktok"></i> TikTok
+        <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="mobile-social-circle tiktok" title="TikTok @Mates_rio" aria-label="TikTok Oficial">
+          <i class="fab fa-tiktok"></i>
         </a>
-        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-instagram" style="flex: 1; padding: 10px; font-size: 0.78rem;">
-          <i class="fab fa-instagram"></i> Instagram
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="mobile-social-circle instagram" title="Instagram @mates_rio_" aria-label="Instagram Oficial">
+          <i class="fab fa-instagram"></i>
         </a>
       </div>
-      <p style="font-size: 0.75rem; color: var(--text-secondary); text-align: center;">
-        Taller en Río Ceballos, Córdoba • Envíos a todo el país
+      <p style="font-size: 0.72rem; color: var(--text-secondary); text-align: center; margin: 0;">
+        Río Ceballos, Córdoba • Envíos a todo el país
       </p>
     </div>
   </aside>

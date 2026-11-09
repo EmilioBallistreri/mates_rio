@@ -1416,10 +1416,11 @@ function get360PointerCanvasCoords(e) {
   const canvas = document.getElementById('studio-360-canvas');
   if (!canvas) return { x: 0, y: 0, rawClientX: 0, rawClientY: 0 };
   const rect = canvas.getBoundingClientRect();
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
+  const touch = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]);
+  const clientX = touch ? touch.clientX : e.clientX;
+  const clientY = touch ? touch.clientY : e.clientY;
+  const scaleX = canvas.width / Math.max(1, rect.width);
+  const scaleY = canvas.height / Math.max(1, rect.height);
   return {
     x: (clientX - rect.left) * scaleX,
     y: (clientY - rect.top) * scaleY,
@@ -2056,15 +2057,72 @@ function duplicateActiveItem() {
   showNotificationToast('Capa duplicada', 'fa-clone');
 }
 
+function updateLiveSvgItemTransform(item) {
+  const svg = document.getElementById('virola-studio-svg');
+  if (!svg || !item) return false;
+  const { cx, cy, rRing } = STUDIO_CONFIG;
+  const groupEl = svg.querySelector(`[data-item-id="${item.id}"]`);
+  if (!groupEl) return false;
+
+  const isMateCurvedText = studio.activeProduct === 'mate' && item.type === 'text' && item.arcPosition !== 'straight';
+  if (isMateCurvedText) {
+    const pathEl = document.getElementById(`text-path-${item.id}`);
+    if (!pathEl) return false;
+    const isBottom = item.arcPosition === 'bottom';
+    const angle = item.angle !== undefined ? item.angle : (isBottom ? 90 : 270);
+    const r = item.radius !== undefined ? item.radius : rRing;
+    let pathD = '';
+    if (isBottom) {
+      const startRad = ((angle + 150) * Math.PI) / 180;
+      const endRad = ((angle - 150) * Math.PI) / 180;
+      const x1 = cx + r * Math.cos(startRad);
+      const y1 = cy + r * Math.sin(startRad);
+      const x2 = cx + r * Math.cos(endRad);
+      const y2 = cy + r * Math.sin(endRad);
+      pathD = `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r.toFixed(2)} ${r.toFixed(2)} 0 1 0 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+    } else {
+      const startRad = ((angle - 150) * Math.PI) / 180;
+      const endRad = ((angle + 150) * Math.PI) / 180;
+      const x1 = cx + r * Math.cos(startRad);
+      const y1 = cy + r * Math.sin(startRad);
+      const x2 = cx + r * Math.cos(endRad);
+      const y2 = cy + r * Math.sin(endRad);
+      pathD = `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r.toFixed(2)} ${r.toFixed(2)} 0 1 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+    }
+    pathEl.setAttribute('d', pathD);
+    return true;
+  }
+
+  const rad = ((item.angle || 0) * Math.PI) / 180;
+  const x = item.x !== undefined ? item.x : cx + (item.radius || rRing) * Math.cos(rad);
+  const y = item.y !== undefined ? item.y : cy + (item.radius || rRing) * Math.sin(rad);
+  const rot = item.rotation || 0;
+  groupEl.setAttribute('transform', `translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})`);
+
+  if (item.type === 'icon') {
+    const imgEl = groupEl.querySelector('image');
+    if (imgEl) {
+      const baseSize = studio.activeProduct === 'caja' ? 48 : 44;
+      const s = baseSize * (item.scale || 1.0);
+      const half = s / 2;
+      imgEl.setAttribute('x', (-half).toFixed(2));
+      imgEl.setAttribute('y', (-half).toFixed(2));
+      imgEl.setAttribute('width', s.toFixed(2));
+      imgEl.setAttribute('height', s.toFixed(2));
+    }
+  }
+  return true;
+}
+
 function startFreeItemDrag(itemId, e) {
-  e.preventDefault();
-  e.stopPropagation();
+  if (e && e.cancelable) e.preventDefault();
+  if (e) e.stopPropagation();
 
   const item = studio.items.find(i => i.id === itemId);
   if (!item) return;
 
   studio.activeItemId = itemId;
-  const targetHandle = e.target.closest('.virola-handle');
+  const targetHandle = e && e.target && e.target.closest ? e.target.closest('.virola-handle') : null;
   const handleType = targetHandle?.getAttribute('data-handle');
 
   if (handleType === 'delete') {
@@ -2075,7 +2133,7 @@ function startFreeItemDrag(itemId, e) {
   const coords = getPointerCoords(e);
   const { cx, cy, rRing } = STUDIO_CONFIG;
 
-  const currentRad = (item.angle * Math.PI) / 180;
+  const currentRad = ((item.angle || 0) * Math.PI) / 180;
   const curX = item.x !== undefined ? item.x : cx + (item.radius || rRing) * Math.cos(currentRad);
   const curY = item.y !== undefined ? item.y : cy + (item.radius || rRing) * Math.sin(currentRad);
 
@@ -2105,13 +2163,51 @@ function startFreeItemDrag(itemId, e) {
     updateActiveTextControls(item);
   }
 
-  renderVirolaCanvas();
+  const isTouchEvent = Boolean(e && (e.touches || e.changedTouches || e.type === 'touchstart'));
+  if (!isTouchEvent) {
+    renderVirolaCanvas();
+  }
   updateActiveItemFloatingBar();
 }
 
 function initCanvasInteraction() {
   const svg = document.getElementById('virola-studio-svg');
   if (!svg) return;
+
+  // Soporte táctil directo en el lienzo SVG para celulares (permite agarrar o ubicar elementos con precisión)
+  svg.addEventListener('touchstart', (e) => {
+    const groupTarget = e.target && e.target.closest
+      ? e.target.closest('.virola-sticker-group, .virola-text-group')
+      : null;
+    if (groupTarget) {
+      const targetId = groupTarget.getAttribute('data-item-id');
+      if (targetId && !studio.dragMode) {
+        startFreeItemDrag(targetId, e);
+      }
+      return;
+    }
+
+    // Si tocó cerca de algún elemento (radio de tolerancia táctil en celular), seleccionarlo y arrastrarlo
+    const coords = getPointerCoords(e);
+    const { cx, cy, rRing } = STUDIO_CONFIG;
+    let closestItem = null;
+    let minDistance = 48;
+
+    studio.items.forEach(it => {
+      const rad = ((it.angle || 0) * Math.PI) / 180;
+      const ix = it.x !== undefined ? it.x : cx + (it.radius || rRing) * Math.cos(rad);
+      const iy = it.y !== undefined ? it.y : cy + (it.radius || rRing) * Math.sin(rad);
+      const d = Math.hypot(coords.x - ix, coords.y - iy);
+      if (d < minDistance) {
+        minDistance = d;
+        closestItem = it;
+      }
+    });
+
+    if (closestItem) {
+      startFreeItemDrag(closestItem.id, e);
+    }
+  }, { passive: false });
 
   svg.addEventListener('click', (e) => {
     if (!e.target.closest('.virola-sticker-group') && 
@@ -2127,17 +2223,19 @@ function initCanvasInteraction() {
   window.addEventListener('touchmove', onCanvasPointerMove, { passive: false });
   window.addEventListener('mouseup', onCanvasPointerEnd);
   window.addEventListener('touchend', onCanvasPointerEnd);
+  window.addEventListener('touchcancel', onCanvasPointerEnd);
 }
 
 function onCanvasPointerMove(e) {
   if (!studio.dragMode || !studio.dragItemId) return;
-  e.preventDefault();
+  if (e && e.cancelable) e.preventDefault();
 
   const item = studio.items.find(i => i.id === studio.dragItemId);
   if (!item) return;
 
   const coords = getPointerCoords(e);
   const { cx, cy, rRing } = STUDIO_CONFIG;
+  const isTouchEvent = Boolean(e && (e.touches || e.changedTouches));
 
   if (studio.dragMode === 'move') {
     const deltaX = coords.x - studio.dragStart.x;
@@ -2175,7 +2273,9 @@ function onCanvasPointerMove(e) {
     item.angle = Math.round(polarAngle);
     item.radius = Math.round(Math.hypot(dx, dy));
 
-    renderVirolaCanvas();
+    if (!isTouchEvent || !updateLiveSvgItemTransform(item)) {
+      renderVirolaCanvas();
+    }
   } else if (studio.dragMode === 'rotate') {
     const itemX = item.x !== undefined ? item.x : cx;
     const itemY = item.y !== undefined ? item.y : cy;
@@ -2188,7 +2288,9 @@ function onCanvasPointerMove(e) {
     }
 
     item.rotation = Math.round(angleDeg + 90);
-    renderVirolaCanvas();
+    if (!isTouchEvent || !updateLiveSvgItemTransform(item)) {
+      renderVirolaCanvas();
+    }
   } else if (studio.dragMode === 'scale') {
     const itemX = item.x !== undefined ? item.x : cx;
     const itemY = item.y !== undefined ? item.y : cy;
@@ -2197,7 +2299,9 @@ function onCanvasPointerMove(e) {
     newScale = Math.max(STUDIO_CONFIG.minScale, Math.min(STUDIO_CONFIG.maxScale, newScale));
 
     item.scale = parseFloat(newScale.toFixed(2));
-    renderVirolaCanvas();
+    if (!isTouchEvent || !updateLiveSvgItemTransform(item)) {
+      renderVirolaCanvas();
+    }
   }
 }
 
@@ -2217,12 +2321,15 @@ function getPointerCoords(e) {
   if (!svg) return { x: 0, y: 0 };
 
   const rect = svg.getBoundingClientRect();
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  const touch = (e && e.touches && e.touches[0]) || (e && e.changedTouches && e.changedTouches[0]);
+  const clientX = touch ? touch.clientX : (e ? e.clientX : 0);
+  const clientY = touch ? touch.clientY : (e ? e.clientY : 0);
 
-  const viewBox = svg.viewBox.baseVal || { width: 500, height: 500 };
-  const scaleX = viewBox.width / rect.width;
-  const scaleY = viewBox.height / rect.height;
+  const viewBox = (svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width)
+    ? svg.viewBox.baseVal
+    : { width: 500, height: 500 };
+  const scaleX = viewBox.width / Math.max(1, rect.width);
+  const scaleY = viewBox.height / Math.max(1, rect.height);
 
   return {
     x: (clientX - rect.left) * scaleX,

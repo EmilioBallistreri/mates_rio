@@ -5,6 +5,7 @@ const stateFilePath = path.join(__dirname, '../data/storeState.json');
 
 const DEFAULT_STORE_STATE = {
   customProducts: null,
+  editedProducts: null,
   deletedProducts: null,
   inventory: null,
   categories: null,
@@ -15,6 +16,9 @@ const DEFAULT_STORE_STATE = {
   supplierPurchases: null,
   orders: null,
   wholesaleClients: null,
+  wholesaleAccounts: null,
+  usersDb: null,
+  auditLog: null,
   updatedAt: 0
 };
 
@@ -57,6 +61,7 @@ const StoreState = {
     currentState = readStateFromDisk();
     const allowedKeys = [
       'customProducts',
+      'editedProducts',
       'deletedProducts',
       'inventory',
       'categories',
@@ -66,7 +71,10 @@ const StoreState = {
       'themeMode',
       'supplierPurchases',
       'orders',
-      'wholesaleClients'
+      'wholesaleClients',
+      'wholesaleAccounts',
+      'usersDb',
+      'auditLog'
     ];
 
     let changed = false;

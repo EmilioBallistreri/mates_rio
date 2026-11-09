@@ -205,6 +205,9 @@
           <button type="button" class="btn-toggle-sidebar-mobile" onclick="toggleMobileSidebar()" aria-label="Abrir Menú">
             <i class="fas fa-bars"></i>
           </button>
+          <button type="button" class="admin-topbar-back-btn" id="admin-topbar-back-btn" onclick="goBackAdminSection()" title="Volver a la sección anterior">
+            <i class="fas fa-arrow-left"></i> <span id="admin-topbar-back-label">Volver</span>
+          </button>
           <div class="topbar-breadcrumb">
             Mates Río / <b id="topbar-current-page">Dashboard General</b>
           </div>
@@ -219,7 +222,7 @@
             <i class="fas fa-magnifying-glass"></i>
           </button>
 
-          <button type="button" class="topbar-icon-btn topbar-notif-btn" onclick="switchAdminSection('orders')" title="Ver Pedidos Recientes" aria-label="Notificaciones de Pedidos">
+          <button type="button" class="topbar-icon-btn topbar-notif-btn" id="admin-topbar-notif-btn" onclick="handleAdminNotifBellClick()" title="Ver Notificaciones y Pedidos Recientes" aria-label="Notificaciones de Pedidos">
             <i class="far fa-bell"></i>
             <span class="topbar-notif-dot"></span>
           </button>
@@ -478,6 +481,15 @@
              SECTION 3: VENTAS Y GESTIÓN DE PEDIDOS
              ================================================================== -->
         <section class="admin-section" id="sec-orders">
+          <div class="admin-notif-back-banner" id="admin-notif-back-banner">
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 0.82rem; font-weight: 700; color: var(--admin-text-main);">
+              <i class="fas fa-bell"></i>
+              <span>Notificaciones de Pedidos Recientes</span>
+            </div>
+            <button type="button" class="admin-notif-back-btn" onclick="goBackAdminSection()">
+              <i class="fas fa-arrow-left"></i> <span id="admin-notif-back-text">Volver a la sección anterior</span>
+            </button>
+          </div>
           <div class="section-head-bar">
             <div>
               <h2 class="section-page-title">Gestión de Ventas y Pedidos</h2>

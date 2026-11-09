@@ -125,17 +125,22 @@ function showToast(message, icon = 'fa-check-circle') {
   const container = document.getElementById('toast-container');
   if (!container) return;
 
+  // Evitar acumulación excesiva de notificaciones en pantalla
+  while (container.children.length >= 2) {
+    container.firstElementChild.remove();
+  }
+
   const toast = document.createElement('div');
   toast.className = 'toast';
-  toast.innerHTML = `<i class="fas ${icon}" style="color: var(--accent-gold); font-size: 1.2rem;"></i> <span>${message}</span>`;
+  toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
   container.appendChild(toast);
 
   setTimeout(() => {
     toast.style.opacity = '0';
-    toast.style.transform = 'translateY(-10px)';
-    toast.style.transition = 'all 0.3s ease';
-    setTimeout(() => toast.remove(), 300);
-  }, 3500);
+    toast.style.transform = 'translateY(8px)';
+    toast.style.transition = 'all 0.25s ease';
+    setTimeout(() => toast.remove(), 250);
+  }, 2600);
 }
 
 // ==========================================================================
@@ -156,6 +161,9 @@ function initThemeMode() {
 
 function applyThemeMode(mode, showNotification = false) {
   const isLight = mode === 'light';
+  document.documentElement.classList.toggle('theme-light', isLight);
+  document.documentElement.classList.toggle('theme-dark', !isLight);
+  document.documentElement.classList.toggle('theme-inverted', isLight);
   document.body.classList.toggle('theme-light', isLight);
   document.body.classList.toggle('theme-dark', !isLight);
   document.body.classList.toggle('theme-inverted', isLight);
@@ -166,7 +174,7 @@ function applyThemeMode(mode, showNotification = false) {
   updateThemeToggleIcons(isLight);
 
   if (showNotification) {
-    showToast(isLight ? 'Modo Claro activado ☀️' : 'Modo Oscuro activado 🌙', isLight ? 'fa-sun' : 'fa-moon');
+    showToast(isLight ? 'Modo Claro activado' : 'Modo Oscuro activado', isLight ? 'fa-sun' : 'fa-moon');
   }
 }
 
@@ -192,10 +200,13 @@ function toggleColorTheme() {
 function updateThemeToggleIcons(isLight) {
   document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
     btn.innerHTML = isLight
-      ? '<i class="fas fa-moon"></i>'
-      : '<i class="fas fa-sun"></i>';
+      ? '<i class="fas fa-moon" style="pointer-events: none;"></i>'
+      : '<i class="fas fa-sun" style="pointer-events: none;"></i>';
     btn.setAttribute('title', isLight ? 'Cambiar a Modo Oscuro' : 'Cambiar a Modo Claro');
     btn.setAttribute('aria-label', isLight ? 'Cambiar a Modo Oscuro' : 'Cambiar a Modo Claro');
+    if (typeof btn.blur === 'function') {
+      btn.blur();
+    }
   });
 
   const mobileIcon = document.getElementById('mobile-theme-icon');
@@ -1666,10 +1677,21 @@ function updateAuthUI() {
     floatingAddBtn.style.display = 'none';
   }
 
+  const mobileAuthItem = document.getElementById('mobile-nav-auth-item');
+  const mobileAuthLink = mobileAuthItem ? mobileAuthItem.querySelector('a') : null;
+  const mobileAuthArrow = mobileAuthItem ? mobileAuthItem.querySelector('.fa-chevron-right') : null;
+
   if (state.currentUser) {
     const firstName = state.currentUser.name ? state.currentUser.name.split(' ')[0] : 'Usuario';
     if (userBtnText) userBtnText.textContent = isAdmin ? 'Admin' : firstName;
-    if (mobileAuthText) mobileAuthText.textContent = `Hola, ${firstName} (${isAdmin ? 'Admin' : 'Mi Perfil'})`;
+    if (mobileAuthText) mobileAuthText.textContent = isAdmin ? 'Hola, Administrador' : `Hola, ${firstName}`;
+    if (mobileAuthArrow) mobileAuthArrow.style.display = 'none';
+    if (mobileAuthItem) mobileAuthItem.classList.add('is-static-greeting');
+    if (mobileAuthLink) {
+      mobileAuthLink.removeAttribute('onclick');
+      mobileAuthLink.style.pointerEvents = 'none';
+      mobileAuthLink.style.cursor = 'default';
+    }
     if (userBtn) {
       userBtn.onclick = (e) => {
         e.stopPropagation();
@@ -1686,6 +1708,12 @@ function updateAuthUI() {
   } else {
     if (userBtnText) userBtnText.textContent = "Ingresar";
     if (mobileAuthText) mobileAuthText.textContent = "Mi Cuenta / Ingresar";
+    if (mobileAuthItem) mobileAuthItem.classList.remove('is-static-greeting');
+    if (mobileAuthLink) {
+      mobileAuthLink.style.pointerEvents = 'auto';
+      mobileAuthLink.style.cursor = 'pointer';
+      mobileAuthLink.onclick = () => handleMobileAuthClick();
+    }
     if (userBtn) {
       userBtn.onclick = () => openAuthModal('login');
       userBtn.title = "Iniciar sesión o Registrarse";
@@ -1694,15 +1722,41 @@ function updateAuthUI() {
     }
     if (userDropdown) userDropdown.classList.remove('active');
   }
+
+  ensureMobileDrawerSocialCircles();
+}
+
+function ensureMobileDrawerSocialCircles() {
+  const footers = document.querySelectorAll('.mobile-nav-footer');
+  footers.forEach(footer => {
+    let circles = footer.querySelector('.mobile-drawer-social-circles');
+    if (!circles) {
+      circles = document.createElement('div');
+      circles.className = 'mobile-drawer-social-circles';
+      footer.insertBefore(circles, footer.firstChild);
+    }
+    if (!circles.querySelector('.tiktok')) {
+      circles.innerHTML = `
+        <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="mobile-social-circle whatsapp" title="WhatsApp Oficial" aria-label="WhatsApp Oficial">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="mobile-social-circle tiktok" title="TikTok @Mates_rio" aria-label="TikTok Oficial">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="mobile-social-circle instagram" title="Instagram @mates_rio_" aria-label="Instagram Oficial">
+          <i class="fab fa-instagram"></i>
+        </a>
+      `;
+    }
+  });
 }
 
 function handleMobileAuthClick() {
-  closeMobileDrawer();
   if (state.currentUser) {
-    openProfileModal();
-  } else {
-    openAuthModal('login');
+    return; // Es solo un mensaje de saludo estático cuando hay sesión iniciada
   }
+  closeMobileDrawer();
+  openAuthModal('login');
 }
 
 // User Profile & Orders Modal with Location and Tabs
@@ -2096,12 +2150,11 @@ function closeMobileDrawer() {
 }
 
 function handleMobileAuthClick() {
-  closeMobileDrawer();
   if (state.currentUser) {
-    openProfileModal();
-  } else {
-    openAuthModal('login');
+    return; // Saludo estático cuando hay sesión iniciada
   }
+  closeMobileDrawer();
+  openAuthModal('login');
 }
 
 // Admin Web Product Creator Modals (Redirects to Admin Panel)

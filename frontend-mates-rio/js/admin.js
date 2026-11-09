@@ -305,9 +305,70 @@ function toggleAdminPasswordVisibility() {
 }
 
 // ==========================================================================
-// 3. NAVIGATION & TABS
+// 3. NAVIGATION & TABS (CON HISTORIAL PARA VOLVER DESDE NOTIFICACIONES)
 // ==========================================================================
-function switchAdminSection(sectionId) {
+let previousAdminSection = null;
+let openedViaNotifBell = false;
+
+const ADMIN_SECTION_LABELS = {
+  dashboard: 'Dashboard General',
+  inventory: 'Control de Inventario & Stock',
+  purchases: 'Compras a Proveedores',
+  orders: 'Ventas & Gestión de Pedidos',
+  stats: 'Estadísticas & Rendimiento',
+  'home-design': 'Diseño & Inicio Web',
+  users: 'Clientes & Accesos',
+  audit: 'Registro de Actividad'
+};
+
+function updateAdminBackButtonsUI() {
+  const topbarBackBtn = document.getElementById('admin-topbar-back-btn');
+  const topbarBackLabel = document.getElementById('admin-topbar-back-label');
+  const notifBanner = document.getElementById('admin-notif-back-banner');
+  const notifBackText = document.getElementById('admin-notif-back-text');
+
+  const hasBackTarget = !!previousAdminSection && previousAdminSection !== currentActiveSection;
+  const prevName = ADMIN_SECTION_LABELS[previousAdminSection] || 'Sección anterior';
+
+  if (topbarBackBtn) {
+    topbarBackBtn.style.display = hasBackTarget ? 'inline-flex' : 'none';
+    topbarBackBtn.title = `Volver a ${prevName}`;
+  }
+  if (topbarBackLabel) {
+    topbarBackLabel.textContent = `Volver a ${prevName}`;
+  }
+
+  if (notifBanner) {
+    notifBanner.style.display = (currentActiveSection === 'orders' && hasBackTarget) ? 'flex' : 'none';
+  }
+  if (notifBackText) {
+    notifBackText.textContent = `Volver a ${prevName}`;
+  }
+}
+
+function handleAdminNotifBellClick() {
+  if (currentActiveSection === 'orders' && previousAdminSection && previousAdminSection !== 'orders') {
+    goBackAdminSection();
+    return;
+  }
+  openedViaNotifBell = true;
+  switchAdminSection('orders', true);
+}
+
+function goBackAdminSection() {
+  const target = previousAdminSection || 'dashboard';
+  previousAdminSection = null;
+  openedViaNotifBell = false;
+  switchAdminSection(target, false, true);
+}
+
+function switchAdminSection(sectionId, fromNotifBell = false, isGoingBack = false) {
+  if (!isGoingBack && currentActiveSection && currentActiveSection !== sectionId) {
+    previousAdminSection = currentActiveSection;
+  }
+  if (!fromNotifBell && sectionId !== 'orders') {
+    openedViaNotifBell = false;
+  }
   currentActiveSection = sectionId;
 
   // 1. Sidebar items
@@ -324,19 +385,10 @@ function switchAdminSection(sectionId) {
   if (targetSec) targetSec.classList.add('active');
 
   // 3. Topbar breadcrumb
-  const pageNames = {
-    dashboard: 'Dashboard General',
-    inventory: 'Control de Inventario & Stock',
-    purchases: 'Compras a Proveedores & Costos',
-    orders: 'Ventas & Gestión de Pedidos',
-    stats: 'Estadísticas & Rendimiento',
-    'home-design': 'Diseño & Inicio Web',
-    users: 'Clientes & Accesos',
-    audit: 'Registro de Actividad'
-  };
-
   const breadcrumb = document.getElementById('topbar-current-page');
-  if (breadcrumb) breadcrumb.textContent = pageNames[sectionId] || 'Panel';
+  if (breadcrumb) breadcrumb.textContent = ADMIN_SECTION_LABELS[sectionId] || 'Panel';
+
+  updateAdminBackButtonsUI();
 
   // 4. Refresh section data
   if (sectionId === 'dashboard') refreshDashboardData();
@@ -1674,12 +1726,12 @@ function renderCategoryBars() {
   if (!container) return;
 
   const categories = [
-    { id: 'promos', name: 'Combos & Promos', pct: 38.0, color: '#d4b483' },
-    { id: 'mates', name: 'Mates Imperiales', pct: 31.0, color: '#c8a97e' },
-    { id: 'termos', name: 'Termos', pct: 15.0, color: '#bda078' },
-    { id: 'accesorios', name: 'Bombillas & Accesorios', pct: 8.0, color: '#a89070' },
-    { id: 'equipos', name: 'Equipos & Materas', pct: 5.0, color: '#8f7b60' },
-    { id: 'yerbas', name: 'Yerbas', pct: 3.0, color: '#786852' }
+    { id: 'promos', name: 'Combos & Promos', pct: 38.0, color: 'var(--admin-text-main)' },
+    { id: 'mates', name: 'Mates Imperiales', pct: 31.0, color: 'var(--admin-text-main)' },
+    { id: 'termos', name: 'Termos', pct: 15.0, color: 'var(--admin-text-main)' },
+    { id: 'accesorios', name: 'Bombillas & Accesorios', pct: 8.0, color: 'var(--admin-text-main)' },
+    { id: 'equipos', name: 'Equipos & Materas', pct: 5.0, color: 'var(--admin-text-main)' },
+    { id: 'yerbas', name: 'Yerbas', pct: 3.0, color: 'var(--admin-text-main)' }
   ];
 
   container.innerHTML = categories.map(cat => `
@@ -1706,9 +1758,9 @@ function renderPaymentMethods() {
   const cardPct = Math.max(0, 100 - transferPct);
 
   const methods = [
-    { name: 'Transferencia (10% OFF)', pct: transferPct, color: '#68b88e' },
-    { name: 'Tarjetas (3 Cuotas)', pct: cardPct, color: '#d4b483' },
-    { name: 'Efectivo / Rapipago', pct: 0, color: '#5a6570' }
+    { name: 'Transferencia (10% OFF)', pct: transferPct, color: 'var(--admin-text-main)' },
+    { name: 'Tarjetas (3 Cuotas)', pct: cardPct, color: 'var(--admin-text-main)' },
+    { name: 'Efectivo / Rapipago', pct: 0, color: 'var(--admin-text-muted)' }
   ];
 
   container.innerHTML = methods.map(m => `
