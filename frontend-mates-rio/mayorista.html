@@ -468,14 +468,95 @@
       }
     }
 
-    @media (max-width: 420px) {
+    @media (max-width: 768px) {
+      body.wholesale-page #open-b2b-cart-btn {
+        width: auto !important;
+        height: 36px !important;
+        padding: 0 10px !important;
+        border-radius: 30px !important;
+        gap: 6px !important;
+      }
       body.wholesale-page #open-b2b-cart-btn span:not(#b2b-cart-badge) {
         display: none !important;
       }
     }
+
+    /* Soporte Modo Claro en Portal Mayorista */
+    body.wholesale-page.theme-light,
+    body.wholesale-page.theme-inverted,
+    body.wholesale-page.theme-light .wholesale-main-wrap,
+    body.wholesale-page.theme-inverted .wholesale-main-wrap {
+      background-color: #f6f6f6 !important;
+      color: #111111 !important;
+    }
+
+    body.wholesale-page.theme-light .site-header,
+    body.wholesale-page.theme-inverted .site-header {
+      background: #ffffff !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12) !important;
+    }
+
+    body.wholesale-page.theme-light .site-header .brand-name,
+    body.wholesale-page.theme-light .site-header .brand-name-group span,
+    body.wholesale-page.theme-light .site-header .nav-link,
+    body.wholesale-page.theme-inverted .site-header .brand-name,
+    body.wholesale-page.theme-inverted .site-header .brand-name-group span,
+    body.wholesale-page.theme-inverted .site-header .nav-link {
+      color: #111111 !important;
+    }
+
+    body.wholesale-page.theme-light #open-b2b-cart-btn,
+    body.wholesale-page.theme-inverted #open-b2b-cart-btn {
+      background: #111111 !important;
+      color: #ffffff !important;
+      border-color: #111111 !important;
+    }
+
+    body.wholesale-page.theme-light #open-b2b-cart-btn i,
+    body.wholesale-page.theme-light #open-b2b-cart-btn span:not(#b2b-cart-badge),
+    body.wholesale-page.theme-inverted #open-b2b-cart-btn i,
+    body.wholesale-page.theme-inverted #open-b2b-cart-btn span:not(#b2b-cart-badge) {
+      color: #ffffff !important;
+    }
+
+    body.wholesale-page.theme-light #b2b-cart-badge,
+    body.wholesale-page.theme-inverted #b2b-cart-badge {
+      background: #ffffff !important;
+      color: #111111 !important;
+      border-color: #ffffff !important;
+    }
   </style>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme');
+        var isLight = saved === 'light' || localStorage.getItem('mates_rio_theme_inverted') === 'true';
+        if (isLight) {
+          document.documentElement.classList.add('theme-light');
+          document.documentElement.classList.remove('theme-dark');
+        } else {
+          document.documentElement.classList.add('theme-dark');
+          document.documentElement.classList.remove('theme-light');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="wholesale-page">
+  <script>
+    (function () {
+      try {
+        var isLight = document.documentElement.classList.contains('theme-light');
+        if (isLight) {
+          document.body.classList.add('theme-light', 'theme-inverted');
+          document.body.classList.remove('theme-dark');
+        } else {
+          document.body.classList.add('theme-dark');
+          document.body.classList.remove('theme-light', 'theme-inverted');
+        }
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- Barra de Anuncio Superior (Oculta por simplificación visual) -->
   <aside class="announcement-bar" style="display: none !important;">
@@ -520,6 +601,40 @@
       </nav>
 
       <div class="header-right">
+        <!-- Selector Modo Claro / Modo Oscuro -->
+        <button class="action-btn theme-toggle-btn" id="theme-toggle-btn" onclick="toggleColorTheme()" title="Cambiar a Modo Claro / Modo Oscuro" aria-label="Cambiar tema de color">
+          <i class="fas fa-sun"></i>
+        </button>
+
+        <!-- Botón de Instagram Oficial -->
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="action-btn instagram-btn" title="Instagram Oficial @mates_rio_" aria-label="Instagram Oficial">
+          <i class="fab fa-instagram"></i>
+        </a>
+
+        <!-- Perfil de Usuario (Mi Perfil, Mis Pedidos, Panel de Administración, Cerrar Sesión) -->
+        <div class="user-btn-wrap">
+          <button class="user-account-btn" id="user-account-btn" onclick="openAuthModal('login')" title="Mi Cuenta">
+            <i class="far fa-user"></i>
+            <span class="user-name-display" id="user-btn-name">Ingresar</span>
+          </button>
+
+          <div class="user-dropdown-menu" id="user-dropdown-menu">
+            <div class="user-dropdown-item" onclick="openProfileModal('profile')">
+              <i class="far fa-id-badge"></i> Mi Perfil
+            </div>
+            <div class="user-dropdown-item" onclick="openProfileModal('orders')">
+              <i class="fas fa-box-open"></i> Mis Pedidos
+            </div>
+            <a href="admin.html" class="user-dropdown-item admin-only-item admin-highlight-link" id="dropdown-admin-link" style="display: none; font-weight: 800; text-decoration: none;">
+              <i class="fas fa-shield-halved"></i> Panel de Administración
+            </a>
+            <div class="user-dropdown-divider"></div>
+            <div class="user-dropdown-item logout text-danger" onclick="logoutUser()">
+              <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </div>
+          </div>
+        </div>
+
         <!-- Botón de Carrito Mayorista Independiente -->
         <button class="action-btn cart-btn-highlight" id="open-b2b-cart-btn" onclick="openB2BCartDrawer()" title="Ver Carrito Mayorista" style="background: #ffffff; color: #000000; border-color: #ffffff; width: auto; padding: 0 16px; border-radius: 30px; gap: 8px; font-weight: 800; font-size: 0.82rem;">
           <i class="fas fa-boxes-packing"></i>
@@ -545,7 +660,7 @@
 
     <ul class="mobile-nav-list">
       <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
-        <a href="index.html" id="mobile-nav-auth-link">
+        <a href="javascript:void(0)" id="mobile-nav-auth-link" onclick="handleMobileAuthClick()">
           <span><i class="fas fa-user-circle" style="width: 22px;"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
         </a>
       </li>
@@ -581,7 +696,7 @@
         <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="mobile-social-circle whatsapp" title="WhatsApp Oficial" aria-label="WhatsApp Oficial">
           <i class="fab fa-whatsapp"></i>
         </a>
-        <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="mobile-social-circle tiktok" title="TikTok @Mates_rio" aria-label="TikTok Oficial">
+        <a href="https://www.tiktok.com/@mates_rio?_t=8rMatesRio&_r=1" target="_blank" rel="noopener" class="mobile-social-circle tiktok" title="TikTok @mates_rio" aria-label="TikTok Oficial">
           <i class="fab fa-tiktok"></i>
         </a>
         <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="mobile-social-circle instagram" title="Instagram @mates_rio_" aria-label="Instagram Oficial">
@@ -1141,15 +1256,28 @@
     }
 
     function openMobileDrawer() {
-      document.getElementById('mobile-nav-drawer')?.classList.add('active');
-      document.getElementById('mobile-nav-overlay')?.classList.add('active');
+      const drawer = document.getElementById('mobile-nav-drawer');
+      const overlay = document.getElementById('mobile-nav-overlay');
+      const btn = document.getElementById('mobile-menu-btn') || document.getElementById('mobile-menu-toggle');
+      if (drawer && drawer.classList.contains('active')) {
+        closeMobileDrawer();
+        if (btn && typeof btn.blur === 'function') btn.blur();
+        return;
+      }
+      drawer?.classList.add('active');
+      overlay?.classList.add('active');
       document.body.style.overflow = 'hidden';
+      if (btn && typeof btn.blur === 'function') btn.blur();
     }
 
     function closeMobileDrawer() {
-      document.getElementById('mobile-nav-drawer')?.classList.remove('active');
-      document.getElementById('mobile-nav-overlay')?.classList.remove('active');
+      const drawer = document.getElementById('mobile-nav-drawer');
+      const overlay = document.getElementById('mobile-nav-overlay');
+      const btn = document.getElementById('mobile-menu-btn') || document.getElementById('mobile-menu-toggle');
+      drawer?.classList.remove('active');
+      overlay?.classList.remove('active');
       document.body.style.overflow = '';
+      if (btn && typeof btn.blur === 'function') btn.blur();
     }
 
     function syncMayoristaMobileMenuAuth() {
@@ -1179,7 +1307,256 @@
       loadB2BCart();
       checkWholesaleSession();
       syncMayoristaMobileMenuAuth();
+      if (typeof updateAuthUI === 'function') updateAuthUI();
+      if (typeof initThemeMode === 'function') initThemeMode();
     });
   </script>
+
+  <!-- ==========================================================================
+       FLOATING WHATSAPP BUTTON & CHAT POPUP (PORTAL MAYORISTA)
+       ========================================================================== -->
+  <div class="floating-whatsapp-container">
+    <div class="whatsapp-chat-popup" id="whatsapp-chat-popup">
+      <div class="chat-popup-header">
+        <img src="assets/images/logo.jpg" alt="Asesor Mates Río" class="chat-avatar" />
+        <div class="chat-title-info">
+          <h5>Mates Río Mayorista</h5>
+          <span class="chat-status">En línea ahora</span>
+        </div>
+        <button class="chat-popup-close" onclick="toggleWhatsAppChat()" aria-label="Cerrar chat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="chat-popup-body">
+        <div class="chat-bubble">
+          ¡Hola! 👋 Bienvenido al <b>Portal Mayorista de Mates Río</b>. ¿Necesitás asesoramiento sobre compras por volumen, grabados personalizados o envíos a tu ciudad?
+          <time>Ahora</time>
+        </div>
+
+        <div class="chat-quick-options">
+          <button class="chat-quick-chip" onclick="startDirectWhatsAppChat('¡Hola Mates Río! Quisiera consultar por compras mayoristas y lista de precios.')">
+            📦 Consultar por pedido mayorista
+          </button>
+          <button class="chat-quick-chip" onclick="startDirectWhatsAppChat('¡Hola Mates Río! Quisiera consultar por grabados láser personalizados por mayor.')">
+            ✨ Grabados láser para comercios/empresas
+          </button>
+          <button class="chat-quick-chip" onclick="startDirectWhatsAppChat('¡Hola! ¿Cómo son los despachos mayoristas a mi localidad?')">
+            🚚 Envíos y expresos a todo el país
+          </button>
+        </div>
+      </div>
+
+      <div class="chat-popup-footer">
+        <button class="chat-start-btn" onclick="startDirectWhatsAppChat('¡Hola Mates Río! Te escribo desde el Portal Mayorista.')">
+          <i class="fab fa-whatsapp"></i> Iniciar conversación en WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <button class="floating-whatsapp-btn" onclick="toggleWhatsAppChat()" aria-label="Abrir asesor por WhatsApp" title="¿Necesitás ayuda? Escribinos por WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </button>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: AUTH (INICIAR SESIÓN / CREAR CUENTA)
+       ========================================================================== -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-box">
+      <button class="modal-close-icon" onclick="closeAuthModal()" aria-label="Cerrar modal">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">
+          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </button>
+        <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">
+          <i class="fas fa-user-plus"></i> Crear Cuenta
+        </button>
+      </div>
+
+      <div class="auth-panel active" id="auth-panel-login">
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" id="login-email" required class="form-input" placeholder="tunombre@correo.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <div class="input-with-eye">
+              <input type="password" id="login-password" required class="form-input" placeholder="••••••••" />
+              <i class="far fa-eye eye-toggle-btn" id="login-eye-icon" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')"></i>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+            Ingresar a mi cuenta
+          </button>
+        </form>
+      </div>
+
+      <div class="auth-panel" id="auth-panel-register">
+        <form onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label">Nombre y Apellido *</label>
+            <input type="text" id="reg-name" required class="form-input" placeholder="Ej: Lucas González" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Teléfono / WhatsApp *</label>
+            <input type="tel" id="reg-phone" required class="form-input" placeholder="Ej: 351 4455 6677" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Correo electrónico *</label>
+            <input type="email" id="reg-email" required class="form-input" placeholder="tuemail@ejemplo.com" />
+          </div>
+
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Contraseña *</label>
+              <div class="input-with-eye">
+                <input type="password" id="reg-password" required class="form-input" placeholder="••••••••" />
+                <i class="far fa-eye eye-toggle-btn" id="reg-eye-icon1" onclick="togglePasswordVisibility('reg-password', 'reg-eye-icon1')"></i>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Confirmar *</label>
+              <div class="input-with-eye">
+                <input type="password" id="reg-password-confirm" required class="form-input" placeholder="••••••••" />
+                <i class="far fa-eye eye-toggle-btn" id="reg-eye-icon2" onclick="togglePasswordVisibility('reg-password-confirm', 'reg-eye-icon2')"></i>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+            Crear mi Cuenta
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: USER PROFILE & MIS PEDIDOS
+       ========================================================================== -->
+  <div class="modal-overlay" id="profile-modal">
+    <div class="modal-box modal-box-padded">
+      <button class="modal-close-icon" onclick="closeProfileModal()" aria-label="Cerrar perfil">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border-light);">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--bg-dark); color: var(--accent-gold); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <i class="far fa-user"></i>
+        </div>
+        <div style="overflow: hidden;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-name-display">Usuario</h3>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" id="profile-email-display">email@ejemplo.com</p>
+          <span style="font-size: 0.76rem; color: var(--accent-leather); font-weight: 600;" id="profile-phone-display">+54 9 351 383-0111</span>
+        </div>
+      </div>
+
+      <div id="profile-admin-card" style="display: none; background: #141414; border: 1.5px solid rgba(255,255,255,0.28); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: #ffffff; text-transform: uppercase;">
+            <i class="fas fa-shield-halved"></i> Permisos de Administrador
+          </span>
+          <span class="nav-badge-pill pill-gold" id="profile-admin-role-badge">STAFF</span>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <a href="admin.html" class="btn btn-primary" style="flex: 1; font-size: 0.8rem; padding: 9px 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; gap: 6px;">
+            <i class="fas fa-shield-halved"></i> Abrir Panel de Administración
+          </a>
+        </div>
+      </div>
+
+      <div class="profile-modal-tabs">
+        <button class="profile-tab-btn active" id="profile-tab-btn-info" onclick="switchProfileTab('profile')">
+          <i class="far fa-id-badge"></i> Mi Perfil y Ubicación
+        </button>
+        <button class="profile-tab-btn" id="profile-tab-btn-orders" onclick="switchProfileTab('orders')">
+          <i class="fas fa-box-open"></i> Mis Pedidos
+        </button>
+      </div>
+
+      <div id="profile-panel-info">
+        <form onsubmit="saveUserLocation(event)" class="location-box">
+          <div class="location-box-title">
+            <i class="fas fa-location-dot" style="color: var(--accent-gold);"></i> Mi Dirección de Entrega Guardada
+          </div>
+          <div class="form-grid-2col" style="margin-top: 10px;">
+            <div class="form-group">
+              <label class="form-label">Provincia *</label>
+              <select id="profile-input-province" class="form-input" style="height: 40px; font-size: 0.84rem;">
+                <option value="Córdoba">Córdoba</option>
+                <option value="Buenos Aires">Buenos Aires</option>
+                <option value="CABA">Ciudad de Buenos Aires (CABA)</option>
+                <option value="Santa Fe">Santa Fe</option>
+                <option value="Mendoza">Mendoza</option>
+                <option value="Entre Ríos">Entre Ríos</option>
+                <option value="Salta">Salta</option>
+                <option value="Tucumán">Tucumán</option>
+                <option value="Chaco">Chaco</option>
+                <option value="Corrientes">Corrientes</option>
+                <option value="Misiones">Misiones</option>
+                <option value="San Juan">San Juan</option>
+                <option value="San Luis">San Luis</option>
+                <option value="Catamarca">Catamarca</option>
+                <option value="La Rioja">La Rioja</option>
+                <option value="Santiago del Estero">Santiago del Estero</option>
+                <option value="Jujuy">Jujuy</option>
+                <option value="Neuquén">Neuquén</option>
+                <option value="Río Negro">Río Negro</option>
+                <option value="Chubut">Chubut</option>
+                <option value="Santa Cruz">Santa Cruz</option>
+                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                <option value="La Pampa">La Pampa</option>
+                <option value="Formosa">Formosa</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ciudad / Localidad *</label>
+              <input type="text" id="profile-input-city" class="form-input" placeholder="Ej: Río Ceballos / Córdoba" />
+            </div>
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Dirección (Calle y Nro) *</label>
+              <input type="text" id="profile-input-address" class="form-input" placeholder="Ej: San Martín 450" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Código Postal *</label>
+              <input type="text" id="profile-input-zip" class="form-input" placeholder="Ej: 5111" />
+            </div>
+          </div>
+          <div id="profile-location-zone-hint" style="font-size: 0.78rem; color: #27ae60; font-weight: 600; margin-bottom: 12px; display: none;"></div>
+          <button type="submit" class="btn btn-outline-dark" style="width: 100%; font-size: 0.82rem; padding: 9px 14px;">
+            <i class="fas fa-floppy-disk"></i> Guardar Dirección de Entrega
+          </button>
+        </form>
+      </div>
+
+      <div id="profile-panel-orders" style="display: none;">
+        <h4 style="font-family: var(--font-heading); font-size: 1rem; margin-bottom: 12px;">
+          <i class="fas fa-clock-rotate-left"></i> Historial de Pedidos y Estadísticas
+        </h4>
+        <div id="profile-orders-list"></div>
+      </div>
+
+      <button class="btn btn-outline-dark" onclick="logoutUser()" style="width: 100%; margin-top: 16px;">
+        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      </button>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

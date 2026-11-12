@@ -12912,17 +12912,24 @@ body {
   }
 
   html.theme-light .user-dropdown-menu,
+  html.theme-light #user-dropdown-menu,
   body.theme-light .user-dropdown-menu,
-  body.theme-inverted .user-dropdown-menu {
+  body.theme-light #user-dropdown-menu,
+  body.theme-inverted .user-dropdown-menu,
+  body.theme-inverted #user-dropdown-menu {
     background: #ffffff !important;
     color: #111111 !important;
     border-color: rgba(0, 0, 0, 0.22) !important;
     box-shadow: 0 16px 38px rgba(0, 0, 0, 0.25) !important;
   }
 
-  .header-right .instagram-btn,
-  .user-account-btn .user-name-display {
+  .user-account-btn .user-name-display,
+  .btn-header-back-mobile {
     display: none !important;
+  }
+
+  .header-right .instagram-btn {
+    display: inline-flex !important;
   }
 
   .header-right .action-btn,
@@ -14179,4 +14186,369 @@ body.theme-inverted #mobile-nav-auth-item.is-static-greeting > a {
 #mobile-nav-auth-item.is-static-greeting .fa-chevron-right {
   display: none !important;
 }
+
+/* ==========================================================================
+   8. CORRECCIONES INTEGRALES SOLICITADAS (CELULAR, MODO CLARO, PERFIL Y PERSONALIZADOR)
+   - Botón de 3 rayitas (menú hamburguesa) siempre visible en Modo Claro y Oscuro (nunca negro sobre negro)
+     y accesible para abrir y cerrar el panel lateral con las mismas 3 rayitas.
+   - Tarjeta de Perfil (#user-dropdown-menu) con fondo blanco y letras negras en Modo Claro,
+     y fondo negro con letras blancas en Modo Oscuro.
+   - Botón de Instagram visible en el encabezado tanto en escritorio como en celular.
+   - Prevención de zoom táctil al mantener apretados los botones +/- del personalizador.
+   ========================================================================== */
+
+/* 8.1 Botón de las 3 rayitas (Menú Móvil): contraste garantizado en Modo Oscuro y Modo Claro */
+.mobile-menu-toggle,
+.mobile-menu-btn,
+#mobile-menu-toggle,
+#mobile-menu-open-btn,
+#mobile-menu-btn,
+.mobile-menu-toggle:hover,
+.mobile-menu-toggle:focus,
+.mobile-menu-toggle:active,
+.mobile-menu-btn:hover,
+.mobile-menu-btn:focus,
+.mobile-menu-btn:active,
+#mobile-menu-toggle:hover,
+#mobile-menu-toggle:focus,
+#mobile-menu-toggle:active,
+#mobile-menu-open-btn:hover,
+#mobile-menu-open-btn:focus,
+#mobile-menu-open-btn:active,
+#mobile-menu-btn:hover,
+#mobile-menu-btn:focus,
+#mobile-menu-btn:active {
+  background: #181818 !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: 50% !important;
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  padding: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: manipulation !important;
+}
+
+.mobile-menu-toggle i,
+.mobile-menu-btn i,
+#mobile-menu-toggle i,
+#mobile-menu-open-btn i,
+#mobile-menu-btn i,
+.mobile-menu-toggle .fa-bars,
+.mobile-menu-btn .fa-bars,
+.mobile-menu-toggle .fa-times,
+.mobile-menu-btn .fa-times {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+}
+
+/* En Modo Claro: Fondo claro y las 3 rayitas siempre en negro nítido (incluso al tocar/mantener activo) */
+html.theme-light .mobile-menu-toggle,
+html.theme-light .mobile-menu-btn,
+html.theme-light #mobile-menu-toggle,
+html.theme-light #mobile-menu-open-btn,
+html.theme-light #mobile-menu-btn,
+html.theme-light .mobile-menu-toggle:hover,
+html.theme-light .mobile-menu-toggle:focus,
+html.theme-light .mobile-menu-toggle:active,
+html.theme-light .mobile-menu-btn:hover,
+html.theme-light .mobile-menu-btn:focus,
+html.theme-light .mobile-menu-btn:active,
+html.theme-light #mobile-menu-toggle:hover,
+html.theme-light #mobile-menu-toggle:focus,
+html.theme-light #mobile-menu-toggle:active,
+html.theme-light #mobile-menu-open-btn:hover,
+html.theme-light #mobile-menu-open-btn:focus,
+html.theme-light #mobile-menu-open-btn:active,
+html.theme-light #mobile-menu-btn:hover,
+html.theme-light #mobile-menu-btn:focus,
+html.theme-light #mobile-menu-btn:active,
+body.theme-light .mobile-menu-toggle,
+body.theme-light .mobile-menu-btn,
+body.theme-light #mobile-menu-toggle,
+body.theme-light #mobile-menu-open-btn,
+body.theme-light #mobile-menu-btn,
+body.theme-light .mobile-menu-toggle:hover,
+body.theme-light .mobile-menu-toggle:focus,
+body.theme-light .mobile-menu-toggle:active,
+body.theme-light .mobile-menu-btn:hover,
+body.theme-light .mobile-menu-btn:focus,
+body.theme-light .mobile-menu-btn:active,
+body.theme-inverted .mobile-menu-toggle,
+body.theme-inverted .mobile-menu-btn,
+body.theme-inverted #mobile-menu-toggle,
+body.theme-inverted #mobile-menu-open-btn,
+body.theme-inverted #mobile-menu-btn,
+body.theme-inverted .mobile-menu-toggle:hover,
+body.theme-inverted .mobile-menu-toggle:focus,
+body.theme-inverted .mobile-menu-toggle:active,
+body.theme-inverted .mobile-menu-btn:hover,
+body.theme-inverted .mobile-menu-btn:focus,
+body.theme-inverted .mobile-menu-btn:active {
+  background: #f4f4f5 !important;
+  color: #111111 !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.32) !important;
+}
+
+html.theme-light .mobile-menu-toggle i,
+html.theme-light .mobile-menu-btn i,
+html.theme-light #mobile-menu-toggle i,
+html.theme-light #mobile-menu-open-btn i,
+html.theme-light #mobile-menu-btn i,
+html.theme-light .mobile-menu-toggle .fa-bars,
+html.theme-light .mobile-menu-btn .fa-bars,
+html.theme-light .mobile-menu-toggle .fa-times,
+html.theme-light .mobile-menu-btn .fa-times,
+body.theme-light .mobile-menu-toggle i,
+body.theme-light .mobile-menu-btn i,
+body.theme-light #mobile-menu-toggle i,
+body.theme-light #mobile-menu-open-btn i,
+body.theme-light #mobile-menu-btn i,
+body.theme-light .mobile-menu-toggle .fa-bars,
+body.theme-light .mobile-menu-btn .fa-bars,
+body.theme-inverted .mobile-menu-toggle i,
+body.theme-inverted .mobile-menu-btn i,
+body.theme-inverted #mobile-menu-toggle i,
+body.theme-inverted #mobile-menu-open-btn i,
+body.theme-inverted #mobile-menu-btn i {
+  color: #111111 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 8.2 Posicionamiento del Panel Lateral Móvil debajo del Header para que las 3 rayitas y la X cierren siempre */
+@media (max-width: 992px) {
+  .mobile-menu-toggle,
+  .mobile-menu-btn,
+  #mobile-menu-toggle,
+  #mobile-menu-open-btn,
+  #mobile-menu-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .mobile-nav-overlay {
+    top: 62px !important;
+    height: calc(100vh - 62px) !important;
+    height: calc(100dvh - 62px) !important;
+    z-index: 1140 !important;
+  }
+
+  .mobile-nav-drawer {
+    top: 62px !important;
+    height: calc(100vh - 62px) !important;
+    height: calc(100dvh - 62px) !important;
+    z-index: 1150 !important;
+  }
+}
+
+html.theme-light .mobile-drawer-header,
+body.theme-light .mobile-drawer-header,
+body.theme-inverted .mobile-drawer-header {
+  background: #f4f4f5 !important;
+  color: #111111 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+html.theme-light .mobile-drawer-header span,
+body.theme-light .mobile-drawer-header span,
+body.theme-inverted .mobile-drawer-header span,
+html.theme-light .mobile-drawer-close,
+body.theme-light .mobile-drawer-close,
+body.theme-inverted .mobile-drawer-close,
+html.theme-light .mobile-drawer-close i,
+body.theme-light .mobile-drawer-close i,
+body.theme-inverted .mobile-drawer-close i {
+  color: #111111 !important;
+}
+
+/* 8.3 Tarjeta Desplegable de Perfil (#user-dropdown-menu): Contraste Total en Modo Claro y Modo Oscuro */
+.user-dropdown-menu,
+#user-dropdown-menu {
+  background: #141414 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.78) !important;
+}
+
+.user-dropdown-menu .user-dropdown-item,
+#user-dropdown-menu .user-dropdown-item,
+.user-dropdown-menu .user-dropdown-item i:not(.fa-sign-out-alt),
+#user-dropdown-menu .user-dropdown-item i:not(.fa-sign-out-alt) {
+  color: #ffffff !important;
+}
+
+.user-dropdown-menu .user-dropdown-item:hover,
+#user-dropdown-menu .user-dropdown-item:hover {
+  background: #242424 !important;
+  color: #ffffff !important;
+}
+
+html.theme-light .user-dropdown-menu,
+html.theme-light #user-dropdown-menu,
+body.theme-light .user-dropdown-menu,
+body.theme-light #user-dropdown-menu,
+body.theme-inverted .user-dropdown-menu,
+body.theme-inverted #user-dropdown-menu {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.22) !important;
+}
+
+html.theme-light .user-dropdown-menu .user-dropdown-item,
+html.theme-light #user-dropdown-menu .user-dropdown-item,
+body.theme-light .user-dropdown-menu .user-dropdown-item,
+body.theme-light #user-dropdown-menu .user-dropdown-item,
+body.theme-inverted .user-dropdown-menu .user-dropdown-item,
+body.theme-inverted #user-dropdown-menu .user-dropdown-item,
+html.theme-light .user-dropdown-menu .user-dropdown-item i:not(.fa-sign-out-alt),
+html.theme-light #user-dropdown-menu .user-dropdown-item i:not(.fa-sign-out-alt),
+body.theme-light .user-dropdown-menu .user-dropdown-item i:not(.fa-sign-out-alt),
+body.theme-light #user-dropdown-menu .user-dropdown-item i:not(.fa-sign-out-alt),
+body.theme-inverted .user-dropdown-menu .user-dropdown-item i:not(.fa-sign-out-alt),
+body.theme-inverted #user-dropdown-menu .user-dropdown-item i:not(.fa-sign-out-alt) {
+  color: #111111 !important;
+}
+
+html.theme-light .user-dropdown-menu .user-dropdown-item:hover,
+html.theme-light #user-dropdown-menu .user-dropdown-item:hover,
+body.theme-light .user-dropdown-menu .user-dropdown-item:hover,
+body.theme-light #user-dropdown-menu .user-dropdown-item:hover,
+body.theme-inverted .user-dropdown-menu .user-dropdown-item:hover,
+body.theme-inverted #user-dropdown-menu .user-dropdown-item:hover {
+  background: #f4f4f5 !important;
+  color: #000000 !important;
+}
+
+/* Cerrar Sesión siempre en rojo visible en ambos modos */
+.user-dropdown-menu .user-dropdown-item.logout,
+#user-dropdown-menu .user-dropdown-item.logout,
+.user-dropdown-menu .user-dropdown-item.text-danger,
+#user-dropdown-menu .user-dropdown-item.text-danger,
+html.theme-light .user-dropdown-menu .user-dropdown-item.logout,
+html.theme-light #user-dropdown-menu .user-dropdown-item.logout,
+html.theme-light .user-dropdown-menu .user-dropdown-item.text-danger,
+html.theme-light #user-dropdown-menu .user-dropdown-item.text-danger,
+body.theme-light .user-dropdown-menu .user-dropdown-item.logout,
+body.theme-light #user-dropdown-menu .user-dropdown-item.logout,
+body.theme-light .user-dropdown-menu .user-dropdown-item.text-danger,
+body.theme-light #user-dropdown-menu .user-dropdown-item.text-danger,
+body.theme-inverted .user-dropdown-menu .user-dropdown-item.logout,
+body.theme-inverted #user-dropdown-menu .user-dropdown-item.logout,
+body.theme-inverted .user-dropdown-menu .user-dropdown-item.text-danger,
+body.theme-inverted #user-dropdown-menu .user-dropdown-item.text-danger {
+  color: #e11d48 !important;
+}
+
+.user-dropdown-menu .user-dropdown-item.logout i,
+#user-dropdown-menu .user-dropdown-item.logout i,
+.user-dropdown-menu .user-dropdown-item.text-danger i,
+#user-dropdown-menu .user-dropdown-item.text-danger i,
+html.theme-light .user-dropdown-menu .user-dropdown-item.logout i,
+html.theme-light #user-dropdown-menu .user-dropdown-item.logout i,
+html.theme-light .user-dropdown-menu .user-dropdown-item.text-danger i,
+html.theme-light #user-dropdown-menu .user-dropdown-item.text-danger i {
+  color: #e11d48 !important;
+}
+
+/* 8.4 Botón de Instagram y Cuenta de Usuario siempre visibles y contrastados en el Header */
+.header-right .instagram-btn,
+.action-btn.instagram-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #181818 !important;
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+.header-right .instagram-btn i,
+.action-btn.instagram-btn i {
+  color: #ffffff !important;
+}
+
+html.theme-light .header-right .instagram-btn,
+html.theme-light .action-btn.instagram-btn,
+body.theme-light .header-right .instagram-btn,
+body.theme-light .action-btn.instagram-btn,
+body.theme-inverted .header-right .instagram-btn,
+body.theme-inverted .action-btn.instagram-btn {
+  background: #f0f0f0 !important;
+  color: #111111 !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.32) !important;
+}
+
+html.theme-light .header-right .instagram-btn i,
+html.theme-light .action-btn.instagram-btn i,
+body.theme-light .header-right .instagram-btn i,
+body.theme-light .action-btn.instagram-btn i,
+body.theme-inverted .header-right .instagram-btn i,
+body.theme-inverted .action-btn.instagram-btn i {
+  color: #111111 !important;
+}
+
+html.theme-light .user-account-btn,
+body.theme-light .user-account-btn,
+body.theme-inverted .user-account-btn {
+  background: #f0f0f0 !important;
+  color: #111111 !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.32) !important;
+}
+
+html.theme-light .user-account-btn i,
+html.theme-light .user-account-btn span,
+body.theme-light .user-account-btn i,
+body.theme-light .user-account-btn span,
+body.theme-inverted .user-account-btn i,
+body.theme-inverted .user-account-btn span {
+  color: #111111 !important;
+}
+
+/* 8.5 Controles del Personalizador: evitar zoom táctil al mantener apretado (+/- y rotación) */
+.item-quick-btn,
+.ribbon-btn,
+.virola-active-item-controls,
+.virola-active-item-controls button,
+.studio-ribbon-container button {
+  touch-action: manipulation !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+/* 8.6 Modal de Perfil (#profile-modal y #profile-admin-card): contraste total en Modo Claro */
+html.theme-light #profile-admin-card,
+body.theme-light #profile-admin-card,
+body.theme-inverted #profile-admin-card {
+  background: #f4f4f5 !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.22) !important;
+  color: #111111 !important;
+  box-shadow: none !important;
+}
+
+html.theme-light #profile-admin-card span,
+body.theme-light #profile-admin-card span,
+body.theme-inverted #profile-admin-card span {
+  color: #111111 !important;
+}
+
+html.theme-light #profile-admin-card a.btn-primary,
+body.theme-light #profile-admin-card a.btn-primary,
+body.theme-inverted #profile-admin-card a.btn-primary {
+  background: #111111 !important;
+  color: #ffffff !important;
+}
+
+html.theme-light #profile-admin-card a.btn-primary i,
+body.theme-light #profile-admin-card a.btn-primary i,
+body.theme-inverted #profile-admin-card a.btn-primary i {
+  color: #ffffff !important;
+}
+
+
 

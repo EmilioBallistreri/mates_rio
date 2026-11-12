@@ -51,8 +51,8 @@ const CONFIG = {
   email: "mates.rio6@gmail.com",
   instagramUrl: "https://www.instagram.com/mates_rio_/",
   instagramHandle: "@mates_rio_",
-  tiktokUrl: "https://www.tiktok.com/@Mates_rio",
-  tiktokHandle: "@Mates_rio",
+  tiktokUrl: "https://www.tiktok.com/@mates_rio?_t=8rMatesRio&_r=1",
+  tiktokHandle: "@mates_rio",
   originCity: "Río Ceballos",
   originProvince: "Córdoba",
   locationDisplay: "Río Ceballos, Sierras Chicas, Córdoba, Argentina"
@@ -1740,13 +1740,29 @@ function ensureMobileDrawerSocialCircles() {
         <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="mobile-social-circle whatsapp" title="WhatsApp Oficial" aria-label="WhatsApp Oficial">
           <i class="fab fa-whatsapp"></i>
         </a>
-        <a href="https://www.tiktok.com/@Mates_rio" target="_blank" rel="noopener noreferrer" class="mobile-social-circle tiktok" title="TikTok @Mates_rio" aria-label="TikTok Oficial">
+        <a href="https://www.tiktok.com/@mates_rio?_t=8rMatesRio&_r=1" target="_blank" rel="noopener" class="mobile-social-circle tiktok" title="TikTok @mates_rio" aria-label="TikTok Oficial">
           <i class="fab fa-tiktok"></i>
         </a>
         <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="mobile-social-circle instagram" title="Instagram @mates_rio_" aria-label="Instagram Oficial">
           <i class="fab fa-instagram"></i>
         </a>
       `;
+    }
+  });
+
+  // Normalizar todos los enlaces de TikTok para que en celular abran directamente el perfil @mates_rio y no el "Para ti"
+  document.querySelectorAll('a[href*="tiktok.com"]').forEach(link => {
+    link.href = CONFIG.tiktokUrl;
+    link.setAttribute('rel', 'noopener');
+    if (!link.dataset.tiktokBound) {
+      link.dataset.tiktokBound = '1';
+      link.addEventListener('click', (e) => {
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '') || window.innerWidth <= 992;
+        if (isMobile) {
+          e.preventDefault();
+          window.location.assign(CONFIG.tiktokUrl);
+        }
+      });
     }
   });
 }
@@ -1890,14 +1906,44 @@ function renderProfileOrders() {
   const ordersListEl = document.getElementById('profile-orders-list');
   if (!ordersListEl || !state.currentUser) return;
 
-  // Filter orders by currentUser email or name
+  // Filter retail orders by currentUser email or name (or show all if admin)
+  const isAdmin = isUserAdmin(state.currentUser);
   const currentEmail = (state.currentUser.email || '').toLowerCase();
   const currentName = (state.currentUser.name || '').toLowerCase();
-  const userOrders = state.orders.filter(ord => {
+  const currentPhone = (state.currentUser.phone || '').replace(/\D/g, '');
+
+  const retailOrders = (state.orders || []).filter(ord => {
+    if (isAdmin) return true;
     const oEmail = (ord.customerEmail || '').toLowerCase();
     const oName = (ord.customerName || '').toLowerCase();
     return oEmail === currentEmail || oName === currentName || (!ord.customerEmail && currentEmail.includes('juan'));
   });
+
+  // Include Wholesale (Mayorista) orders from localStorage
+  let wholesaleOrders = [];
+  try {
+    const rawB2B = JSON.parse(localStorage.getItem('mates_rio_wholesale_orders') || '[]');
+    const b2bSession = JSON.parse(localStorage.getItem('mates_rio_b2b_user_session') || 'null');
+    const b2bName = b2bSession && b2bSession.businessName ? b2bSession.businessName.toLowerCase() : '';
+    wholesaleOrders = rawB2B.filter(ord => {
+      if (isAdmin) return true;
+      const cName = (ord.businessName || '').toLowerCase();
+      const cPhone = (ord.phone || '').replace(/\D/g, '');
+      return (currentName && cName.includes(currentName)) ||
+             (b2bName && cName === b2bName) ||
+             (currentPhone && cPhone && cPhone.includes(currentPhone));
+    }).map(ord => ({
+      id: ord.id,
+      date: ord.date || '-',
+      items: Array.isArray(ord.items) ? ord.items.map(i => `${i.qty}x ${i.name}`).join(', ') : (ord.items || 'Pedido Mayorista'),
+      total: ord.totalWholesale || ord.total || 0,
+      status: ord.status || 'Pendiente',
+      address: ord.city || '',
+      isWholesale: true
+    }));
+  } catch (e) {}
+
+  const userOrders = [...wholesaleOrders, ...retailOrders];
 
   const ordersCountBadge = document.getElementById('profile-orders-tab-count');
   if (ordersCountBadge) {
@@ -1912,7 +1958,7 @@ function renderProfileOrders() {
         </div>
         <h5 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 6px;">Aún no realizaste ningún pedido</h5>
         <p style="color: var(--text-secondary); font-size: 0.84rem; max-width: 320px; margin: 0 auto 16px;">
-          Elegí tu mate imperial favorito o armá tu set personalizado y viví la experiencia Mates Río.
+          Elegí tu mate imperial favorito o armá tu pedido mayorista y viví la experiencia Mates Río.
         </p>
         <button class="btn btn-primary" onclick="closeProfileModal(); window.location.href='catalogo.html';" style="font-size: 0.82rem; padding: 9px 18px;">
           <i class="fas fa-store"></i> Explorar Catálogo
@@ -1926,7 +1972,7 @@ function renderProfileOrders() {
     <div style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px;">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
         <div>
-          <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">Pedido #${ord.id}</span>
+          <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">Pedido #${ord.id} ${ord.isWholesale ? '<small style="font-size:0.7rem;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.12);">MAYORISTA</small>' : ''}</span>
           <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">
             <i class="far fa-calendar-alt"></i> ${ord.date}
           </div>
@@ -2135,18 +2181,34 @@ function startDirectWhatsAppChat(customMessage = null) {
 }
 
 // ==========================================================================
-// MOBILE DRAWER MENU
+// MOBILE DRAWER MENU (CON TOGGLE DE APERTURA Y CIERRE EN LAS 3 RAYITAS)
 // ==========================================================================
 function openMobileDrawer() {
-  document.getElementById('mobile-nav-drawer')?.classList.add('active');
-  document.getElementById('mobile-nav-overlay')?.classList.add('active');
+  const drawer = document.getElementById('mobile-nav-drawer');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  const btn = document.getElementById('mobile-menu-toggle') || document.getElementById('mobile-menu-open-btn') || document.getElementById('mobile-menu-btn');
+
+  if (drawer && drawer.classList.contains('active')) {
+    closeMobileDrawer();
+    if (btn && typeof btn.blur === 'function') btn.blur();
+    return;
+  }
+
+  drawer?.classList.add('active');
+  overlay?.classList.add('active');
   document.body.style.overflow = 'hidden';
+  if (btn && typeof btn.blur === 'function') btn.blur();
 }
 
 function closeMobileDrawer() {
-  document.getElementById('mobile-nav-drawer')?.classList.remove('active');
-  document.getElementById('mobile-nav-overlay')?.classList.remove('active');
+  const drawer = document.getElementById('mobile-nav-drawer');
+  const overlay = document.getElementById('mobile-nav-overlay');
+  const btn = document.getElementById('mobile-menu-toggle') || document.getElementById('mobile-menu-open-btn') || document.getElementById('mobile-menu-btn');
+
+  drawer?.classList.remove('active');
+  overlay?.classList.remove('active');
   document.body.style.overflow = '';
+  if (btn && typeof btn.blur === 'function') btn.blur();
 }
 
 function handleMobileAuthClick() {

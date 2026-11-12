@@ -2427,7 +2427,8 @@ function stepItemScale(delta) {
 
   if (item.type === 'text') {
     const curSize = item.fontSize || 22;
-    const newSize = Math.max(10, Math.min(80, Math.round(curSize + (delta > 0 ? 3 : -3))));
+    const stepPx = Math.abs(delta) < 0.08 ? (delta > 0 ? 1.5 : -1.5) : (delta > 0 ? 3 : -3);
+    const newSize = Math.max(8, Math.min(160, Math.round(curSize + stepPx)));
     item.fontSize = newSize;
     const sizeInput = document.getElementById('active-text-size-input');
     const sizeSlider = document.getElementById('active-text-size-slider');
@@ -2437,6 +2438,10 @@ function stepItemScale(delta) {
     const cur = item.scale || 1.0;
     const n = Math.max(STUDIO_CONFIG.minScale, Math.min(STUDIO_CONFIG.maxScale, cur + delta));
     item.scale = parseFloat(n.toFixed(2));
+    const scaleSlider = document.getElementById('logo-scale-slider');
+    const scaleLabel = document.getElementById('logo-scale-val-label');
+    if (scaleSlider) scaleSlider.value = Math.round(item.scale * 100);
+    if (scaleLabel) scaleLabel.textContent = `${Math.round(item.scale * 100)}%`;
   }
 
   renderVirolaCanvas();
@@ -3990,11 +3995,105 @@ function escapeHtml(str) {
     };
   }
 
+  // 10. Mantener apretado (Press-and-Hold) en botones de + / - tamaño y rotación para agrandar o achicar
+  //     de forma continua sin tener que hacer múltiples clics que activen el zoom del celular.
+  function setupContinuousHoldButtons() {
+    const buttons = document.querySelectorAll(
+      'button[onclick*="stepItemScale"], button[onclick*="stepTextFontSize"], button[onclick*="stepItemRotation"]'
+    );
+
+    buttons.forEach(btn => {
+      if (btn.dataset.holdConfigured === '1') return;
+      const rawOnclick = btn.getAttribute('onclick') || '';
+      const match = rawOnclick.match(/(stepItemScale|stepTextFontSize|stepItemRotation)\s*\(\s*([-+]?\d*\.?\d+)\s*\)/);
+      if (!match) return;
+
+      const fnName = match[1];
+      const baseVal = parseFloat(match[2]);
+      if (isNaN(baseVal)) return;
+
+      btn.dataset.holdConfigured = '1';
+      btn.removeAttribute('onclick');
+
+      let holdTimeout = null;
+      let holdInterval = null;
+      let isHolding = false;
+
+      const executeStep = (continuous) => {
+        const sign = baseVal >= 0 ? 1 : -1;
+        if (fnName === 'stepItemScale') {
+          const delta = continuous ? (sign * 0.05) : baseVal;
+          window.stepItemScale(delta);
+        } else if (fnName === 'stepTextFontSize') {
+          const delta = continuous ? (sign * 2) : baseVal;
+          window.stepTextFontSize(delta);
+        } else if (fnName === 'stepItemRotation') {
+          const delta = continuous ? (sign * 5) : baseVal;
+          window.stepItemRotation(delta);
+        }
+      };
+
+      const stopHold = () => {
+        if (holdTimeout) {
+          clearTimeout(holdTimeout);
+          holdTimeout = null;
+        }
+        if (holdInterval) {
+          clearInterval(holdInterval);
+          holdInterval = null;
+        }
+        isHolding = false;
+      };
+
+      const startHold = (e) => {
+        if (e.type === 'pointerdown' && e.button !== undefined && e.button !== 0) return;
+        if (e.cancelable) e.preventDefault();
+        stopHold();
+        isHolding = true;
+
+        if (typeof saveStudioHistoryState === 'function') {
+          saveStudioHistoryState();
+        }
+
+        executeStep(false);
+
+        holdTimeout = setTimeout(() => {
+          if (!isHolding) return;
+          holdInterval = setInterval(() => {
+            if (!isHolding) {
+              stopHold();
+              return;
+            }
+            executeStep(true);
+          }, 55);
+        }, 210);
+      };
+
+      btn.addEventListener('pointerdown', startHold, { passive: false });
+      btn.addEventListener('pointerup', stopHold);
+      btn.addEventListener('pointercancel', stopHold);
+      btn.addEventListener('pointerleave', stopHold);
+      btn.addEventListener('touchend', stopHold);
+      btn.addEventListener('touchcancel', stopHold);
+      btn.addEventListener('contextmenu', (e) => e.preventDefault());
+      btn.addEventListener('dblclick', (e) => e.preventDefault());
+
+      // Soporte por teclado (Accesibilidad Enter / Espacio)
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          executeStep(false);
+        }
+      });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     studio.circularLines = 'no';
     studio.snappingEnabled = false;
     window.syncStudioPricingFromAdmin();
     injectQuickUndoRedoButtons();
+    setupContinuousHoldButtons();
     syncCurvatureControlsVisibility();
     renderModelsDropdown();
     updatePriceDisplay();
