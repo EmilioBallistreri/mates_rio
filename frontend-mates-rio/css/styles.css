@@ -1156,7 +1156,7 @@ input, select, textarea {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 4px 18px rgba(184, 134, 11, 0.3);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
 }
 
 .categories-grid {
@@ -3169,7 +3169,7 @@ input, select, textarea {
   align-items: center;
   background: linear-gradient(135deg, #18181b 0%, #121214 60%, #381f13 100%);
   border-radius: var(--radius-lg);
-  box-shadow: 0 16px 40px rgba(43, 24, 16, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
   border: 1.5px solid rgba(255, 255, 255, 0.35);
   overflow: hidden;
   position: relative;
@@ -3199,7 +3199,7 @@ input, select, textarea {
   gap: 8px;
   background: rgba(255, 255, 255, 0.18);
   border: 1px solid var(--accent-gold);
-  color: #f7d577;
+  color: #ffffff;
   padding: 6px 14px;
   border-radius: 50px;
   font-size: 0.76rem;
@@ -3525,7 +3525,7 @@ input, select, textarea {
   border-left: 5px solid var(--accent-leather);
   border-radius: var(--radius-md);
   padding: 16px 20px;
-  box-shadow: 0 4px 14px rgba(43, 24, 16, 0.05);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
   text-align: left;
 }
 
@@ -3733,7 +3733,7 @@ input, select, textarea {
 }
 
 .virola-metal-type {
-  color: #f7d577;
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -3997,7 +3997,7 @@ input, select, textarea {
 }
 
 .virola-mockup-footer b {
-  color: #f7d577;
+  color: #ffffff;
 }
 
 /* Simulator Trust Guarantees */
@@ -4073,7 +4073,7 @@ input, select, textarea {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(43, 24, 16, 0.25);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 .step-title {
@@ -4422,9 +4422,9 @@ input, select, textarea {
 
 .design-tab-btn.active {
   background: #18181b;
-  color: #f7d577;
+  color: #ffffff;
   border-color: #18181b;
-  box-shadow: 0 3px 10px rgba(43, 24, 16, 0.25);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
 }
 
 .design-panel {
@@ -4601,8 +4601,8 @@ input, select, textarea {
 .location-pill.active {
   background: #18181b;
   border-color: #18181b;
-  color: #f7d577;
-  box-shadow: 0 3px 10px rgba(43, 24, 16, 0.2);
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Graphics Grid (Escudos & Criollos) */
@@ -4960,7 +4960,7 @@ body:not(.theme-light):not(.theme-inverted) .summary-line-row span:last-child {
   background: #ffffff;
   border: 1.5px solid var(--border-light);
   border-radius: var(--radius-lg);
-  box-shadow: 0 12px 32px rgba(43, 24, 16, 0.06);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
   padding: 24px;
   position: relative;
 }
@@ -5887,7 +5887,7 @@ body:not(.theme-light):not(.theme-inverted) .lines-pill-btn.active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(22, 17, 13, 0.94);
+  background: #141416;
   border: 1.5px solid var(--accent-gold);
   border-radius: 30px;
   padding: 6px 14px;
@@ -6038,7 +6038,7 @@ body.theme-dark .purchase-type-card {
 .studio-canvas-stage {
   position: sticky;
   top: 92px;
-  background: radial-gradient(circle at center, #261f18 0%, #141416 65%, #09090b 100%);
+  background: radial-gradient(circle at center, #161618 0%, #141416 65%, #09090b 100%);
   border: 1.5px solid rgba(255, 255, 255, 0.45);
   border-radius: var(--radius-lg);
   padding: 32px 24px;
@@ -10934,7 +10934,7 @@ body.theme-light .customizer-hero-head .studio-page-title {
 body.theme-light .prod-select-card {
   background: #ffffff;
   border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 6px 20px rgba(43, 24, 16, 0.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
 .prod-select-card:hover {
@@ -11065,7 +11065,7 @@ body.theme-light .prod-select-card.active {
 body.theme-light .studio-ribbon-container {
   background: linear-gradient(180deg, #ffffff 0%, #f9f6f0 100%);
   border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 28px rgba(43, 24, 16, 0.08);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
 }
 
 /* Pestañas superiores del Ribbon (Archivo / Inicio / Formato) */
@@ -11373,7 +11373,7 @@ body.theme-light .ribbon-font-item {
 body.theme-light .studio-main-stage-full {
   background: radial-gradient(circle at center, #ffffff 0%, #f4f4f5 60%, #e4e4e7 100%);
   border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 16px 48px rgba(43, 24, 16, 0.12);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
 }
 
 /* Barra superior del Lienzo con alternancia de modos */
@@ -11407,7 +11407,7 @@ body.theme-light .studio-main-stage-full {
 body.theme-light .stage-mode-switch-segmented {
   background: rgba(255, 255, 255, 0.95);
   border-color: rgba(255, 255, 255, 0.4);
-  box-shadow: 0 6px 18px rgba(43, 24, 16, 0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
 .stage-mode-btn {
@@ -16382,4 +16382,506 @@ html.theme-light .filter-pill.active .mono-cat-icon-img,
 body.theme-light .filter-pill:hover .mono-cat-icon-img,
 body.theme-light .filter-pill.active .mono-cat-icon-img {
   filter: brightness(0) invert(1) !important;
+}
+
+
+/* ==========================================================================
+   TALLER DE PERSONALIZACIÓN: HEADER TAGLINE & BREADCRUMBS HIGH CONTRAST
+   ========================================================================== */
+.brand-tagline {
+  color: #ffffff !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.8px !important;
+  text-transform: uppercase !important;
+  opacity: 0.95 !important;
+}
+
+html.theme-light .brand-tagline,
+body.theme-light .brand-tagline {
+  color: #111111 !important;
+  opacity: 0.95 !important;
+}
+
+/* Breadcrumbs de Navegación en el Customizer */
+.customizer-breadcrumbs {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  list-style: none !important;
+  margin: 0 0 0 20px !important;
+  padding: 0 !important;
+  font-size: 0.84rem !important;
+}
+
+.customizer-breadcrumbs li {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.customizer-breadcrumbs li a {
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: color 0.15s ease !important;
+}
+
+.customizer-breadcrumbs li a:hover {
+  color: #ffffff !important;
+}
+
+.customizer-breadcrumbs li.active,
+.customizer-breadcrumbs li.active span {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+.customizer-breadcrumbs .sep {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: 0.65rem !important;
+}
+
+/* Breadcrumbs en Modo Claro */
+html.theme-light .customizer-breadcrumbs li a,
+body.theme-light .customizer-breadcrumbs li a {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+html.theme-light .customizer-breadcrumbs li a:hover,
+body.theme-light .customizer-breadcrumbs li a:hover {
+  color: #000000 !important;
+}
+
+html.theme-light .customizer-breadcrumbs li.active,
+html.theme-light .customizer-breadcrumbs li.active span,
+body.theme-light .customizer-breadcrumbs li.active,
+body.theme-light .customizer-breadcrumbs li.active span {
+  color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+html.theme-light .customizer-breadcrumbs .sep,
+body.theme-light .customizer-breadcrumbs .sep {
+  color: rgba(0, 0, 0, 0.35) !important;
+}
+
+/* ==========================================================================
+   SECCIÓN DE CONTACTO: SEPARACIÓN DEL FOOTER, CONTRASTE DE TEXTO & WSP FLOTANTE
+   ========================================================================== */
+.contact-direct-section {
+  padding-bottom: 90px !important;
+  margin-bottom: 40px !important;
+}
+
+.contact-location-official-grid {
+  margin-bottom: 60px !important;
+}
+
+/* Corrección de Textos Grises en Fondo Oscuro (Modo Oscuro) */
+body:not(.theme-light) .location-desc,
+body:not(.theme-light) .location-detail-item p,
+body:not(.theme-light) .channel-info,
+body:not(.theme-light) .about-pillar-card p,
+body:not(.theme-light) .about-us-lead,
+body:not(.theme-light) .about-us-desc,
+body:not(.theme-light) .section-subtitle,
+body:not(.theme-light) .channels-panel-header p,
+body.theme-dark .location-desc,
+body.theme-dark .location-detail-item p,
+body.theme-dark .channel-info,
+body.theme-dark .about-pillar-card p,
+body.theme-dark .about-us-lead,
+body.theme-dark .about-us-desc,
+body.theme-dark .section-subtitle,
+body.theme-dark .channels-panel-header p {
+  color: #d4d4d8 !important;
+}
+
+body:not(.theme-light) .location-detail-item strong,
+body:not(.theme-light) .about-pillar-card h4,
+body:not(.theme-light) .channel-name,
+body:not(.theme-light) .channels-panel-header h3,
+body:not(.theme-light) .location-title,
+body.theme-dark .location-detail-item strong,
+body.theme-dark .about-pillar-card h4,
+body.theme-dark .channel-name,
+body.theme-dark .channels-panel-header h3,
+body.theme-dark .location-title {
+  color: #ffffff !important;
+}
+
+/* Botón Flotante Directo de WhatsApp en Contacto (debajo del carrito) */
+.floating-wsp-contact-btn {
+  position: fixed !important;
+  bottom: 32px !important;
+  right: 28px !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  background: #25d366 !important;
+  color: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.75rem !important;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45) !important;
+  z-index: 1000 !important;
+  text-decoration: none !important;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.floating-wsp-contact-btn:hover {
+  background: #1ebd5a !important;
+  color: #ffffff !important;
+  transform: translateY(-4px) scale(1.08) !important;
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.6) !important;
+}
+
+@media (max-width: 768px) {
+  .contact-direct-section {
+    padding-bottom: 70px !important;
+    margin-bottom: 30px !important;
+  }
+  .contact-location-official-grid {
+    margin-bottom: 40px !important;
+  }
+  .floating-wsp-contact-btn {
+    bottom: 22px !important;
+    right: 16px !important;
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 1.55rem !important;
+  }
+}
+
+
+/* ==========================================================================
+   CUSTOMIZER HEADER BREADCRUMB & TAGLINE FIX (HIGH VISIBILITY BITONO)
+   ========================================================================== */
+.brand-tagline {
+  color: #ffffff !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.8px !important;
+  text-transform: uppercase !important;
+  opacity: 0.95 !important;
+}
+
+html.theme-light .brand-tagline,
+body.theme-light .brand-tagline {
+  color: #000000 !important;
+  font-weight: 800 !important;
+  opacity: 0.95 !important;
+}
+
+.customizer-breadcrumb,
+.customizer-breadcrumbs {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: 0.85rem !important;
+}
+
+.customizer-breadcrumb a,
+.customizer-breadcrumbs a {
+  color: rgba(255, 255, 255, 0.75) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  transition: color 0.15s ease !important;
+}
+
+.customizer-breadcrumb a:hover,
+.customizer-breadcrumbs a:hover {
+  color: #ffffff !important;
+}
+
+.customizer-breadcrumb .sep,
+.customizer-breadcrumbs .sep {
+  font-size: 0.65rem !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.customizer-breadcrumb .active,
+.customizer-breadcrumb .active span,
+.customizer-breadcrumbs .active,
+.customizer-breadcrumbs .active span {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+/* Modo Claro */
+html.theme-light .customizer-breadcrumb a,
+html.theme-light .customizer-breadcrumbs a,
+body.theme-light .customizer-breadcrumb a,
+body.theme-light .customizer-breadcrumbs a {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+html.theme-light .customizer-breadcrumb a:hover,
+html.theme-light .customizer-breadcrumbs a:hover,
+body.theme-light .customizer-breadcrumb a:hover,
+body.theme-light .customizer-breadcrumbs a:hover {
+  color: #000000 !important;
+}
+
+html.theme-light .customizer-breadcrumb .sep,
+html.theme-light .customizer-breadcrumbs .sep,
+body.theme-light .customizer-breadcrumb .sep,
+body.theme-light .customizer-breadcrumbs .sep {
+  color: rgba(0, 0, 0, 0.35) !important;
+}
+
+html.theme-light .customizer-breadcrumb .active,
+html.theme-light .customizer-breadcrumb .active span,
+html.theme-light .customizer-breadcrumbs .active,
+html.theme-light .customizer-breadcrumbs .active span,
+body.theme-light .customizer-breadcrumb .active,
+body.theme-light .customizer-breadcrumb .active span,
+body.theme-light .customizer-breadcrumbs .active,
+body.theme-light .customizer-breadcrumbs .active span {
+  color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+
+/* ==========================================================================
+   BOTONERA INFERIOR DEL LIENZO: DESHACER, REHACER, CENTRAR, DESELECCIONAR, LIMPIAR
+   ESTRICTO BITONO BLANCO Y NEGRO (CERO BORDES DORADOS, CERO MARRONES, CERO SOMBRAS AMARILLAS)
+   ========================================================================== */
+.stage-bottombar-tools {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin-top: 16px !important;
+  padding: 8px 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  z-index: 35 !important;
+  position: relative !important;
+}
+
+.stage-tools-pill-group {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Modo Oscuro: Píldoras negras con contorno sutil blanco y texto blanco puro */
+.stage-tool-pill,
+#btn-studio-undo,
+#btn-studio-redo {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  padding: 8px 16px !important;
+  border-radius: 999px !important;
+  background: #141416 !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.18s ease !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+  text-shadow: none !important;
+  outline: none !important;
+}
+
+.stage-tool-pill i,
+#btn-studio-undo i,
+#btn-studio-redo i {
+  color: #ffffff !important;
+  font-size: 0.82rem !important;
+  transition: color 0.18s ease !important;
+}
+
+.stage-tool-pill:hover:not(:disabled),
+#btn-studio-undo:hover:not(:disabled),
+#btn-studio-redo:hover:not(:disabled) {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-1px) !important;
+}
+
+.stage-tool-pill:hover:not(:disabled) i,
+#btn-studio-undo:hover:not(:disabled) i,
+#btn-studio-redo:hover:not(:disabled) i {
+  color: #000000 !important;
+}
+
+.stage-tool-pill:disabled,
+#btn-studio-undo:disabled,
+#btn-studio-redo:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  background: #141416 !important;
+  color: #888888 !important;
+}
+
+.stage-tool-pill:disabled i,
+#btn-studio-undo:disabled i,
+#btn-studio-redo:disabled i {
+  color: #888888 !important;
+}
+
+/* Modo Claro: Píldoras blancas con contorno negro sutil y texto negro puro */
+html.theme-light .stage-tool-pill,
+body.theme-light .stage-tool-pill,
+body.theme-inverted .stage-tool-pill,
+html.theme-light #btn-studio-undo,
+body.theme-light #btn-studio-undo,
+html.theme-light #btn-studio-redo,
+body.theme-light #btn-studio-redo {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.22) !important;
+  color: #0a0a0a !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.theme-light .stage-tool-pill i,
+body.theme-light .stage-tool-pill i,
+body.theme-inverted .stage-tool-pill i,
+html.theme-light #btn-studio-undo i,
+body.theme-light #btn-studio-undo i,
+html.theme-light #btn-studio-redo i,
+body.theme-light #btn-studio-redo i {
+  color: #0a0a0a !important;
+}
+
+html.theme-light .stage-tool-pill:hover:not(:disabled),
+body.theme-light .stage-tool-pill:hover:not(:disabled),
+body.theme-inverted .stage-tool-pill:hover:not(:disabled),
+html.theme-light #btn-studio-undo:hover:not(:disabled),
+body.theme-light #btn-studio-undo:hover:not(:disabled),
+html.theme-light #btn-studio-redo:hover:not(:disabled),
+body.theme-light #btn-studio-redo:hover:not(:disabled) {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22) !important;
+  transform: translateY(-1px) !important;
+}
+
+html.theme-light .stage-tool-pill:hover:not(:disabled) i,
+body.theme-light .stage-tool-pill:hover:not(:disabled) i,
+body.theme-inverted .stage-tool-pill:hover:not(:disabled) i,
+html.theme-light #btn-studio-undo:hover:not(:disabled) i,
+body.theme-light #btn-studio-undo:hover:not(:disabled) i,
+html.theme-light #btn-studio-redo:hover:not(:disabled) i,
+body.theme-light #btn-studio-redo:hover:not(:disabled) i {
+  color: #ffffff !important;
+}
+
+html.theme-light .stage-tool-pill:disabled,
+body.theme-light .stage-tool-pill:disabled,
+html.theme-light #btn-studio-undo:disabled,
+body.theme-light #btn-studio-undo:disabled,
+html.theme-light #btn-studio-redo:disabled,
+body.theme-light #btn-studio-redo:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  background: #ffffff !important;
+  color: #aaaaaa !important;
+}
+
+html.theme-light .stage-tool-pill:disabled i,
+body.theme-light .stage-tool-pill:disabled i,
+html.theme-light #btn-studio-undo:disabled i,
+body.theme-light #btn-studio-undo:disabled i,
+html.theme-light #btn-studio-redo:disabled i,
+body.theme-light #btn-studio-redo:disabled i {
+  color: #aaaaaa !important;
+}
+
+/* Barra de control activa del elemento (sin bordes dorados ni sombras ámbar) */
+.virola-active-item-controls {
+  background: #141416 !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5) !important;
+}
+
+.virola-active-item-controls.has-active-item {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 4px 18px rgba(255, 255, 255, 0.12) !important;
+}
+
+.active-item-name-badge {
+  color: #ffffff !important;
+}
+
+.active-item-name-badge i {
+  color: #ffffff !important;
+}
+
+html.theme-light .virola-active-item-controls,
+body.theme-light .virola-active-item-controls,
+body.theme-inverted .virola-active-item-controls {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.18) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.theme-light .virola-active-item-controls.has-active-item,
+body.theme-light .virola-active-item-controls.has-active-item,
+body.theme-inverted .virola-active-item-controls.has-active-item {
+  border-color: #000000 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+}
+
+html.theme-light .active-item-name-badge,
+body.theme-light .active-item-name-badge,
+body.theme-inverted .active-item-name-badge {
+  color: #000000 !important;
+}
+
+html.theme-light .active-item-name-badge i,
+body.theme-light .active-item-name-badge i,
+body.theme-inverted .active-item-name-badge i {
+  color: #000000 !important;
+}
+
+.item-quick-btn {
+  background: #18181b !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.item-quick-btn:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+html.theme-light .item-quick-btn,
+body.theme-light .item-quick-btn,
+body.theme-inverted .item-quick-btn {
+  background: #f4f4f5 !important;
+  border: 1px solid rgba(0, 0, 0, 0.18) !important;
+  color: #000000 !important;
+}
+
+html.theme-light .item-quick-btn:hover,
+body.theme-light .item-quick-btn:hover,
+body.theme-inverted .item-quick-btn:hover {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
 }

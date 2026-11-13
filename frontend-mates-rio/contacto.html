@@ -21,7 +21,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=20261113-v5" />
 
   <!-- Immediate Theme Initializer -->
   <script>
@@ -333,64 +333,42 @@
          SECCIÓN 1: QUIÉNES SOMOS (HISTORIA, TALLER Y VALORES)
          ========================================================================== -->
     <section class="about-us-section" id="quienes-somos">
-      <div class="container">
-        <div class="about-us-grid">
-          <div class="about-us-content">
-            <span class="section-tag">NUESTRA HISTORIA</span>
-            <h2 class="about-us-heading">Tradición Matera y Orfebrería desde las Sierras de Córdoba</h2>
-            <p class="about-us-paragraph">
-              En <strong>Mates Río</strong> nacimos en <strong>Río Ceballos, Sierras Chicas, Córdoba</strong>,
-              impulsados por una convicción clara: elevar el ritual argentino del mate a través de piezas nobles que
-              duren toda la vida.
-            </p>
-            <p class="about-us-paragraph">
-              Seleccionamos manualmente cada calabaza brasilera de pared gruesa, trabajamos cuero vacuno genuino con
-              costura artesanal y cincelamos virolas de alpaca maciza. Además, contamos con nuestro propio
-              <strong>Taller de Grabado Láser de Alta Precisión</strong> para transformar cada mate, termo o caja de
-              presentación en una pieza única.
-            </p>
+      <div class="container" style="max-width: 980px;">
+        <div style="text-align: center; margin-bottom: 32px;">
+          <span class="section-tag"><i class="fas fa-gem"></i> NUESTRA HISTORIA &amp; OFICIO</span>
+          <h2 class="about-us-heading" style="margin: 10px auto; font-size: 1.85rem;">Tradición Matera &amp; Orfebrería Criolla</h2>
+          <p class="about-us-paragraph" style="max-width: 760px; margin: 0 auto; font-size: 0.96rem; line-height: 1.6;">
+            En <strong>Mates Río</strong> nacimos en <strong>Río Ceballos, Sierras Chicas de Córdoba</strong>, combinando calabazas brasileras seleccionadas, cuero vacuno genuino y virolas de alpaca maciza con grabado láser milimétrico en nuestro propio taller para crear piezas únicas que duran toda la vida.
+          </p>
+        </div>
 
-            <div class="about-pillars-grid">
-              <div class="about-pillar-card">
-                <div class="about-pillar-icon"><i class="fas fa-gem"></i></div>
-                <div>
-                  <h4>Nobleza en Materiales</h4>
-                  <p>Calabaza seleccionada, cuero vacuno legítimo, alpaca maciza y acero inoxidable térmico.</p>
-                </div>
-              </div>
-              <div class="about-pillar-card">
-                <div class="about-pillar-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
-                <div>
-                  <h4>Taller de Grabado Propio</h4>
-                  <p>Personalización láser milimétrica al instante sin intermediarios desde nuestro taller.</p>
-                </div>
-              </div>
-              <div class="about-pillar-card">
-                <div class="about-pillar-icon"><i class="fas fa-truck-fast"></i></div>
-                <div>
-                  <h4>Envíos a Todo el País</h4>
-                  <p>Despachamos a diario desde Córdoba a toda la Argentina con seguimiento en tiempo real.</p>
-                </div>
-              </div>
-              <div class="about-pillar-card">
-                <div class="about-pillar-icon"><i class="fas fa-handshake"></i></div>
-                <div>
-                  <h4>Atención Directa</h4>
-                  <p>Asesoramiento cercano tanto para tu primer mate imperial como para pedidos mayoristas y
-                    corporativos.</p>
-                </div>
-              </div>
+        <div class="about-pillars-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px;">
+          <div class="about-pillar-card">
+            <div class="about-pillar-icon"><i class="fas fa-gem"></i></div>
+            <div>
+              <h4>Nobleza en Materiales</h4>
+              <p>Calabaza gruesa seleccionada, cuero vacuno legítimo y alpaca maciza.</p>
             </div>
           </div>
-
-          <div class="about-us-visual">
-            <div class="about-visual-card">
-              <img src="assets/images/prod_mate_imperial.jpg" alt="Taller Artesanal Mates Río"
-                class="about-visual-img" />
-              <div class="about-visual-caption">
-                <strong>MATES RÍO OFICIAL</strong>
-                <span>Taller de Orfebrería &amp; Grabado Láser • Río Ceballos, Córdoba</span>
-              </div>
+          <div class="about-pillar-card">
+            <div class="about-pillar-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+            <div>
+              <h4>Taller de Grabado Propio</h4>
+              <p>Personalización láser milimétrica en el acto sin intermediarios.</p>
+            </div>
+          </div>
+          <div class="about-pillar-card">
+            <div class="about-pillar-icon"><i class="fas fa-truck-fast"></i></div>
+            <div>
+              <h4>Envíos a Todo el País</h4>
+              <p>Despachos diarios asegurados a toda la Argentina con seguimiento.</p>
+            </div>
+          </div>
+          <div class="about-pillar-card">
+            <div class="about-pillar-icon"><i class="fas fa-handshake"></i></div>
+            <div>
+              <h4>Atención Directa</h4>
+              <p>Asesoramiento personalizado minorista, mayorista y corporativo.</p>
             </div>
           </div>
         </div>
@@ -630,6 +608,13 @@
     </div>
     <span class="floating-cart-badge" id="floating-cart-badge">0</span>
   </button>
+
+  <!-- Botón Flotante Directo de WhatsApp (debajo del carrito) -->
+  <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Me%20contacto%20desde%20la%20secci%C3%B3n%20de%20contacto."
+    target="_blank" rel="noopener noreferrer" class="floating-wsp-contact-btn" id="floating-wsp-contact-btn"
+    aria-label="Contactar por WhatsApp" title="Escribinos por WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
 
   <!-- Sliding Cart Drawer -->
   <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>

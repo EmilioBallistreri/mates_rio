@@ -349,7 +349,7 @@ function renderRibbonFontDropdown() {
   if (!container) return;
 
   container.innerHTML = `
-    <div style="padding: 6px 10px 10px; border-bottom: 1px solid rgba(197, 155, 39, 0.25); margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+    <div style="padding: 6px 10px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.18); margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
       <span style="font-size: 0.76rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.8px;">
         <i class="fas fa-font" style="margin-right: 6px;"></i>Tipografías Orfebres
       </span>
@@ -1395,8 +1395,8 @@ function renderVirolaCanvas() {
           <stop offset="100%" stop-color="#141414" />
         </linearGradient>
         <linearGradient id="termo-gold-accent" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#c59b27" />
-          <stop offset="100%" stop-color="#8f6e16" />
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="100%" stop-color="#888888" />
         </linearGradient>
         ${defsTextPathsHtml}
       </defs>
@@ -1406,11 +1406,11 @@ function renderVirolaCanvas() {
       
       <!-- Tapón y pico cebador superior -->
       <rect x="180" y="10" width="140" height="24" rx="6" fill="#111111" stroke="#333333" stroke-width="2" />
-      <rect x="220" y="2" width="60" height="10" rx="3" fill="#c59b27" />
+      <rect x="220" y="2" width="60" height="10" rx="3" fill="#ffffff" />
 
       <!-- Zona delimitada para grabado láser 360° -->
-      <rect x="100" y="70" width="300" height="360" rx="10" fill="none" stroke="rgba(197, 155, 39, 0.35)" stroke-width="1.5" stroke-dasharray="4,4" />
-      <text x="250" y="60" text-anchor="middle" fill="#c59b27" font-size="11" font-weight="800" letter-spacing="1">ÁREA DE GRABADO LÁSER CNC 360°</text>
+      <rect x="100" y="70" width="300" height="360" rx="10" fill="none" stroke="rgba(255, 255, 255, 0.28)" stroke-width="1.5" stroke-dasharray="4,4" />
+      <text x="250" y="60" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="800" letter-spacing="1">ÁREA DE GRABADO LÁSER CNC 360°</text>
 
       <!-- Base inferior reforzada -->
       <rect x="86" y="450" width="328" height="20" rx="8" fill="#111111" />
@@ -1443,13 +1443,13 @@ function renderVirolaCanvas() {
       <line x1="60" y1="380" x2="440" y2="380" stroke="rgba(0,0,0,0.18)" stroke-width="3" />
 
       <!-- Esquineros metálicos de orfebrería -->
-      <path d="M 50 70 L 70 70 L 70 50 L 50 40 Z" fill="#c59b27" />
-      <path d="M 450 70 L 430 70 L 430 50 L 450 40 Z" fill="#c59b27" />
-      <path d="M 50 430 L 70 430 L 70 450 L 50 460 Z" fill="#c59b27" />
-      <path d="M 450 430 L 430 430 L 430 450 L 450 460 Z" fill="#c59b27" />
+      <path d="M 50 70 L 70 70 L 70 50 L 50 40 Z" fill="#ffffff" />
+      <path d="M 450 70 L 430 70 L 430 50 L 450 40 Z" fill="#ffffff" />
+      <path d="M 50 430 L 70 430 L 70 450 L 50 460 Z" fill="#ffffff" />
+      <path d="M 450 430 L 430 430 L 430 450 L 450 460 Z" fill="#ffffff" />
 
       <!-- Marco central de pirograbado -->
-      <rect x="80" y="70" width="340" height="360" rx="8" fill="none" stroke="rgba(197, 155, 39, 0.45)" stroke-width="1.8" />
+      <rect x="80" y="70" width="340" height="360" rx="8" fill="none" stroke="rgba(255, 255, 255, 0.28)" stroke-width="1.8" />
       <rect x="85" y="75" width="330" height="350" rx="6" fill="none" stroke="rgba(255, 255, 255, 0.15)" stroke-width="1" />
 
       <!-- Grabados en la Caja -->
@@ -1701,7 +1701,7 @@ function render360Canvas() {
       ctx.beginPath();
       ctx.moveTo(centerX + seamOffset, centerY + 25);
       ctx.quadraticCurveTo(centerX + seamOffset * 1.15, centerY + 100, centerX + seamOffset * 0.8, centerY + 178);
-      ctx.strokeStyle = '#c59b27';
+      ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = 2.5;
       ctx.setLineDash([4, 4]);
       ctx.globalAlpha = Math.max(0.2, seamCos);
@@ -1826,7 +1826,7 @@ function render360Canvas() {
     ctx.fill();
     ctx.beginPath();
     ctx.roundRect(centerX - 18, centerY - tHeight / 2 - 32, 36, 10, 3);
-    ctx.fillStyle = '#c59b27';
+    ctx.fillStyle = '#ffffff';
     ctx.fill();
 
     // PROYECCIÓN DE GRABADOS A LO LARGO DEL CILINDRO 360°
@@ -2010,9 +2010,9 @@ function render360Canvas() {
       if (f.isFront) {
         const midX = (f.pts[0].x + f.pts[1].x) / 2;
         const midY = (f.pts[0].y + f.pts[2].y) / 2 - 4;
-        ctx.fillStyle = '#c59b27';
+        ctx.fillStyle = '#ffffff';
         ctx.fillRect(midX - 7, midY - 6, 14, 16);
-        ctx.strokeStyle = '#6b500d';
+        ctx.strokeStyle = '#333333';
         ctx.lineWidth = 1;
         ctx.strokeRect(midX - 7, midY - 6, 14, 16);
       }
@@ -2408,7 +2408,7 @@ function updateActiveItemFloatingBar() {
   if (!studio.activeItemId) {
     bar.classList.remove('has-active-item');
     if (nameBadge) {
-      nameBadge.innerHTML = `<i class="fas fa-hand-pointer" style="color: var(--accent-gold); margin-right: 6px;"></i> Hacé clic en cualquier texto o grabado para editarlo`;
+      nameBadge.innerHTML = `<i class="fas fa-hand-pointer" style="margin-right: 6px;"></i> Hacé clic en cualquier texto o grabado para editarlo`;
     }
     if (actionsGroup) {
       actionsGroup.classList.add('disabled');
@@ -2423,7 +2423,7 @@ function updateActiveItemFloatingBar() {
   if (!item) {
     bar.classList.remove('has-active-item');
     if (nameBadge) {
-      nameBadge.innerHTML = `<i class="fas fa-hand-pointer" style="color: var(--accent-gold); margin-right: 6px;"></i> Hacé clic en cualquier texto o grabado para editarlo`;
+      nameBadge.innerHTML = `<i class="fas fa-hand-pointer" style="margin-right: 6px;"></i> Hacé clic en cualquier texto o grabado para editarlo`;
     }
     if (actionsGroup) {
       actionsGroup.classList.add('disabled');
@@ -2748,8 +2748,8 @@ function showNotificationToast(msg, icon = 'fa-check') {
       bottom: 24px;
       right: 24px;
       z-index: 99999;
-      background: rgba(22, 17, 13, 0.96);
-      border: 1.5px solid var(--accent-gold);
+      background: #18181b;
+      border: 1.5px solid rgba(255, 255, 255, 0.28);
       color: #f5f2ec;
       padding: 12px 20px;
       border-radius: 40px;
@@ -2767,7 +2767,7 @@ function showNotificationToast(msg, icon = 'fa-check') {
     document.body.appendChild(toast);
   }
 
-  toast.innerHTML = `<i class="fas ${icon}" style="color: var(--accent-gold); font-size: 1rem;"></i> <span>${escapeHtml(msg)}</span>`;
+  toast.innerHTML = `<i class="fas ${icon}" style="color: #ffffff; font-size: 1rem;"></i> <span>${escapeHtml(msg)}</span>`;
   toast.style.transform = 'translateY(0)';
   toast.style.opacity = '1';
 

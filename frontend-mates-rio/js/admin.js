@@ -642,7 +642,7 @@ function renderInventoryTable() {
           <div class="product-row-item">
             <img src="${item.image}" alt="${item.name}" class="table-product-thumb" />
             <div class="table-product-info">
-              <span class="table-product-name">${item.name} ${item.isCustom ? '<span style="font-size: 0.65rem; background: rgba(197, 155, 39, 0.2); color: #c59b27; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-left: 4px;">NUEVO</span>' : ''}</span>
+              <span class="table-product-name">${item.name} ${item.isCustom ? '<span style="font-size: 0.65rem; background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-left: 4px;">NUEVO</span>' : ''}</span>
               <span class="table-product-sku">ID: <code>${item.id}</code></span>
             </div>
           </div>
@@ -1976,7 +1976,7 @@ function renderAuditTable() {
     <tr>
       <td style="font-size: 0.74rem; color: var(--admin-text-muted);">${entry.date}</td>
       <td><strong>${entry.user}</strong></td>
-      <td><span class="badge-stock stock-good">${entry.action}</span></td>
+      <td><span class="badge-stock badge-activity-action">${entry.action}</span></td>
       <td style="font-size: 0.78rem;">${entry.detail}</td>
     </tr>
   `).join('');
@@ -2173,7 +2173,7 @@ function renderPurchasesSection() {
           <div style="font-weight: 600;">${p.item}</div>
           ${p.notes ? `<div style="font-size: 0.72rem; color: var(--admin-text-muted); margin-top: 2px;"><i class="fas fa-file-invoice" style="opacity: 0.7;"></i> ${p.notes}</div>` : ''}
         </td>
-        <td><span class="badge-stock stock-good" style="font-size: 0.7rem;">${p.category}</span></td>
+        <td><span class="badge-stock badge-category-pill" style="font-size: 0.7rem;">${p.category}</span></td>
         <td style="font-weight: 700;">${p.quantity} un.</td>
         <td style="font-size: 0.82rem;">${formatARS(p.unitCost)}</td>
         <td style="font-weight: 800; color: var(--admin-text-main); font-size: 0.92rem;">${formatARS(p.totalCost)}</td>
@@ -3383,7 +3383,7 @@ function openWholesaleOrderDetail(id) {
       </table>
     </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(197, 155, 39, 0.08); padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid rgba(197, 155, 39, 0.3);">
+    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.06); padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid rgba(255, 255, 255, 0.2);">
       <div>
         <span style="font-size: 0.75rem; color: var(--admin-text-muted);">Rentabilidad de la Orden B2B:</span>
         <div style="font-size: 1.05rem; font-weight: 800; color: var(--admin-gold);">+${formatARS(grossMargin)} (${marginPct}% Margen Bruto)</div>
