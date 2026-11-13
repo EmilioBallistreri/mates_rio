@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ventas Corporativas & Regalos Empresariales | Mates Río</title>
+  <meta name="description" content="División Corporativa de Mates Río en Río Ceballos, Córdoba. Regalos empresariales premium, grabado láser de logotipos en virolas y termos, packaging rígido y atención a empresas." />
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Immediate Theme Initializer -->
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'light') {
+        document.documentElement.classList.add('theme-light');
+        document.documentElement.classList.remove('theme-dark');
+      } else {
+        document.documentElement.classList.add('theme-dark');
+        document.documentElement.classList.remove('theme-light');
+      }
+    })();
+  </script>
+</head>
+<body class="page-corporativo">
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'light') {
+        document.body.classList.add('theme-light', 'theme-inverted');
+        document.body.classList.remove('theme-dark');
+      } else {
+        document.body.classList.add('theme-dark');
+        document.body.classList.remove('theme-light', 'theme-inverted');
+      }
+    })();
+  </script>
+
+  <!-- Top Scroll Progress Indicator -->
+  <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+
+  <!-- Announcement Bar -->
+  <aside class="announcement-bar">
+    <div class="container announcement-inner">
+      <div class="announcement-center-msg">
+        <span class="announcement-item"><i class="fas fa-building"></i> <b>División Corporativa & Empresas</b></span>
+        <span class="announcement-sep">•</span>
+        <span class="announcement-item"><i class="fas fa-receipt"></i> Factura A & B</span>
+        <span class="announcement-sep announcement-sep-desktop">•</span>
+        <span class="announcement-item announcement-item-desktop"><i class="fas fa-truck-fast"></i> Envíos Corporativos a Todo el País</span>
+      </div>
+
+      <div class="announcement-links">
+        <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20solicitar%20un%20presupuesto%20corporativo%20para%20mi%20empresa." target="_blank" rel="noopener noreferrer" title="WhatsApp Corporativo">
+          <i class="fab fa-whatsapp"></i> WhatsApp Empresas
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sticky Header -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <div class="header-left">
+        <button class="mobile-menu-toggle action-btn" id="mobile-menu-toggle" onclick="openMobileDrawer()" aria-label="Abrir Menú de Navegación">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <a href="index.html" class="brand-logo-wrap" title="Mates Río - Inicio">
+          <img src="assets/images/logo.jpg" alt="Logo de Mates Río" class="brand-logo-img" />
+          <div class="brand-name-group">
+            <span class="brand-name">MATES RÍO</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="header-center" aria-label="Navegación Principal">
+        <ul class="main-nav">
+          <li>
+            <a href="index.html" class="nav-link">Inicio</a>
+          </li>
+
+          <!-- Dropdown: Productos -->
+          <li class="nav-item-dropdown" id="nav-dropdown-products">
+            <a href="catalogo.html" class="nav-link nav-dropdown-trigger">
+              Productos <i class="fas fa-chevron-down dropdown-arrow"></i>
+            </a>
+            
+            <div class="nav-dropdown-menu">
+              <div class="dropdown-categories-grid">
+                <a href="promos.html" class="dropdown-cat-card">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_promos.svg" alt="Promos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">PROMOS & COMBOS</span>
+                    <span class="dropdown-cat-desc">Hasta 25% OFF en sets completos</span>
+                  </div>
+                </a>
+
+                <a href="catalogo.html?categoria=mates" class="dropdown-cat-card" onclick="setCategoryFilter('mates')">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_mates.svg" alt="Mates" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">MATES IMPERIALES</span>
+                    <span class="dropdown-cat-desc">Calabaza, alpaca y cuero vacuno</span>
+                  </div>
+                </a>
+
+                <a href="catalogo.html?categoria=termos" class="dropdown-cat-card" onclick="setCategoryFilter('termos')">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_termos.svg" alt="Termos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">TERMOS TÉRMICOS</span>
+                    <span class="dropdown-cat-desc">Acero inoxidable 1L y Media Manija</span>
+                  </div>
+                </a>
+
+                <a href="catalogo.html?categoria=accesorios" class="dropdown-cat-card" onclick="setCategoryFilter('accesorios')">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_accesorios.svg" alt="Accesorios" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">ACCESORIOS</span>
+                    <span class="dropdown-cat-desc">Bombillas pico de loro y yerberas</span>
+                  </div>
+                </a>
+
+                <a href="catalogo.html?categoria=yerbas" class="dropdown-cat-card" onclick="setCategoryFilter('yerbas')">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_yerbas.svg" alt="Yerbas" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">YERBAS DE AUTOR</span>
+                    <span class="dropdown-cat-desc">Barbacuá, orgánicas y serranas</span>
+                  </div>
+                </a>
+
+                <a href="catalogo.html?categoria=equipos" class="dropdown-cat-card" onclick="setCategoryFilter('equipos')">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_equipos.svg" alt="Equipos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">EQUIPOS DE MATE</span>
+                    <span class="dropdown-cat-desc">Mochilas y canastas de cuero</span>
+                  </div>
+                </a>
+              </div>
+
+              <div class="dropdown-footer">
+                <a href="catalogo.html" onclick="setCategoryFilter('all')" class="dropdown-all-link">
+                  Ver todo el catálogo completo <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="mayorista.html" class="nav-link" style="font-weight: 700;">
+              Mayorista <span class="nav-badge-pill pill-gold" style="font-size: 0.65rem;">B2B</span>
+            </a>
+          </li>
+          <li>
+            <a href="promos.html" class="nav-link">
+              Promos <span class="nav-badge-pill">OFF</span>
+            </a>
+          </li>
+          <li>
+            <a href="corporativo.html" class="nav-link active">Corporativo</a>
+          </li>
+          <li>
+            <a href="contacto.html" class="nav-link">Contacto</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-right">
+        <button class="action-btn theme-toggle-btn" id="theme-toggle-btn" onclick="toggleColorTheme()" title="Cambiar a Modo Claro / Modo Oscuro" aria-label="Cambiar tema de color">
+          <i class="fas fa-sun"></i>
+        </button>
+
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="action-btn instagram-btn" title="Instagram Oficial @mates_rio_">
+          <i class="fab fa-instagram"></i>
+        </a>
+
+        <div class="user-btn-wrap">
+          <button class="user-account-btn" id="user-account-btn" onclick="openAuthModal('login')" title="Mi Cuenta">
+            <i class="far fa-user"></i>
+            <span class="user-name-display" id="user-btn-name">Ingresar</span>
+          </button>
+
+          <div class="user-dropdown-menu" id="user-dropdown-menu">
+            <div class="user-dropdown-item" onclick="openProfileModal('profile')">
+              <i class="far fa-id-badge"></i> Mi Perfil
+            </div>
+            <div class="user-dropdown-item" onclick="openProfileModal('orders')">
+              <i class="fas fa-box-open"></i> Mis Pedidos
+            </div>
+            <a href="admin.html" class="user-dropdown-item admin-highlight-link" id="dropdown-admin-link" style="display: none; font-weight: 800; text-decoration: none;">
+              <i class="fas fa-shield-halved"></i> Panel de Administración
+            </a>
+            <div class="user-dropdown-item logout" onclick="logoutUser()">
+              <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </div>
+          </div>
+        </div>
+
+        <button class="action-btn cart-btn-highlight" id="open-cart-btn" onclick="openCartDrawer()" title="Ver Carrito de Compras">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-count-badge" id="cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Off-Canvas Navigation Drawer -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileDrawer()"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Menú Móvil">
+    <div class="mobile-drawer-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="assets/images/logo.jpg" alt="Logo Mates Río" style="width: 36px; height: 36px; border-radius: 6px; border: 1px solid var(--accent-gold); object-fit: contain; background: #000; padding: 2px;" />
+        <span style="font-family: var(--font-heading); font-weight: 800; font-size: 1.15rem; letter-spacing: 1px;">MATES RÍO</span>
+      </div>
+      <button class="mobile-drawer-close" onclick="closeMobileDrawer()" aria-label="Cerrar menú">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <ul class="mobile-nav-list">
+      <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
+        <a href="javascript:void(0)" id="mobile-nav-auth-link" onclick="handleMobileAuthClick()">
+          <span><i class="fas fa-user-circle" style="width: 22px;"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-admin" id="mobile-nav-admin-item" style="display: none;">
+        <a href="admin.html" onclick="closeMobileDrawer();">
+          <span><i class="fas fa-shield-halved" style="width: 22px;"></i> <b>Panel de Administración</b></span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="index.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-home" style="width: 22px;"></i> Inicio</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="mayorista.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-boxes-packing" style="width: 22px;"></i> Portal Mayorista</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="personaliza-tu-mate.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-magic" style="width: 22px;"></i> Personalización</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html" onclick="setCategoryFilter('all'); closeMobileDrawer()">
+          <span><i class="fas fa-th-large" style="width: 22px;"></i> Catálogo Completo</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="corporativo.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-building" style="width: 22px;"></i> Corporativo</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="contacto.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-envelope" style="width: 22px;"></i> Contacto</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="mobile-nav-footer">
+      <div class="mobile-drawer-social-circles">
+        <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="mobile-social-circle whatsapp" title="WhatsApp Oficial" aria-label="WhatsApp Oficial">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.tiktok.com/@mates_rio?_t=8rMatesRio&_r=1" target="_blank" rel="noopener" class="mobile-social-circle tiktok" title="TikTok @mates_rio" aria-label="TikTok Oficial">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="mobile-social-circle instagram" title="Instagram @mates_rio_" aria-label="Instagram Oficial">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+      <p style="font-size: 0.72rem; color: var(--text-secondary); text-align: center; margin: 0;">
+        Río Ceballos, Córdoba • Envíos a todo el país
+      </p>
+    </div>
+  </aside>
+
+  <!-- MAIN CORPORATE CONTENT -->
+  <main class="corp-page-main">
+    
+    <!-- 1. Hero Corporativo -->
+    <section class="corp-hero-section">
+      <div class="container">
+        <div class="corp-hero-content">
+          <span class="corp-badge-tag"><i class="fas fa-crown"></i> DIVISIÓN CORPORATIVA &amp; VENTAS EMPRESARIALES</span>
+          <h1 class="corp-hero-title">Regalos Empresariales de Autor con Identidad de Marca</h1>
+          <p class="corp-hero-desc">
+            Diseñamos y producimos piezas materas de máxima nobleza con el logotipo de tu empresa grabado en láser de alta definición. Combinamos calabaza seleccionada, alpaca maciza cincelada, cuero vacuno legítimo y cajas de presentación rígidas verticales.
+          </p>
+
+          <div class="corp-hero-cta-row">
+            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20solicitar%20un%20presupuesto%20corporativo%20para%20mi%20empresa." target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+              <i class="fab fa-whatsapp"></i> Solicitar Presupuesto Inmediato
+            </a>
+            <a href="#soluciones" class="btn btn-secondary btn-lg">
+              Explorar Soluciones <i class="fas fa-arrow-down"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Barra de Métricas y Compromiso -->
+    <section class="corp-metrics-bar">
+      <div class="container">
+        <div class="corp-metrics-grid">
+          <div class="corp-metric-item">
+            <div class="corp-metric-icon"><i class="fas fa-handshake"></i></div>
+            <div class="corp-metric-text">
+              <strong>Atención B2B Exclusiva</strong>
+              <span>Asesor comercial asignado de punta a punta</span>
+            </div>
+          </div>
+
+          <div class="corp-metric-item">
+            <div class="corp-metric-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+            <div class="corp-metric-text">
+              <strong>Muestra Digital Sin Cargo</strong>
+              <span>Simulación 2D con tu logo antes de producir</span>
+            </div>
+          </div>
+
+          <div class="corp-metric-item">
+            <div class="corp-metric-icon"><i class="fas fa-receipt"></i></div>
+            <div class="corp-metric-text">
+              <strong>Facturación Formal A &amp; B</strong>
+              <span>Empresa inscripta con despacho oficial</span>
+            </div>
+          </div>
+
+          <div class="corp-metric-item">
+            <div class="corp-metric-icon"><i class="fas fa-boxes-stacked"></i></div>
+            <div class="corp-metric-text">
+              <strong>Desde 10 Unidades</strong>
+              <span>Escalas de bonificación por volumen</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Soluciones por Ocasión -->
+    <section class="corp-solutions-section" id="soluciones">
+      <div class="container">
+        <div class="corp-section-header">
+          <span class="section-tag">PROPUESTAS A MEDIDA</span>
+          <h2 class="section-title">Soluciones Materas para Cada Momento Corporativo</h2>
+          <p class="section-subtitle">
+            Un regalo que no queda en un cajón: el mate acompaña a diario en el escritorio, reuniones y viajes, manteniendo viva la presencia de tu marca.
+          </p>
+        </div>
+
+        <div class="corp-cards-grid">
+          <div class="corp-card">
+            <div class="corp-card-img-wrap">
+              <img src="assets/images/prod_mate_imperial.jpg" alt="Regalos de Fin de Año Corporativos" class="corp-card-img" />
+              <span class="corp-card-pill">Más Solicitado</span>
+            </div>
+            <div class="corp-card-body">
+              <div class="corp-card-icon-tag"><i class="fas fa-champagne-glasses"></i></div>
+              <h3 class="corp-card-title">Regalos de Fin de Año &amp; Fiestas</h3>
+              <p class="corp-card-desc">
+                Sets completos de Mate Imperial y Bombilla de Alpaca presentados en cajas rígidas verticales con el mensaje institucional de agradecimiento a clientes estratégicos o colaboradores destacados.
+              </p>
+              <ul class="corp-card-perks">
+                <li><i class="fas fa-check"></i> Mate Imperial con grabado láser de logo</li>
+                <li><i class="fas fa-check"></i> Estuche vertical rígido con tapa grabada</li>
+                <li><i class="fas fa-check"></i> Tarjeta dedicatoria corporativa personalizada</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="corp-card">
+            <div class="corp-card-img-wrap">
+              <img src="assets/images/cat_termos.jpg" alt="Welcome Kits y Onboarding" class="corp-card-img" />
+              <span class="corp-card-pill">Cultura de Equipo</span>
+            </div>
+            <div class="corp-card-body">
+              <div class="corp-card-icon-tag"><i class="fas fa-user-plus"></i></div>
+              <h3 class="corp-card-title">Welcome Kits &amp; Onboarding</h3>
+              <p class="corp-card-desc">
+                Dale la bienvenida a nuevos talentos con un kit que transmite pertenencia desde el primer día: Termo térmico de 1L grabado 360° con el logo de la empresa y mate ergonómico de cuero.
+              </p>
+              <ul class="corp-card-perks">
+                <li><i class="fas fa-check"></i> Termo Acero Inoxidable 1L grabado láser</li>
+                <li><i class="fas fa-check"></i> Personalización individual con nombre de cada empleado</li>
+                <li><i class="fas fa-check"></i> Durabilidad superior a 5 años de uso diario</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="corp-card">
+            <div class="corp-card-img-wrap">
+              <img src="assets/images/cat_equipos.jpg" alt="Aniversarios y Premiaciones" class="corp-card-img" />
+              <span class="corp-card-pill">Alta Gama</span>
+            </div>
+            <div class="corp-card-body">
+              <div class="corp-card-icon-tag"><i class="fas fa-trophy"></i></div>
+              <h3 class="corp-card-title">Aniversarios &amp; Premiaciones</h3>
+              <p class="corp-card-desc">
+                Reconocimiento a trayectorias de 5, 10, 15 o 20 años en la organización. Piezas de orfebrería cinceladas a mano en alpaca maciza con inscripciones de fecha, mérito y firma directiva.
+              </p>
+              <ul class="corp-card-perks">
+                <li><i class="fas fa-check"></i> Virola de alpaca maciza forjada artesanalmente</li>
+                <li><i class="fas fa-check"></i> Mochila o canasta matera de cuero legítimo</li>
+                <li><i class="fas fa-check"></i> Certificado de autenticidad de taller cordobés</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Catálogo de Artículos Personalizables para Empresas -->
+    <section class="corp-catalog-section">
+      <div class="container">
+        <div class="corp-section-header">
+          <span class="section-tag">CATÁLOGO DE PRODUCTOS</span>
+          <h2 class="section-title">Piezas Disponibles para Producción Corporativa</h2>
+          <p class="section-subtitle">
+            Cada producto se graba mediante tecnología láser CNC de fibra en nuestro taller propio de Río Ceballos, garantizando nitidez perfecta del logotipo.
+          </p>
+        </div>
+
+        <div class="corp-products-grid">
+          <div class="corp-product-item">
+            <div class="corp-prod-media">
+              <img src="assets/images/prod_mate_imperial.jpg" alt="Mate Imperial Corporativo" />
+            </div>
+            <div class="corp-prod-info">
+              <h4>Mate Imperial con Virola de Alpaca</h4>
+              <p>Calabaza gruesa, forrado en cuero vacuno con costura artesanal y virola de alpaca grabada con tu logo.</p>
+              <span class="corp-prod-tag">Mínimo: 10 unidades</span>
+            </div>
+          </div>
+
+          <div class="corp-product-item">
+            <div class="corp-prod-media">
+              <img src="assets/images/prod_mate_camionero.jpg" alt="Mate Camionero Corporativo" />
+            </div>
+            <div class="corp-prod-info">
+              <h4>Mate Camionero Cuero Vacuno</h4>
+              <p>Formato de boca ancha ideal para la oficina o el campo. Virola de acero inoxidable pulida con grabado láser nítido.</p>
+              <span class="corp-prod-tag">Mínimo: 10 unidades</span>
+            </div>
+          </div>
+
+          <div class="corp-product-item">
+            <div class="corp-prod-media">
+              <img src="assets/images/cat_termos.jpg" alt="Termo de Acero Inoxidable 1L" />
+            </div>
+            <div class="corp-prod-info">
+              <h4>Termo de Acero Inoxidable 1L</h4>
+              <p>Doble capa térmica al vacío que mantiene el calor por más de 24 hs. Grabado láser vertical o 360° indeleble.</p>
+              <span class="corp-prod-tag">Mínimo: 10 unidades</span>
+            </div>
+          </div>
+
+          <div class="corp-product-item">
+            <div class="corp-prod-media">
+              <img src="assets/images/cat_promos.jpg" alt="Caja Rígida de Presentación Vertical" />
+            </div>
+            <div class="corp-prod-info">
+              <h4>Caja Rígida Vertical de Presentación</h4>
+              <p>Estuche de lujo color negro mate con grabado láser en blanco del logo de tu empresa en el frente.</p>
+              <span class="corp-prod-tag">Mínimo: 10 unidades</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Proceso de Trabajo Paso a Paso -->
+    <section class="corp-process-section">
+      <div class="container">
+        <div class="corp-section-header">
+          <span class="section-tag">METODOLOGÍA DE TRABAJO</span>
+          <h2 class="section-title">¿Cómo Trabajamos con tu Empresa?</h2>
+          <p class="section-subtitle">
+            Un proceso ágil, transparente y seguro desde la primera consulta hasta la entrega en tu sede corporativa.
+          </p>
+        </div>
+
+        <div class="corp-steps-grid">
+          <div class="corp-step-card">
+            <div class="corp-step-num">01</div>
+            <h3>Consulta &amp; Asesoramiento</h3>
+            <p>Nos contás la cantidad de piezas, fecha deseada y ocasión. Te orientamos sobre los mejores modelos y escalas de costos.</p>
+          </div>
+
+          <div class="corp-step-card">
+            <div class="corp-step-num">02</div>
+            <h3>Muestra Digital (Mockup)</h3>
+            <p>Nos enviás el archivo de tu logo (vector, PDF o PNG) y armamos una simulación digital exacta de cómo lucirá grabado en el mate o termo.</p>
+          </div>
+
+          <div class="corp-step-card">
+            <div class="corp-step-num">03</div>
+            <h3>Grabado &amp; Control en Taller</h3>
+            <p>Tras tu aprobación, iniciamos el grabado láser y pulido en nuestro taller de Río Ceballos con estricto control de calidad pieza por pieza.</p>
+          </div>
+
+          <div class="corp-step-card">
+            <div class="corp-step-num">04</div>
+            <h3>Despacho &amp; Facturación</h3>
+            <p>Embalamos cada unidad individualmente y despachamos con seguro y seguimiento hasta tus oficinas o centro de distribución.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Escalas y Beneficios por Volumen -->
+    <section class="corp-tiers-section">
+      <div class="container">
+        <div class="corp-tiers-box">
+          <div class="corp-tiers-header">
+            <h3><i class="fas fa-layer-group"></i> Escalas de Bonificación Corporativa</h3>
+            <p>Accedé a condiciones comerciales directas de taller sin costos ocultos de intermediación:</p>
+          </div>
+
+          <div class="corp-tiers-table-wrap">
+            <table class="corp-tiers-table">
+              <thead>
+                <tr>
+                  <th>Escala de Unidades</th>
+                  <th>Grabado Láser de Logo</th>
+                  <th>Packaging Ejecutivo</th>
+                  <th>Muestra Digital</th>
+                  <th>Condición Comercial</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>10 a 24 unidades</strong></td>
+                  <td><span class="status-badge-ok">Bonificado</span></td>
+                  <td>Caja Individual</td>
+                  <td>Sin Cargo</td>
+                  <td>Tarifa Corporativa Base</td>
+                </tr>
+                <tr>
+                  <td><strong>25 a 49 unidades</strong></td>
+                  <td><span class="status-badge-ok">Bonificado</span></td>
+                  <td>Caja Grabada con Logo</td>
+                  <td>Sin Cargo</td>
+                  <td><strong>10% OFF Extra</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>50 a 99 unidades</strong></td>
+                  <td><span class="status-badge-ok">Bonificado (2 caras)</span></td>
+                  <td>Caja Rígida Grabada</td>
+                  <td>Sin Cargo + Prueba Real</td>
+                  <td><strong>15% OFF Extra</strong> + Envío Bonificado</td>
+                </tr>
+                <tr>
+                  <td><strong>+100 unidades</strong></td>
+                  <td><span class="status-badge-ok">Totalmente Personalizado</span></td>
+                  <td>Caja Rígida + Tarjeta de Marca</td>
+                  <td>Sin Cargo</td>
+                  <td><strong>Presupuesto Especial Gran Cuenta</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Card de Contacto Directo Corporativo -->
+    <section class="corp-contact-cta-section" id="contacto-corp">
+      <div class="container">
+        <div class="corp-cta-card-luxury">
+          <div class="corp-cta-inner">
+            <span class="section-tag"><i class="fas fa-phone-volume"></i> CONTACTO DIRECTO EMPRESAS</span>
+            <h2 class="corp-cta-title">Hacé Crecer tu Marca con un Regalo Inolvidable</h2>
+            <p class="corp-cta-subtitle">
+              Escribinos hoy mismo para recibir la cotización formal de tu proyecto corporativo y la muestra digital de tu logo sin compromiso.
+            </p>
+
+            <div class="corp-direct-channels-grid">
+              <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20solicitar%20un%20presupuesto%20corporativo%20para%20mi%20empresa." target="_blank" rel="noopener noreferrer" class="corp-channel-btn whatsapp">
+                <i class="fab fa-whatsapp"></i>
+                <div class="channel-text">
+                  <span>WhatsApp Corporativo Inmediato</span>
+                  <strong>+54 9 351 383-0111</strong>
+                </div>
+              </a>
+
+              <a href="mailto:mates.rio6@gmail.com?subject=Solicitud%20de%20Cotizaci%C3%B3n%20Corporativa%20-%20Mates%20R%C3%ADo" class="corp-channel-btn email">
+                <i class="far fa-envelope"></i>
+                <div class="channel-text">
+                  <span>Correo Electrónico Oficial</span>
+                  <strong>mates.rio6@gmail.com</strong>
+                </div>
+              </a>
+            </div>
+
+            <p class="corp-cta-footnote">
+              <i class="fas fa-location-dot"></i> Taller de Orfebrería &amp; Grabado Láser • Río Ceballos, Sierras Chicas, Córdoba • Envíos corporativos con seguro a todo el país.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="assets/images/logo.jpg" alt="Mates Río Logo" class="footer-logo-img" />
+            <div>
+              <span class="footer-brand-title">MATES RÍO</span>
+              <p style="font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 1px; font-weight: 600;">INDUSTRIA ARGENTINA</p>
+            </div>
+          </div>
+          <p class="footer-brand-desc">
+            Mates imperiales seleccionados, termos de alto rendimiento y regalos corporativos de autor hechos con nobleza y tradición criolla.
+          </p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="social-icon-btn instagram" title="Instagram @mates_rio_">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@mates_rio?_t=8rMatesRio&_r=1" target="_blank" rel="noopener" class="social-icon-btn tiktok" title="TikTok @mates_rio">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20la%20web." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="mailto:mates.rio6@gmail.com" class="social-icon-btn email" title="Correo Oficial mates.rio6@gmail.com">
+              <i class="far fa-envelope"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-nav-col">
+          <h4 class="footer-heading">Navegación</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catálogo Completo</a></li>
+            <li><a href="personaliza-tu-mate.html">Estudio de Personalización</a></li>
+            <li><a href="mayorista.html">Portal Mayorista B2B</a></li>
+            <li><a href="promos.html">Promos &amp; Ofertas</a></li>
+            <li><a href="corporativo.html">Ventas Corporativas</a></li>
+            <li><a href="contacto.html">Quiénes Somos &amp; Contacto</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-nav-col">
+          <h4 class="footer-heading">Categorías</h4>
+          <ul class="footer-links">
+            <li><a href="promos.html">Promos</a></li>
+            <li><a href="catalogo.html?categoria=mates">Mates</a></li>
+            <li><a href="catalogo.html?categoria=termos">Termos</a></li>
+            <li><a href="catalogo.html?categoria=accesorios">Accesorios</a></li>
+            <li><a href="catalogo.html?categoria=yerbas">Yerbas</a></li>
+            <li><a href="catalogo.html?categoria=equipos">Equipos de Mate</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-nav-col">
+          <h4 class="footer-heading">Contacto &amp; Taller</h4>
+          <ul class="footer-contact-list">
+            <li>
+              <i class="fas fa-location-dot"></i>
+              <span>Río Ceballos, Sierras Chicas, Córdoba, Argentina</span>
+            </li>
+            <li>
+              <i class="fab fa-whatsapp"></i>
+              <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer">+54 9 351 383-0111</a>
+            </li>
+            <li>
+              <i class="far fa-envelope"></i>
+              <a href="mailto:mates.rio6@gmail.com">mates.rio6@gmail.com</a>
+            </li>
+            <li>
+              <i class="far fa-clock"></i>
+              <span>Lun a Vie: 09:00 a 19:00 • Sáb: 10:00 a 15:00</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <p class="copyright-text">
+          &copy; 2026 <strong>Mates Río</strong>. Todos los derechos reservados. Industria Argentina.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Shopping Cart Drawer Modal -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Carrito de compras">
+    <div class="cart-drawer-header">
+      <div class="cart-header-title">
+        <i class="fas fa-shopping-bag"></i>
+        <span>Mi Carrito</span>
+        <span class="cart-items-count" id="cart-drawer-count">(0)</span>
+      </div>
+      <button class="cart-close-btn" onclick="closeCartDrawer()" aria-label="Cerrar carrito">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="free-shipping-progress" id="free-shipping-bar">
+      <div class="progress-msg" id="shipping-msg">
+        ¡Agregá <strong id="shipping-remaining">$ 60.000</strong> más para tener <b>ENVÍO GRATIS</b>!
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="shipping-progress-fill" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <div class="cart-drawer-body" id="cart-items-container">
+      <div class="cart-empty-state">
+        <i class="fas fa-shopping-basket"></i>
+        <p>Tu carrito está vacío</p>
+        <a href="catalogo.html" class="btn btn-primary btn-sm" onclick="closeCartDrawer()">Explorar Catálogo</a>
+      </div>
+    </div>
+
+    <div class="cart-drawer-footer" id="cart-drawer-footer" style="display: none;">
+      <div class="cart-totals-summary">
+        <div class="summary-line">
+          <span>Subtotal:</span>
+          <strong id="cart-subtotal-price">$ 0</strong>
+        </div>
+        <div class="summary-line discount-line" id="cart-discount-row" style="display: none;">
+          <span id="discount-label">Descuento:</span>
+          <strong id="cart-discount-val">-$ 0</strong>
+        </div>
+        <div class="summary-line total-line">
+          <span>Total Estimado:</span>
+          <strong id="cart-total-price">$ 0</strong>
+        </div>
+      </div>
+
+      <div class="cart-checkout-actions">
+        <button class="btn btn-primary btn-checkout-main" onclick="openWebCheckout()">
+          <i class="fas fa-credit-card"></i> Iniciar Compra Online
+        </button>
+        <button class="btn btn-whatsapp-secondary" onclick="checkoutWhatsApp()" title="Atención y pedido por WhatsApp">
+          <i class="fab fa-whatsapp"></i> Finalizar Pedido por WhatsApp
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Floating Cart Button -->
+  <button class="floating-cart-btn" id="floating-cart-btn" onclick="openCartDrawer()" title="Ver Carrito de Compras" aria-label="Ver Carrito de Compras">
+    <i class="fas fa-shopping-bag"></i>
+    <span class="floating-cart-badge" id="floating-cart-badge">0</span>
+  </button>
+
+  <!-- Toast Notification Box -->
+  <div class="toast-notification-box" id="toast-box"></div>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
+

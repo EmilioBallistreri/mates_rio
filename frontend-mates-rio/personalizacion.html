@@ -321,11 +321,6 @@
           <button type="button" class="ribbon-tab-btn" data-tab="upload" onclick="switchRibbonTab('upload')">
             <i class="fas fa-cloud-arrow-up"></i> <span>Tu Logo / Imagen</span>
           </button>
-
-          <!-- Botón directo "Finalizar Pedido" arriba a la derecha dentro de la personalización -->
-          <button type="button" class="ribbon-tab-btn ribbon-tab-finish ribbon-top-right-finish-btn" onclick="finalizeAndAddToCart()">
-            <i class="fas fa-check-circle"></i> <span>Finalizar Pedido</span>
-          </button>
         </div>
 
         <!-- Contenido dinámico del Ribbon organizado por Grupos -->
@@ -663,6 +658,27 @@
                 class="fas fa-clone"></i></button>
             <button type="button" class="item-quick-btn btn-delete-item" onclick="deleteActiveVirolaItem()"
               title="Eliminar de la pieza"><i class="fas fa-trash-can"></i></button>
+          </div>
+        </div>
+
+        <!-- Barra Inferior de Herramientas del Escenario (Bitono B&W) -->
+        <div class="stage-bottombar-tools">
+          <div class="stage-tools-pill-group">
+            <button type="button" class="stage-tool-pill" id="btn-studio-undo" onclick="undoStudioAction()" title="Deshacer (Ctrl+Z)">
+              <i class="fas fa-rotate-left"></i> Deshacer
+            </button>
+            <button type="button" class="stage-tool-pill" id="btn-studio-redo" onclick="redoStudioAction()" title="Rehacer (Ctrl+Y)">
+              <i class="fas fa-rotate-right"></i> Rehacer
+            </button>
+            <button type="button" class="stage-tool-pill" onclick="centerActiveItem()" title="Centrar elemento">
+              <i class="fas fa-crosshairs"></i> Centrar
+            </button>
+            <button type="button" class="stage-tool-pill" onclick="studio.activeItemId = null; renderVirolaCanvas();" title="Deseleccionar">
+              <i class="fas fa-mouse-pointer"></i> Deseleccionar
+            </button>
+            <button type="button" class="stage-tool-pill" onclick="resetVirolaStudio()" title="Limpiar lienzo">
+              <i class="fas fa-trash-can"></i> Limpiar
+            </button>
           </div>
         </div>
 

@@ -419,22 +419,12 @@ function renderCategoriesGrid() {
   const cats = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
 
   container.innerHTML = cats.map(cat => {
-    const iconUrl = CATEGORY_MONO_ICONS[(cat.id || '').toLowerCase()] || 'https://api.iconify.design/lucide/tag.svg';
     return `
-    <div class="category-card" data-category="${cat.id}">
+    <div class="category-card category-card-name-only" data-category="${cat.id}">
       <img src="${cat.image}" alt="${cat.name}" class="category-card-bg" loading="lazy" />
       <div class="category-card-overlay"></div>
-      <div class="category-card-content">
-        <div class="category-card-mono-badge">
-          <img src="${iconUrl}" alt="${cat.name}" class="mono-cat-icon-img" />
-        </div>
+      <div class="category-card-content category-card-content-clean">
         <h3 class="category-name">${cat.name}</h3>
-        <div class="category-footer-row">
-          <span class="category-sub">${cat.label || cat.subtitle || ''}</span>
-          <div class="category-arrow-icon">
-            <i class="fas fa-arrow-right"></i>
-          </div>
-        </div>
       </div>
     </div>
   `;
@@ -881,6 +871,7 @@ function confirmClearCart() {
 function clearCart() {
   if (state.cart.length === 0) return;
   state.cart = [];
+  checkoutUpsellSeen = false;
   saveCart();
   updateCartUI();
   showToast('Vaciaste el carrito de compras', 'fa-info-circle');
@@ -1168,11 +1159,135 @@ function calculateShippingCP() {
 }
 
 // ==========================================================================
+// MODAL DE RECOMENDACIÓN / UPSELL ESTILO MCDONALD'S ANTES DE FINALIZAR COMPRA
+// ==========================================================================
+let checkoutUpsellSeen = false;
+
+function triggerCheckoutUpsell(checkoutType, onConfirmCallback) {
+  if (!state.cart || state.cart.length === 0) {
+    showToast('Tu carrito está vacío. Agregá productos para continuar.', 'fa-exclamation-triangle');
+    return;
+  }
+
+  // Si ya vio la recomendación en este pedido, continuar directo
+  if (checkoutUpsellSeen) {
+    if (typeof onConfirmCallback === 'function') onConfirmCallback();
+    return;
+  }
+
+  const upsellCandidateIds = ['acc-1', 'yerba-1', 'acc-2', 'yerba-2', 'acc-3'];
+  const cartIds = new Set(state.cart.map(item => item.id));
+
+  const availableCandidates = (typeof PRODUCTS_DATA !== 'undefined' && Array.isArray(PRODUCTS_DATA))
+    ? PRODUCTS_DATA.filter(p => upsellCandidateIds.includes(p.id) && !cartIds.has(p.id))
+    : [];
+
+  if (availableCandidates.length === 0) {
+    checkoutUpsellSeen = true;
+    if (typeof onConfirmCallback === 'function') onConfirmCallback();
+    return;
+  }
+
+  openUpsellModal(availableCandidates.slice(0, 3), () => {
+    checkoutUpsellSeen = true;
+    if (typeof onConfirmCallback === 'function') onConfirmCallback();
+  });
+}
+
+function openUpsellModal(products, onProceedCallback) {
+  let modalBackdrop = document.getElementById('checkout-upsell-modal');
+  if (!modalBackdrop) {
+    modalBackdrop = document.createElement('div');
+    modalBackdrop.id = 'checkout-upsell-modal';
+    modalBackdrop.className = 'upsell-modal-backdrop';
+    document.body.appendChild(modalBackdrop);
+  }
+
+  const itemsHtml = products.map(prod => `
+    <div class="upsell-item-card" id="upsell-row-${prod.id}">
+      <div class="upsell-item-left">
+        <img src="${prod.image || 'assets/images/cat_accesorios.jpg'}" alt="${prod.name}" class="upsell-item-img" />
+        <div class="upsell-item-info">
+          <h4 class="upsell-item-name">${prod.name}</h4>
+          <p class="upsell-item-desc">${prod.description || 'Accesorio complementario de alta calidad'}</p>
+          <span class="upsell-item-price">${formatARS(prod.price)}</span>
+        </div>
+      </div>
+      <button type="button" class="btn-upsell-add" id="btn-upsell-add-${prod.id}" onclick="handleUpsellQuickAdd('${prod.id}')">
+        <i class="fas fa-plus"></i> Sumar al combo
+      </button>
+    </div>
+  `).join('');
+
+  modalBackdrop.innerHTML = `
+    <div class="upsell-modal-card" onclick="event.stopPropagation()">
+      <div class="upsell-modal-header">
+        <span class="upsell-badge-pill"><i class="fas fa-sparkles"></i> RECOMENDACIÓN MATES RÍO</span>
+        <h3 class="upsell-modal-title">¿Querés sumar algo más a tu combo matero?</h3>
+        <p class="upsell-modal-subtitle">Aprovechá a incluir accesorios complementarios en el mismo envío antes de finalizar.</p>
+      </div>
+
+      <div class="upsell-modal-body">
+        <div class="upsell-items-grid">
+          ${itemsHtml}
+        </div>
+      </div>
+
+      <div class="upsell-modal-footer">
+        <button type="button" class="btn-upsell-continue" id="btn-upsell-continue">
+          <i class="fas fa-arrow-right"></i> Continuar con la compra
+        </button>
+        <button type="button" class="btn-upsell-skip" id="btn-upsell-skip">
+          No por ahora, continuar directo al pago
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Asignar listeners
+  const continueBtn = modalBackdrop.querySelector('#btn-upsell-continue');
+  const skipBtn = modalBackdrop.querySelector('#btn-upsell-skip');
+
+  const closeAndProceed = () => {
+    modalBackdrop.classList.remove('open');
+    if (typeof onProceedCallback === 'function') onProceedCallback();
+  };
+
+  if (continueBtn) continueBtn.onclick = closeAndProceed;
+  if (skipBtn) skipBtn.onclick = closeAndProceed;
+  modalBackdrop.onclick = closeAndProceed;
+
+  // Abrir modal con microretardo para transición CSS
+  requestAnimationFrame(() => {
+    modalBackdrop.classList.add('open');
+  });
+}
+
+function handleUpsellQuickAdd(productId) {
+  if (typeof addToCart === 'function') {
+    addToCart(productId, 1);
+  }
+
+  const btn = document.getElementById(`btn-upsell-add-${productId}`);
+  if (btn) {
+    btn.classList.add('added');
+    btn.innerHTML = '<i class="fas fa-check"></i> Agregado';
+    btn.disabled = true;
+  }
+  showToast('¡Accesorio sumado a tu pedido!', 'fa-shopping-bag');
+}
+
+// ==========================================================================
 // CHECKOUT VIA WHATSAPP (ARGENTINE CONVERSION STANDARD)
 // ==========================================================================
-function checkoutWhatsApp() {
+function checkoutWhatsApp(bypassUpsell = false) {
   if (state.cart.length === 0) {
     showToast('Tu carrito está vacío. Agregá productos para continuar.', 'fa-exclamation-triangle');
+    return;
+  }
+
+  if (!bypassUpsell && !checkoutUpsellSeen) {
+    triggerCheckoutUpsell('whatsapp', () => checkoutWhatsApp(true));
     return;
   }
 
@@ -1226,9 +1341,14 @@ function checkoutWhatsApp() {
 // ==========================================================================
 // WEB CHECKOUT MODAL & ORDER CREATION (DESDE RÍO CEBALLOS, CÓRDOBA)
 // ==========================================================================
-function openWebCheckout() {
+function openWebCheckout(bypassUpsell = false) {
   if (state.cart.length === 0) {
     showToast('Tu carrito está vacío.', 'fa-exclamation-triangle');
+    return;
+  }
+
+  if (!bypassUpsell && !checkoutUpsellSeen) {
+    triggerCheckoutUpsell('web', () => openWebCheckout(true));
     return;
   }
 

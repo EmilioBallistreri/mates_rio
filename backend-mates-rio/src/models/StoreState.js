@@ -28,6 +28,10 @@ function readStateFromDisk() {
       const raw = fs.readFileSync(stateFilePath, 'utf8');
       const parsed = JSON.parse(raw);
       return { ...DEFAULT_STORE_STATE, ...parsed };
+    } else {
+      const initial = { ...DEFAULT_STORE_STATE, updatedAt: Date.now() };
+      writeStateToDisk(initial);
+      return initial;
     }
   } catch (err) {
     console.error('Error leyendo storeState.json:', err.message);

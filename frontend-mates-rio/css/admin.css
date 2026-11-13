@@ -4,23 +4,23 @@
    ========================================================================== */
 
 :root {
-  --admin-bg-sidebar: #17110c;
-  --admin-sidebar-hover: #261c14;
+  --admin-bg-sidebar: #121214;
+  --admin-sidebar-hover: #141416;
   --admin-sidebar-active: #38271a;
   --admin-bg-main: #f7f5f0;
   --admin-card-bg: #ffffff;
   --admin-border: #e8e2d8;
-  --admin-border-focus: #c59b27;
+  --admin-border-focus: #ffffff;
   
-  --admin-text-main: #221810;
+  --admin-text-main: #121214;
   --admin-text-muted: #7d7268;
   --admin-text-light: #f5f0eb;
   
-  --admin-gold: #c59b27;
-  --admin-gold-hover: #dbad30;
-  --admin-gold-light: #fbf5e6;
-  --admin-leather: #8b4513;
-  --admin-leather-dark: #5c2c0b;
+  --admin-gold: #ffffff;
+  --admin-gold-hover: #e4e4e7;
+  --admin-gold-light: rgba(255, 255, 255, 0.12);
+  --admin-leather: #27272a;
+  --admin-leather-dark: #18181b;
   
   --admin-success: #27ae60;
   --admin-success-light: #eafaf1;
@@ -75,7 +75,7 @@ body.admin-body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 50% 30%, #2b1810 0%, #150d08 100%);
+  background: radial-gradient(circle at 50% 30%, #18181b 0%, #150d08 100%);
   padding: 24px 16px;
   position: relative;
   overflow: hidden;
@@ -88,7 +88,7 @@ body.admin-body {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle at center, rgba(197, 155, 39, 0.06) 0%, transparent 60%);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -98,7 +98,7 @@ body.admin-body {
   background: var(--admin-card-bg);
   border-radius: var(--radius-lg);
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
-  border: 1.5px solid rgba(197, 155, 39, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   overflow: hidden;
   position: relative;
   z-index: 10;
@@ -111,7 +111,7 @@ body.admin-body {
 }
 
 .admin-gate-header {
-  background: linear-gradient(135deg, #1f140e 0%, #2f1d14 100%);
+  background: linear-gradient(135deg, #121214 0%, #18181b 100%);
   padding: 32px 24px 26px;
   text-align: center;
   color: #ffffff;
@@ -135,7 +135,7 @@ body.admin-body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(197, 155, 39, 0.2);
+  background: rgba(255, 255, 255, 0.2);
   border: 1px solid var(--admin-gold);
   color: #f7e099;
   font-size: 0.7rem;
@@ -210,7 +210,7 @@ body.admin-body {
   outline: none;
   background: var(--admin-card-bg);
   border-color: var(--admin-gold);
-  box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.18);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
 }
 
 .admin-pwd-toggle {
@@ -232,8 +232,8 @@ body.admin-body {
 .btn-admin-login {
   width: 100%;
   height: 46px;
-  background: linear-gradient(135deg, #c59b27 0%, #b88a1e 100%);
-  color: #1a1008;
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  color: #121214;
   border: none;
   border-radius: var(--radius-md);
   font-size: 0.92rem;
@@ -244,15 +244,15 @@ body.admin-body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 14px rgba(197, 155, 39, 0.35);
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.35);
   transition: var(--transition);
   margin-top: 10px;
 }
 
 .btn-admin-login:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(197, 155, 39, 0.5);
-  background: linear-gradient(135deg, #dbad30 0%, #c59b27 100%);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.5);
+  background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 100%);
 }
 
 .btn-admin-login:active {
@@ -385,7 +385,7 @@ body.admin-body {
   bottom: 0;
   left: 0;
   z-index: 100;
-  border-right: 1.5px solid rgba(197, 155, 39, 0.2);
+  border-right: 1.5px solid rgba(255, 255, 255, 0.2);
   transition: var(--transition);
 }
 
@@ -501,7 +501,7 @@ body.admin-body {
 }
 
 .sidebar-nav-item.active {
-  background: linear-gradient(90deg, rgba(197, 155, 39, 0.22) 0%, rgba(197, 155, 39, 0.06) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%);
   color: #ffffff;
   font-weight: 700;
   border-left: 3px solid var(--admin-gold);
@@ -525,7 +525,7 @@ body.admin-body {
 }
 
 .badge-info {
-  background: rgba(197, 155, 39, 0.25);
+  background: rgba(255, 255, 255, 0.25);
   color: var(--admin-gold);
   border: 1px solid var(--admin-gold);
 }
@@ -782,14 +782,14 @@ body.admin-body {
 }
 
 .btn-admin-primary {
-  background: linear-gradient(135deg, var(--admin-gold) 0%, #b88a1e 100%);
-  color: #1a1008;
-  box-shadow: 0 3px 10px rgba(197, 155, 39, 0.3);
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  color: #121214;
+  box-shadow: 0 3px 10px rgba(255, 255, 255, 0.3);
 }
 
 .btn-admin-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(197, 155, 39, 0.45);
+  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.45);
 }
 
 .btn-admin-outline {
@@ -1123,7 +1123,7 @@ body.admin-body {
   outline: none;
   background: var(--admin-card-bg);
   border-color: var(--admin-gold);
-  box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.18);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
 }
 
 .admin-select,
@@ -1143,7 +1143,7 @@ body.admin-body {
 .admin-filter-select:focus {
   outline: none;
   border-color: var(--admin-gold);
-  box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.18);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
 }
 
 .table-responsive-card {
@@ -1426,7 +1426,7 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
 
 .status-prep {
   background: #fdf5e6;
-  color: #b8860b;
+  color: #e4e4e7;
   border-color: rgba(184, 134, 11, 0.3);
 }
 
@@ -1557,7 +1557,7 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
 }
 
 .admin-toast {
-  background: #1f1610;
+  background: #141416;
   color: #ffffff;
   border-left: 4px solid var(--admin-gold);
   padding: 12px 18px;
@@ -1745,7 +1745,7 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #17110c;
+  background: #121214;
   color: #ffffff;
   padding: 10px 20px;
   border-bottom: 2px solid var(--admin-gold);
@@ -1797,7 +1797,7 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
 
 .btn-close-admin-embedded:hover {
   background: var(--admin-gold);
-  color: #17110c;
+  color: #121214;
   border-color: var(--admin-gold);
 }
 
@@ -1831,21 +1831,21 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
   outline: none;
   background: var(--admin-card-bg);
   border-color: var(--admin-gold);
-  box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.18);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
 }
 
 .btn-admin-gold {
-  background: linear-gradient(135deg, #c59b27 0%, #dbb242 100%);
-  color: #17110c;
+  background: linear-gradient(135deg, #ffffff 0%, #e4e4e7 100%);
+  color: #121214;
   font-weight: 700;
-  border: 1px solid rgba(197, 155, 39, 0.4);
-  box-shadow: 0 4px 12px rgba(197, 155, 39, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.25);
 }
 
 .btn-admin-gold:hover {
-  background: linear-gradient(135deg, #d4a72d 0%, #e8c050 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #e8c050 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(197, 155, 39, 0.4);
+  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.4);
 }
 
 @media (max-width: 680px) {
@@ -1873,7 +1873,7 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
 
 .image-dropzone.dragover {
   border-color: var(--admin-gold);
-  background: rgba(197, 155, 39, 0.08);
+  background: rgba(255, 255, 255, 0.08);
   transform: scale(1.01);
 }
 
@@ -1914,7 +1914,7 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
 
 .preview-thumb-card.primary {
   border-color: var(--admin-gold);
-  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.35);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
 }
 
 .preview-thumb-img {
@@ -2021,8 +2021,8 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
 .occasion-preset-card.active,
 .occasion-preset-card.selected {
   border-color: var(--admin-gold);
-  background: rgba(197, 155, 39, 0.08);
-  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
 }
 
 /* Selector de Ubicación del Banner */
@@ -2054,15 +2054,15 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
 
 .occasion-position-card.active {
   border-color: var(--admin-gold);
-  background: rgba(197, 155, 39, 0.1);
-  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
 }
 
 .occasion-position-icon {
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  background: rgba(197, 155, 39, 0.15);
+  background: rgba(255, 255, 255, 0.15);
   color: var(--admin-gold);
   display: flex;
   align-items: center;
@@ -2144,12 +2144,12 @@ body:not(.admin-dark-mode) .admin-data-table tr:hover td {
   outline: none;
   border-color: var(--admin-gold);
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
 }
 
 body.admin-dark-mode .occasion-clean-input,
 body.admin-dark-mode .occasion-clean-select {
-  background: #231c15;
+  background: #18181b;
   border-color: #423528;
   color: #f5ede4;
 }
@@ -2162,7 +2162,7 @@ body.admin-dark-mode .occasion-clean-select:focus {
 
 /* Selector Interactivo de Emojis */
 .occasion-emoji-box {
-  background: rgba(197, 155, 39, 0.05);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px dashed var(--admin-gold);
   border-radius: var(--radius-md);
   padding: 14px 16px;
@@ -2199,7 +2199,7 @@ body.admin-dark-mode .occasion-clean-select:focus {
 .occasion-emoji-cat-btn:hover,
 .occasion-emoji-cat-btn.active {
   background: var(--admin-gold);
-  color: #17110c;
+  color: #121214;
   border-color: var(--admin-gold);
 }
 
@@ -2242,12 +2242,12 @@ body.admin-dark-mode .occasion-clean-select:focus {
 }
 
 .occasion-theme-mate {
-  background: linear-gradient(90deg, #283618 0%, #606c38 50%, #bc6c25 100%) !important;
+  background: linear-gradient(90deg, #283618 0%, #27272a 50%, #52525b 100%) !important;
 }
 
 .occasion-theme-seleccion {
-  background: linear-gradient(90deg, #0d1b2a 0%, #1b263b 40%, #415a77 80%, #c59b27 100%) !important;
-  border-bottom: 2px solid #c59b27;
+  background: linear-gradient(90deg, #09090b 0%, #18181b 50%, #27272a 100%) !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.25);
 }
 
 .occasion-theme-primavera {
@@ -2304,7 +2304,7 @@ body.admin-dark-mode .occasion-clean-select:focus {
 .badge-purchase.pending,
 .badge-purchase.status-pendiente {
   background: #fff3cd;
-  color: #856404;
+  color: #18181b;
   border-color: rgba(133, 100, 4, 0.25);
 }
 
@@ -2331,7 +2331,7 @@ body.admin-dark-mode .occasion-clean-select:focus {
 .admin-slide-img-wrap {
   position: relative;
   height: 160px;
-  background: #17110c;
+  background: #121214;
   overflow: hidden;
 }
 
@@ -2353,7 +2353,7 @@ body.admin-dark-mode .occasion-clean-select:focus {
   background: rgba(18, 18, 18, 0.85);
   backdrop-filter: blur(4px);
   color: var(--admin-gold);
-  border: 1px solid rgba(197, 155, 39, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   font-size: 0.72rem;
   font-weight: 800;
   padding: 3px 8px;
@@ -2436,7 +2436,7 @@ body.admin-dark-mode .occasion-clean-select:focus {
 .admin-cat-img-wrap {
   position: relative;
   height: 140px;
-  background: #17110c;
+  background: #121214;
   overflow: hidden;
 }
 
@@ -2627,15 +2627,15 @@ body.admin-dark-mode .occasion-clean-select:focus {
 .admin-modal-engraving-box {
   margin-bottom: 16px;
   padding: 14px 16px;
-  background: rgba(197, 155, 39, 0.08);
-  border: 1.5px solid rgba(197, 155, 39, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   border-radius: var(--radius-md);
 }
 
 .admin-modal-engraving-badge {
   color: var(--admin-leather);
   font-weight: 800;
-  background: rgba(197, 155, 39, 0.15);
+  background: rgba(255, 255, 255, 0.15);
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -2674,9 +2674,9 @@ body.admin-dark-mode .occasion-clean-select:focus {
    ========================================================================== */
 body.admin-dark-mode {
   --admin-bg-main: #14100c;
-  --admin-card-bg: #1c1611;
+  --admin-card-bg: #18181b;
   --admin-border: #2e241c;
-  --admin-border-focus: #dfb542;
+  --admin-border-focus: #ffffff;
   --admin-text-main: #f5efe6;
   --admin-text-muted: #9e9185;
   background-color: var(--admin-bg-main);
@@ -2684,7 +2684,7 @@ body.admin-dark-mode {
 }
 
 body.admin-dark-mode .admin-topbar {
-  background: #1c1611;
+  background: #18181b;
   border-bottom-color: #2e241c;
 }
 
@@ -2695,13 +2695,13 @@ body.admin-dark-mode .topbar-breadcrumb {
 body.admin-dark-mode .topbar-live-clock,
 body.admin-dark-mode .btn-store-preview,
 body.admin-dark-mode .admin-theme-toggle-btn {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
   color: #f5efe6;
 }
 
 body.admin-dark-mode .btn-admin-outline {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
   color: #f5efe6;
 }
@@ -2713,7 +2713,7 @@ body.admin-dark-mode .btn-admin-outline:hover {
 }
 
 body.admin-dark-mode .btn-table-action {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
   color: #c9bfb4;
 }
@@ -2724,7 +2724,7 @@ body.admin-dark-mode .btn-table-action:hover {
 }
 
 body.admin-dark-mode .stock-btn-step {
-  background: #251e17;
+  background: #18181b;
   color: #f5efe6;
 }
 
@@ -2734,12 +2734,12 @@ body.admin-dark-mode .stock-btn-step:hover {
 }
 
 body.admin-dark-mode .admin-gate-box {
-  background: #1c1611;
+  background: #18181b;
   border-color: #382c21;
 }
 
 body.admin-dark-mode .kpi-card {
-  background: #1c1611;
+  background: #18181b;
   border-color: #2e241c;
 }
 
@@ -2749,20 +2749,20 @@ body.admin-dark-mode .kpi-footer-sub {
 
 body.admin-dark-mode .table-responsive-card,
 html.admin-dark-mode .table-responsive-card {
-  background: #1c1611;
+  background: #18181b;
   border-color: #2e241c;
 }
 
 body.admin-dark-mode .admin-data-table th,
 html.admin-dark-mode .admin-data-table th {
-  background: #231b14;
-  color: #dfb542;
+  background: #141416;
+  color: #ffffff;
   border-bottom-color: #2e241c;
 }
 
 body.admin-dark-mode .admin-data-table td,
 html.admin-dark-mode .admin-data-table td {
-  border-bottom-color: #261e16;
+  border-bottom-color: #141416;
   color: #f5efe6;
 }
 
@@ -2781,8 +2781,8 @@ html.admin-dark-mode .admin-data-table tr:hover,
 html.admin-dark-mode .admin-data-table tbody tr:hover,
 html.admin-dark-mode .admin-data-table tr:hover td,
 html.admin-dark-mode .admin-data-table tbody tr:hover td {
-  background: #281f17 !important;
-  background-color: #281f17 !important;
+  background: #18181b !important;
+  background-color: #18181b !important;
   color: #ffffff !important;
 }
 
@@ -2812,7 +2812,7 @@ html.admin-dark-mode .admin-data-table tr:hover td .admin-log-user {
 
 body.admin-dark-mode .admin-data-table tr:hover td strong[style*="admin-leather"],
 html.admin-dark-mode .admin-data-table tr:hover td strong[style*="admin-leather"] {
-  color: #dfb542 !important;
+  color: #ffffff !important;
 }
 
 body.admin-dark-mode .admin-data-table tr:hover td small,
@@ -2825,36 +2825,36 @@ html.admin-dark-mode .admin-data-table tr:hover td .text-muted,
 html.admin-dark-mode .admin-data-table tr:hover td .table-product-sku,
 html.admin-dark-mode .admin-data-table tr:hover td .admin-log-time,
 html.admin-dark-mode .admin-data-table tr:hover td .col-order-date {
-  color: #dfb542 !important;
+  color: #ffffff !important;
 }
 
 body.admin-dark-mode .table-filter-bar,
 body.admin-dark-mode .admin-filter-bar {
-  background: #1c1611;
+  background: #18181b;
   border-color: #2e241c;
 }
 
 body.admin-dark-mode .admin-filter-select {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
   color: #f5efe6;
 }
 
 body.admin-dark-mode .payment-method-icon {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
   color: var(--admin-gold);
 }
 
 body.admin-dark-mode .order-status-select {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
   color: #f5efe6;
 }
 
 body.admin-dark-mode .status-prep {
   background: rgba(184, 134, 11, 0.22);
-  color: #f1c40f;
+  color: #ffffff;
   border-color: rgba(241, 196, 15, 0.35);
 }
 
@@ -2877,9 +2877,9 @@ body.admin-dark-mode .status-cancelled {
 }
 
 body.admin-dark-mode .engraving-tag {
-  background: rgba(197, 155, 39, 0.18);
-  color: #dfb542;
-  border-color: rgba(197, 155, 39, 0.4);
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 body.admin-dark-mode .badge-purchase.received,
@@ -2899,19 +2899,19 @@ body.admin-dark-mode .badge-purchase.status-camino {
 body.admin-dark-mode .badge-purchase.pending,
 body.admin-dark-mode .badge-purchase.status-pendiente {
   background: rgba(241, 196, 15, 0.2);
-  color: #f1c40f;
+  color: #ffffff;
   border-color: rgba(241, 196, 15, 0.35);
 }
 
 body.admin-dark-mode .admin-modal-card {
-  background: #1c1611;
+  background: #18181b;
   color: #f5efe6;
   border: 1px solid #382c21;
 }
 
 body.admin-dark-mode .admin-modal-header,
 body.admin-dark-mode .admin-modal-footer {
-  background: #231b14;
+  background: #141416;
   border-color: #2e241c;
 }
 
@@ -2922,7 +2922,7 @@ body.admin-dark-mode .admin-modal-title {
 body.admin-dark-mode .admin-input,
 body.admin-dark-mode .admin-select,
 body.admin-dark-mode .admin-search-input {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
   color: #f5efe6;
 }
@@ -2935,11 +2935,11 @@ body.admin-dark-mode .admin-modal-card .modal-input:focus {
   background: #2a221b;
   border-color: var(--admin-gold);
   color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.25);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
 }
 
 body.admin-dark-mode .home-design-tabs {
-  background: #1c1611;
+  background: #18181b;
   border-color: #2e241c;
 }
 
@@ -2949,11 +2949,11 @@ body.admin-dark-mode .home-design-tab-btn {
 
 body.admin-dark-mode .home-design-tab-btn:hover {
   color: #ffffff;
-  background: #251e17;
+  background: #18181b;
 }
 
 body.admin-dark-mode .home-design-tab-btn.active {
-  background: #2a2017;
+  background: #18181b;
   color: var(--admin-gold);
 }
 
@@ -2961,13 +2961,13 @@ body.admin-dark-mode .admin-slide-card,
 body.admin-dark-mode .admin-category-card,
 body.admin-dark-mode .admin-card,
 body.admin-dark-mode .occasion-config-card {
-  background: #1c1611;
+  background: #18181b;
   border-color: #2e241c;
 }
 
 body.admin-dark-mode .admin-slide-link-pill {
-  background: #251e17;
-  color: #dfb542;
+  background: #18181b;
+  color: #ffffff;
   border-color: #382c21;
 }
 
@@ -2976,19 +2976,19 @@ body.admin-dark-mode .admin-slide-actions {
 }
 
 body.admin-dark-mode .admin-subcat-chip {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
   color: #e5ded5;
 }
 
 body.admin-dark-mode .admin-subcat-chip-interactive {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
   color: #f5efe6;
 }
 
 body.admin-dark-mode .admin-subcats-box {
-  background: #18130e;
+  background: #121214;
   border-color: #382c21;
 }
 
@@ -2999,28 +2999,28 @@ body.admin-dark-mode .admin-preview-avatar,
 body.admin-dark-mode .admin-modal-order-header,
 body.admin-dark-mode .admin-modal-info-box,
 body.admin-dark-mode .admin-modal-items-box {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
   color: #f5efe6;
 }
 
 body.admin-dark-mode .admin-modal-engraving-box {
-  background: rgba(197, 155, 39, 0.1);
-  border-color: rgba(197, 155, 39, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 body.admin-dark-mode .admin-modal-engraving-badge {
   color: var(--admin-gold);
-  background: rgba(197, 155, 39, 0.22);
+  background: rgba(255, 255, 255, 0.22);
 }
 
 body.admin-dark-mode .preview-thumb-card {
-  background: #251e17;
+  background: #18181b;
   border-color: #382c21;
 }
 
 body.admin-dark-mode .occasion-preset-card {
-  background: #231b14;
+  background: #141416;
   border-color: #33271d;
   color: #f5efe6;
 }
@@ -3033,11 +3033,11 @@ body.admin-dark-mode .occasion-preset-card:hover {
 body.admin-dark-mode .occasion-preset-card.selected {
   border-color: var(--admin-gold);
   background: #33261a;
-  box-shadow: 0 0 0 2px rgba(197, 155, 39, 0.35);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
 }
 
 body.admin-dark-mode .stat-box-card {
-  background: #1c1611;
+  background: #18181b;
   border-color: #2e241c;
 }
 
@@ -3050,7 +3050,7 @@ body.admin-dark-mode .section-page-desc {
 }
 
 body.admin-dark-mode .image-dropzone {
-  background: #221a14;
+  background: #18181b;
   border-color: #3d2f23;
 }
 
@@ -3063,7 +3063,7 @@ body.admin-dark-mode .image-dropzone-sub {
 }
 
 body.admin-dark-mode .table-responsive-card::-webkit-scrollbar-track {
-  background: #1c1611;
+  background: #18181b;
 }
 
 body.admin-dark-mode .table-responsive-card::-webkit-scrollbar-thumb {
@@ -3135,7 +3135,7 @@ body.admin-dark-mode .table-responsive-card::-webkit-scrollbar-thumb {
 
 /* Dark mode for admin design accordions */
 body.admin-dark-mode .admin-design-accordion {
-  background: #1c1611;
+  background: #18181b;
   border-color: #2e241c;
 }
 
@@ -3144,11 +3144,11 @@ body.admin-dark-mode .admin-design-accordion:hover {
 }
 
 body.admin-dark-mode .admin-design-accordion-header {
-  background: #231b14;
+  background: #141416;
 }
 
 body.admin-dark-mode .admin-design-accordion-header:hover {
-  background: #2a2018;
+  background: #1f1f23;
 }
 
 body.admin-dark-mode .admin-design-accordion-body {
@@ -3166,25 +3166,25 @@ body.admin-dark-mode .admin-design-accordion-body {
    ========================================================================== */
 
 body.admin-dark-mode {
-  --admin-gold: #cfa83b;
+  --admin-gold: #ffffff;
   --admin-gold-hover: #dfb84c;
   --admin-gold-light: rgba(207, 168, 59, 0.12);
-  --admin-border: #282018;
-  --admin-border-focus: #cfa83b;
+  --admin-border: #18181b;
+  --admin-border-focus: #ffffff;
   --admin-text-main: #f5f0ea;
   --admin-text-muted: #a89c90;
   --admin-bg-main: #130f0c;
-  --admin-card-bg: #1a1410;
+  --admin-card-bg: #141416;
 }
 
 body.admin-dark-mode .kpi-card {
-  background: #1a1410;
+  background: #141416;
   border-color: #2b2219;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
 }
 
 body.admin-dark-mode .kpi-card.kpi-gold {
-  border-left: 4px solid #cfa83b;
+  border-left: 4px solid #ffffff;
 }
 
 body.admin-dark-mode .kpi-card.kpi-success {
@@ -3192,11 +3192,11 @@ body.admin-dark-mode .kpi-card.kpi-success {
 }
 
 body.admin-dark-mode .kpi-card.kpi-leather {
-  border-left: 4px solid #9c5c2a;
+  border-left: 4px solid #52525b;
 }
 
 body.admin-dark-mode .kpi-card.kpi-warning {
-  border-left: 4px solid #d97724;
+  border-left: 4px solid #71717a;
 }
 
 body.admin-dark-mode .kpi-title {
@@ -3214,7 +3214,7 @@ body.admin-dark-mode .kpi-value {
 
 body.admin-dark-mode .icon-wrap-gold {
   background: rgba(207, 168, 59, 0.12);
-  color: #cfa83b;
+  color: #ffffff;
 }
 
 body.admin-dark-mode .sidebar-badge.badge-gold {
@@ -3237,12 +3237,12 @@ body.admin-dark-mode .sidebar-badge.badge-success {
 
 /* Tablas en modo oscuro limpias y contrastadas */
 body.admin-dark-mode .table-responsive-card {
-  background: #1a1410;
+  background: #141416;
   border-color: #2b2219;
 }
 
 body.admin-dark-mode .admin-data-table th {
-  background: #211914;
+  background: #18181b;
   color: #b5a99d;
   font-weight: 700;
   font-size: 0.74rem;
@@ -3252,13 +3252,13 @@ body.admin-dark-mode .admin-data-table th {
 }
 
 body.admin-dark-mode .admin-data-table td {
-  border-bottom: 1px solid #261d16;
+  border-bottom: 1px solid #18181b;
   color: #e8e2d8;
   font-size: 0.82rem;
 }
 
 body.admin-dark-mode .admin-data-table tbody tr:hover td {
-  background: #231b14 !important;
+  background: #141416 !important;
 }
 
 body.admin-dark-mode .table-product-name {
@@ -3271,7 +3271,7 @@ body.admin-dark-mode .table-product-sku {
 }
 
 body.admin-dark-mode .stock-counter-pill {
-  background: #211914;
+  background: #18181b;
   border-color: #33271d;
 }
 
@@ -3281,7 +3281,7 @@ body.admin-dark-mode .stock-val-display {
 
 /* Modales y Formularios en modo oscuro */
 body.admin-dark-mode .admin-modal-card {
-  background: #1a1410;
+  background: #141416;
   border: 1px solid #382c21;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
 }
@@ -3301,7 +3301,7 @@ body.admin-dark-mode .admin-form-label {
 body.admin-dark-mode .modal-input,
 body.admin-dark-mode .admin-input,
 body.admin-dark-mode .admin-select {
-  background: #211914;
+  background: #18181b;
   border-color: #33271d;
   color: #f5f0ea;
 }
@@ -3309,7 +3309,7 @@ body.admin-dark-mode .admin-select {
 body.admin-dark-mode .modal-input:focus,
 body.admin-dark-mode .admin-input:focus,
 body.admin-dark-mode .admin-select:focus {
-  border-color: #cfa83b;
+  border-color: #ffffff;
   box-shadow: 0 0 0 2px rgba(207, 168, 59, 0.2);
 }
 

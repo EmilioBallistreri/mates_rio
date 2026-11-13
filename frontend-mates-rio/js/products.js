@@ -962,12 +962,20 @@ window.syncProductsFromStorage = syncProductsFromStorage;
     if (window.MATES_RIO_API_URL) {
       urls.push(window.MATES_RIO_API_URL.replace(/\/$/, '') + '/store-state');
     }
-    if (window.location && window.location.protocol.startsWith('http')) {
-      if (window.location.port === '5000') {
-        urls.push(window.location.origin + '/api/store-state');
+    if (typeof window !== 'undefined' && window.location) {
+      const hostname = window.location.hostname || 'localhost';
+      if (window.location.protocol.startsWith('http')) {
+        if (window.location.port === '5000') {
+          urls.push(window.location.origin + '/api/store-state');
+        } else {
+          urls.push(`http://${hostname}:5000/api/store-state`);
+          urls.push('http://localhost:5000/api/store-state');
+          urls.push('http://127.0.0.1:5000/api/store-state');
+          urls.push(window.location.origin + '/api/store-state');
+        }
       } else {
         urls.push('http://localhost:5000/api/store-state');
-        urls.push(window.location.origin + '/api/store-state');
+        urls.push('http://127.0.0.1:5000/api/store-state');
       }
     } else {
       urls.push('http://localhost:5000/api/store-state');

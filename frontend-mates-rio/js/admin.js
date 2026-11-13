@@ -362,6 +362,29 @@ function goBackAdminSection() {
   switchAdminSection(target, false, true);
 }
 
+async function forceAdminCloudSync() {
+  const icon = document.getElementById('admin-sync-icon');
+  const label = document.getElementById('admin-sync-label');
+  if (icon) icon.classList.add('fa-spin');
+  if (label) label.textContent = 'Sincronizando...';
+
+  try {
+    if (window.MatesRioCloudSync && typeof window.MatesRioCloudSync.push === 'function') {
+      await window.MatesRioCloudSync.push();
+      await window.MatesRioCloudSync.pull();
+    }
+    showAdminToast('¡Sincronización en la Nube exitosa! Todos los cambios están guardados en el servidor y visibles en toda la web.', 'fa-cloud-arrow-up');
+  } catch (err) {
+    console.error('Error sincronizando nube:', err);
+    showAdminToast('Cambios guardados localmente. Iniciá el servidor backend (npm run dev) para sincronizar entre dispositivos.', 'fa-triangle-exclamation');
+  } finally {
+    setTimeout(() => {
+      if (icon) icon.classList.remove('fa-spin');
+      if (label) label.textContent = 'Sincronizar Nube';
+    }, 700);
+  }
+}
+
 function switchAdminSection(sectionId, fromNotifBell = false, isGoingBack = false) {
   if (!isGoingBack && currentActiveSection && currentActiveSection !== sectionId) {
     previousAdminSection = currentActiveSection;

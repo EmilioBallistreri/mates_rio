@@ -1078,6 +1078,19 @@ function resetItemTransform() {
 // 8. RENDERIZADOR 2D DEL LIENZO SVG (CORONA VIROLA, CUERPO TERMO O CAJA)
 // Eliminación del círculo que aparece al rededor de los íconos (Item 2)
 // ==========================================================================
+function describeSvgArc(cx, cy, r, startAngleDeg, endAngleDeg) {
+  const startRad = (startAngleDeg * Math.PI) / 180;
+  const endRad = (endAngleDeg * Math.PI) / 180;
+  const x1 = cx + r * Math.cos(startRad);
+  const y1 = cy + r * Math.sin(startRad);
+  const x2 = cx + r * Math.cos(endRad);
+  const y2 = cy + r * Math.sin(endRad);
+  let diff = (endAngleDeg - startAngleDeg) % 360;
+  if (diff < 0) diff += 360;
+  const largeArcFlag = diff > 180 ? 1 : 0;
+  return 'M ' + x1.toFixed(2) + ' ' + y1.toFixed(2) + ' A ' + r.toFixed(2) + ' ' + r.toFixed(2) + ' 0 ' + largeArcFlag + ' 1 ' + x2.toFixed(2) + ' ' + y2.toFixed(2);
+}
+
 function renderVirolaCanvas() {
   const svg = document.getElementById('virola-studio-svg');
   if (!svg) return;
@@ -1093,31 +1106,25 @@ function renderVirolaCanvas() {
     const y = item.y !== undefined ? item.y : cy + (item.radius || rRing) * Math.sin(rad);
 
     if (item.type === 'icon') {
-      const halfSize = (44 * scale) / 2 + 10;
-      grooveCutoutsHtml += `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${halfSize.toFixed(2)}" fill="black" />`;
+      const halfSize = (44 * scale) / 2 + 12;
+      grooveCutoutsHtml += '<circle cx="' + x.toFixed(2) + '" cy="' + y.toFixed(2) + '" r="' + halfSize.toFixed(2) + '" fill="black" />';
     } else if (item.type === 'text') {
       const fontSize = item.fontSize || 22;
       const textLen = (item.text || '').length;
 
       if (item.arcPosition === 'straight') {
-        const estWidth = textLen * fontSize * 0.65 + 18;
-        const estHeight = fontSize + 14;
-        grooveCutoutsHtml += `
-          <g transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${item.rotation || 0})">
-            <rect x="${(-estWidth / 2).toFixed(2)}" y="${(-estHeight / 2).toFixed(2)}" width="${estWidth.toFixed(2)}" height="${estHeight.toFixed(2)}" rx="8" fill="black" />
-          </g>
-        `;
+        const estWidth = textLen * fontSize * 0.65 + 24;
+        const estHeight = fontSize + 20;
+        grooveCutoutsHtml += '<g transform="translate(' + x.toFixed(2) + ', ' + y.toFixed(2) + ') rotate(' + (item.rotation || 0) + ')"><rect x="' + (-estWidth / 2).toFixed(2) + '" y="' + (-estHeight / 2).toFixed(2) + '" width="' + estWidth.toFixed(2) + '" height="' + estHeight.toFixed(2) + '" rx="8" fill="black" /></g>';
       } else {
-        const arcDeg = Math.min(260, Math.max(30, textLen * fontSize * 0.38));
         const maskRad = item.radius || rRing;
-        grooveCutoutsHtml += `
-          <circle cx="${cx}" cy="${cy}" r="${maskRad.toFixed(2)}" 
-                  fill="none" stroke="black" 
-                  stroke-width="${(fontSize + 16).toFixed(2)}" 
-                  stroke-dasharray="${(arcDeg * 3.4).toFixed(2)} 2000" 
-                  stroke-dashoffset="${(item.angle * 1.5).toFixed(2)}" />
-          <circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${(fontSize * 1.2).toFixed(2)}" fill="black" />
-        `;
+        const textArcLen = textLen * fontSize * 0.62 + 28;
+        const halfDeg = ((textArcLen / 2) / maskRad) * (180 / Math.PI);
+        const angle = item.angle !== undefined ? item.angle : (item.arcPosition === 'bottom' ? 90 : 270);
+        const startDeg = angle - halfDeg;
+        const endDeg = angle + halfDeg;
+        const arcPath = describeSvgArc(cx, cy, maskRad, startDeg, endDeg);
+        grooveCutoutsHtml += '<path d="' + arcPath + '" fill="none" stroke="black" stroke-width="' + (fontSize + 24).toFixed(2) + '" stroke-linecap="round" />';
       }
     }
   });
@@ -2331,9 +2338,7 @@ function onCanvasPointerMove(e) {
     item.angle = Math.round(polarAngle);
     item.radius = Math.round(Math.hypot(dx, dy));
 
-    if (!isTouchEvent || !updateLiveSvgItemTransform(item)) {
-      renderVirolaCanvas();
-    }
+    renderVirolaCanvas();
   } else if (studio.dragMode === 'rotate') {
     const itemX = item.x !== undefined ? item.x : cx;
     const itemY = item.y !== undefined ? item.y : cy;
@@ -2346,9 +2351,7 @@ function onCanvasPointerMove(e) {
     }
 
     item.rotation = Math.round(angleDeg + 90);
-    if (!isTouchEvent || !updateLiveSvgItemTransform(item)) {
-      renderVirolaCanvas();
-    }
+    renderVirolaCanvas();
   } else if (studio.dragMode === 'scale') {
     const itemX = item.x !== undefined ? item.x : cx;
     const itemY = item.y !== undefined ? item.y : cy;
@@ -2357,9 +2360,7 @@ function onCanvasPointerMove(e) {
     newScale = Math.max(STUDIO_CONFIG.minScale, Math.min(STUDIO_CONFIG.maxScale, newScale));
 
     item.scale = parseFloat(newScale.toFixed(2));
-    if (!isTouchEvent || !updateLiveSvgItemTransform(item)) {
-      renderVirolaCanvas();
-    }
+    renderVirolaCanvas();
   }
 }
 

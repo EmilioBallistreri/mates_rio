@@ -121,7 +121,7 @@
             <div class="nav-dropdown-menu">
               <div class="dropdown-categories-grid">
                 <a href="promos.html" class="dropdown-cat-card">
-                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/flame.svg" alt="Promos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_promos.svg" alt="Promos" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">PROMOS & COMBOS</span>
                     <span class="dropdown-cat-desc">Hasta 25% OFF en sets completos</span>
@@ -129,7 +129,7 @@
                 </a>
 
                 <a href="catalogo.html?categoria=mates" class="dropdown-cat-card" onclick="setCategoryFilter('mates')">
-                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/cup-soda.svg" alt="Mates" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_mates.svg" alt="Mates" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">MATES IMPERIALES</span>
                     <span class="dropdown-cat-desc">Calabaza, alpaca y cuero vacuno</span>
@@ -137,7 +137,7 @@
                 </a>
 
                 <a href="catalogo.html?categoria=termos" class="dropdown-cat-card" onclick="setCategoryFilter('termos')">
-                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/thermometer.svg" alt="Termos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_termos.svg" alt="Termos" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">TERMOS TÉRMICOS</span>
                     <span class="dropdown-cat-desc">Acero inoxidable 1L y Media Manija</span>
@@ -145,7 +145,7 @@
                 </a>
 
                 <a href="catalogo.html?categoria=accesorios" class="dropdown-cat-card" onclick="setCategoryFilter('accesorios')">
-                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/sparkles.svg" alt="Accesorios" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_accesorios.svg" alt="Accesorios" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">ACCESORIOS</span>
                     <span class="dropdown-cat-desc">Bombillas pico de loro y yerberas</span>
@@ -153,7 +153,7 @@
                 </a>
 
                 <a href="catalogo.html?categoria=yerbas" class="dropdown-cat-card" onclick="setCategoryFilter('yerbas')">
-                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/leaf.svg" alt="Yerbas" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_yerbas.svg" alt="Yerbas" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">YERBAS DE AUTOR</span>
                     <span class="dropdown-cat-desc">Barbacuá, orgánicas y serranas</span>
@@ -161,7 +161,7 @@
                 </a>
 
                 <a href="catalogo.html?categoria=equipos" class="dropdown-cat-card" onclick="setCategoryFilter('equipos')">
-                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/briefcase.svg" alt="Equipos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_equipos.svg" alt="Equipos" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">EQUIPOS DE MATE</span>
                     <span class="dropdown-cat-desc">Mochilas y canastas de cuero</span>
@@ -188,7 +188,7 @@
             </a>
           </li>
           <li>
-            <a href="#corporativo" class="nav-link">Corporativo</a>
+            <a href="corporativo.html" class="nav-link">Corporativo</a>
           </li>
           <li>
             <a href="contacto.html" class="nav-link">Contacto</a>
@@ -285,6 +285,16 @@
       <li class="mobile-nav-item">
         <a href="catalogo.html#catalogo" onclick="setCategoryFilter('all'); closeMobileDrawer()">
           <span><i class="fas fa-th-large" style="width: 22px;"></i> Catálogo Completo</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="corporativo.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-building" style="width: 22px;"></i> Corporativo</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="contacto.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-envelope" style="width: 22px;"></i> Contacto</span>
         </a>
       </li>
     </ul>
@@ -528,64 +538,23 @@
     </section>
 
     <!-- ==========================================================================
-         SECCIÓN CORPORATIVA Y DE VENTAS EMPRESARIALES
+         SECCIÓN CORPORATIVA Y DE VENTAS EMPRESARIALES (TEASER HACIA corporativo.html)
          ========================================================================== -->
     <section class="corporate-sales-section" id="corporativo" aria-label="Ventas Corporativas y Regalos Empresariales">
       <div class="container">
-        <div class="corporate-section-card">
-          <div class="corporate-header-block">
-            <span class="section-tag"><i class="fas fa-building"></i> DIVISIÓN EMPRESARIAL &amp; INSTITUCIONAL</span>
-            <h2 class="section-title">Regalos Empresariales &amp; Ventas Corporativas</h2>
-            <p class="section-subtitle">
-              Diseñamos y producimos regalos corporativos de alta gama con el logo de tu empresa grabado en láser de alta definición sobre mates imperiales, termos de acero inoxidable y cajas verticales de presentación.
-            </p>
-          </div>
-
-          <div class="corporate-features-grid">
-            <div class="corporate-feature-box">
-              <div class="corporate-feature-icon">
-                <i class="fas fa-wand-magic-sparkles"></i>
-              </div>
-              <h3>Grabado Láser de Marca</h3>
-              <p>
-                Aplicamos el isotipo, logotipo o dedicatoria de tu empresa con precisión milimétrica en virolas de alpaca, termos y estuches rígidos.
-              </p>
-            </div>
-
-            <div class="corporate-feature-box">
-              <div class="corporate-feature-icon">
-                <i class="fas fa-box-open"></i>
-              </div>
-              <h3>Packaging Ejecutivo</h3>
-              <p>
-                Presentación en cajas verticales premium personalizadas listas para entregar en eventos, fin de año, aniversarios o kits de bienvenida (onboarding).
-              </p>
-            </div>
-
-            <div class="corporate-feature-box">
-              <div class="corporate-feature-icon">
-                <i class="fas fa-file-invoice"></i>
-              </div>
-              <h3>Beneficios por Volumen</h3>
-              <p>
-                Escalas de descuento corporativo desde 10 unidades, muestras digitales previas sin cargo, facturación empresarial y envíos a todo el país.
-              </p>
-            </div>
-          </div>
-
-          <div class="corporate-cta-bar">
-            <div class="corporate-cta-text">
-              <strong>¿Buscás cotizar regalos para tu equipo o clientes?</strong>
-              <span>Recibí asesoramiento personalizado y una muestra digital con tu logo en el día.</span>
-            </div>
-            <div class="corporate-cta-buttons">
-              <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20solicitar%20un%20presupuesto%20de%20Ventas%20Corporativas%20/%20Regalos%20Empresariales%20con%20logo." target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                <i class="fab fa-whatsapp"></i> Solicitar Presupuesto Corporativo
-              </a>
-              <a href="contacto.html" class="btn btn-secondary">
-                <i class="far fa-envelope"></i> Formulario de Contacto
-              </a>
-            </div>
+        <div class="corporate-section-card" style="text-align: center; padding: 48px 24px;">
+          <span class="section-tag" style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px;"><i class="fas fa-building"></i> DIVISIÓN EMPRESARIAL &amp; INSTITUCIONAL</span>
+          <h2 class="section-title" style="margin-bottom: 12px;">Regalos Empresariales &amp; Ventas Corporativas</h2>
+          <p class="section-subtitle" style="max-width: 780px; margin: 0 auto 28px; line-height: 1.6;">
+            Diseñamos y producimos piezas de alta gama con el logo de tu empresa grabado en láser de precisión sobre mates imperiales, termos térmicos y cajas verticales de presentación. Escalas de bonificación desde 10 unidades y atención corporativa dedicada.
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="corporativo.html" class="btn btn-primary btn-lg" style="padding: 14px 28px; font-weight: 800; letter-spacing: 0.5px;">
+              <i class="fas fa-arrow-up-right-from-square"></i> Conocer División Corporativa
+            </a>
+            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20solicitar%20un%20presupuesto%20corporativo%20para%20mi%20empresa." target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg" style="padding: 14px 26px;">
+              <i class="fab fa-whatsapp"></i> Cotizar por WhatsApp
+            </a>
           </div>
         </div>
       </div>
@@ -667,7 +636,7 @@
             <li><a href="index.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Inicio</a></li>
             <li><a href="catalogo.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Catálogo Completo</a></li>
             <li><a href="promos.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Promociones & Combos</a></li>
-            <li><a href="#corporativo" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Ventas Corporativas</a></li>
+            <li><a href="corporativo.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Ventas Corporativas</a></li>
             <li><a href="contacto.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Quiénes Somos & Contacto</a></li>
           </ul>
         </div>
