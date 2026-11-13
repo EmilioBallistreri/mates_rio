@@ -404,27 +404,41 @@ function initSlider() {
 // ==========================================================================
 // CATEGORIES & CATALOG FILTERING
 // ==========================================================================
+const CATEGORY_MONO_ICONS = {
+  promos: 'https://api.iconify.design/lucide/flame.svg',
+  mates: 'https://api.iconify.design/lucide/cup-soda.svg',
+  termos: 'https://api.iconify.design/lucide/thermometer.svg',
+  accesorios: 'https://api.iconify.design/lucide/sparkles.svg',
+  yerbas: 'https://api.iconify.design/lucide/leaf.svg',
+  equipos: 'https://api.iconify.design/lucide/briefcase.svg'
+};
+
 function renderCategoriesGrid() {
   const container = document.getElementById('categories-grid');
   if (!container) return;
   const cats = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
 
-  container.innerHTML = cats.map(cat => `
+  container.innerHTML = cats.map(cat => {
+    const iconUrl = CATEGORY_MONO_ICONS[(cat.id || '').toLowerCase()] || 'https://api.iconify.design/lucide/tag.svg';
+    return `
     <div class="category-card" data-category="${cat.id}">
       <img src="${cat.image}" alt="${cat.name}" class="category-card-bg" loading="lazy" />
       <div class="category-card-overlay"></div>
       <div class="category-card-content">
-
+        <div class="category-card-mono-badge">
+          <img src="${iconUrl}" alt="${cat.name}" class="mono-cat-icon-img" />
+        </div>
         <h3 class="category-name">${cat.name}</h3>
         <div class="category-footer-row">
-          <span class="category-sub">${cat.label || ''}</span>
+          <span class="category-sub">${cat.label || cat.subtitle || ''}</span>
           <div class="category-arrow-icon">
             <i class="fas fa-arrow-right"></i>
           </div>
         </div>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   // Click on category card filters catalog if on catalog page, or navigates to dedicated catalog page
   container.querySelectorAll('.category-card').forEach(card => {
@@ -2081,7 +2095,11 @@ function openQuickView(productId) {
   if (imgEl) imgEl.src = product.image;
   if (titleEl) titleEl.textContent = product.name;
   if (catEl) catEl.textContent = product.categoryName;
-  if (priceEl) priceEl.textContent = formatARS(product.price);
+  if (priceEl) {
+    priceEl.textContent = formatARS(product.price);
+    priceEl.classList.add('qv-price-current');
+    priceEl.style.color = '';
+  }
   if (origPriceEl) {
     if (product.originalPrice) {
       origPriceEl.textContent = formatARS(product.originalPrice);
@@ -2091,7 +2109,10 @@ function openQuickView(productId) {
     }
   }
   if (descEl) descEl.textContent = product.description;
-  if (qtyInput) qtyInput.value = 1;
+  if (qtyInput) {
+    qtyInput.value = 1;
+    qtyInput.setAttribute('readonly', 'readonly');
+  }
 
   if (ratingEl) {
     ratingEl.innerHTML = `${getStarRatingHtml(product.rating)} <span style="font-size: 0.78rem; color: #888;">(${product.reviewsCount} opiniones)</span>`;

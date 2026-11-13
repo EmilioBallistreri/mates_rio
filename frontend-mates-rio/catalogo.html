@@ -176,7 +176,7 @@
             <div class="nav-dropdown-menu">
               <div class="dropdown-categories-grid">
                 <a href="promos.html" class="dropdown-cat-card">
-                  <div class="dropdown-cat-icon"><i class="fas fa-fire" style="color: var(--badge-promo);"></i></div>
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/flame.svg" alt="Promos" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">PROMOS & COMBOS</span>
                     <span class="dropdown-cat-desc">Hasta 25% OFF en sets completos</span>
@@ -184,7 +184,7 @@
                 </a>
 
                 <a href="catalogo.html?categoria=mates" class="dropdown-cat-card" onclick="setCategoryFilter('mates')">
-                  <div class="dropdown-cat-icon"><i class="fas fa-mug-hot" style="color: var(--accent-leather);"></i></div>
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/cup-soda.svg" alt="Mates" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">MATES IMPERIALES</span>
                     <span class="dropdown-cat-desc">Calabaza, alpaca y cuero vacuno</span>
@@ -192,7 +192,7 @@
                 </a>
 
                 <a href="catalogo.html?categoria=termos" class="dropdown-cat-card" onclick="setCategoryFilter('termos')">
-                  <div class="dropdown-cat-icon"><i class="fas fa-temperature-high" style="color: var(--accent-gold);"></i></div>
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/thermometer.svg" alt="Termos" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">TERMOS TÉRMICOS</span>
                     <span class="dropdown-cat-desc">Acero inoxidable 1L y Media Manija</span>
@@ -200,7 +200,7 @@
                 </a>
 
                 <a href="catalogo.html?categoria=accesorios" class="dropdown-cat-card" onclick="setCategoryFilter('accesorios')">
-                  <div class="dropdown-cat-icon"><i class="fas fa-magic" style="color: #4a6fa5;"></i></div>
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/sparkles.svg" alt="Accesorios" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">ACCESORIOS</span>
                     <span class="dropdown-cat-desc">Bombillas pico de loro y yerberas</span>
@@ -208,7 +208,7 @@
                 </a>
 
                 <a href="catalogo.html?categoria=yerbas" class="dropdown-cat-card" onclick="setCategoryFilter('yerbas')">
-                  <div class="dropdown-cat-icon"><i class="fas fa-leaf" style="color: #27ae60;"></i></div>
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/leaf.svg" alt="Yerbas" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">YERBAS DE AUTOR</span>
                     <span class="dropdown-cat-desc">Barbacuá, orgánicas y serranas</span>
@@ -216,7 +216,7 @@
                 </a>
 
                 <a href="catalogo.html?categoria=equipos" class="dropdown-cat-card" onclick="setCategoryFilter('equipos')">
-                  <div class="dropdown-cat-icon"><i class="fas fa-briefcase" style="color: var(--accent-leather);"></i></div>
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/briefcase.svg" alt="Equipos" class="mono-cat-icon-img" /></div>
                   <div class="dropdown-cat-info">
                     <span class="dropdown-cat-name">EQUIPOS DE MATE</span>
                     <span class="dropdown-cat-desc">Mochilas y canastas de cuero</span>
@@ -233,7 +233,7 @@
           </li>
 
           <li>
-            <a href="mayorista.html" class="nav-link" style="color: var(--accent-gold); font-weight: 700;">
+            <a href="mayorista.html" class="nav-link" style="font-weight: 700;">
               Mayorista <span class="nav-badge-pill pill-gold" style="font-size: 0.65rem;">B2B</span>
             </a>
           </li>
@@ -242,9 +242,11 @@
               Promos <span class="nav-badge-pill">OFF</span>
             </a>
           </li>
-
           <li>
-            <a href="index.html#contacto" class="nav-link">Contacto</a>
+            <a href="index.html#corporativo" class="nav-link">Corporativo</a>
+          </li>
+          <li>
+            <a href="contacto.html" class="nav-link">Contacto</a>
           </li>
         </ul>
       </nav>
@@ -431,15 +433,29 @@
             </div>
           </div>
 
-          <!-- Category Pills Filter Bar -->
+          <!-- Category Pills Filter Bar (Monocromáticos) -->
           <div class="category-filter-pills" role="tablist">
-            <button class="filter-pill active" data-category="all">Todos los Productos</button>
-            <button class="filter-pill" data-category="promos">🔥 PROMOS</button>
-            <button class="filter-pill" data-category="mates">🧉 MATES</button>
-            <button class="filter-pill" data-category="termos">⚡ TERMOS</button>
-            <button class="filter-pill" data-category="accesorios">✨ ACCESORIOS</button>
-            <button class="filter-pill" data-category="yerbas">🌿 YERBAS</button>
-            <button class="filter-pill" data-category="equipos">🎒 EQUIPOS DE MATE</button>
+            <button class="filter-pill active" data-category="all">
+              <img src="https://api.iconify.design/lucide/layout-grid.svg" alt="" class="mono-cat-icon-img" /> Todos los Productos
+            </button>
+            <button class="filter-pill" data-category="promos">
+              <img src="https://api.iconify.design/lucide/flame.svg" alt="" class="mono-cat-icon-img" /> PROMOS
+            </button>
+            <button class="filter-pill" data-category="mates">
+              <img src="https://api.iconify.design/lucide/cup-soda.svg" alt="" class="mono-cat-icon-img" /> MATES
+            </button>
+            <button class="filter-pill" data-category="termos">
+              <img src="https://api.iconify.design/lucide/thermometer.svg" alt="" class="mono-cat-icon-img" /> TERMOS
+            </button>
+            <button class="filter-pill" data-category="accesorios">
+              <img src="https://api.iconify.design/lucide/sparkles.svg" alt="" class="mono-cat-icon-img" /> ACCESORIOS
+            </button>
+            <button class="filter-pill" data-category="yerbas">
+              <img src="https://api.iconify.design/lucide/leaf.svg" alt="" class="mono-cat-icon-img" /> YERBAS
+            </button>
+            <button class="filter-pill" data-category="equipos">
+              <img src="https://api.iconify.design/lucide/briefcase.svg" alt="" class="mono-cat-icon-img" /> EQUIPOS DE MATE
+            </button>
           </div>
 
           <!-- Subcategory Filter Chips Bar (Visible dinámicamente al seleccionar categoría) -->
@@ -658,12 +674,11 @@
   <!-- ==========================================================================
        SLIDING CART DRAWER
        ========================================================================== -->
-  <!-- Botón Flotante de Carrito Profesional -->
+  <!-- Botón Flotante de Carrito Profesional (Solo ícono) -->
   <button class="floating-cart-btn" id="floating-cart-btn" onclick="openCartDrawer()" aria-label="Abrir Carrito de Compras" title="Ver Carrito de Compras">
     <div class="floating-cart-icon-wrap">
       <i class="fas fa-shopping-bag"></i>
     </div>
-    <span class="floating-cart-label">Carrito</span>
     <span class="floating-cart-badge" id="floating-cart-badge">0</span>
   </button>
 
@@ -1019,15 +1034,15 @@
       </div>
 
       <!-- Admin Quick Access Card (Visible para administradores) -->
-      <div id="profile-admin-card" style="display: none; background: linear-gradient(135deg, #17110c 0%, #2a1b12 100%); border: 1.5px solid var(--accent-gold); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px; box-shadow: 0 4px 16px rgba(197, 155, 39, 0.18);">
+      <div id="profile-admin-card" style="display: none; background: var(--bg-card); border: 1.5px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: var(--text-main); text-transform: uppercase;">
             <i class="fas fa-shield-halved"></i> Permisos de Administrador
           </span>
           <span class="nav-badge-pill pill-gold" id="profile-admin-role-badge">STAFF</span>
         </div>
         <div style="display: flex; gap: 8px; margin-top: 8px;">
-          <a href="admin.html" class="btn btn-primary" style="flex: 1; font-size: 0.8rem; padding: 9px 12px; background: var(--accent-gold); color: #121212; border: none; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; gap: 6px;">
+          <a href="admin.html" class="btn btn-primary" style="flex: 1; font-size: 0.8rem; padding: 9px 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; gap: 6px;">
             <i class="fas fa-shield-halved"></i> Abrir Panel de Control
           </a>
         </div>
@@ -1145,12 +1160,12 @@
           <span id="qv-category" style="font-size: 0.75rem; font-weight: 700; color: var(--accent-leather); letter-spacing: 1px; text-transform: uppercase;"></span>
           <h3 id="qv-title" style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; line-height: 1.25; margin: 6px 0 10px;"></h3>
 
-          <div id="qv-rating" style="display: flex; align-items: center; gap: 4px; color: #e5a100; font-size: 0.85rem; margin-bottom: 14px;"></div>
+          <div id="qv-rating" style="display: flex; align-items: center; gap: 4px; color: var(--text-main); font-size: 0.85rem; margin-bottom: 14px;"></div>
 
           <div style="margin-bottom: 16px;">
-            <span id="qv-price" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: var(--bg-dark);"></span>
+            <span id="qv-price" class="qv-price-current" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: var(--text-main);"></span>
             <span id="qv-orig-price" style="font-size: 1rem; color: var(--text-muted); text-decoration: line-through; margin-left: 10px;"></span>
-            <div style="font-size: 0.8rem; color: #27ae60; font-weight: 600; margin-top: 4px;">
+            <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; margin-top: 4px;">
               <i class="far fa-credit-card"></i> 3 Cuotas sin interés • 10% OFF extra con Transferencia
             </div>
           </div>

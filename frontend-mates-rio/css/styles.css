@@ -12243,7 +12243,7 @@ body.theme-light .design-modal-card {
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25)) !important;
 }
 
-/* 6. Grabado Láser Vectorial en la Virola Metálica y Caja */
+/* 6. Grabado Láser Vectorial en la Virola Metálica y Caja (Escudos nítidos sin volverse silueta negra) */
 .virola-sticker-group image {
   /* Nitidez de grabado láser CNC */
   image-rendering: -webkit-optimize-contrast !important;
@@ -12251,12 +12251,17 @@ body.theme-light .design-modal-card {
 }
 
 #virola-studio-svg:not([data-product="caja"]) .virola-sticker-group:not(.box-white-sticker) image {
-  filter: brightness(0) contrast(120%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.45)) !important;
+  filter: grayscale(100%) contrast(115%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.35)) !important;
 }
 
-#virola-studio-svg[data-product="caja"] .virola-sticker-group image,
-.virola-sticker-group.box-white-sticker image {
-  filter: brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,0.75)) !important;
+#virola-studio-svg[data-product="caja"] .virola-sticker-group:not(.custom-white-upload) image,
+.virola-sticker-group.box-white-sticker:not(.custom-white-upload) image {
+  filter: grayscale(100%) invert(1) contrast(115%) drop-shadow(0 1px 2px rgba(0,0,0,0.75)) !important;
+}
+
+#virola-studio-svg[data-product="caja"] .virola-sticker-group.custom-white-upload image,
+.virola-sticker-group.box-white-sticker.custom-white-upload image {
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.75)) !important;
 }
 
 
@@ -14549,6 +14554,244 @@ body.theme-light #profile-admin-card a.btn-primary i,
 body.theme-inverted #profile-admin-card a.btn-primary i {
   color: #ffffff !important;
 }
+
+
+/* ==========================================================================
+   9. ACTUALIZACIÓN INTEGRAL BITONO B&W: FICHAS DE PRODUCTOS, PRECIOS EN MODO
+      OSCURO, CANTIDAD ÚNICA SIN FLECHAS, CARRITO FLOTANTE SOLO ÍCONO,
+      CATEGORÍAS MONOCROMÁTICAS, SECCIÓN CORPORATIVA, QUIÉNES SOMOS Y ESTUDIO
+   ========================================================================== */
+
+/* 9.1 Precios en las fichas de productos y modales: blanco puro en Modo Oscuro y negro puro en Modo Claro */
+#qv-price,
+.qv-price-current,
+.product-price,
+.card-price,
+.promo-card-price,
+.ws-price,
+.product-card .price,
+.product-card .product-price,
+.product-card-price,
+.quick-view-info #qv-price {
+  color: #ffffff !important;
+}
+
+html.theme-light #qv-price,
+html.theme-light .qv-price-current,
+html.theme-light .product-price,
+html.theme-light .card-price,
+html.theme-light .promo-card-price,
+html.theme-light .ws-price,
+html.theme-light .product-card .price,
+html.theme-light .product-card .product-price,
+html.theme-light .product-card-price,
+html.theme-light .quick-view-info #qv-price,
+body.theme-light #qv-price,
+body.theme-light .qv-price-current,
+body.theme-light .product-price,
+body.theme-light .card-price,
+body.theme-light .promo-card-price,
+body.theme-light .ws-price,
+body.theme-light .product-card .price,
+body.theme-light .product-card .product-price,
+body.theme-light .product-card-price,
+body.theme-light .quick-view-info #qv-price,
+body.theme-inverted #qv-price,
+body.theme-inverted .qv-price-current,
+body.theme-inverted .product-price,
+body.theme-inverted .card-price {
+  color: #000000 !important;
+}
+
+/* 9.2 Una sola opción para agregar más productos: eliminar flechitas nativas arriba/abajo de inputs numéricos */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button,
+#qv-qty::-webkit-outer-spin-button,
+#qv-qty::-webkit-inner-spin-button,
+.qty-stepper input::-webkit-outer-spin-button,
+.qty-stepper input::-webkit-inner-spin-button,
+.ws-qty-input::-webkit-outer-spin-button,
+.ws-qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+}
+
+input[type="number"],
+#qv-qty,
+.qty-stepper input,
+.ws-qty-input {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+/* 9.3 Botón flotante del carrito: solo ícono del carrito + contador (sin la palabra "Carrito") */
+.floating-cart-label,
+#floating-cart-btn .floating-cart-label {
+  display: none !important;
+}
+
+#floating-cart-btn,
+.floating-cart-btn {
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  max-width: 56px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+}
+
+#floating-cart-btn .floating-cart-badge,
+.floating-cart-btn .floating-cart-badge {
+  position: absolute !important;
+  top: -4px !important;
+  right: -4px !important;
+  min-width: 22px !important;
+  height: 22px !important;
+  padding: 0 5px !important;
+  border-radius: 999px !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* 9.4 Íconos de categorías monocromáticos con imágenes SVG web */
+.mono-cat-icon-img {
+  width: 18px !important;
+  height: 18px !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  filter: brightness(0) invert(1) !important;
+  transition: filter 0.2s ease, transform 0.2s ease !important;
+}
+
+/* Cuando el botón o píldora está activo (fondo blanco en modo oscuro), el ícono pasa a negro */
+.cat-pill-btn.active .mono-cat-icon-img,
+.promo-chip.active .mono-cat-icon-img,
+html.theme-light .mono-cat-icon-img,
+body.theme-light .mono-cat-icon-img,
+body.theme-inverted .mono-cat-icon-img {
+  filter: brightness(0) !important;
+}
+
+/* En modo claro, cuando el botón de categoría está activo (fondo negro), el ícono pasa a blanco */
+html.theme-light .cat-pill-btn.active .mono-cat-icon-img,
+html.theme-light .promo-chip.active .mono-cat-icon-img,
+body.theme-light .cat-pill-btn.active .mono-cat-icon-img,
+body.theme-light .promo-chip.active .mono-cat-icon-img,
+body.theme-inverted .cat-pill-btn.active .mono-cat-icon-img,
+body.theme-inverted .promo-chip.active .mono-cat-icon-img {
+  filter: brightness(0) invert(1) !important;
+}
+
+.category-card-mono-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  backdrop-filter: blur(6px);
+}
+
+.category-card-mono-badge .mono-cat-icon-img {
+  width: 22px !important;
+  height: 22px !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+/* 9.5 Personalizador: ocultar íconos de Mate/Termo/Caja, ocultar "Grabado BONIFICADO", ocultar 360° y barra inferior repetitiva */
+.prod-card-icon-wrap,
+.prod-card-free,
+#studio-360-viewport,
+#stage-btn-360,
+#ribbon-view-360-btn,
+.ribbon-tab-btn[data-tab="product"],
+#ribbon-panel-product,
+.ribbon-tab-btn[data-tab="chisel"],
+#ribbon-panel-chisel,
+.stage-bottombar-tools {
+  display: none !important;
+}
+
+/* 9.6 Botón "Finalizar Pedido" arriba a la derecha en la sección de Personalización */
+.ribbon-top-right-finish-btn,
+.stage-top-right-finish-btn {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1.5px solid #ffffff !important;
+  padding: 8px 16px !important;
+  border-radius: 999px !important;
+  font-size: 0.78rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.6px !important;
+  text-transform: uppercase !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
+}
+
+.ribbon-top-right-finish-btn i,
+.stage-top-right-finish-btn i {
+  color: #000000 !important;
+}
+
+html.theme-light .ribbon-top-right-finish-btn,
+html.theme-light .stage-top-right-finish-btn,
+body.theme-light .ribbon-top-right-finish-btn,
+body.theme-light .stage-top-right-finish-btn,
+body.theme-inverted .ribbon-top-right-finish-btn,
+body.theme-inverted .stage-top-right-finish-btn {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+
+html.theme-light .ribbon-top-right-finish-btn i,
+html.theme-light .stage-top-right-finish-btn i,
+body.theme-light .ribbon-top-right-finish-btn i,
+body.theme-light .stage-top-right-finish-btn i,
+body.theme-inverted .ribbon-top-right-finish-btn i,
+body.theme-inverted .stage-top-right-finish-btn i {
+  color: #ffffff !important;
+}
+
+@media (max-width: 768px) {
+  .ribbon-top-right-finish-btn,
+  .stage-top-right-finish-btn {
+    padding: 7px 12px !important;
+    font-size: 0.72rem !important;
+  }
+}
+
+/* 9.7 Sección Corporativa y Ventas Empresariales + Página Independiente de Quiénes Somos y Contacto */
+@media (max-width: 900px) {
+  .corporate-sales-grid,
+  .about-us-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  .corporate-benefits-cards {
+    grid-template-columns: 1fr !important;
+  }
+  .corporate-cta-card {
+    padding: 26px 20px !important;
+  }
+}
+
 
 
 

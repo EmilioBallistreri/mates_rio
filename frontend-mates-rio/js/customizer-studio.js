@@ -102,6 +102,12 @@ const studio = {
   projected360Items: []
 };
 
+// Helper para generar emojis estilo WhatsApp en formato SVG vectorial limpio
+function makeEmojiSvgDataUrl(emojiChar) {
+  const svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="54" font-size="68" text-anchor="middle" dominant-baseline="central" font-family="'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif">${emojiChar}</text></svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svgStr);
+}
+
 // Biblioteca de Diseños Vectoriales
 const VECTOR_CATEGORIES = {
   deportes: {
@@ -145,17 +151,44 @@ const VECTOR_CATEGORIES = {
       { id: 'ciervo', name: 'Ciervo de los Pantanos', file: 'assets/images/designs/ciervo.svg' }
     ]
   },
-  frases: {
-    name: '💬 Frases & Pasión',
+  emojis: {
+    name: '😊 Emojis WhatsApp',
     items: [
-      { id: 'frase_gloria', name: 'CORONADOS DE GLORIA', text: 'CORONADOS DE GLORIA' },
-      { id: 'frase_mate', name: 'EL AMOR POR EL MATE', text: 'EL AMOR POR EL MATE' },
-      { id: 'frase_costumbres', name: 'COSTUMBRES ARGENTINAS', text: 'COSTUMBRES ARGENTINAS' },
-      { id: 'frase_pasion', name: 'PASIÓN & TRADICIÓN', text: 'PASIÓN & TRADICIÓN' },
-      { id: 'frase_amistad', name: 'AMISTAD CRIOLLA', text: 'AMISTAD CRIOLLA' },
-      { id: 'frase_campeon', name: 'CAMPEONES DEL MUNDO', text: 'CAMPEONES DEL MUNDO' },
-      { id: 'frase_siempre', name: 'SIEMPRE CON VOS', text: 'SIEMPRE CON VOS' }
+      { id: 'emoji_mate', name: 'Mate 🧉', file: makeEmojiSvgDataUrl('🧉') },
+      { id: 'emoji_corazon', name: 'Corazón ❤️', file: makeEmojiSvgDataUrl('❤️') },
+      { id: 'emoji_fuego', name: 'Fuego 🔥', file: makeEmojiSvgDataUrl('🔥') },
+      { id: 'emoji_estrella', name: 'Estrella ⭐', file: makeEmojiSvgDataUrl('⭐') },
+      { id: 'emoji_corona', name: 'Corona 👑', file: makeEmojiSvgDataUrl('👑') },
+      { id: 'emoji_trofeo', name: 'Trofeo 🏆', file: makeEmojiSvgDataUrl('🏆') },
+      { id: 'emoji_futbol', name: 'Fútbol ⚽', file: makeEmojiSvgDataUrl('⚽') },
+      { id: 'emoji_sol', name: 'Sol ☀️', file: makeEmojiSvgDataUrl('☀️') },
+      { id: 'emoji_luna', name: 'Luna 🌙', file: makeEmojiSvgDataUrl('🌙') },
+      { id: 'emoji_destellos', name: 'Destellos ✨', file: makeEmojiSvgDataUrl('✨') },
+      { id: 'emoji_manos', name: 'Manos 🙌', file: makeEmojiSvgDataUrl('🙌') },
+      { id: 'emoji_aplausos', name: 'Aplausos 👏', file: makeEmojiSvgDataUrl('👏') },
+      { id: 'emoji_apreton', name: 'Amistad 🤝', file: makeEmojiSvgDataUrl('🤝') },
+      { id: 'emoji_fuerza', name: 'Fuerza 💪', file: makeEmojiSvgDataUrl('💪') },
+      { id: 'emoji_brindis', name: 'Brindis 🥂', file: makeEmojiSvgDataUrl('🥂') },
+      { id: 'emoji_fiesta', name: 'Fiesta 🎉', file: makeEmojiSvgDataUrl('🎉') },
+      { id: 'emoji_trebol', name: 'Trébol 🍀', file: makeEmojiSvgDataUrl('🍀') },
+      { id: 'emoji_infinito', name: 'Infinito ♾️', file: makeEmojiSvgDataUrl('♾️') },
+      { id: 'emoji_musica', name: 'Música 🎵', file: makeEmojiSvgDataUrl('🎵') },
+      { id: 'emoji_huella', name: 'Huellas 🐾', file: makeEmojiSvgDataUrl('🐾') },
+      { id: 'emoji_perro', name: 'Perro 🐶', file: makeEmojiSvgDataUrl('🐶') },
+      { id: 'emoji_gato', name: 'Gato 🐱', file: makeEmojiSvgDataUrl('🐱') },
+      { id: 'emoji_mundo', name: 'Mundo 🌎', file: makeEmojiSvgDataUrl('🌎') },
+      { id: 'emoji_avion', name: 'Viajes ✈️', file: makeEmojiSvgDataUrl('✈️') },
+      { id: 'emoji_ancla', name: 'Ancla ⚓', file: makeEmojiSvgDataUrl('⚓') },
+      { id: 'emoji_rayo', name: 'Rayo ⚡', file: makeEmojiSvgDataUrl('⚡') },
+      { id: 'emoji_diamante', name: 'Diamante 💎', file: makeEmojiSvgDataUrl('💎') },
+      { id: 'emoji_sonrisa', name: 'Sonrisa 😊', file: makeEmojiSvgDataUrl('😊') },
+      { id: 'emoji_enamorado', name: 'Enamorado 😍', file: makeEmojiSvgDataUrl('😍') },
+      { id: 'emoji_festejo', name: 'Festejo 🥳', file: makeEmojiSvgDataUrl('🥳') }
     ]
+  },
+  plantillas: {
+    name: '📐 Plantillas',
+    items: []
   },
   simbolos: {
     name: '✨ Símbolos & Formas',
@@ -169,7 +202,7 @@ const VECTOR_CATEGORIES = {
   }
 };
 
-// Tipografías Orfebres de Lujo
+// 50 Tipografías Orfebres Diferentes
 const GOOGLE_FONTS = [
   { id: 'Cinzel', name: 'Cinzel' },
   { id: 'Cinzel Decorative', name: 'Cinzel Decorative' },
@@ -195,7 +228,32 @@ const GOOGLE_FONTS = [
   { id: 'Oswald', name: 'Oswald' },
   { id: 'Rye', name: 'Rye' },
   { id: 'Pirata One', name: 'Pirata One' },
-  { id: 'UnifrakturMaguntia', name: 'UnifrakturMaguntia' }
+  { id: 'UnifrakturMaguntia', name: 'UnifrakturMaguntia' },
+  { id: 'Merriweather', name: 'Merriweather' },
+  { id: 'EB Garamond', name: 'EB Garamond' },
+  { id: 'Libre Baskerville', name: 'Libre Baskerville' },
+  { id: 'Bodoni Moda', name: 'Bodoni Moda' },
+  { id: 'Prata', name: 'Prata' },
+  { id: 'DM Serif Display', name: 'DM Serif Display' },
+  { id: 'Rozha One', name: 'Rozha One' },
+  { id: 'Yeseva One', name: 'Yeseva One' },
+  { id: 'Ultra', name: 'Ultra' },
+  { id: 'Alfa Slab One', name: 'Alfa Slab One' },
+  { id: 'Righteous', name: 'Righteous' },
+  { id: 'Fredoka', name: 'Fredoka' },
+  { id: 'Pacifico', name: 'Pacifico' },
+  { id: 'Lobster', name: 'Lobster' },
+  { id: 'Caveat', name: 'Caveat' },
+  { id: 'Kaushan Script', name: 'Kaushan Script' },
+  { id: 'Courgette', name: 'Courgette' },
+  { id: 'Allura', name: 'Allura' },
+  { id: 'Tangerine', name: 'Tangerine' },
+  { id: 'Yellowtail', name: 'Yellowtail' },
+  { id: 'Cookie', name: 'Cookie' },
+  { id: 'Amatic SC', name: 'Amatic SC' },
+  { id: 'Permanent Marker', name: 'Permanent Marker' },
+  { id: 'Shadows Into Light', name: 'Shadows Into Light' },
+  { id: 'Indie Flower', name: 'Indie Flower' }
 ];
 
 // ==========================================================================
@@ -718,14 +776,14 @@ function renderRibbonQuickDesigns(catKey) {
   if (!container || !VECTOR_CATEGORIES[catKey]) return;
 
   container.scrollLeft = 0;
-  const items = VECTOR_CATEGORIES[catKey].items;
+  const items = VECTOR_CATEGORIES[catKey].items || [];
 
-  if (catKey === 'frases') {
-    container.innerHTML = items.map(f => `
-      <button type="button" class="ribbon-phrase-quick-btn" onclick="applyPhraseById('${f.id}')" title="Aplicar frase grabada">
-        <i class="fas fa-quote-left" style="color: var(--accent-gold); font-size: 0.72rem;"></i> ${escapeHtml(f.name)}
-      </button>
-    `).join('');
+  if (items.length === 0) {
+    container.innerHTML = `
+      <span style="font-size: 0.78rem; color: var(--text-muted); padding: 0 14px; font-weight: 600; white-space: nowrap;">
+        <i class="fas fa-layer-group" style="margin-right: 6px;"></i>Próximamente: Plantillas prediseñadas disponibles en este apartado
+      </span>
+    `;
     return;
   }
 
@@ -844,19 +902,19 @@ function renderModalCatalogGrid(catKey) {
   let itemsToRender = [];
   if (catKey === 'all') {
     Object.keys(VECTOR_CATEGORIES).forEach(k => {
-      if (k !== 'frases') itemsToRender.push(...VECTOR_CATEGORIES[k].items);
+      if (VECTOR_CATEGORIES[k].items) itemsToRender.push(...VECTOR_CATEGORIES[k].items);
     });
   } else if (VECTOR_CATEGORIES[catKey]) {
-    itemsToRender = VECTOR_CATEGORIES[catKey].items;
+    itemsToRender = VECTOR_CATEGORIES[catKey].items || [];
   }
 
-  if (catKey === 'frases') {
-    grid.innerHTML = itemsToRender.map(f => `
-      <div class="vector-phrase-item" onclick="applyPhraseById('${f.id}'); closeDesignCatalogModal();">
-        <span class="phrase-text"><i class="fas fa-quote-left" style="color: var(--accent-gold); margin-right: 8px;"></i>${escapeHtml(f.name)}</span>
-        <button type="button" class="btn-add-phrase"><i class="fas fa-plus"></i> Usar Frase</button>
+  if (itemsToRender.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 36px 20px; color: var(--text-muted); font-size: 0.9rem; font-weight: 600;">
+        <i class="fas fa-layer-group" style="font-size: 1.8rem; margin-bottom: 10px; display: block; opacity: 0.65;"></i>
+        Próximamente: Plantillas prediseñadas disponibles en este apartado.
       </div>
-    `).join('');
+    `;
     return;
   }
 
@@ -1186,7 +1244,7 @@ function renderVirolaCanvas() {
     const baseSize = 44;
     const halfSize = (baseSize * scale) / 2;
 
-    const contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" />`;
+    const contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(115%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.35));" />`;
 
     // ÍCONOS Y DISEÑOS CON MARCO DE SELECCIÓN LIMPIO (SIN BOTONES FLOTANTES DESPROLIJOS)
     let selectionBorderHtml = '';
@@ -1194,7 +1252,7 @@ function renderVirolaCanvas() {
       selectionBorderHtml = `
         <rect x="${(-halfSize - 5).toFixed(2)}" y="${(-halfSize - 5).toFixed(2)}" 
               width="${(baseSize * scale + 10).toFixed(2)}" height="${(baseSize * scale + 10).toFixed(2)}" 
-              fill="none" stroke="#c59b27" stroke-width="1.8" stroke-dasharray="4,4" 
+              fill="none" stroke="#111111" stroke-width="1.8" stroke-dasharray="4,4" 
               rx="6" ry="6" opacity="0.9" pointer-events="none" />
       `;
     }
@@ -1216,13 +1274,13 @@ function renderVirolaCanvas() {
   let snappingGuidesHtml = '';
   if (studio.snappingEnabled && studio.dragMode) {
     if (studio.activeGuides.v) {
-      snappingGuidesHtml += `<line x1="${cx}" y1="10" x2="${cx}" y2="490" stroke="#c59b27" stroke-width="1.5" stroke-dasharray="4,4" />`;
+      snappingGuidesHtml += `<line x1="${cx}" y1="10" x2="${cx}" y2="490" stroke="#111111" stroke-width="1.5" stroke-dasharray="4,4" />`;
     }
     if (studio.activeGuides.h) {
-      snappingGuidesHtml += `<line x1="10" y1="${cy}" x2="490" y2="${cy}" stroke="#c59b27" stroke-width="1.5" stroke-dasharray="4,4" />`;
+      snappingGuidesHtml += `<line x1="10" y1="${cy}" x2="490" y2="${cy}" stroke="#111111" stroke-width="1.5" stroke-dasharray="4,4" />`;
     }
     if (studio.activeGuides.ring) {
-      snappingGuidesHtml += `<circle cx="${cx}" cy="${cy}" r="${rRing}" fill="none" stroke="#c59b27" stroke-width="1.5" stroke-dasharray="5,5" />`;
+      snappingGuidesHtml += `<circle cx="${cx}" cy="${cy}" r="${rRing}" fill="none" stroke="#111111" stroke-width="1.5" stroke-dasharray="5,5" />`;
     }
   }
 
@@ -1231,29 +1289,29 @@ function renderVirolaCanvas() {
 
   // RENDER SEGÚN PRODUCTO: MATE, TERMO O CAJA
   if (studio.activeProduct === 'mate') {
-    // VIROLA CIRCULAR DE ALPACA MACIZA (MATE)
+    // VIROLA CIRCULAR DE ALPACA MACIZA (MATE - 100% BITONO B&W)
     svg.innerHTML = `
       <defs>
         <radialGradient id="metal-sheen-grad" cx="45%" cy="38%" r="62%">
-          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
-          <stop offset="25%" stop-color="#f2eee9" />
-          <stop offset="55%" stop-color="#ded7cd" />
-          <stop offset="80%" stop-color="#b8ad9e" />
-          <stop offset="100%" stop-color="#8a7c6b" />
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98" />
+          <stop offset="25%" stop-color="#f2f2f2" />
+          <stop offset="55%" stop-color="#dddddd" />
+          <stop offset="80%" stop-color="#b5b5b5" />
+          <stop offset="100%" stop-color="#888888" />
         </radialGradient>
 
         <linearGradient id="metal-reflection" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="#ffffff" stop-opacity="0.65" />
-          <stop offset="28%" stop-color="#c5bcaf" stop-opacity="0.15" />
+          <stop offset="28%" stop-color="#cccccc" stop-opacity="0.15" />
           <stop offset="72%" stop-color="#ffffff" stop-opacity="0.5" />
-          <stop offset="100%" stop-color="#736655" stop-opacity="0.8" />
+          <stop offset="100%" stop-color="#666666" stop-opacity="0.8" />
         </linearGradient>
 
         <radialGradient id="calabaza-interior" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#0e0a07" />
-          <stop offset="65%" stop-color="#1c1611" />
-          <stop offset="90%" stop-color="#2b2017" />
-          <stop offset="100%" stop-color="#0d0906" />
+          <stop offset="0%" stop-color="#0a0a0a" />
+          <stop offset="65%" stop-color="#171717" />
+          <stop offset="90%" stop-color="#242424" />
+          <stop offset="100%" stop-color="#080808" />
         </radialGradient>
 
         <mask id="virola-groove-mask">
@@ -1274,9 +1332,9 @@ function renderVirolaCanvas() {
         ${defsTextPathsHtml}
       </defs>
 
-      <!-- Cuero vacuno exterior -->
-      <circle cx="${cx}" cy="${cy}" r="${rOuter + 8}" fill="#1b120c" stroke="#3d2a1d" stroke-width="4" />
-      <circle cx="${cx}" cy="${cy}" r="${rOuter + 5}" fill="none" stroke="#c59b27" stroke-width="1" stroke-dasharray="2,3" opacity="0.6" />
+      <!-- Cuero vacuno exterior bitono negro -->
+      <circle cx="${cx}" cy="${cy}" r="${rOuter + 8}" fill="#111111" stroke="#2b2b2b" stroke-width="4" />
+      <circle cx="${cx}" cy="${cy}" r="${rOuter + 5}" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="2,3" opacity="0.45" />
 
       <!-- Corona de Alpaca / Virola Metálica (Ancho 70px) -->
       <path d="M ${cx} ${cy - rOuter} 
@@ -1286,7 +1344,7 @@ function renderVirolaCanvas() {
                A ${rInner} ${rInner} 0 1 1 ${cx} ${cy + rInner} 
                A ${rInner} ${rInner} 0 1 1 ${cx} ${cy - rInner} Z"
             fill="${metalFillGrad}" 
-            stroke="#7d6f5f" 
+            stroke="#666666" 
             stroke-width="1.5"
             fill-rule="evenodd" />
 
@@ -1304,10 +1362,10 @@ function renderVirolaCanvas() {
       <!-- Ranuras concéntricas -->
       ${circularLinesHtml}
 
-      <!-- Boca interior de la calabaza -->
-      <circle cx="${cx}" cy="${cy}" r="${rInner}" fill="url(#calabaza-interior)" stroke="#3d2d1e" stroke-width="3" />
-      <circle cx="${cx}" cy="${cy}" r="${rInner - 22}" fill="#162212" opacity="0.85" />
-      <circle cx="${cx}" cy="${cy}" r="${rInner - 26}" fill="none" stroke="#25381e" stroke-width="3" stroke-dasharray="3,4" opacity="0.7" />
+      <!-- Boca interior de la calabaza bitono -->
+      <circle cx="${cx}" cy="${cy}" r="${rInner}" fill="url(#calabaza-interior)" stroke="#2e2e2e" stroke-width="3" />
+      <circle cx="${cx}" cy="${cy}" r="${rInner - 22}" fill="#161616" opacity="0.85" />
+      <circle cx="${cx}" cy="${cy}" r="${rInner - 26}" fill="none" stroke="#2c2c2c" stroke-width="3" stroke-dasharray="3,4" opacity="0.7" />
 
       <!-- Grabados Láser -->
       <g class="virola-engravings-container" ${studio.clipToMetal ? 'clip-path="url(#metal-ring-clip)"' : ''}>
@@ -2840,7 +2898,7 @@ function escapeHtml(str) {
     PRODUCTS_CATALOG.mate.name = 'Mate';
     PRODUCTS_CATALOG.termo.name = 'Termo';
     PRODUCTS_CATALOG.caja.name = 'Caja de presentación';
-    PRODUCTS_CATALOG.caja.surfaceName = 'Frente de Caja de Presentación Rectangular (Grabado Blanco)';
+    PRODUCTS_CATALOG.caja.surfaceName = 'Frente de Caja de Presentación Vertical (Grabado Blanco)';
 
     if (typeof getCustomizationPricingConfig === 'function') {
       const cfg = getCustomizationPricingConfig();
@@ -2884,26 +2942,26 @@ function escapeHtml(str) {
       });
     }
 
-    // Caso 1: Caja de presentación rectangular (Frente únicamente: x entre 110..390, y entre 155..345)
+    // Caso 1: Caja de presentación VERTICAL (x entre 145..355, y entre 105..395)
     if (studio.activeProduct === 'caja') {
       const boxSlots = itemType === 'text'
         ? [
-            { x: 250, y: 195, angle: 270 },
-            { x: 250, y: 305, angle: 90 },
-            { x: 250, y: 250, angle: 0 },
-            { x: 250, y: 160, angle: 270 },
-            { x: 250, y: 340, angle: 90 }
+            { x: 250, y: 155, angle: 270 },
+            { x: 250, y: 245, angle: 0 },
+            { x: 250, y: 335, angle: 90 },
+            { x: 250, y: 115, angle: 270 },
+            { x: 250, y: 380, angle: 90 }
           ]
         : [
             { x: 250, y: 255, angle: 90 },
-            { x: 165, y: 255, angle: 180 },
-            { x: 335, y: 255, angle: 0 },
-            { x: 205, y: 195, angle: 225 },
-            { x: 295, y: 195, angle: 315 },
-            { x: 205, y: 310, angle: 135 },
-            { x: 295, y: 310, angle: 45 },
-            { x: 135, y: 195, angle: 200 },
-            { x: 365, y: 195, angle: 340 }
+            { x: 250, y: 185, angle: 270 },
+            { x: 250, y: 325, angle: 90 },
+            { x: 190, y: 220, angle: 180 },
+            { x: 310, y: 220, angle: 0 },
+            { x: 190, y: 300, angle: 135 },
+            { x: 310, y: 300, angle: 45 },
+            { x: 250, y: 125, angle: 270 },
+            { x: 250, y: 380, angle: 90 }
           ];
 
       for (const slot of boxSlots) {
@@ -2912,11 +2970,11 @@ function escapeHtml(str) {
         }
       }
       const n = studio.items.length;
-      const col = n % 4;
-      const row = Math.floor(n / 4) % 3;
+      const col = n % 3;
+      const row = Math.floor(n / 3) % 4;
       return {
-        x: 140 + col * 72,
-        y: 175 + row * 68,
+        x: 175 + col * 75,
+        y: 130 + row * 72,
         angle: 90,
         radius: rRing
       };
@@ -2986,12 +3044,13 @@ function escapeHtml(str) {
     };
   };
 
-  // 4. Sobrescribir switchActiveProduct: Caja solo en el frente y sin opción 360°
+  // 4. Sobrescribir switchActiveProduct: visualización estándar 2D única para todos los productos (sin vista 360°)
   window.switchActiveProduct = function(prodKey) {
     if (!PRODUCTS_CATALOG[prodKey]) return;
     studio.activeProduct = prodKey;
     const prodDef = PRODUCTS_CATALOG[prodKey];
     studio.selectedMateId = prodDef.defaultModel;
+    studio.viewMode = '2d';
 
     renderProductSelectorCardsUI();
 
@@ -2999,31 +3058,13 @@ function escapeHtml(str) {
       btn.classList.toggle('active', btn.getAttribute('data-prod-btn') === prodKey);
     });
 
-    // Ocultar o mostrar botones de vista 360° (las cajas solo se personalizan en el frente)
-    const stageBtn360 = document.getElementById('stage-btn-360');
-    const ribbonBtn360 = document.getElementById('ribbon-view-360-btn');
-    const stageBtn2d = document.getElementById('stage-btn-2d');
-    const ribbonBtn2d = document.getElementById('ribbon-view-2d-btn');
-
     if (prodKey === 'caja') {
-      if (stageBtn360) stageBtn360.style.display = 'none';
-      if (ribbonBtn360) ribbonBtn360.style.display = 'none';
-      if (stageBtn2d) stageBtn2d.innerHTML = '<i class="fas fa-box-open"></i> Vista Frontal (Caja)';
-      if (ribbonBtn2d) ribbonBtn2d.innerHTML = '<i class="fas fa-box-open"></i> Vista Frontal';
-      if (studio.viewMode === '360') {
-        setStudioViewMode('2d');
-      }
-      // En caja los textos se muestran rectos en el frente para máxima legibilidad
+      // En caja los textos se muestran rectos en el frente vertical para máxima legibilidad
       studio.items.forEach(it => {
         if (it.type === 'text') {
           it.arcPosition = 'straight';
         }
       });
-    } else {
-      if (stageBtn360) stageBtn360.style.display = 'inline-flex';
-      if (ribbonBtn360) ribbonBtn360.style.display = 'inline-flex';
-      if (stageBtn2d) stageBtn2d.innerHTML = '<i class="fas fa-pen-ruler"></i> Vista Grabado 2D';
-      if (ribbonBtn2d) ribbonBtn2d.innerHTML = '<i class="fas fa-pen-ruler"></i> Vista Grabado 2D';
     }
 
     renderModelsDropdown();
@@ -3032,19 +3073,14 @@ function escapeHtml(str) {
 
     autoCenterAndBalanceVirola();
     renderVirolaCanvas();
-    if (studio.viewMode === '360') render360Canvas();
 
     showNotificationToast(`Personalizando: ${prodDef.name}`, 'fa-cube');
   };
 
-  // Impedir activar 360° si el producto es caja
+  // Eliminar opción 360°: mantener siempre visualización estándar 2D
   const _origSetStudioViewMode = window.setStudioViewMode;
-  window.setStudioViewMode = function(mode) {
-    if (studio.activeProduct === 'caja' && mode === '360') {
-      mode = '2d';
-      showNotificationToast('La caja de presentación se personaliza exclusivamente en el frente', 'fa-box-open');
-    }
-    return _origSetStudioViewMode(mode);
+  window.setStudioViewMode = function() {
+    return _origSetStudioViewMode('2d');
   };
 
   // 5. Sobrescribir agregado, duplicado y eliminación con Historial y No-Superposición
@@ -3319,9 +3355,13 @@ function escapeHtml(str) {
     if (curveGroup) {
       curveGroup.style.display = studio.activeProduct === 'mate' ? '' : 'none';
     }
+    const virolaLinesGroup = document.getElementById('virola-lines-ribbon-group');
+    if (virolaLinesGroup) {
+      virolaLinesGroup.style.display = studio.activeProduct === 'mate' ? '' : 'none';
+    }
   }
 
-  // Sincronización automática al cambiar de producto (Mate / Termo en negro, Caja en blanco; coordenadas centradas)
+  // Sincronización automática al cambiar de producto (Mate / Termo en negro, Caja vertical en blanco; coordenadas centradas)
   const _origSwitchActiveProduct = window.switchActiveProduct;
   window.switchActiveProduct = function(prodType) {
     const prevProduct = studio.activeProduct;
@@ -3343,7 +3383,7 @@ function escapeHtml(str) {
       }
     });
 
-    // Ajustar coordenadas al pasar entre virola circular (mate) y superficies frontales (termo / caja)
+    // Ajustar coordenadas al pasar entre virola circular (mate) y superficies frontales (termo / caja vertical)
     if (studio.activeProduct === 'termo') {
       textItems.forEach((t, idx) => {
         if (prevProduct === 'mate' || t.x === undefined || t.x < 185 || t.x > 315 || t.y < 95 || t.y > 415) {
@@ -3362,16 +3402,16 @@ function escapeHtml(str) {
       });
     } else if (studio.activeProduct === 'caja') {
       textItems.forEach((t, idx) => {
-        if (prevProduct === 'mate' || t.x === undefined || t.y < 135 || t.y > 365) {
+        if (prevProduct === 'mate' || t.x === undefined || t.x < 145 || t.x > 355 || t.y < 90 || t.y > 410) {
           t.x = 250;
-          t.y = 195 + idx * 42;
+          t.y = 165 + idx * 45;
         }
         t.rotation = 0;
       });
       iconItems.forEach((ic, idx) => {
-        if (prevProduct === 'mate' || ic.x === undefined || ic.y < 135 || ic.y > 365) {
+        if (prevProduct === 'mate' || ic.x === undefined || ic.x < 145 || ic.x > 355 || ic.y < 90 || ic.y > 410) {
           ic.x = 250;
-          ic.y = 285 + idx * 55;
+          ic.y = 275 + idx * 58;
         }
       });
     } else if (studio.activeProduct === 'mate' && prevProduct !== 'mate') {
@@ -3396,7 +3436,6 @@ function escapeHtml(str) {
     }
 
     renderVirolaCanvas();
-    if (studio.viewMode === '360') render360Canvas();
   };
 
   // Helper para renderizar controles interactivos (escalar, rotar, eliminar) en Termo y Caja 2D
@@ -3416,7 +3455,7 @@ function escapeHtml(str) {
             fill="none" stroke="${strokeCol}" stroke-width="1.5" stroke-dasharray="4,4"
             rx="6" ry="6" opacity="0.88" pointer-events="none" />
       <g class="virola-handle handle-delete" data-handle="delete" transform="translate(${delX.toFixed(2)}, ${delY.toFixed(2)})">
-        <circle r="10" fill="#dc2626" stroke="#ffffff" stroke-width="1.5" />
+        <circle r="10" fill="#111111" stroke="#ffffff" stroke-width="1.5" />
         <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">✕</text>
       </g>
       <g class="virola-handle handle-rotate" data-handle="rotate" transform="translate(${rotX.toFixed(2)}, ${rotY.toFixed(2)})">
@@ -3431,9 +3470,9 @@ function escapeHtml(str) {
   }
 
   // 7. Sobrescribir renderVirolaCanvas:
-  //    - Mate: grabado negro en virola circular
-  //    - Termo: cilindro real idéntico en tamaño/proporción a la vista 360° con grabado en negro
-  //    - Caja: frente negro con todas las frases, letras, íconos e imágenes subidas automáticamente en BLANCO
+  //    - Mate: grabado negro en virola circular con escudos de fútbol nítidos (sin volverse silueta negra)
+  //    - Termo: cilindro real con grabado en negro y escudos de fútbol nítidos
+  //    - Caja: formato VERTICAL negro con textos, íconos, escudos e imágenes en BLANCO
   const _origRenderVirolaCanvas = window.renderVirolaCanvas;
   window.renderVirolaCanvas = function() {
     const svg = document.getElementById('virola-studio-svg');
@@ -3447,10 +3486,10 @@ function escapeHtml(str) {
       return _origRenderVirolaCanvas();
     }
 
-    const { cx, cy } = STUDIO_CONFIG;
+    const { cx } = STUDIO_CONFIG;
 
     // -------------------------------------------------------------------------
-    // VISTA 2D DEL TERMO (Mismo tamaño y proporciones reales que la vista 360°)
+    // VISTA 2D DEL TERMO
     // -------------------------------------------------------------------------
     if (studio.activeProduct === 'termo') {
       const tWidth = 170;
@@ -3485,10 +3524,10 @@ function escapeHtml(str) {
                   font-size="${fSize}" 
                   font-weight="800" 
                   letter-spacing="1.5px" 
-                  fill="#120e0a" 
+                  fill="#111111" 
                   text-anchor="middle" 
                   dominant-baseline="central" 
-                  style="cursor: grab; fill: #120e0a !important;" 
+                  style="cursor: grab; fill: #111111 !important;" 
                   class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
                   data-item-id="${t.id}">
               ${escapeHtml(t.text)}
@@ -3516,7 +3555,7 @@ function escapeHtml(str) {
         const baseSize = 44;
         const halfSize = (baseSize * scale) / 2;
 
-        const contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: brightness(0) contrast(120%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.35));" />`;
+        const contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(115%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.35));" />`;
 
         iconsHtml += `
           <g class="virola-sticker-group ${isActive ? 'active-sticker' : ''}" 
@@ -3545,11 +3584,11 @@ function escapeHtml(str) {
         <!-- Sombra inferior del termo -->
         <ellipse cx="${cx}" cy="${tY + tHeight + 12}" rx="84" ry="16" fill="rgba(0,0,0,0.45)" />
 
-        <!-- Pico vertedor y tapón cebador superior (idéntico a la vista 360°) -->
+        <!-- Pico vertedor y tapón cebador superior -->
         <rect x="${cx - 21}" y="${tY - 36}" width="42" height="12" rx="3" fill="#262626" stroke="#404040" stroke-width="1" />
         <rect x="${cx - 40}" y="${tY - 26}" width="80" height="28" rx="6" fill="#111111" stroke="#2b2b2b" stroke-width="1.5" />
 
-        <!-- Cuerpo cilíndrico real del Termo 1L (170x390, igual al 360°) -->
+        <!-- Cuerpo cilíndrico real del Termo 1L -->
         <rect x="${tX}" y="${tY}" width="${tWidth}" height="${tHeight}" rx="16" fill="url(#termo-real-2d-grad)" stroke="#2b2b2b" stroke-width="2.2" />
 
         <!-- Banda de base inferior reforzada -->
@@ -3566,18 +3605,23 @@ function escapeHtml(str) {
     }
 
     // -------------------------------------------------------------------------
-    // VISTA 2D DE LA CAJA DE PRESENTACIÓN (Grabado 100% en BLANCO automático)
+    // VISTA 2D DE LA CAJA DE PRESENTACIÓN VERTICAL (Grabado en BLANCO)
     // -------------------------------------------------------------------------
+    const boxW = 270;
+    const boxH = 400;
+    const boxX = cx - boxW / 2; // 115..385
+    const boxY = 52;            // 52..452
+
     let textsHtml = '';
     const textItems = studio.items.filter(i => i.type === 'text');
     textItems.forEach((t, idx) => {
       const isActive = t.id === studio.activeItemId;
-      if (t.x === undefined || t.y < 120 || t.y > 380) {
+      if (t.x === undefined || t.x < boxX + 20 || t.x > boxX + boxW - 20 || t.y < boxY + 25 || t.y > boxY + boxH - 25) {
         t.x = cx;
-        t.y = 195 + idx * 42;
+        t.y = 165 + idx * 45;
       }
-      const x = Math.max(65, Math.min(435, t.x));
-      const y = Math.max(138, Math.min(362, t.y));
+      const x = Math.max(boxX + 24, Math.min(boxX + boxW - 24, t.x));
+      const y = Math.max(boxY + 28, Math.min(boxY + boxH - 28, t.y));
       t.x = x;
       t.y = y;
       const rot = t.rotation !== undefined ? t.rotation : 0;
@@ -3616,22 +3660,26 @@ function escapeHtml(str) {
       const scale = item.scale || 1.0;
       const rot = item.rotation || 0;
       const isActive = item.id === studio.activeItemId;
-      if (item.x === undefined || item.y < 120 || item.y > 380) {
+      if (item.x === undefined || item.x < boxX + 20 || item.x > boxX + boxW - 20 || item.y < boxY + 25 || item.y > boxY + boxH - 25) {
         item.x = cx;
-        item.y = 285 + idx * 55;
+        item.y = 275 + idx * 58;
       }
-      const x = Math.max(68, Math.min(432, item.x));
-      const y = Math.max(142, Math.min(358, item.y));
+      const x = Math.max(boxX + 26, Math.min(boxX + boxW - 26, item.x));
+      const y = Math.max(boxY + 30, Math.min(boxY + boxH - 30, item.y));
       item.x = x;
       item.y = y;
       const baseSize = 48;
       const halfSize = (baseSize * scale) / 2;
 
-      // Filtro blanco puro para todos los íconos, escudos e imágenes cargadas desde el dispositivo
-      const contentHtml = `<image href="${imgSrc}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,0.75)) !important;" />`;
+      // Si es imagen subida (ya procesada en blanco en fileWhite), no invertir de nuevo; para SVGs/escudos/emojis invertir en escala de grises para preservar todos los trazos internos en blanco
+      const boxImgFilter = item.fileWhite
+        ? 'drop-shadow(0 1px 2px rgba(0,0,0,0.75))'
+        : 'grayscale(100%) invert(1) contrast(115%) drop-shadow(0 1px 2px rgba(0,0,0,0.75))';
+
+      const contentHtml = `<image href="${imgSrc}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: ${boxImgFilter} !important;" />`;
 
       iconsHtml += `
-        <g class="virola-sticker-group box-white-sticker ${isActive ? 'active-sticker' : ''}" 
+        <g class="virola-sticker-group box-white-sticker ${item.fileWhite ? 'custom-white-upload' : ''} ${isActive ? 'active-sticker' : ''}" 
            data-item-id="${item.id}" 
            transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
            onmousedown="startFreeItemDrag('${item.id}', event)"
@@ -3643,7 +3691,7 @@ function escapeHtml(str) {
       `;
     });
 
-    // Formato rectangular horizontal de la Caja de presentación negra con grabado en blanco
+    // Formato rectangular VERTICAL de la Caja de presentación negra con grabado en blanco
     svg.innerHTML = `
       <defs>
         <linearGradient id="box-dark-finish" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -3653,15 +3701,15 @@ function escapeHtml(str) {
         </linearGradient>
       </defs>
 
-      <!-- Sombra exterior -->
-      <rect x="34" y="114" width="432" height="278" rx="12" fill="rgba(0,0,0,0.45)" />
+      <!-- Sombra exterior vertical -->
+      <rect x="${boxX + 4}" y="${boxY + 4}" width="${boxW}" height="${boxH}" rx="12" fill="rgba(0,0,0,0.45)" />
 
-      <!-- Cuerpo Rectangular Frontal de la Caja de Presentación -->
-      <rect x="30" y="110" width="440" height="280" rx="10" fill="url(#box-dark-finish)" stroke="#333333" stroke-width="3" />
+      <!-- Cuerpo Rectangular VERTICAL de la Caja de Presentación -->
+      <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" rx="10" fill="url(#box-dark-finish)" stroke="#333333" stroke-width="3" />
 
-      <!-- Marco interior sutil del frente -->
-      <rect x="48" y="128" width="404" height="244" rx="6" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
-      <text x="250" y="100" text-anchor="middle" fill="#ffffff" opacity="0.75" font-size="11" font-weight="700" letter-spacing="1.5">FRENTE DE CAJA DE PRESENTACIÓN (GRABADO EN BLANCO)</text>
+      <!-- Marco interior sutil del frente vertical -->
+      <rect x="${boxX + 16}" y="${boxY + 16}" width="${boxW - 32}" height="${boxH - 32}" rx="6" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
+      <text x="250" y="38" text-anchor="middle" fill="#ffffff" opacity="0.75" font-size="10.5" font-weight="700" letter-spacing="1.4">CAJA DE PRESENTACIÓN VERTICAL (GRABADO EN BLANCO)</text>
 
       <!-- Grabados invertidos en color blanco -->
       <g class="virola-texts-layer">${textsHtml}</g>

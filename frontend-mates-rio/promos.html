@@ -487,10 +487,10 @@
 
           <div class="sort-select-wrap">
             <select class="sort-select catalog-select" id="catalog-sort-select">
-              <option value="featured">✨ Destacados</option>
-              <option value="price-low">💵 Menor precio</option>
-              <option value="price-high">💎 Mayor precio</option>
-              <option value="rating">⭐ Mejor valorados</option>
+              <option value="featured">Destacados</option>
+              <option value="price-low">Menor precio</option>
+              <option value="price-high">Mayor precio</option>
+              <option value="rating">Mejor valorados</option>
             </select>
           </div>
 
@@ -502,11 +502,11 @@
 
       <!-- Combo Category Filter Chips -->
       <div class="promos-filter-chips" style="display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 26px;">
-        <button type="button" class="filter-pill active" onclick="setPromoSubfilter('all', this)"><i class="fas fa-fire"></i> Todos los Combos</button>
-        <button type="button" class="filter-pill" onclick="setPromoSubfilter('termo', this)"><i class="fas fa-temperature-high"></i> Con Termo</button>
-        <button type="button" class="filter-pill" onclick="setPromoSubfilter('imperial', this)"><i class="fas fa-crown"></i> Sets Imperiales</button>
-        <button type="button" class="filter-pill" onclick="setPromoSubfilter('canasta', this)"><i class="fas fa-briefcase"></i> Con Canasta / Matera</button>
-        <button type="button" class="filter-pill" onclick="setPromoSubfilter('under-80k', this)"><i class="fas fa-tag"></i> Hasta $80.000</button>
+        <button type="button" class="filter-pill active" onclick="setPromoSubfilter('all', this)"><img src="https://api.iconify.design/lucide/flame.svg" alt="" class="mono-cat-icon-img" /> Todos los Combos</button>
+        <button type="button" class="filter-pill" onclick="setPromoSubfilter('termo', this)"><img src="https://api.iconify.design/lucide/thermometer.svg" alt="" class="mono-cat-icon-img" /> Con Termo</button>
+        <button type="button" class="filter-pill" onclick="setPromoSubfilter('imperial', this)"><img src="https://api.iconify.design/lucide/cup-soda.svg" alt="" class="mono-cat-icon-img" /> Sets Imperiales</button>
+        <button type="button" class="filter-pill" onclick="setPromoSubfilter('canasta', this)"><img src="https://api.iconify.design/lucide/briefcase.svg" alt="" class="mono-cat-icon-img" /> Con Canasta / Matera</button>
+        <button type="button" class="filter-pill" onclick="setPromoSubfilter('under-80k', this)"><img src="https://api.iconify.design/lucide/tag.svg" alt="" class="mono-cat-icon-img" /> Hasta $80.000</button>
       </div>
 
       <!-- Products Grid (Populated dynamically via app.js) -->
@@ -684,12 +684,11 @@
     </div>
   </footer>
 
-  <!-- Botón Flotante de Carrito Profesional -->
+  <!-- Botón Flotante de Carrito Profesional (Solo ícono) -->
   <button class="floating-cart-btn" id="floating-cart-btn" onclick="openCartDrawer()" aria-label="Abrir Carrito de Compras" title="Ver Carrito de Compras">
     <div class="floating-cart-icon-wrap">
       <i class="fas fa-shopping-bag"></i>
     </div>
-    <span class="floating-cart-label">Carrito</span>
     <span class="floating-cart-badge" id="floating-cart-badge">0</span>
   </button>
 
@@ -877,15 +876,15 @@
       </div>
 
       <!-- Admin Quick Access Card (Visible para administradores) -->
-      <div id="profile-admin-card" style="display: none; background: linear-gradient(135deg, #17110c 0%, #2a1b12 100%); border: 1.5px solid var(--accent-gold); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px; box-shadow: 0 4px 16px rgba(197, 155, 39, 0.18);">
+      <div id="profile-admin-card" style="display: none; background: var(--bg-card); border: 1.5px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: var(--text-main); text-transform: uppercase;">
             <i class="fas fa-shield-halved"></i> Permisos de Administrador
           </span>
           <span class="nav-badge-pill pill-gold" id="profile-admin-role-badge">STAFF</span>
         </div>
         <div style="display: flex; gap: 8px; margin-top: 8px;">
-          <a href="admin.html" class="btn btn-primary" style="flex: 1; font-size: 0.8rem; padding: 9px 12px; background: var(--accent-gold); color: #121212; border: none; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; gap: 6px;">
+          <a href="admin.html" class="btn btn-primary" style="flex: 1; font-size: 0.8rem; padding: 9px 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; gap: 6px;">
             <i class="fas fa-shield-halved"></i> Abrir Panel de Control
           </a>
         </div>
@@ -1166,12 +1165,12 @@
           <span id="qv-category" style="font-size: 0.75rem; font-weight: 700; color: var(--accent-leather); letter-spacing: 1px; text-transform: uppercase;"></span>
           <h3 id="qv-title" style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; line-height: 1.25; margin: 6px 0 10px;"></h3>
 
-          <div id="qv-rating" style="display: flex; align-items: center; gap: 4px; color: #e5a100; font-size: 0.85rem; margin-bottom: 14px;"></div>
+          <div id="qv-rating" style="display: flex; align-items: center; gap: 4px; color: var(--text-main); font-size: 0.85rem; margin-bottom: 14px;"></div>
 
           <div style="margin-bottom: 16px;">
-            <span id="qv-price" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: var(--bg-dark);"></span>
+            <span id="qv-price" class="qv-price-current" style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 900; color: var(--text-main);"></span>
             <span id="qv-orig-price" style="font-size: 1rem; color: var(--text-muted); text-decoration: line-through; margin-left: 10px;"></span>
-            <div style="font-size: 0.8rem; color: #27ae60; font-weight: 600; margin-top: 4px;">
+            <div style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; margin-top: 4px;">
               <i class="far fa-credit-card"></i> 3 Cuotas sin interés • 10% OFF extra con Transferencia
             </div>
           </div>

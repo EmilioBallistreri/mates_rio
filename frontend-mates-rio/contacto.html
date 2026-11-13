@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiénes Somos & Contacto | Mates Río</title>
+  <meta name="description" content="Conocé la historia de Mates Río en Río Ceballos, Córdoba. Taller de mates imperiales artesanales, grabado láser de precisión, atención personalizada y ventas corporativas." />
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Dancing+Script:wght@600;700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Immediate Theme Initializer -->
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'light') {
+        document.documentElement.classList.add('theme-light');
+        document.documentElement.classList.remove('theme-dark');
+      } else {
+        document.documentElement.classList.add('theme-dark');
+        document.documentElement.classList.remove('theme-light');
+      }
+    })();
+  </script>
+</head>
+<body class="page-contacto">
+  <script>
+    (function() {
+      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
+      if (mode === 'light') {
+        document.body.classList.add('theme-light', 'theme-inverted');
+        document.body.classList.remove('theme-dark');
+      } else {
+        document.body.classList.add('theme-dark');
+        document.body.classList.remove('theme-light', 'theme-inverted');
+      }
+    })();
+  </script>
+
+  <!-- Top Scroll Progress Indicator -->
+  <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+
+  <!-- Top Announcement Bar -->
+  <aside class="announcement-bar">
+    <div class="container announcement-inner">
+      <div class="announcement-center-msg">
+        <span class="announcement-item"><i class="far fa-credit-card"></i> <b>3 Cuotas sin interés</b></span>
+        <span class="announcement-sep">•</span>
+        <span class="announcement-item"><i class="fas fa-bolt"></i> <b>10% OFF</b> Transferencia</span>
+        <span class="announcement-sep announcement-sep-desktop">•</span>
+        <span class="announcement-item announcement-item-desktop"><i class="fas fa-truck"></i> <b>Envío Gratis</b> +$ 60.000</span>
+      </div>
+
+      <div class="announcement-links">
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" title="Instagram Oficial">
+          <i class="fab fa-instagram"></i> @mates_rio_
+        </a>
+        <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Quisiera%20hacer%20una%20consulta." target="_blank" rel="noopener noreferrer" title="WhatsApp Directo">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Banner Dinámico de Fechas Especiales -->
+  <aside id="special-occasion-banner" class="special-occasion-banner" style="display: none;"></aside>
+
+  <!-- Sticky Header -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <div class="header-left">
+        <button class="mobile-menu-toggle action-btn" id="mobile-menu-toggle" onclick="openMobileDrawer()" aria-label="Abrir Menú de Navegación">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <a href="index.html" class="brand-logo-wrap" title="Mates Río - Inicio">
+          <img src="assets/images/logo.jpg" alt="Logo de Mates Río" class="brand-logo-img" ondblclick="handleSecretAdminTrigger()" />
+          <div class="brand-name-group">
+            <span class="brand-name">MATES RÍO</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="header-center" aria-label="Navegación Principal">
+        <ul class="main-nav">
+          <li>
+            <a href="index.html" class="nav-link">Inicio</a>
+          </li>
+
+          <!-- Dropdown: Productos -->
+          <li class="nav-item-dropdown" id="nav-dropdown-products">
+            <a href="catalogo.html" class="nav-link nav-dropdown-trigger">
+              Productos <i class="fas fa-chevron-down dropdown-arrow"></i>
+            </a>
+            
+            <div class="nav-dropdown-menu">
+              <div class="dropdown-categories-grid">
+                <a href="promos.html" class="dropdown-cat-card">
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/flame.svg" alt="Promos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">PROMOS & COMBOS</span>
+                    <span class="dropdown-cat-desc">Hasta 25% OFF en sets completos</span>
+                  </div>
+                </a>
+
+                <a href="catalogo.html?categoria=mates" class="dropdown-cat-card" onclick="setCategoryFilter('mates')">
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/cup-soda.svg" alt="Mates" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">MATES IMPERIALES</span>
+                    <span class="dropdown-cat-desc">Calabaza, alpaca y cuero vacuno</span>
+                  </div>
+                </a>
+
+                <a href="catalogo.html?categoria=termos" class="dropdown-cat-card" onclick="setCategoryFilter('termos')">
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/thermometer.svg" alt="Termos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">TERMOS TÉRMICOS</span>
+                    <span class="dropdown-cat-desc">Acero inoxidable 1L y Media Manija</span>
+                  </div>
+                </a>
+
+                <a href="catalogo.html?categoria=accesorios" class="dropdown-cat-card" onclick="setCategoryFilter('accesorios')">
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/sparkles.svg" alt="Accesorios" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">ACCESORIOS</span>
+                    <span class="dropdown-cat-desc">Bombillas pico de loro y yerberas</span>
+                  </div>
+                </a>
+
+                <a href="catalogo.html?categoria=yerbas" class="dropdown-cat-card" onclick="setCategoryFilter('yerbas')">
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/leaf.svg" alt="Yerbas" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">YERBAS DE AUTOR</span>
+                    <span class="dropdown-cat-desc">Barbacuá, orgánicas y serranas</span>
+                  </div>
+                </a>
+
+                <a href="catalogo.html?categoria=equipos" class="dropdown-cat-card" onclick="setCategoryFilter('equipos')">
+                  <div class="dropdown-cat-icon"><img src="https://api.iconify.design/lucide/briefcase.svg" alt="Equipos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">EQUIPOS DE MATE</span>
+                    <span class="dropdown-cat-desc">Mochilas y canastas de cuero</span>
+                  </div>
+                </a>
+              </div>
+
+              <div class="dropdown-footer">
+                <a href="catalogo.html" onclick="setCategoryFilter('all')" class="dropdown-all-link">
+                  Ver todo el catálogo completo <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="mayorista.html" class="nav-link" style="font-weight: 700;">
+              Mayorista <span class="nav-badge-pill pill-gold" style="font-size: 0.65rem;">B2B</span>
+            </a>
+          </li>
+          <li>
+            <a href="promos.html" class="nav-link">
+              Promos <span class="nav-badge-pill">OFF</span>
+            </a>
+          </li>
+          <li>
+            <a href="index.html#corporativo" class="nav-link">Corporativo</a>
+          </li>
+          <li>
+            <a href="contacto.html" class="nav-link active">Contacto</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-right">
+        <button class="action-btn theme-toggle-btn" id="theme-toggle-btn" onclick="toggleColorTheme()" title="Cambiar a Modo Claro / Modo Oscuro" aria-label="Cambiar tema de color">
+          <i class="fas fa-sun"></i>
+        </button>
+
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="action-btn instagram-btn" title="Instagram Oficial @mates_rio_">
+          <i class="fab fa-instagram"></i>
+        </a>
+
+        <div class="user-btn-wrap">
+          <button class="user-account-btn" id="user-account-btn" onclick="openAuthModal('login')" title="Mi Cuenta">
+            <i class="far fa-user"></i>
+            <span class="user-name-display" id="user-btn-name">Ingresar</span>
+          </button>
+
+          <div class="user-dropdown-menu" id="user-dropdown-menu">
+            <div class="user-dropdown-item" onclick="openProfileModal('profile')">
+              <i class="far fa-id-badge"></i> Mi Perfil
+            </div>
+            <div class="user-dropdown-item" onclick="openProfileModal('orders')">
+              <i class="fas fa-box-open"></i> Mis Pedidos
+            </div>
+            <a href="admin.html" class="user-dropdown-item admin-highlight-link" id="dropdown-admin-link" style="display: none; font-weight: 800; text-decoration: none;">
+              <i class="fas fa-shield-halved"></i> Panel de Administración
+            </a>
+            <div class="user-dropdown-item logout" onclick="logoutUser()">
+              <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </div>
+          </div>
+        </div>
+
+        <button class="action-btn cart-btn-highlight" id="open-cart-btn" onclick="openCartDrawer()" title="Ver Carrito de Compras">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-count-badge" id="cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Off-Canvas Navigation Drawer -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileDrawer()"></div>
+  <aside class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Menú Móvil">
+    <div class="mobile-drawer-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="assets/images/logo.jpg" alt="Logo Mates Río" style="width: 36px; height: 36px; border-radius: 6px; border: 1px solid var(--accent-gold); object-fit: contain; background: #000; padding: 2px;" />
+        <span style="font-family: var(--font-heading); font-weight: 800; font-size: 1.15rem; letter-spacing: 1px;">MATES RÍO</span>
+      </div>
+      <button class="mobile-drawer-close" onclick="closeMobileDrawer()" aria-label="Cerrar menú">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <ul class="mobile-nav-list">
+      <li class="mobile-nav-item mobile-nav-auth-item" id="mobile-nav-auth-item">
+        <a href="javascript:void(0)" id="mobile-nav-auth-link" onclick="handleMobileAuthClick()">
+          <span><i class="fas fa-user-circle" style="width: 22px;"></i> <b id="mobile-nav-auth-text">Mi Cuenta / Ingresar</b></span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-admin" id="mobile-nav-admin-item" style="display: none;">
+        <a href="admin.html" onclick="closeMobileDrawer();">
+          <span><i class="fas fa-shield-halved" style="width: 22px;"></i> <b>Panel de Administración</b></span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="index.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-home" style="width: 22px;"></i> Inicio</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="mayorista.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-boxes-packing" style="width: 22px;"></i> Portal Mayorista</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item mobile-nav-highlight">
+        <a href="personaliza-tu-mate.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-magic" style="width: 22px;"></i> Personalización</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="catalogo.html#catalogo" onclick="setCategoryFilter('all'); closeMobileDrawer()">
+          <span><i class="fas fa-th-large" style="width: 22px;"></i> Catálogo Completo</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="mobile-nav-footer">
+      <div class="mobile-drawer-social-circles">
+        <a href="https://wa.me/5493513830111" target="_blank" rel="noopener noreferrer" class="mobile-social-circle whatsapp" title="WhatsApp Oficial" aria-label="WhatsApp Oficial">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://www.tiktok.com/@mates_rio?_t=8rMatesRio&_r=1" target="_blank" rel="noopener" class="mobile-social-circle tiktok" title="TikTok @mates_rio" aria-label="TikTok Oficial">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="mobile-social-circle instagram" title="Instagram @mates_rio_" aria-label="Instagram Oficial">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+      <p style="font-size: 0.72rem; color: var(--text-secondary); text-align: center; margin: 0;">
+        Río Ceballos, Córdoba • Envíos a todo el país
+      </p>
+    </div>
+  </aside>
+
+  <main class="contact-page-main">
+    <!-- ==========================================================================
+         HERO: QUIÉNES SOMOS & CONTACTO
+         ========================================================================== -->
+    <section class="contact-hero-section">
+      <div class="container">
+        <span class="section-tag"><i class="fas fa-compass"></i> RÍO CEBALLOS • SIERRAS CHICAS, CÓRDOBA</span>
+        <h1 class="contact-hero-title">Quiénes Somos &amp; Contacto</h1>
+        <p class="contact-hero-subtitle">
+          Conocé la historia detrás de nuestro taller artesanal y comunicate directamente con nosotros para pedidos minoristas, grabados personalizados o regalos empresariales.
+        </p>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECCIÓN 1: QUIÉNES SOMOS (HISTORIA, TALLER Y VALORES)
+         ========================================================================== -->
+    <section class="about-us-section" id="quienes-somos">
+      <div class="container">
+        <div class="about-us-grid">
+          <div class="about-us-content">
+            <span class="section-tag">NUESTRA HISTORIA</span>
+            <h2 class="about-us-heading">Tradición Matera y Orfebrería desde las Sierras de Córdoba</h2>
+            <p class="about-us-paragraph">
+              En <strong>Mates Río</strong> nacimos en <strong>Río Ceballos, Sierras Chicas, Córdoba</strong>, impulsados por una convicción clara: elevar el ritual argentino del mate a través de piezas nobles que duren toda la vida.
+            </p>
+            <p class="about-us-paragraph">
+              Seleccionamos manualmente cada calabaza brasilera de pared gruesa, trabajamos cuero vacuno genuino con costura artesanal y cincelamos virolas de alpaca maciza. Además, contamos con nuestro propio <strong>Taller de Grabado Láser de Alta Precisión</strong> para transformar cada mate, termo o caja de presentación en una pieza única.
+            </p>
+
+            <div class="about-pillars-grid">
+              <div class="about-pillar-card">
+                <div class="about-pillar-icon"><i class="fas fa-gem"></i></div>
+                <div>
+                  <h4>Nobleza en Materiales</h4>
+                  <p>Calabaza seleccionada, cuero vacuno legítimo, alpaca maciza y acero inoxidable térmico.</p>
+                </div>
+              </div>
+              <div class="about-pillar-card">
+                <div class="about-pillar-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                <div>
+                  <h4>Taller de Grabado Propio</h4>
+                  <p>Personalización láser milimétrica al instante sin intermediarios desde nuestro taller.</p>
+                </div>
+              </div>
+              <div class="about-pillar-card">
+                <div class="about-pillar-icon"><i class="fas fa-truck-fast"></i></div>
+                <div>
+                  <h4>Envíos a Todo el País</h4>
+                  <p>Despachamos a diario desde Córdoba a toda la Argentina con seguimiento en tiempo real.</p>
+                </div>
+              </div>
+              <div class="about-pillar-card">
+                <div class="about-pillar-icon"><i class="fas fa-handshake"></i></div>
+                <div>
+                  <h4>Atención Directa</h4>
+                  <p>Asesoramiento cercano tanto para tu primer mate imperial como para pedidos mayoristas y corporativos.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-us-visual">
+            <div class="about-visual-card">
+              <img src="assets/images/prod_mate_imperial.jpg" alt="Taller Artesanal Mates Río" class="about-visual-img" />
+              <div class="about-visual-caption">
+                <strong>MATES RÍO OFICIAL</strong>
+                <span>Taller de Orfebrería &amp; Grabado Láser • Río Ceballos, Córdoba</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECCIÓN 2: CONTACTO DIRECTO & FORMULARIO DE CONSULTAS
+         ========================================================================== -->
+    <section class="contact-direct-section" id="contacto">
+      <div class="container">
+        <div class="contact-section-header">
+          <span class="section-tag">CANALES OFICIALES DE ATENCIÓN</span>
+          <h2 class="section-title">Ponete en Contacto con Nuestro Equipo</h2>
+          <p class="section-subtitle">
+            Escribinos por WhatsApp para respuesta inmediata o envianos tu consulta a través del formulario oficial.
+          </p>
+        </div>
+
+        <div class="contact-layout-grid">
+          <!-- Columna Izquierda: Tarjetas de Información de Contacto -->
+          <div class="contact-cards-column">
+            <div class="contact-info-card">
+              <div class="contact-card-icon"><i class="fab fa-whatsapp"></i></div>
+              <div class="contact-card-body">
+                <h4>WhatsApp Ventas &amp; Asesoramiento</h4>
+                <p>Atención rápida para consultas de stock, personalización, envíos y ventas corporativas.</p>
+                <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Me%20contacto%20desde%20la%20p%C3%A1gina%20web." target="_blank" rel="noopener noreferrer" class="contact-card-link">
+                  +54 9 351 383-0111 <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="contact-card-icon"><i class="far fa-envelope"></i></div>
+              <div class="contact-card-body">
+                <h4>Correo Electrónico Oficial</h4>
+                <p>Para presupuestos formales, pedidos empresariales, facturación y distribuidores.</p>
+                <a href="mailto:mates.rio6@gmail.com" class="contact-card-link">
+                  mates.rio6@gmail.com <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="contact-card-icon"><i class="fas fa-location-dot"></i></div>
+              <div class="contact-card-body">
+                <h4>Taller &amp; Showroom</h4>
+                <p>Río Ceballos, Sierras Chicas, Provincia de Córdoba, República Argentina.</p>
+                <span class="contact-card-meta"><i class="far fa-clock"></i> Lun a Vie: 09:00 a 19:00 hs • Sáb: 10:00 a 15:00 hs</span>
+              </div>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="contact-card-icon"><i class="fas fa-share-nodes"></i></div>
+              <div class="contact-card-body">
+                <h4>Redes Sociales Oficiales</h4>
+                <p>Seguinos para ver lanzamientos, trabajos de grabado láser en vivo y promociones.</p>
+                <div class="contact-social-buttons">
+                  <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark btn-sm">
+                    <i class="fab fa-instagram"></i> @mates_rio_
+                  </a>
+                  <a href="https://www.tiktok.com/@mates_rio?_t=8rMatesRio&_r=1" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">
+                    <i class="fab fa-tiktok"></i> @mates_rio
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Formulario de Contacto -->
+          <div class="contact-form-card">
+            <h3><i class="far fa-paper-plane"></i> Envianos tu Mensaje</h3>
+            <p class="contact-form-desc">
+              Completá tus datos y te responderemos a la brevedad o abriremos tu consulta lista en WhatsApp.
+            </p>
+
+            <form id="direct-contact-form" onsubmit="handleContactPageSubmit(event)">
+              <div class="form-group">
+                <label class="form-label" for="contact-name">Nombre y Apellido / Empresa *</label>
+                <input type="text" id="contact-name" required class="form-input" placeholder="Ej: Martín Gómez" />
+              </div>
+
+              <div class="form-grid-2col">
+                <div class="form-group">
+                  <label class="form-label" for="contact-phone">Teléfono / WhatsApp *</label>
+                  <input type="tel" id="contact-phone" required class="form-input" placeholder="Ej: 351 555-1234" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="contact-email">Correo Electrónico *</label>
+                  <input type="email" id="contact-email" required class="form-input" placeholder="tunombre@correo.com" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact-topic">Motivo de tu consulta *</label>
+                <select id="contact-topic" class="form-input" style="height: 44px;">
+                  <option value="Consulta General / Minorista">Consulta General / Compra Minorista</option>
+                  <option value="Personalización y Grabado Láser">Personalización y Grabado Láser</option>
+                  <option value="Ventas Corporativas y Regalos Empresariales">Ventas Corporativas y Regalos Empresariales</option>
+                  <option value="Compras Mayoristas B2B">Compras Mayoristas (Comercios / Revendedores)</option>
+                  <option value="Estado de mi Pedido / Envío">Estado de mi Pedido / Envío</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="contact-message">Mensaje o Detalle *</label>
+                <textarea id="contact-message" rows="4" required class="form-input" style="padding: 12px; height: auto;" placeholder="Contanos en qué podemos ayudarte, qué modelos buscás o cuántas unidades necesitás..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; height: 48px;">
+                <i class="fab fa-whatsapp"></i> Enviar Consulta Directa
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="assets/images/logo.jpg" alt="Mates Río Logo" class="footer-logo-img" />
+            <div>
+              <span class="footer-brand-title">MATES RÍO</span>
+              <p style="font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 1px; font-weight: 600;">INDUSTRIA ARGENTINA</p>
+            </div>
+          </div>
+          <p class="footer-brand-desc">
+            Mates imperiales seleccionados, termos de alto rendimiento y combos artesanales hechos con nobleza y tradición criolla.
+          </p>
+          <div class="social-links">
+            <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="social-icon-btn instagram" title="Instagram @mates_rio_">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@mates_rio?_t=8rMatesRio&_r=1" target="_blank" rel="noopener" class="social-icon-btn tiktok" title="TikTok @mates_rio">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Vengo%20desde%20la%20web." target="_blank" rel="noopener noreferrer" class="social-icon-btn whatsapp" title="WhatsApp Mates Río">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="mailto:mates.rio6@gmail.com" class="social-icon-btn email" title="Correo Oficial mates.rio6@gmail.com">
+              <i class="fas fa-envelope"></i>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Navegación</h4>
+          <ul class="footer-nav-list">
+            <li><a href="index.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Inicio</a></li>
+            <li><a href="catalogo.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Catálogo Completo</a></li>
+            <li><a href="promos.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Promociones &amp; Combos</a></li>
+            <li><a href="index.html#corporativo" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Ventas Corporativas</a></li>
+            <li><a href="contacto.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Quiénes Somos &amp; Contacto</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Pagos &amp; Envíos</h4>
+          <div class="payment-badges-wrap">
+            <span class="pay-badge"><i class="far fa-credit-card"></i> 3 Cuotas sin interés</span>
+            <span class="pay-badge"><i class="fas fa-bolt"></i> Transf. 10% OFF</span>
+            <span class="pay-badge"><i class="fas fa-shield-alt"></i> Compra Protegida</span>
+          </div>
+          <div class="shipping-methods-info" style="margin-top: 10px;">
+            <p><i class="fas fa-truck-fast" style="margin-right: 4px;"></i> Despachos rápidos a todo el país vía <b>Correo Argentino</b> y <b>Andreani</b> con código de seguimiento.</p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Contacto &amp; Taller</h4>
+          <ul class="contact-info-list">
+            <li class="contact-item">
+              <i class="fab fa-whatsapp"></i>
+              <div>
+                <strong>WhatsApp Ventas:</strong><br />
+                <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!" target="_blank" rel="noopener noreferrer">+54 9 351 383-0111</a>
+              </div>
+            </li>
+            <li class="contact-item">
+              <i class="far fa-envelope"></i>
+              <div>
+                <strong>Correo Electrónico:</strong><br />
+                <a href="mailto:mates.rio6@gmail.com">mates.rio6@gmail.com</a>
+              </div>
+            </li>
+            <li class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <strong>Taller &amp; Showroom:</strong><br />
+                <span>Río Ceballos, Sierras Chicas • Córdoba, Argentina</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span onclick="handleSecretAdminTrigger()" style="cursor: default;" title="Mates Río Oficial">© 2026 Mates Río. Pasión por la cultura matera. Río Ceballos, Córdoba.</span>
+        <span>Envíos a toda la República Argentina</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Botón Flotante de Carrito (Solo Ícono, sin texto "Carrito") -->
+  <button class="floating-cart-btn" id="floating-cart-btn" onclick="openCartDrawer()" aria-label="Abrir Carrito de Compras" title="Ver Carrito de Compras">
+    <div class="floating-cart-icon-wrap">
+      <i class="fas fa-shopping-bag"></i>
+    </div>
+    <span class="floating-cart-badge" id="floating-cart-badge">0</span>
+  </button>
+
+  <!-- Sliding Cart Drawer -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
+  <aside class="cart-drawer cart-drawer-simplified" id="cart-drawer" aria-label="Carrito de Compras">
+    <div class="cart-header">
+      <div class="cart-header-title-group">
+        <div class="cart-header-icon-box">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <div>
+          <h3 class="cart-header-title">Mi Carrito</h3>
+          <span class="cart-items-counter-sub" id="cart-count-title">(0 productos)</span>
+        </div>
+      </div>
+      <button class="cart-close-btn" onclick="closeCartDrawer()" aria-label="Cerrar carrito" title="Cerrar">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="cart-items-list" id="cart-items-container"></div>
+    <div class="cart-footer" id="cart-footer">
+      <div class="cart-summary-card">
+        <div class="cart-totals-row total-final">
+          <span class="row-label-total">Total a pagar</span>
+          <span class="row-val-total" id="cart-total">$ 0</span>
+        </div>
+        <small class="transfer-savings-hint" style="display: block; margin-top: 6px; font-size: 0.8rem; text-align: right;">
+          <i class="fas fa-bolt"></i> 10% OFF pagando por Transferencia Bancaria
+        </small>
+      </div>
+      <div class="cart-checkout-actions">
+        <button class="btn btn-primary btn-checkout-main" onclick="openWebCheckout()">
+          <i class="fas fa-credit-card"></i> Iniciar Compra Online
+        </button>
+        <button class="btn btn-whatsapp-secondary" onclick="checkoutWhatsApp()">
+          <i class="fab fa-whatsapp"></i> Finalizar Pedido por WhatsApp
+        </button>
+      </div>
+      <div class="cart-footer-security-row">
+        <span><i class="fas fa-shield-alt"></i> Compra Segura</span>
+        <span>•</span>
+        <button onclick="confirmClearCart()" class="cart-clear-link">Vaciar carrito</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Auth Modal -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-box">
+      <button class="modal-close-icon" onclick="closeAuthModal()" aria-label="Cerrar modal">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-btn-login" onclick="switchAuthTab('login')">
+          <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </button>
+        <button class="auth-tab-btn" id="tab-btn-register" onclick="switchAuthTab('register')">
+          <i class="fas fa-user-plus"></i> Crear Cuenta
+        </button>
+      </div>
+      <div class="auth-panel active" id="auth-panel-login">
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Correo electrónico</label>
+            <input type="email" id="login-email" required class="form-input" placeholder="tunombre@correo.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contraseña</label>
+            <div class="input-with-eye">
+              <input type="password" id="login-password" required class="form-input" placeholder="••••••••" />
+              <i class="far fa-eye eye-toggle-btn" id="login-eye-icon" onclick="togglePasswordVisibility('login-password', 'login-eye-icon')"></i>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Ingresar a mi cuenta</button>
+        </form>
+      </div>
+      <div class="auth-panel" id="auth-panel-register">
+        <form onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label">Nombre y Apellido *</label>
+            <input type="text" id="reg-name" required class="form-input" placeholder="Ej: Lucas González" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Teléfono / WhatsApp *</label>
+            <input type="tel" id="reg-phone" required class="form-input" placeholder="Ej: 11 4455 6677" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Correo electrónico *</label>
+            <input type="email" id="reg-email" required class="form-input" placeholder="tuemail@ejemplo.com" />
+          </div>
+          <div class="form-grid-2col">
+            <div class="form-group">
+              <label class="form-label">Contraseña *</label>
+              <input type="password" id="reg-password" required class="form-input" placeholder="••••••••" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirmar *</label>
+              <input type="password" id="reg-password-confirm" required class="form-input" placeholder="••••••••" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Crear mi Cuenta</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    function handleContactPageSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('contact-name')?.value.trim() || '';
+      const phone = document.getElementById('contact-phone')?.value.trim() || '';
+      const email = document.getElementById('contact-email')?.value.trim() || '';
+      const topic = document.getElementById('contact-topic')?.value || 'Consulta Web';
+      const message = document.getElementById('contact-message')?.value.trim() || '';
+
+      const text = `Hola Mates Río! Les escribo desde la página de Contacto:\n\n• *Nombre:* ${name}\n• *Teléfono:* ${phone}\n• *Email:* ${email}\n• *Motivo:* ${topic}\n• *Mensaje:* ${message}`;
+      if (typeof showToast === 'function') {
+        showToast('Redirigiendo tu consulta al WhatsApp oficial...', 'fa-check-circle');
+      }
+      window.open(`https://wa.me/5493513830111?text=${encodeURIComponent(text)}`, '_blank');
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>
+
