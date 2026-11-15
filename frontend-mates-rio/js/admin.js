@@ -1539,6 +1539,9 @@ function renderOrdersTable() {
             <button type="button" class="btn-table-action" onclick="contactCustomerWhatsApp('${order.customerPhone || '5493513830111'}', '${order.id}', '${order.customerName || 'Cliente'}', '${order.status}')" title="Contactar por WhatsApp">
               <i class="fab fa-whatsapp" style="color: #27ae60;"></i>
             </button>
+            <button type="button" class="btn-table-action" onclick="deleteOrder('${order.id}')" title="Eliminar Venta / Pedido" style="color: #ef4444;">
+              <i class="fas fa-trash-can"></i>
+            </button>
           </div>
         </td>
       </tr>
@@ -1548,6 +1551,24 @@ function renderOrdersTable() {
 
 function filterOrdersTable() {
   renderOrdersTable();
+}
+
+function deleteOrder(orderId) {
+  if (!confirm(`¿Estás seguro de que deseás eliminar permanentemente la venta #${orderId}? Esta acción no se puede deshacer.`)) {
+    return;
+  }
+  let orders = getOrders();
+  const orderToDelete = orders.find(o => o.id === orderId);
+  orders = orders.filter(o => o.id !== orderId);
+  saveOrders(orders);
+  
+  renderOrdersTable();
+  if (typeof refreshDashboardData === 'function') refreshDashboardData();
+  if (typeof renderDashboardRecentOrders === 'function') renderDashboardRecentOrders();
+  if (typeof updateKPIs === 'function') updateKPIs();
+  
+  logAuditAction('Eliminación de Venta', `Se eliminó el pedido #${orderId} (${orderToDelete?.customerName || 'Cliente'}).`);
+  showAdminToast(`Venta #${orderId} eliminada correctamente`, 'fa-trash-can');
 }
 
 function changeOrderStatus(orderId, newStatus) {
@@ -2294,6 +2315,7 @@ function switchDesignTab(tabName) {
 
   if (tabName === 'slides') renderAdminSlidesList();
   if (tabName === 'categories') renderAdminCategoriesGrid();
+  populateCategorySelects();
   if (tabName === 'occasions') renderOccasionSettings();
 }
 
@@ -2482,10 +2504,11 @@ function renderAdminCategoriesGrid() {
 
   container.innerHTML = categories.map(cat => {
     const subcats = Array.isArray(cat.subcategories) ? cat.subcategories : [];
+    const isHomeVisible = cat.showOnHome !== false;
     return `
       <div class="admin-category-card">
         <div class="admin-cat-img-wrap">
-          <img src="${cat.image}" alt="${cat.name}" class="admin-cat-img" />
+          <img src="${cat.image || 'assets/images/cat_accesorios.jpg'}" alt="${cat.name}" class="admin-cat-img" onerror="this.src='assets/images/cat_accesorios.jpg'" />
           ${cat.badge ? `<span class="admin-cat-badge-pill">${cat.badge}</span>` : ''}
           <div class="admin-cat-overlay-title">
             ${cat.name}
@@ -2493,18 +2516,23 @@ function renderAdminCategoriesGrid() {
         </div>
         <div class="admin-cat-body">
           <div>
+            <div style="margin-bottom: 8px;">
+              <span class="badge-stock ${isHomeVisible ? 'stock-good' : 'stock-out'}" style="font-size: 0.68rem; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px;">
+                ${isHomeVisible ? '<i class="fas fa-home"></i> En Inicio y Catálogo' : '<i class="fas fa-filter"></i> Solo en Catálogo y Filtros'}
+              </span>
+            </div>
             <div class="admin-cat-label-sub">
-              <i class="fas fa-layer-group"></i> ${cat.label || ''}
+              <i class="fas fa-layer-group"></i> ${cat.label || cat.subtitle || 'Sin subtítulo'}
             </div>
             <div class="admin-cat-subcats-count">
               Subcategorías activas (${subcats.length}):
             </div>
             <div class="admin-cat-chips-list">
-              ${subcats.map(sc => `<span class="admin-subcat-chip">${sc}</span>`).join('')}
+              ${subcats.length > 0 ? subcats.map(sc => `<span class="admin-subcat-chip">${sc}</span>`).join('') : '<span style="font-size: 0.72rem; color: var(--admin-text-muted);">Sin subcategorías</span>'}
             </div>
           </div>
           <button type="button" class="btn-admin btn-admin-gold" style="width: 100%; justify-content: center; font-size: 0.82rem; margin-top: 10px;" onclick="openCategoryModal('${cat.id}')">
-            <i class="fas fa-pen-to-square"></i> Modificar Categoría & Subcategorías
+            <i class="fas fa-pen-to-square"></i> Editar Categoría & Subcategorías
           </button>
         </div>
       </div>
@@ -2512,11 +2540,47 @@ function renderAdminCategoriesGrid() {
   }).join('');
 }
 
+function openCreateCategoryModal() {
+  currentEditingCatId = '__new__';
+  const modalTitle = document.getElementById('cat-modal-title');
+  if (modalTitle) modalTitle.innerHTML = '<i class="fas fa-plus" style="color: var(--admin-gold);"></i> Agregar Nueva Categoría';
+  
+  const idEl = document.getElementById('cat-edit-id');
+  if (idEl) idEl.value = '';
+
+  const nameEl = document.getElementById('cat-edit-name');
+  if (nameEl) nameEl.value = '';
+
+  const badgeEl = document.getElementById('cat-edit-badge');
+  if (badgeEl) badgeEl.value = '';
+
+  const labelEl = document.getElementById('cat-edit-label');
+  if (labelEl) labelEl.value = '';
+
+  const imgEl = document.getElementById('cat-edit-image');
+  if (imgEl) imgEl.value = 'assets/images/cat_accesorios.jpg';
+
+  const showHomeEl = document.getElementById('cat-edit-show-on-home');
+  if (showHomeEl) showHomeEl.checked = false; // Por defecto: no en el inicio, tal como pidió el cliente
+
+  const deleteBtn = document.getElementById('btn-delete-cat');
+  if (deleteBtn) deleteBtn.style.display = 'none';
+
+  currentEditingSubcats = [];
+  renderCatSubcatsChips();
+
+  const modal = document.getElementById('category-editor-modal');
+  if (modal) modal.classList.add('active');
+}
+
 function openCategoryModal(catId) {
   currentEditingCatId = catId;
   const categories = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
   const cat = categories.find(c => c.id === catId);
   if (!cat) return;
+
+  const modalTitle = document.getElementById('cat-modal-title');
+  if (modalTitle) modalTitle.innerHTML = `<i class="fas fa-pen-to-square" style="color: var(--admin-gold);"></i> Modificar Categoría: ${cat.name}`;
 
   const idEl = document.getElementById('cat-edit-id');
   if (idEl) idEl.value = cat.id;
@@ -2528,7 +2592,18 @@ function openCategoryModal(catId) {
   if (badgeEl) badgeEl.value = cat.badge || '';
 
   const labelEl = document.getElementById('cat-edit-label');
-  if (labelEl) labelEl.value = cat.label || '';
+  if (labelEl) labelEl.value = cat.label || cat.subtitle || '';
+
+  const imgEl = document.getElementById('cat-edit-image');
+  if (imgEl) imgEl.value = cat.image || 'assets/images/cat_accesorios.jpg';
+
+  const showHomeEl = document.getElementById('cat-edit-show-on-home');
+  if (showHomeEl) showHomeEl.checked = cat.showOnHome !== false;
+
+  const deleteBtn = document.getElementById('btn-delete-cat');
+  if (deleteBtn) {
+    deleteBtn.style.display = categories.length > 1 ? 'inline-flex' : 'none';
+  }
 
   currentEditingSubcats = Array.isArray(cat.subcategories) ? [...cat.subcategories] : [];
   renderCatSubcatsChips();
@@ -2541,6 +2616,7 @@ function closeCategoryModal() {
   const modal = document.getElementById('category-editor-modal');
   if (!modal) return;
   modal.classList.remove('active');
+  currentEditingCatId = null;
 }
 
 function renderCatSubcatsChips() {
@@ -2580,11 +2656,11 @@ function removeSubcatChip(idx) {
 }
 
 function saveCategoryEdits() {
-  if (!currentEditingCatId) return;
-
   const name = document.getElementById('cat-edit-name')?.value.trim();
   const badge = document.getElementById('cat-edit-badge')?.value.trim();
   const label = document.getElementById('cat-edit-label')?.value.trim();
+  const image = document.getElementById('cat-edit-image')?.value.trim() || 'assets/images/cat_accesorios.jpg';
+  const showOnHome = document.getElementById('cat-edit-show-on-home')?.checked || false;
 
   if (!name) {
     alert('El nombre de la categoría es obligatorio.');
@@ -2592,23 +2668,113 @@ function saveCategoryEdits() {
   }
 
   let categories = typeof getActiveCategories === 'function' ? [...getActiveCategories()] : [...CATEGORIES_DATA];
-  const cat = categories.find(c => c.id === currentEditingCatId);
 
-  if (cat) {
-    cat.name = name;
-    cat.badge = badge;
-    cat.label = label;
-    cat.subcategories = [...currentEditingSubcats];
-
-    if (typeof saveActiveCategories === 'function') {
-      saveActiveCategories(categories);
+  if (currentEditingCatId === '__new__') {
+    let baseId = name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+    if (!baseId) baseId = 'cat_' + Date.now();
+    let uniqueId = baseId;
+    let counter = 1;
+    while (categories.some(c => c.id === uniqueId)) {
+      uniqueId = `${baseId}_${counter++}`;
     }
+
+    const newCat = {
+      id: uniqueId,
+      name: name,
+      subtitle: label || '',
+      label: label || '',
+      badge: badge || '',
+      image: image,
+      subcategories: [...currentEditingSubcats],
+      showOnHome: showOnHome,
+      custom: true
+    };
+    categories.push(newCat);
+    logAuditAction('Diseño Web', `Se agregó la nueva categoría "${name}" (ID: ${uniqueId}, En Inicio: ${showOnHome ? 'Sí' : 'No'}).`);
+    showAdminToast(`Categoría "${name}" creada con éxito`, 'fa-plus');
+  } else {
+    const cat = categories.find(c => c.id === currentEditingCatId);
+    if (cat) {
+      cat.name = name;
+      cat.badge = badge;
+      cat.label = label;
+      cat.subtitle = label;
+      cat.image = image;
+      cat.subcategories = [...currentEditingSubcats];
+      cat.showOnHome = showOnHome;
+      logAuditAction('Diseño Web', `Categoría "${name}" y sus subcategorías fueron modificadas.`);
+      showAdminToast(`Categoría "${name}" actualizada correctamente`, 'fa-tags');
+    }
+  }
+
+  if (typeof saveActiveCategories === 'function') {
+    saveActiveCategories(categories);
   }
 
   closeCategoryModal();
   renderAdminCategoriesGrid();
-  showAdminToast(`Categoría "${name}" actualizada correctamente`, 'fa-tags');
-  logAuditAction('Diseño Web', `Categoría "${name}" y sus subcategorías fueron modificadas.`);
+  populateCategorySelects();
+}
+
+function deleteCurrentCategory() {
+  if (!currentEditingCatId || currentEditingCatId === '__new__') return;
+  let categories = typeof getActiveCategories === 'function' ? [...getActiveCategories()] : [...CATEGORIES_DATA];
+  const cat = categories.find(c => c.id === currentEditingCatId);
+  if (!cat) return;
+
+  if (!confirm(`¿Estás seguro de que deseás eliminar la categoría "${cat.name}"? Los productos asociados deberán ser reclasificados.`)) {
+    return;
+  }
+
+  categories = categories.filter(c => c.id !== currentEditingCatId);
+  if (typeof saveActiveCategories === 'function') {
+    saveActiveCategories(categories);
+  }
+
+  closeCategoryModal();
+  renderAdminCategoriesGrid();
+  populateCategorySelects();
+  logAuditAction('Diseño Web', `Se eliminó la categoría "${cat.name}".`);
+  showAdminToast(`Categoría "${cat.name}" eliminada`, 'fa-trash-can');
+}
+
+function populateCategorySelects() {
+  const categories = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
+  
+  // 1. Selector de nuevo producto
+  const newCatSelect = document.getElementById('new-prod-category');
+  if (newCatSelect) {
+    const currentVal = newCatSelect.value;
+    newCatSelect.innerHTML = categories.map(c => `
+      <option value="${c.id}">${c.name}${c.label ? ' - ' + c.label : ''}</option>
+    `).join('');
+    if (currentVal && categories.some(c => c.id === currentVal)) {
+      newCatSelect.value = currentVal;
+    }
+  }
+
+  // 2. Selector de editar producto
+  const editCatSelect = document.getElementById('edit-prod-category');
+  if (editCatSelect) {
+    const currentVal = editCatSelect.value;
+    editCatSelect.innerHTML = categories.map(c => `
+      <option value="${c.id}">${c.name}${c.label ? ' - ' + c.label : ''}</option>
+    `).join('');
+    if (currentVal && categories.some(c => c.id === currentVal)) {
+      editCatSelect.value = currentVal;
+    }
+  }
+
+  // 3. Filtro de inventario
+  const invCatFilter = document.getElementById('inventory-cat-filter');
+  if (invCatFilter) {
+    const currentVal = invCatFilter.value;
+    invCatFilter.innerHTML = `
+      <option value="all">Todas las Categorías</option>
+      ${categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+    `;
+    if (currentVal) invCatFilter.value = currentVal;
+  }
 }
 
 // --- 13.3 ANUNCIO DE FECHAS ESPECIALES & UBICACIÓN WEB ---
@@ -3304,6 +3470,9 @@ function renderWholesaleOrdersTable() {
             <a href="https://wa.me/${(order.phone || '').replace(/\D/g, '')}?text=Hola%20${encodeURIComponent(order.contactName)}%20de%20${encodeURIComponent(order.businessName)},%20te%20escribimos%20de%20Mates%20R%C3%ADo%20por%20tu%20pedido%20mayorista%20#${order.id}." target="_blank" class="btn-table-action" title="Contactar por WhatsApp">
               <i class="fab fa-whatsapp" style="color: #25d366;"></i>
             </a>
+            <button type="button" class="btn-table-action" onclick="deleteWholesaleOrder('${order.id}')" title="Eliminar Pedido Mayorista" style="color: #ef4444;">
+              <i class="fas fa-trash-can"></i>
+            </button>
           </div>
         </td>
       </tr>

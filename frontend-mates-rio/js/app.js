@@ -417,8 +417,11 @@ function renderCategoriesGrid() {
   const container = document.getElementById('categories-grid');
   if (!container) return;
   const cats = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
+  
+  // Excluir categorías configuradas como showOnHome === false (no mostrarlas en los recuadros del inicio)
+  const homeCats = cats.filter(c => c.showOnHome !== false);
 
-  container.innerHTML = cats.map(cat => {
+  container.innerHTML = homeCats.map(cat => {
     return `
     <div class="category-card category-card-name-only" data-category="${cat.id}">
       <img src="${cat.image}" alt="${cat.name}" class="category-card-bg" loading="lazy" />
@@ -491,6 +494,50 @@ function setSubcategoryFilter(subcat) {
   state.activeSubcategory = subcat;
   renderSubcategoriesFilterBar(state.activeCategory);
   renderProducts();
+}
+
+
+// Renderizado dinámico de píldoras de categorías en el Catálogo desde getActiveCategories()
+function renderCatalogCategoryPills() {
+  const container = document.querySelector('.category-filter-pills');
+  if (!container) return;
+
+  const cats = typeof getActiveCategories === 'function' ? getActiveCategories() : (typeof CATEGORIES_DATA !== 'undefined' ? CATEGORIES_DATA : []);
+  
+  const defaultIcons = {
+    all: 'assets/images/icons-cat/cat_todos.svg',
+    promos: 'assets/images/icons-cat/cat_promos.svg',
+    mates: 'assets/images/icons-cat/cat_mates.svg',
+    termos: 'assets/images/icons-cat/cat_termos.svg',
+    accesorios: 'assets/images/icons-cat/cat_accesorios.svg',
+    yerbas: 'assets/images/icons-cat/cat_yerbas.svg',
+    equipos: 'assets/images/icons-cat/cat_equipos.svg'
+  };
+
+  let html = `
+    <button class="filter-pill ${state.activeCategory === 'all' ? 'active' : ''}" data-category="all">
+      <img src="assets/images/icons-cat/cat_todos.svg" alt="" class="mono-cat-icon-img" /> Todos los Productos
+    </button>
+  `;
+
+  cats.forEach(cat => {
+    const iconSrc = defaultIcons[cat.id] || 'assets/images/icons-cat/cat_todos.svg';
+    const isActive = state.activeCategory === cat.id;
+    html += `
+      <button class="filter-pill ${isActive ? 'active' : ''}" data-category="${cat.id}">
+        <img src="${iconSrc}" alt="" class="mono-cat-icon-img" /> ${cat.name.toUpperCase()}
+      </button>
+    `;
+  });
+
+  container.innerHTML = html;
+
+  container.querySelectorAll('.filter-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const cat = pill.getAttribute('data-category');
+      setCategoryFilter(cat);
+    });
+  });
 }
 
 function setCategoryFilter(categoryId) {
@@ -2619,6 +2666,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  renderCatalogCategoryPills();
   // 8. Category Filter Pills
   document.querySelectorAll('.filter-pill').forEach(pill => {
     pill.addEventListener('click', () => {
