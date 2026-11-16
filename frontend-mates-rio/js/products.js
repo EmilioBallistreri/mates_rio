@@ -946,6 +946,7 @@ window.syncProductsFromStorage = syncProductsFromStorage;
     mates_rio_customization_pricing: 'customizationPricing',
     mates_rio_supplier_purchases: 'supplierPurchases',
     mates_rio_orders: 'orders',
+    mates_rio_wholesale_orders: 'wholesaleOrders',
     mates_rio_wholesale_clients: 'wholesaleClients',
     mates_rio_wholesale_accounts: 'wholesaleAccounts',
     mates_rio_users_db: 'usersDb',
@@ -1038,11 +1039,37 @@ window.syncProductsFromStorage = syncProductsFromStorage;
       if (typeof window.renderInventoryTable === 'function') {
         window.renderInventoryTable();
       }
-      if (typeof window.renderHomeSlidesAdmin === 'function') {
-        window.renderHomeSlidesAdmin();
+      if (typeof window.renderAdminSlidesList === 'function') {
+        window.renderAdminSlidesList();
       }
-      if (typeof window.renderCategoriesAdmin === 'function') {
-        window.renderCategoriesAdmin();
+      if (typeof window.renderAdminCategoriesGrid === 'function') {
+        window.renderAdminCategoriesGrid();
+      }
+      if (typeof window.renderOccasionSettings === 'function') {
+        window.renderOccasionSettings();
+      }
+      if (typeof window.renderCustomizerPricingAdmin === 'function') {
+        window.renderCustomizerPricingAdmin();
+      }
+      if (typeof window.renderOrdersTable === 'function') {
+        window.renderOrdersTable();
+      }
+      if (typeof window.renderUsersTable === 'function') {
+        window.renderUsersTable();
+      }
+      if (typeof window.renderPurchasesSection === 'function') {
+        window.renderPurchasesSection();
+      }
+      if (typeof window.updateKPIs === 'function') {
+        window.updateKPIs();
+      }
+      if (typeof state !== 'undefined' && state) {
+        try {
+          const ordRaw = localStorage.getItem('mates_rio_orders');
+          if (ordRaw) state.orders = JSON.parse(ordRaw);
+          const usrRaw = localStorage.getItem('mates_rio_users_db');
+          if (usrRaw) state.usersDb = JSON.parse(usrRaw);
+        } catch (err) {}
       }
     } catch (e) {
       console.warn('Error refrescando vistas tras sincronización:', e);

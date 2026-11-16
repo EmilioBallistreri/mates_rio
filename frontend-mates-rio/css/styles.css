@@ -6184,8 +6184,6 @@ body.theme-dark .purchase-type-card {
 }
 
 /* ==========================================================================
-
-/* ==========================================================================
    6. COMPLETION CHOICE MODAL (CONTINUAR COMPRA / FINALIZAR / WHATSAPP)
    ========================================================================== */
 .modal-completion-box {
@@ -10892,12 +10890,14 @@ body.theme-dark .btn-outline-dark:hover {
   margin: 10px 0 8px;
   background: linear-gradient(135deg, #ffffff 0%, #e4e4e7 45%, #a1a1aa 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 body.theme-light .customizer-hero-head .studio-page-title {
   background: linear-gradient(135deg, #09090b 0%, #18181b 50%, #27272a 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -11009,6 +11009,7 @@ body.theme-light .prod-select-card.active {
   margin: 0 0 8px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -13139,6 +13140,7 @@ body {
     max-width: 100% !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
   }
@@ -14729,6 +14731,7 @@ input[type="number"]::-webkit-inner-spin-button,
 .ws-qty-input::-webkit-outer-spin-button,
 .ws-qty-input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
+  appearance: none !important;
   margin: 0 !important;
   display: none !important;
 }
@@ -16885,3 +16888,111 @@ body.theme-inverted .item-quick-btn:hover {
   color: #ffffff !important;
   border-color: #000000 !important;
 }
+
+/* ==========================================================================
+   TARJETAS DE PLANTILLAS PREDISEÑADAS (EJ: PAPA LEÓN XIV) EN RIBBON Y MODAL
+   ========================================================================== */
+.ribbon-template-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 14px 6px 8px;
+  border-radius: 10px;
+  background: #18181b;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 54px;
+  white-space: nowrap;
+}
+
+.ribbon-template-card-btn:hover {
+  background: #27272a;
+  border-color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.ribbon-template-thumb {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.ribbon-template-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: none !important;
+}
+
+.ribbon-template-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.2;
+}
+
+.ribbon-template-title {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.ribbon-template-sub {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 600;
+}
+
+html.theme-light .ribbon-template-card-btn,
+body.theme-light .ribbon-template-card-btn,
+body.theme-inverted .ribbon-template-card-btn {
+  background: #f4f4f5;
+  border-color: rgba(0, 0, 0, 0.28);
+  color: #111111;
+}
+
+html.theme-light .ribbon-template-card-btn:hover,
+body.theme-light .ribbon-template-card-btn:hover,
+body.theme-inverted .ribbon-template-card-btn:hover {
+  background: #e4e4e7;
+  border-color: #111111;
+}
+
+html.theme-light .ribbon-template-title,
+body.theme-light .ribbon-template-title,
+body.theme-inverted .ribbon-template-title {
+  color: #111111;
+}
+
+html.theme-light .ribbon-template-sub,
+body.theme-light .ribbon-template-sub,
+body.theme-inverted .ribbon-template-sub {
+  color: #52525b;
+}
+
+.vector-icon-card.is-template-card .vector-thumb-wrap {
+  background: #ffffff !important;
+  border-radius: 50%;
+  padding: 4px;
+  width: 72px;
+  height: 72px;
+}
+
+.vector-icon-card.is-template-card .vector-thumb-wrap img {
+  filter: none !important;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+

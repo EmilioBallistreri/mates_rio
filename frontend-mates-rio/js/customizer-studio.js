@@ -188,7 +188,16 @@ const VECTOR_CATEGORIES = {
   },
   plantillas: {
     name: '📐 Plantillas',
-    items: []
+    items: [
+      {
+        id: 'tpl_papa_leon_xiv',
+        isTemplate: true,
+        templateId: 'tpl_papa_leon_xiv',
+        name: 'Papa León XIV',
+        subtitle: 'Plantilla Completa Editable',
+        file: 'assets/images/designs/papa_leon/thumb_papa_leon.png'
+      }
+    ]
   },
   simbolos: {
     name: '✨ Símbolos & Formas',
@@ -302,6 +311,10 @@ function initStudioEngine() {
 // 2. NAVEGACIÓN Y TABS DEL RIBBON (WORD / PAINT CAD)
 // ==========================================================================
 function switchRibbonTab(tabKey) {
+  if (tabKey === 'templates') {
+    openTemplatesRibbonTab();
+    return;
+  }
   studio.activeRibbonTab = tabKey;
   
   // Actualizar botones de pestaña
@@ -317,6 +330,18 @@ function switchRibbonTab(tabKey) {
   // Cerrar dropdown de fuentes si estuviera abierto
   const fontDropdown = document.getElementById('ribbon-font-dropdown');
   if (fontDropdown) fontDropdown.classList.remove('open');
+}
+
+function openTemplatesRibbonTab() {
+  studio.activeRibbonTab = 'icons';
+  document.querySelectorAll('.ribbon-tab-btn').forEach(btn => {
+    const t = btn.getAttribute('data-tab');
+    btn.classList.toggle('active', t === 'templates' || (t === 'icons' && !document.querySelector('.ribbon-tab-btn[data-tab="templates"]')));
+  });
+  document.querySelectorAll('.ribbon-tab-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.getAttribute('data-panel') === 'icons');
+  });
+  filterRibbonDesigns('plantillas');
 }
 
 // Compatibilidad con llamadas legacy
@@ -787,6 +812,21 @@ function renderRibbonQuickDesigns(catKey) {
     return;
   }
 
+  if (catKey === 'plantillas') {
+    container.innerHTML = items.map(item => `
+      <button type="button" class="ribbon-template-card-btn" onclick="applyVirolaPresetTemplate('${item.templateId || item.id}')" title="Aplicar plantilla completa: ${item.name}">
+        <span class="ribbon-template-thumb">
+          <img src="${item.file}" alt="${item.name}" loading="lazy" />
+        </span>
+        <span class="ribbon-template-info">
+          <strong class="ribbon-template-title">${item.name}</strong>
+          <small class="ribbon-template-sub">${item.subtitle || 'Plantilla Editable'}</small>
+        </span>
+      </button>
+    `).join('');
+    return;
+  }
+
   // ITEM 2: ÚNICAMENTE ÍCONOS, SIN NINGÚN NOMBRE O TEXTO
   container.innerHTML = items.map(item => `
     <button type="button" class="ribbon-icon-quick-btn" onclick="addVectorToVirola('${item.id}', '${catKey}')" title="${item.name}">
@@ -794,6 +834,308 @@ function renderRibbonQuickDesigns(catKey) {
     </button>
   `).join('');
 }
+
+// ==========================================================================
+// SISTEMA DE PLANTILLAS PREDISEÑADAS COMPLETAS Y 100% EDITABLES
+// ==========================================================================
+function getPapaLeonTemplateItems() {
+  const ts = Date.now();
+  return [
+    // 1. Arcos dobles superiores que enmarcan "PAPA LEÓN XIV"
+    {
+      id: `tpl_arco_sup_${ts}_1`,
+      type: 'icon',
+      graphicId: 'papa_arco_sup',
+      name: 'Arco Doble Superior',
+      file: 'assets/images/designs/papa_leon/papa_arco_sup.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_arco_sup.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_arco_sup_white.png',
+      svgArc: { gap: 2.2, spanDeg: 92 },
+      angle: 270,
+      radius: 221.2,
+      rotation: 0,
+      scale: 1.0,
+      x: 250,
+      y: 28.8
+    },
+    {
+      id: `tpl_arco_inf_${ts}_2`,
+      type: 'icon',
+      graphicId: 'papa_arco_inf',
+      name: 'Arco Doble Interior',
+      file: 'assets/images/designs/papa_leon/papa_arco_inf.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_arco_inf.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_arco_inf_white.png',
+      svgArc: { gap: 2.2, spanDeg: 86 },
+      angle: 270,
+      radius: 169.1,
+      rotation: 0,
+      scale: 1.0,
+      x: 250,
+      y: 80.9
+    },
+    // 2. Íconos superiores izquierdos (Biblia, Cruz, Sol)
+    {
+      id: `tpl_biblia_${ts}_3`,
+      type: 'icon',
+      graphicId: 'papa_biblia',
+      name: 'Santa Biblia',
+      file: 'assets/images/designs/papa_leon/papa_biblia.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_biblia.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_biblia_white.png',
+      wRatio: 0.9,
+      hRatio: 1.0,
+      angle: 217,
+      radius: 205.2,
+      rotation: 0,
+      scale: 0.98,
+      x: 86.15,
+      y: 126.44
+    },
+    {
+      id: `tpl_cruz_${ts}_4`,
+      type: 'icon',
+      graphicId: 'papa_cruz',
+      name: 'Cruz Cristiana',
+      file: 'assets/images/designs/papa_leon/papa_cruz.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_cruz.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_cruz_white.png',
+      wRatio: 0.857,
+      hRatio: 1.0,
+      angle: 205,
+      radius: 213.2,
+      rotation: 0,
+      scale: 0.86,
+      x: 56.07,
+      y: 161.36
+    },
+    {
+      id: `tpl_sol_${ts}_5`,
+      type: 'icon',
+      graphicId: 'papa_sol',
+      name: 'Sol Radiante',
+      file: 'assets/images/designs/papa_leon/papa_sol.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_sol.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_sol_white.png',
+      wRatio: 1.0,
+      hRatio: 0.955,
+      angle: 208,
+      radius: 179.3,
+      rotation: 0,
+      scale: 1.07,
+      x: 91.53,
+      y: 166.2
+    },
+    // 3. Íconos superiores derechos (Paloma, Sagrado Corazón, Cáliz)
+    {
+      id: `tpl_paloma_${ts}_6`,
+      type: 'icon',
+      graphicId: 'papa_paloma',
+      name: 'Paloma de la Paz',
+      file: 'assets/images/designs/papa_leon/papa_paloma.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_paloma.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_paloma_white.png',
+      wRatio: 0.727,
+      hRatio: 1.0,
+      angle: 322,
+      radius: 208.7,
+      rotation: 0,
+      scale: 1.07,
+      x: 414.92,
+      y: 122.15
+    },
+    {
+      id: `tpl_corazon_${ts}_7`,
+      type: 'icon',
+      graphicId: 'papa_corazon',
+      name: 'Sagrado Corazón',
+      file: 'assets/images/designs/papa_leon/papa_corazon.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_corazon.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_corazon_white.png',
+      wRatio: 0.959,
+      hRatio: 1.0,
+      angle: 327,
+      radius: 180.0,
+      rotation: 0,
+      scale: 1.20,
+      x: 401.49,
+      y: 152.77
+    },
+    {
+      id: `tpl_caliz_${ts}_8`,
+      type: 'icon',
+      graphicId: 'papa_caliz',
+      name: 'Cáliz Sagrado',
+      file: 'assets/images/designs/papa_leon/papa_caliz.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_caliz.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_caliz_white.png',
+      wRatio: 0.667,
+      hRatio: 1.0,
+      angle: 334,
+      radius: 212.9,
+      rotation: 0,
+      scale: 0.74,
+      x: 440.71,
+      y: 155.45
+    },
+    // 4. Retratos laterales del Papa León XIV
+    {
+      id: `tpl_papa_izq_${ts}_9`,
+      type: 'icon',
+      graphicId: 'papa_izq',
+      name: 'Papa León XIV (Ornamentos)',
+      file: 'assets/images/designs/papa_leon/papa_izq.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_izq.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_izq_white.png',
+      wRatio: 0.5425,
+      hRatio: 1.0,
+      angle: 179,
+      radius: 187.0,
+      rotation: 0,
+      scale: 3.74,
+      x: 63.05,
+      y: 252.69
+    },
+    {
+      id: `tpl_papa_der_${ts}_10`,
+      type: 'icon',
+      graphicId: 'papa_der',
+      name: 'Papa León XIV (Retrato)',
+      file: 'assets/images/designs/papa_leon/papa_der.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_der.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_der_white.png',
+      wRatio: 0.4902,
+      hRatio: 1.0,
+      angle: 0,
+      radius: 191.2,
+      rotation: 0,
+      scale: 3.74,
+      x: 441.24,
+      y: 249.46
+    },
+    // 5. Firuletes barrocos inferiores
+    {
+      id: `tpl_fir_izq_${ts}_11`,
+      type: 'icon',
+      graphicId: 'papa_firulete_izq',
+      name: 'Firulete Izquierdo',
+      file: 'assets/images/designs/papa_leon/papa_firulete_izq.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_firulete_izq.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_firulete_izq_white.png',
+      wRatio: 0.9535,
+      hRatio: 1.0,
+      angle: 139,
+      radius: 206.8,
+      rotation: 0,
+      scale: 2.10,
+      x: 93.67,
+      y: 385.37
+    },
+    {
+      id: `tpl_fir_der_${ts}_12`,
+      type: 'icon',
+      graphicId: 'papa_firulete_der',
+      name: 'Firulete Derecho',
+      file: 'assets/images/designs/papa_leon/papa_firulete_der.png',
+      fileBlack: 'assets/images/designs/papa_leon/papa_firulete_der.png',
+      fileWhite: 'assets/images/designs/papa_leon/papa_firulete_der_white.png',
+      wRatio: 0.7558,
+      hRatio: 1.0,
+      angle: 39,
+      radius: 210.9,
+      rotation: 0,
+      scale: 2.10,
+      x: 414.38,
+      y: 382.15
+    },
+    // 6. Capas de texto editables (Superior e Inferiores)
+    {
+      id: `tpl_text_top_${ts}_13`,
+      type: 'text',
+      text: 'PAPA LEÓN XIV',
+      font: 'Libre Baskerville',
+      fontSize: 33,
+      fontWeight: 700,
+      letterSpacing: '1.2px',
+      arcPosition: 'top',
+      angle: 270,
+      radius: 180,
+      rotation: 0,
+      scale: 1.0,
+      x: 250,
+      y: 70
+    },
+    {
+      id: `tpl_text_bot1_${ts}_14`,
+      type: 'text',
+      text: '“No hay corazón demasiado roto',
+      font: 'Libre Baskerville',
+      fontSize: 18,
+      fontWeight: 700,
+      letterSpacing: '0.2px',
+      arcPosition: 'bottom',
+      angle: 90,
+      radius: 190,
+      rotation: 0,
+      scale: 1.0,
+      x: 250,
+      y: 440
+    },
+    {
+      id: `tpl_text_bot2_${ts}_15`,
+      type: 'text',
+      text: 'para la misericordia”',
+      font: 'Libre Baskerville',
+      fontSize: 18.5,
+      fontWeight: 700,
+      letterSpacing: '0.3px',
+      arcPosition: 'bottom',
+      angle: 90,
+      radius: 215,
+      rotation: 0,
+      scale: 1.0,
+      x: 250,
+      y: 465
+    }
+  ];
+}
+
+function applyVirolaPresetTemplate(templateId) {
+  if (typeof saveStudioHistoryState === 'function') {
+    saveStudioHistoryState();
+  }
+
+  // Asegurar que estamos en el Mate (virola circular) para que se ajuste directamente a la virola
+  if (studio.activeProduct !== 'mate') {
+    studio.activeProduct = 'mate';
+    studio.selectedMateId = PRODUCTS_CATALOG.mate.defaultModel;
+    renderProductSelectorCardsUI();
+    renderModelsDropdown();
+    updateStageBadge();
+  }
+
+  // Desactivar líneas genéricas porque la plantilla tiene sus propios arcos dobles
+  studio.circularLines = 'no';
+  document.querySelectorAll('.lines-pill-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-lines') === 'no');
+  });
+
+  if (templateId === 'tpl_papa_leon_xiv' || templateId === 'papa_leon_xiv') {
+    studio.items = getPapaLeonTemplateItems();
+    const topTextItem = studio.items.find(i => i.type === 'text');
+    studio.activeItemId = topTextItem ? topTextItem.id : null;
+    studio.selectedFont = 'Libre Baskerville';
+  }
+
+  renderVirolaCanvas();
+  renderTextLayersUI();
+  updateActiveItemFloatingBar();
+  updatePriceDisplay();
+  if (studio.viewMode === '360') render360Canvas();
+
+  showNotificationToast('¡Plantilla "Papa León XIV" aplicada! Podés mover, editar o eliminar cualquier parte.', 'fa-Wand-magic-sparkles');
+}
+window.applyVirolaPresetTemplate = applyVirolaPresetTemplate;
 
 function applyPhraseById(phraseId) {
   const cat = VECTOR_CATEGORIES.frases;
@@ -838,6 +1180,11 @@ function addVectorToVirola(itemId, catKey) {
   if (!cat) return;
   const itemDef = cat.items.find(i => i.id === itemId);
   if (!itemDef) return;
+
+  if (itemDef.isTemplate) {
+    applyVirolaPresetTemplate(itemDef.templateId || itemDef.id);
+    return;
+  }
 
   const { cx, cy, rRing } = STUDIO_CONFIG;
   const existingCount = studio.items.filter(i => i.type === 'icon').length;
@@ -919,14 +1266,20 @@ function renderModalCatalogGrid(catKey) {
   }
 
   // ITEM 1: Cuadrícula ultra profesional con miniaturas acotadas y elegantes
-  grid.innerHTML = itemsToRender.map(item => `
-    <div class="vector-icon-card" onclick="addVectorToVirola('${item.id}'); closeDesignCatalogModal();" title="${item.name}">
-      <div class="vector-thumb-wrap">
-        <img src="${item.file}" alt="${item.name}" loading="lazy" />
+  grid.innerHTML = itemsToRender.map(item => {
+    const clickAction = item.isTemplate
+      ? `applyVirolaPresetTemplate('${item.templateId || item.id}'); closeDesignCatalogModal();`
+      : `addVectorToVirola('${item.id}'); closeDesignCatalogModal();`;
+    return `
+      <div class="vector-icon-card ${item.isTemplate ? 'is-template-card' : ''}" onclick="${clickAction}" title="${item.name}">
+        <div class="vector-thumb-wrap">
+          <img src="${item.file}" alt="${item.name}" loading="lazy" />
+        </div>
+        <span class="vector-name">${item.name}</span>
+        ${item.isTemplate ? '<small style="font-size:0.68rem;opacity:0.75;display:block;margin-top:2px;">Plantilla Completa</small>' : ''}
       </div>
-      <span class="vector-name">${item.name}</span>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 // ==========================================================================
@@ -1152,6 +1505,7 @@ function renderVirolaCanvas() {
   // 3. CAPAS DE TEXTO
   let textsHtml = '';
   let defsTextPathsHtml = '';
+  let activeHandlesHtml = '';
   const textItems = studio.items.filter(i => i.type === 'text');
 
   textItems.forEach(t => {
@@ -1163,6 +1517,8 @@ function renderVirolaCanvas() {
     const rad = (angle * Math.PI) / 180;
     const x = t.x !== undefined ? t.x : cx + r * Math.cos(rad);
     const y = t.y !== undefined ? t.y : cy + r * Math.sin(rad);
+    const fWeight = t.fontWeight || 800;
+    const lSpacing = t.letterSpacing !== undefined ? t.letterSpacing : '2px';
 
     if (isStraight) {
       const rot = t.rotation !== undefined ? t.rotation : 0;
@@ -1174,8 +1530,8 @@ function renderVirolaCanvas() {
            ontouchstart="startFreeItemDrag('${t.id}', event)">
           <text font-family="'${t.font || 'Cinzel'}', serif" 
                 font-size="${t.fontSize || 22}" 
-                font-weight="800" 
-                letter-spacing="2px" 
+                font-weight="${fWeight}" 
+                letter-spacing="${lSpacing}" 
                 fill="#120e0a" 
                 text-anchor="middle" 
                 dominant-baseline="central" 
@@ -1221,8 +1577,8 @@ function renderVirolaCanvas() {
            ontouchstart="startFreeItemDrag('${t.id}', event)">
           <text font-family="'${t.font || 'Cinzel'}', serif" 
                 font-size="${t.fontSize || 22}" 
-                font-weight="800" 
-                letter-spacing="2px" 
+                font-weight="${fWeight}" 
+                letter-spacing="${lSpacing}" 
                 fill="#120e0a" 
                 style="cursor: grab;" 
                 class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
@@ -1236,7 +1592,7 @@ function renderVirolaCanvas() {
     }
   });
 
-  // 4. ÍCONOS, DISEÑOS Y LOGOS CARGADOS (ITEM 5: BOTONES DE ACCIÓN ESTÁTICOS)
+  // 4. ÍCONOS, DISEÑOS Y LOGOS CARGADOS
   let iconsHtml = '';
   const iconItems = studio.items.filter(i => i.type === 'icon');
   iconItems.forEach(item => {
@@ -1248,21 +1604,58 @@ function renderVirolaCanvas() {
     const x = item.x !== undefined ? item.x : cx + (item.radius || rRing) * Math.cos(rad);
     const y = item.y !== undefined ? item.y : cy + (item.radius || rRing) * Math.sin(rad);
 
-    const baseSize = 44;
-    const halfSize = (baseSize * scale) / 2;
+    if (item.svgArc && studio.activeProduct === 'mate') {
+      const rMid = item.radius || rRing;
+      const halfGap = (item.svgArc.gap || 2.2) / 2;
+      const halfSpan = Math.min(165, ((item.svgArc.spanDeg || 90) * scale) / 2);
+      const centerAng = (item.angle !== undefined ? item.angle : 270) + rot;
+      const arc1 = describeSvgArc(cx, cy, rMid - halfGap, centerAng - halfSpan, centerAng + halfSpan);
+      const arc2 = describeSvgArc(cx, cy, rMid + halfGap, centerAng - halfSpan, centerAng + halfSpan);
+      const anchorRad = (centerAng * Math.PI) / 180;
+      const anchorX = cx + rMid * Math.cos(anchorRad);
+      const anchorY = cy + rMid * Math.sin(anchorRad);
 
-    const contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(115%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.35));" />`;
-
-    // ÍCONOS Y DISEÑOS CON MARCO DE SELECCIÓN LIMPIO (SIN BOTONES FLOTANTES DESPROLIJOS)
-    let selectionBorderHtml = '';
-    if (isActive) {
-      selectionBorderHtml = `
-        <rect x="${(-halfSize - 5).toFixed(2)}" y="${(-halfSize - 5).toFixed(2)}" 
-              width="${(baseSize * scale + 10).toFixed(2)}" height="${(baseSize * scale + 10).toFixed(2)}" 
-              fill="none" stroke="#111111" stroke-width="1.8" stroke-dasharray="4,4" 
-              rx="6" ry="6" opacity="0.9" pointer-events="none" />
+      iconsHtml += `
+        <g class="virola-sticker-group ${isActive ? 'active-sticker' : ''}"
+           data-item-id="${item.id}"
+           onmousedown="startFreeItemDrag('${item.id}', event)"
+           ontouchstart="startFreeItemDrag('${item.id}', event)"
+           style="cursor: grab;">
+          <path d="${arc1}" fill="none" stroke="transparent" stroke-width="10" pointer-events="stroke" />
+          <path d="${arc1}" fill="none" stroke="#120e0a" stroke-width="1.6" stroke-linecap="round" pointer-events="none" />
+          <path d="${arc2}" fill="none" stroke="#120e0a" stroke-width="1.4" stroke-linecap="round" pointer-events="none" />
+        </g>
       `;
+
+      if (isActive) {
+        activeHandlesHtml += `
+          <g class="virola-sticker-group active-sticker" data-item-id="${item.id}"
+             transform="translate(${anchorX.toFixed(2)}, ${anchorY.toFixed(2)})"
+             onmousedown="startFreeItemDrag('${item.id}', event)"
+             ontouchstart="startFreeItemDrag('${item.id}', event)">
+            <g class="virola-handle handle-delete" data-handle="delete" transform="translate(22, -12)" style="cursor: pointer;">
+              <circle r="10" fill="#111111" stroke="#ffffff" stroke-width="1.5" />
+              <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">✕</text>
+            </g>
+            <g class="virola-handle handle-scale" data-handle="scale" transform="translate(-22, -12)" style="cursor: nwse-resize;">
+              <circle r="10" fill="#18181b" stroke="#ffffff" stroke-width="1.5" />
+              <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">⤡</text>
+            </g>
+          </g>
+        `;
+      }
+      return;
     }
+
+    const baseSize = 44;
+    const wRatio = item.wRatio || 1.0;
+    const hRatio = item.hRatio || 1.0;
+    const itemW = baseSize * scale * wRatio;
+    const itemH = baseSize * scale * hRatio;
+    const halfW = itemW / 2;
+    const halfH = itemH / 2;
+
+    const contentHtml = `<image href="${item.file}" x="${(-halfW).toFixed(2)}" y="${(-halfH).toFixed(2)}" width="${itemW.toFixed(2)}" height="${itemH.toFixed(2)}" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(115%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.35));" />`;
 
     iconsHtml += `
       <g class="virola-sticker-group ${isActive ? 'active-sticker' : ''}" 
@@ -1272,9 +1665,40 @@ function renderVirolaCanvas() {
          ontouchstart="startFreeItemDrag('${item.id}', event)"
          style="cursor: grab;">
         ${contentHtml}
-        ${selectionBorderHtml}
       </g>
     `;
+
+    if (isActive) {
+      const delX = halfW + 8;
+      const delY = -halfH - 8;
+      const rotX = -halfW - 8;
+      const rotY = -halfH - 8;
+      const scX = halfW + 8;
+      const scY = halfH + 8;
+      activeHandlesHtml += `
+        <g class="virola-sticker-group active-sticker" data-item-id="${item.id}"
+           transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
+           onmousedown="startFreeItemDrag('${item.id}', event)"
+           ontouchstart="startFreeItemDrag('${item.id}', event)">
+          <rect x="${(-halfW - 5).toFixed(2)}" y="${(-halfH - 5).toFixed(2)}" 
+                width="${(itemW + 10).toFixed(2)}" height="${(itemH + 10).toFixed(2)}" 
+                fill="none" stroke="#111111" stroke-width="1.8" stroke-dasharray="4,4" 
+                rx="6" ry="6" opacity="0.9" pointer-events="none" />
+          <g class="virola-handle handle-delete" data-handle="delete" transform="translate(${delX.toFixed(2)}, ${delY.toFixed(2)})" style="cursor: pointer;">
+            <circle r="10" fill="#111111" stroke="#ffffff" stroke-width="1.5" />
+            <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">✕</text>
+          </g>
+          <g class="virola-handle handle-rotate" data-handle="rotate" transform="translate(${rotX.toFixed(2)}, ${rotY.toFixed(2)})" style="cursor: grab;">
+            <circle r="10" fill="#18181b" stroke="#ffffff" stroke-width="1.5" />
+            <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">↻</text>
+          </g>
+          <g class="virola-handle handle-scale" data-handle="scale" transform="translate(${scX.toFixed(2)}, ${scY.toFixed(2)})" style="cursor: nwse-resize;">
+            <circle r="10" fill="#18181b" stroke="#ffffff" stroke-width="1.5" />
+            <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">⤡</text>
+          </g>
+        </g>
+      `;
+    }
   });
 
   // 5. GUÍAS MAGNÉTICAS DE SNAPPING
@@ -1376,9 +1800,12 @@ function renderVirolaCanvas() {
 
       <!-- Grabados Láser -->
       <g class="virola-engravings-container" ${studio.clipToMetal ? 'clip-path="url(#metal-ring-clip)"' : ''}>
-        <g class="virola-texts-layer">${textsHtml}</g>
         <g class="virola-icons-layer">${iconsHtml}</g>
+        <g class="virola-texts-layer">${textsHtml}</g>
       </g>
+
+      <!-- Controles del elemento activo (sin recorte de virola para que nunca se corten los botones ✕ ↻ ⤡) -->
+      <g class="virola-active-handles-layer">${activeHandlesHtml}</g>
 
       <!-- Guías magnéticas de imán -->
       <g class="virola-snapping-guides-layer">${snappingGuidesHtml}</g>
@@ -3140,6 +3567,11 @@ function escapeHtml(str) {
     }
     if (!itemDef) return;
 
+    if (itemDef.isTemplate) {
+      applyVirolaPresetTemplate(itemDef.templateId || itemDef.id);
+      return;
+    }
+
     saveStudioHistoryState();
     const placement = findNonOverlappingPosition('icon');
 
@@ -3554,9 +3986,14 @@ function escapeHtml(str) {
         item.x = x;
         item.y = y;
         const baseSize = 44;
-        const halfSize = (baseSize * scale) / 2;
+        const wRatio = item.wRatio || 1.0;
+        const hRatio = item.hRatio || 1.0;
+        const itemW = baseSize * scale * wRatio;
+        const itemH = baseSize * scale * hRatio;
+        const halfW = itemW / 2;
+        const halfH = itemH / 2;
 
-        const contentHtml = `<image href="${item.file}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(115%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.35));" />`;
+        const contentHtml = `<image href="${item.file}" x="${-halfW}" y="${-halfH}" width="${itemW}" height="${itemH}" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(115%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.35));" />`;
 
         iconsHtml += `
           <g class="virola-sticker-group ${isActive ? 'active-sticker' : ''}" 
@@ -3566,7 +4003,7 @@ function escapeHtml(str) {
              ontouchstart="startFreeItemDrag('${item.id}', event)"
              style="cursor: grab;">
             ${contentHtml}
-            ${build2DItemHandlesHtml(item, halfSize, halfSize, false)}
+            ${build2DItemHandlesHtml(item, halfW, halfH, false)}
           </g>
         `;
       });
@@ -3670,14 +4107,19 @@ function escapeHtml(str) {
       item.x = x;
       item.y = y;
       const baseSize = 48;
-      const halfSize = (baseSize * scale) / 2;
+      const wRatio = item.wRatio || 1.0;
+      const hRatio = item.hRatio || 1.0;
+      const itemW = baseSize * scale * wRatio;
+      const itemH = baseSize * scale * hRatio;
+      const halfW = itemW / 2;
+      const halfH = itemH / 2;
 
       // Si es imagen subida (ya procesada en blanco en fileWhite), no invertir de nuevo; para SVGs/escudos/emojis invertir en escala de grises para preservar todos los trazos internos en blanco
       const boxImgFilter = item.fileWhite
         ? 'drop-shadow(0 1px 2px rgba(0,0,0,0.75))'
         : 'grayscale(100%) invert(1) contrast(115%) drop-shadow(0 1px 2px rgba(0,0,0,0.75))';
 
-      const contentHtml = `<image href="${imgSrc}" x="${-halfSize}" y="${-halfSize}" width="${baseSize * scale}" height="${baseSize * scale}" preserveAspectRatio="xMidYMid meet" style="filter: ${boxImgFilter} !important;" />`;
+      const contentHtml = `<image href="${imgSrc}" x="${-halfW}" y="${-halfH}" width="${itemW}" height="${itemH}" preserveAspectRatio="xMidYMid meet" style="filter: ${boxImgFilter} !important;" />`;
 
       iconsHtml += `
         <g class="virola-sticker-group box-white-sticker ${item.fileWhite ? 'custom-white-upload' : ''} ${isActive ? 'active-sticker' : ''}" 
@@ -3687,7 +4129,7 @@ function escapeHtml(str) {
            ontouchstart="startFreeItemDrag('${item.id}', event)"
            style="cursor: grab;">
           ${contentHtml}
-          ${build2DItemHandlesHtml(item, halfSize, halfSize, true)}
+          ${build2DItemHandlesHtml(item, halfW, halfH, true)}
         </g>
       `;
     });
