@@ -365,6 +365,21 @@ input, select, textarea {
 /* Category Mega Dropdown */
 .nav-item-dropdown {
   position: relative;
+  padding-bottom: 14px;
+  margin-bottom: -14px;
+}
+
+/* Puente invisible para que al bajar el mouse hacia el pop-up nunca se cierre */
+.nav-item-dropdown::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: -80px;
+  right: -80px;
+  height: 26px;
+  background: transparent;
+  pointer-events: auto;
+  z-index: 119;
 }
 
 .dropdown-arrow {
@@ -373,27 +388,38 @@ input, select, textarea {
   transition: transform var(--transition-fast);
 }
 
-.nav-item-dropdown:hover .dropdown-arrow {
+.nav-item-dropdown:hover .dropdown-arrow,
+.nav-item-dropdown.dropdown-open .dropdown-arrow {
   transform: rotate(180deg);
   color: var(--accent-gold);
 }
 
 .nav-dropdown-menu {
   position: absolute;
-  top: calc(100% + 14px);
+  top: calc(100% + 6px);
   left: 50%;
-  transform: translateX(-50%) translateY(10px);
+  transform: translateX(-50%) translateY(6px);
   width: 530px;
   background: #ffffff;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-dark);
-  border: 1px solid var(--border-light);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
+  border: 1.5px solid #d4d4d8;
   padding: 20px;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
   z-index: 120;
   pointer-events: none;
+}
+
+.nav-dropdown-menu::after {
+  content: '';
+  position: absolute;
+  top: -24px;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: transparent;
 }
 
 .nav-dropdown-menu::before {
@@ -405,16 +431,18 @@ input, select, textarea {
   width: 12px;
   height: 12px;
   background: #ffffff;
-  border-top: 1px solid var(--border-light);
-  border-left: 1px solid var(--border-light);
+  border-top: 1.5px solid #d4d4d8;
+  border-left: 1.5px solid #d4d4d8;
 }
 
 .nav-item-dropdown:hover .nav-dropdown-menu,
-.nav-item-dropdown:focus-within .nav-dropdown-menu {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: auto;
+.nav-item-dropdown:focus-within .nav-dropdown-menu,
+.nav-item-dropdown.dropdown-open .nav-dropdown-menu,
+.nav-dropdown-menu:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateX(-50%) translateY(0) !important;
+  pointer-events: auto !important;
 }
 
 .dropdown-categories-grid {
@@ -6113,18 +6141,17 @@ body.theme-dark .purchase-type-card {
   transform: translateY(-1px);
 }
 
-/* Handles interactivos de sticker SVG (Sin transform en <g> para evitar saltos y vibraciones) */
+/* Handles interactivos de sticker SVG (Fijos en su lugar sin transform ni cambio de radio en hover para evitar vibraciones) */
 .virola-handle {
   cursor: pointer;
 }
 
 .virola-handle circle {
-  transition: r 0.18s ease, filter 0.18s ease;
+  transition: none;
 }
 
 .virola-handle:hover circle {
-  r: 13.5;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.35));
 }
 
 .virola-curved-text {
@@ -11523,15 +11550,14 @@ body.theme-light .stage-mode-btn {
   color: #ffffff;
 }
 
-/* Handles de manipulación limpios (SIN CÍRCULO PUNTEADO ALREDEDOR) */
+/* Handles de manipulación limpios (FIJOS SIN TRANSFORM EN HOVER PARA EVITAR QUE VIBREN) */
 .virola-handle {
   cursor: pointer;
-  transition: transform 0.15s ease, filter 0.15s ease;
+  transition: none !important;
 }
 
 .virola-handle:hover {
-  transform: scale(1.22);
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+  filter: brightness(1.12);
 }
 
 .virola-sticker-group {
@@ -12008,18 +12034,18 @@ html.theme-light .ribbon-icon-quick-btn:hover {
   font-weight: 800 !important;
 }
 
-/* Item 5: Handles Estáticos en los Íconos */
+/* Item 5: Handles Estáticos en los Íconos (Sin transform en hover para que no se muevan ni se traben) */
 .virola-handles-overlay {
   pointer-events: auto !important;
 }
 
 .virola-handle {
   cursor: pointer !important;
-  transition: transform 0.12s ease !important;
+  transition: none !important;
 }
 
 .virola-handle:hover {
-  transform: scale(1.22) !important;
+  filter: brightness(1.12) !important;
 }
 
 /* Indicador de arrastre 360 interactivo */
@@ -17201,5 +17227,681 @@ body.theme-dark .btn-completion-choice .choice-text small {
 .qv-price-current {
   color: var(--text-main) !important;
 }
+
+/* ==========================================================================
+   MODO CLARO EXCLUSIVO (DESACTIVACIÓN DE MODO OSCURO Y CONTRASTE TOTAL EN TODA LA WEB)
+   1. Oculta el botón de cambio de tema en toda la web.
+   2. Unifica variables y superficies en Modo Claro (#ffffff / #f6f6f6) con textos oscuros (#09090b).
+   3. Corrige todas las tarjetas, botones, títulos, inputs, menús desplegables y modales
+      que tenían letras blancas sobre fondo blanco o bordes invisibles.
+   4. Mantiene estáticos los 3 botones SVG del personalizador (✕, ↻, ⤡) sin vibración al pasar el cursor.
+   5. Mantiene fijo el desplegable "Productos" del menú principal al bajar el mouse.
+   ========================================================================== */
+
+/* 1. Ocultar el selector de Modo Oscuro / Claro en toda la web */
+.theme-toggle-btn,
+#theme-toggle-btn,
+.action-btn.theme-toggle-btn,
+.admin-theme-toggle-btn,
+#admin-theme-toggle-btn {
+  display: none !important;
+}
+
+/* 2. Paleta Global Unificada en Modo Claro */
+:root,
+html,
+body,
+html.theme-light,
+body.theme-light,
+body.theme-inverted {
+  --accent-gold: #09090b !important;
+  --accent-gold-hover: #27272a !important;
+  --accent-gold-light: rgba(0, 0, 0, 0.08) !important;
+  --accent-leather: #09090b !important;
+  --accent-leather-light: #3f3f46 !important;
+  --accent-olive: #18181b !important;
+  --bg-main: #f6f6f6 !important;
+  --bg-surface: #ffffff !important;
+  --bg-surface-elevated: #ffffff !important;
+  --bg-card: #ffffff !important;
+  --text-main: #09090b !important;
+  --text-secondary: #4a4a4a !important;
+  --text-muted: #6e6e77 !important;
+  --border-light: #e4e4e7 !important;
+  --border-color: #d4d4d8 !important;
+  background-color: #f6f6f6 !important;
+  color: #09090b !important;
+}
+
+/* 3. Menú Desplegable de "Productos" en el Header: puente continuo y contraste claro */
+.nav-item-dropdown {
+  position: relative !important;
+  padding-bottom: 16px !important;
+  margin-bottom: -16px !important;
+}
+
+.nav-item-dropdown::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: -80px !important;
+  right: -80px !important;
+  height: 28px !important;
+  background: transparent !important;
+  pointer-events: auto !important;
+  z-index: 1299 !important;
+}
+
+.nav-dropdown-menu {
+  top: calc(100% + 4px) !important;
+  background: #ffffff !important;
+  border: 1.5px solid #d4d4d8 !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.16) !important;
+  color: #09090b !important;
+  z-index: 1300 !important;
+}
+
+.nav-dropdown-menu::before {
+  background: #ffffff !important;
+  border-top: 1.5px solid #d4d4d8 !important;
+  border-left: 1.5px solid #d4d4d8 !important;
+}
+
+.nav-dropdown-menu::after {
+  content: '' !important;
+  position: absolute !important;
+  top: -28px !important;
+  left: -30px !important;
+  right: -30px !important;
+  height: 30px !important;
+  background: transparent !important;
+}
+
+.nav-item-dropdown:hover .nav-dropdown-menu,
+.nav-item-dropdown:focus-within .nav-dropdown-menu,
+.nav-item-dropdown.dropdown-open .nav-dropdown-menu,
+.nav-dropdown-menu:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateX(-50%) translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+.dropdown-cat-card {
+  background: #f8f8f9 !important;
+  border: 1px solid #e4e4e7 !important;
+  color: #09090b !important;
+}
+
+.dropdown-cat-card:hover {
+  background: #ececef !important;
+  border-color: #09090b !important;
+}
+
+.dropdown-cat-icon {
+  background: #ffffff !important;
+  border: 1px solid #d4d4d8 !important;
+  color: #09090b !important;
+}
+
+.dropdown-cat-icon .mono-cat-icon-img {
+  filter: brightness(0) !important;
+}
+
+.dropdown-cat-name {
+  color: #09090b !important;
+  font-weight: 800 !important;
+}
+
+.dropdown-cat-desc {
+  color: #52525b !important;
+}
+
+.dropdown-footer {
+  border-top: 1px solid #e4e4e7 !important;
+}
+
+.dropdown-all-link {
+  color: #09090b !important;
+  font-weight: 800 !important;
+}
+
+.dropdown-all-link:hover {
+  color: #000000 !important;
+}
+
+/* 4. Banner "¿Querés un Mate Único e Irrepetible?" y Card Corporativa en Inicio */
+.banner-personalizado-card,
+html.theme-light .banner-personalizado-card,
+body.theme-light .banner-personalizado-card {
+  background: #ffffff !important;
+  border: 1.5px solid #d4d4d8 !important;
+  color: #09090b !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.07) !important;
+}
+
+.banner-pers-title {
+  color: #09090b !important;
+}
+
+.banner-pers-desc {
+  color: #4a4a4a !important;
+}
+
+.pers-perk-item {
+  background: #f4f4f5 !important;
+  border: 1px solid #d4d4d8 !important;
+  color: #09090b !important;
+}
+
+.pers-perk-item i {
+  color: #09090b !important;
+}
+
+.corporate-section-card {
+  background: #ffffff !important;
+  border: 1.5px solid #d4d4d8 !important;
+  border-radius: 18px !important;
+  color: #09090b !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Botones primarios y secundarios siempre visibles en Modo Claro */
+.btn-primary,
+.add-to-cart-btn,
+.btn-enter-studio,
+.btn-pers-main {
+  background: #09090b !important;
+  color: #ffffff !important;
+  border: 1.5px solid #09090b !important;
+}
+
+.btn-primary i,
+.btn-primary span,
+.add-to-cart-btn i,
+.add-to-cart-btn span,
+.btn-pers-main i {
+  color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.add-to-cart-btn:hover,
+.btn-enter-studio:hover,
+.btn-pers-main:hover {
+  background: #27272a !important;
+  color: #ffffff !important;
+  border-color: #27272a !important;
+}
+
+.btn-secondary {
+  background: #ffffff !important;
+  color: #09090b !important;
+  border: 1.5px solid #09090b !important;
+  font-weight: 700 !important;
+}
+
+.btn-secondary i,
+.btn-secondary span {
+  color: #09090b !important;
+}
+
+.btn-secondary:hover {
+  background: #09090b !important;
+  color: #ffffff !important;
+  border-color: #09090b !important;
+}
+
+.btn-secondary:hover i,
+.btn-secondary:hover span {
+  color: #ffffff !important;
+}
+
+.btn-outline-dark {
+  background: #ffffff !important;
+  color: #09090b !important;
+  border: 1.5px solid #09090b !important;
+}
+
+.btn-outline-dark:hover {
+  background: #09090b !important;
+  color: #ffffff !important;
+  border-color: #09090b !important;
+}
+
+/* 5. Cabeceras de Catálogo, Promos y Contacto en Modo Claro */
+.promos-hero-section .promos-hero-title,
+.promos-hero-section .promos-hero-title span,
+.catalog-hero-section .catalog-hero-title,
+.catalog-hero-section .catalog-hero-title span {
+  color: #ffffff !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55) !important;
+}
+
+.why-combo-card {
+  background: #ffffff !important;
+  border: 1.5px solid #e4e4e7 !important;
+  color: #09090b !important;
+}
+
+.why-combo-title {
+  color: #09090b !important;
+}
+
+.why-combo-text {
+  color: #52525b !important;
+}
+
+.why-combo-icon {
+  background: #f4f4f5 !important;
+  border: 1.5px solid #d4d4d8 !important;
+  color: #09090b !important;
+}
+
+.contact-hero-section {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e4e4e7 !important;
+  padding: 54px 0 42px !important;
+  text-align: center !important;
+  color: #09090b !important;
+}
+
+.contact-hero-title,
+.about-us-heading {
+  color: #09090b !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 800 !important;
+}
+
+.contact-hero-subtitle,
+.about-us-paragraph {
+  color: #4a4a4a !important;
+}
+
+.about-us-section {
+  padding: 52px 0 !important;
+  background: #f6f6f6 !important;
+  border-bottom: 1px solid #e4e4e7 !important;
+}
+
+.about-pillar-card {
+  background: #ffffff !important;
+  border: 1.5px solid #e4e4e7 !important;
+  border-radius: 14px !important;
+  padding: 20px !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+  color: #09090b !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.about-pillar-card h4 {
+  color: #09090b !important;
+  font-weight: 800 !important;
+  margin-bottom: 4px !important;
+}
+
+.about-pillar-card p {
+  color: #52525b !important;
+  font-size: 0.84rem !important;
+  margin: 0 !important;
+}
+
+.about-pillar-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 10px !important;
+  background: #f4f4f5 !important;
+  border: 1px solid #d4d4d8 !important;
+  color: #09090b !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  font-size: 1.1rem !important;
+}
+
+/* 6. Taller de Personalización: Tarjetas, Ribbon, Inputs, Fuentes y Modal en Modo Claro */
+.customizer-hero-head .studio-page-title {
+  background: none !important;
+  -webkit-text-fill-color: #09090b !important;
+  color: #09090b !important;
+}
+
+/* Tarjetas de elección de producto (Mate, Termo, Caja de presentación) */
+.prod-select-card,
+html.theme-light .prod-select-card,
+body.theme-light .prod-select-card,
+body.theme-inverted .prod-select-card {
+  background: #ffffff !important;
+  color: #09090b !important;
+  border: 1.5px solid #d4d4d8 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+}
+
+.prod-select-card:hover,
+html.theme-light .prod-select-card:hover,
+body.theme-light .prod-select-card:hover {
+  border-color: #09090b !important;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1) !important;
+}
+
+.prod-select-card.active,
+html.theme-light .prod-select-card.active,
+body.theme-light .prod-select-card.active,
+body.theme-inverted .prod-select-card.active {
+  background: #f4f4f5 !important;
+  color: #09090b !important;
+  border: 2px solid #09090b !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+.prod-select-card .prod-card-title,
+.prod-select-card .prod-card-price,
+.prod-select-card .prod-card-meta,
+.prod-select-card .prod-card-body,
+html.theme-light .prod-select-card .prod-card-title,
+html.theme-light .prod-select-card .prod-card-price,
+body.theme-light .prod-select-card .prod-card-title,
+body.theme-light .prod-select-card .prod-card-price,
+body.theme-inverted .prod-select-card .prod-card-title,
+body.theme-inverted .prod-select-card .prod-card-price {
+  color: #09090b !important;
+}
+
+.prod-select-card .prod-card-desc {
+  color: #52525b !important;
+}
+
+.prod-select-card.active .prod-card-check,
+html.theme-light .prod-select-card.active .prod-card-check,
+body.theme-light .prod-select-card.active .prod-card-check,
+body.theme-inverted .prod-select-card.active .prod-card-check {
+  background: #09090b !important;
+  color: #ffffff !important;
+}
+
+.prod-select-card.active .prod-card-check i {
+  color: #ffffff !important;
+}
+
+/* Ribbon y Controles del Personalizador en Modo Claro */
+.studio-ribbon-container {
+  background: #ffffff !important;
+  border: 1.5px solid #d4d4d8 !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06) !important;
+}
+
+.ribbon-tabs-strip {
+  background: #f4f4f5 !important;
+  border-bottom: 1.5px solid #d4d4d8 !important;
+}
+
+.ribbon-tab-btn {
+  color: #3f3f46 !important;
+  background: transparent !important;
+}
+
+.ribbon-tab-btn:hover {
+  color: #09090b !important;
+  background: #e4e4e7 !important;
+}
+
+.ribbon-tab-btn.active {
+  background: #09090b !important;
+  color: #ffffff !important;
+  border-top-color: #09090b !important;
+}
+
+.ribbon-tab-btn.active i,
+.ribbon-tab-btn.active span {
+  color: #ffffff !important;
+}
+
+.ribbon-group {
+  border-right: 1px solid #e4e4e7 !important;
+}
+
+.ribbon-group-label {
+  color: #52525b !important;
+  opacity: 1 !important;
+}
+
+.ribbon-btn {
+  background: #f4f4f5 !important;
+  border: 1.5px solid #d4d4d8 !important;
+  color: #09090b !important;
+}
+
+.ribbon-btn i,
+.ribbon-btn span {
+  color: #09090b !important;
+}
+
+.ribbon-btn:hover {
+  background: #e4e4e7 !important;
+  border-color: #09090b !important;
+  color: #000000 !important;
+}
+
+.ribbon-btn.active {
+  background: #09090b !important;
+  border-color: #09090b !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18) !important;
+}
+
+.ribbon-btn.active i,
+.ribbon-btn.active span {
+  color: #ffffff !important;
+}
+
+.ribbon-input-text,
+#active-text-input,
+.ribbon-select,
+#active-text-size-input {
+  background: #ffffff !important;
+  color: #09090b !important;
+  border: 1.5px solid #a1a1aa !important;
+}
+
+.ribbon-input-text::placeholder,
+#active-text-input::placeholder {
+  color: #71717a !important;
+}
+
+.ribbon-input-text:focus,
+#active-text-input:focus,
+.ribbon-select:focus,
+#active-text-size-input:focus {
+  border-color: #09090b !important;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Desplegable de 50 tipografías en Modo Claro */
+.ribbon-font-dropdown,
+#ribbon-font-dropdown {
+  background: #ffffff !important;
+  border: 1.5px solid #d4d4d8 !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18) !important;
+  color: #09090b !important;
+}
+
+.ribbon-font-item {
+  color: #09090b !important;
+}
+
+.ribbon-font-item:hover {
+  background: #f4f4f5 !important;
+  border-color: #d4d4d8 !important;
+  color: #000000 !important;
+}
+
+.ribbon-font-item.selected {
+  background: #09090b !important;
+  color: #ffffff !important;
+}
+
+.ribbon-font-item.selected *,
+.ribbon-font-item.selected i {
+  color: #ffffff !important;
+}
+
+/* Flechas del carrusel de escudos e íconos en el Ribbon */
+.ribbon-carousel-nav {
+  background: #f4f4f5 !important;
+  border: 1.5px solid #d4d4d8 !important;
+  color: #09090b !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+.ribbon-carousel-nav i {
+  color: #09090b !important;
+}
+
+.ribbon-carousel-nav:hover {
+  background: #09090b !important;
+  border-color: #09090b !important;
+  color: #ffffff !important;
+}
+
+.ribbon-carousel-nav:hover i {
+  color: #ffffff !important;
+}
+
+.ribbon-phrase-quick-btn {
+  background: #f4f4f5 !important;
+  border: 1.5px solid #d4d4d8 !important;
+  color: #09090b !important;
+}
+
+.ribbon-phrase-quick-btn:hover {
+  background: #09090b !important;
+  border-color: #09090b !important;
+  color: #ffffff !important;
+}
+
+/* Barra de elemento activo y píldoras de escala */
+.virola-active-item-controls {
+  background: #ffffff !important;
+  border: 1.5px solid #d4d4d8 !important;
+  color: #09090b !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
+}
+
+.active-item-name-badge,
+.active-item-name-badge strong,
+.active-item-name-badge i {
+  color: #09090b !important;
+}
+
+.active-item-type-tag {
+  background: #09090b !important;
+  color: #ffffff !important;
+  border: 1px solid #09090b !important;
+}
+
+.active-item-scale-pill {
+  background: #f4f4f5 !important;
+  color: #09090b !important;
+  border: 1px solid #d4d4d8 !important;
+}
+
+.active-item-divider {
+  background: #d4d4d8 !important;
+}
+
+/* Modal de Catálogo Completo de Diseños */
+.design-modal-card {
+  background: #ffffff !important;
+  border: 1.5px solid #d4d4d8 !important;
+  color: #09090b !important;
+}
+
+.design-modal-header {
+  background: #f8f8f9 !important;
+  border-bottom: 1px solid #e4e4e7 !important;
+  color: #09090b !important;
+}
+
+.design-modal-header h3,
+.design-modal-header i {
+  color: #09090b !important;
+}
+
+/* 7. Handles SVG del Personalizador (✕, ↻, ⤡) 100% FIJOS sin vibración al pasar el mouse */
+.virola-handle,
+.virola-handle:hover,
+.virola-handle:active,
+.virola-handle:focus {
+  transition: none !important;
+  animation: none !important;
+}
+
+.virola-handle circle,
+.virola-handle:hover circle {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* 8. Modales de Login, Perfil, Checkout y Finalización en Modo Claro */
+.auth-tabs,
+.profile-modal-tabs {
+  background: #f4f4f5 !important;
+  border-radius: 10px !important;
+  padding: 4px !important;
+  border: 1px solid #e4e4e7 !important;
+}
+
+.auth-tab-btn,
+.profile-tab-btn {
+  color: #52525b !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+}
+
+.auth-tab-btn.active,
+.profile-tab-btn.active {
+  background: #09090b !important;
+  color: #ffffff !important;
+}
+
+.auth-tab-btn.active i,
+.profile-tab-btn.active i {
+  color: #ffffff !important;
+}
+
+.completion-title,
+.completion-mate-name,
+.comp-item-title,
+.comp-item-price,
+.completion-price-tag,
+.btn-completion-choice .choice-text strong {
+  color: #09090b !important;
+}
+
+.completion-summary-preview,
+.comp-engraving-badge {
+  background: #f8f8f9 !important;
+  border: 1px solid #d4d4d8 !important;
+  color: #09090b !important;
+}
+
+.btn-completion-choice {
+  background: #ffffff !important;
+  border: 1.5px solid #d4d4d8 !important;
+  color: #09090b !important;
+}
+
+.btn-completion-choice:hover {
+  border-color: #09090b !important;
+  background: #f4f4f5 !important;
+}
+
+.btn-completion-choice .choice-text span,
+.btn-completion-choice .choice-text small {
+  color: #52525b !important;
+}
+
 
 

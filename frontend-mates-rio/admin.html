@@ -19,33 +19,21 @@
   <!-- Custom Admin Styles -->
   <link rel="stylesheet" href="css/admin.css" />
 
-  <!-- Immediate Theme Initializer (Sincronizado al instante con la Web) -->
+  <!-- Immediate Theme Initializer (Modo Claro Exclusivo) -->
   <script>
     (function() {
-      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
-      if (mode === 'dark') {
-        document.documentElement.classList.add('admin-dark-mode');
-        document.documentElement.classList.add('theme-dark');
-      } else {
-        document.documentElement.classList.remove('admin-dark-mode');
-        document.documentElement.classList.add('theme-light');
-      }
+      document.documentElement.classList.remove('admin-dark-mode', 'theme-dark');
+      document.documentElement.classList.add('theme-light');
+      localStorage.setItem('mates_rio_theme_mode', 'light');
+      localStorage.setItem('mates_rio_admin_theme', 'light');
     })();
   </script>
 </head>
-<body class="admin-body">
+<body class="admin-body theme-light">
   <script>
     (function() {
-      const mode = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
-      if (mode === 'dark') {
-        document.body.classList.add('admin-dark-mode');
-        document.body.classList.add('theme-dark');
-        document.body.classList.remove('theme-light');
-      } else {
-        document.body.classList.remove('admin-dark-mode');
-        document.body.classList.remove('theme-dark');
-        document.body.classList.add('theme-light');
-      }
+      document.body.classList.remove('admin-dark-mode', 'theme-dark');
+      document.body.classList.add('theme-light');
     })();
   </script>
 

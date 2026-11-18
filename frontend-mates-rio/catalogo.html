@@ -109,8 +109,14 @@
       }
     }
   </style>
+  <script>
+    (function() {
+      document.documentElement.classList.add('theme-light', 'theme-inverted');
+      document.documentElement.classList.remove('theme-dark');
+    })();
+  </script>
 </head>
-<body class="page-catalogo">
+<body class="page-catalogo theme-light theme-inverted">
 
   <!-- Top Scroll Progress Indicator -->
   <div class="scroll-progress-bar" id="scroll-progress-bar"></div>

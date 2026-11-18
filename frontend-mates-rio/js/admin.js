@@ -642,7 +642,7 @@ function renderInventoryTable() {
           <div class="product-row-item">
             <img src="${item.image}" alt="${item.name}" class="table-product-thumb" />
             <div class="table-product-info">
-              <span class="table-product-name">${item.name} ${item.isCustom ? '<span style="font-size: 0.65rem; background: rgba(255, 255, 255, 0.15); color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-left: 4px;">NUEVO</span>' : ''}</span>
+              <span class="table-product-name">${item.name} ${item.isCustom ? '<span style="font-size: 0.65rem; background: #111111; color: #ffffff; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-left: 4px;">NUEVO</span>' : ''}</span>
               <span class="table-product-sku">ID: <code>${item.id}</code></span>
             </div>
           </div>
@@ -3123,52 +3123,27 @@ function saveOccasionSettings() {
 }
 
 // ==========================================================================
-// 14. ADMIN THEME MODE (MODO CLARO / MODO OSCURO SINCRONIZADO CON LA WEB)
+// 14. ADMIN THEME MODE (MODO CLARO EXCLUSIVO)
 // ==========================================================================
 function initAdminThemeMode() {
-  const saved = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme') || 'dark';
-  applyAdminThemeMode(saved, false);
+  applyAdminThemeMode('light', false);
 }
 
-function applyAdminThemeMode(mode, notify = false) {
-  const isDark = mode === 'dark';
-  document.body.classList.toggle('admin-dark-mode', isDark);
-  document.documentElement.classList.toggle('admin-dark-mode', isDark);
-  document.body.classList.toggle('theme-dark', isDark);
-  document.body.classList.toggle('theme-light', !isDark);
-  localStorage.setItem('mates_rio_admin_theme', mode);
-  localStorage.setItem('mates_rio_theme_mode', mode); // Sincronizado con Web principal
-  localStorage.setItem('mates_rio_theme_inverted', isDark ? 'false' : 'true');
+function applyAdminThemeMode(mode = 'light', notify = false) {
+  document.body.classList.remove('admin-dark-mode', 'theme-dark');
+  document.documentElement.classList.remove('admin-dark-mode', 'theme-dark');
+  document.body.classList.add('theme-light');
+  document.documentElement.classList.add('theme-light');
+  localStorage.setItem('mates_rio_admin_theme', 'light');
+  localStorage.setItem('mates_rio_theme_mode', 'light');
+  localStorage.setItem('mates_rio_theme_inverted', 'true');
 
-  const icon = document.getElementById('admin-theme-icon');
-  const label = document.getElementById('admin-theme-label');
   const btn = document.getElementById('admin-theme-toggle-btn');
-
-  if (icon) icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
-  if (label) label.textContent = isDark ? 'Modo Claro' : 'Modo Oscuro';
-  if (btn) btn.setAttribute('title', isDark ? 'Cambiar a Modo Claro' : 'Cambiar a Modo Oscuro');
-
-  if (notify && typeof showAdminToast === 'function') {
-    showAdminToast(isDark ? 'Panel en Modo Oscuro 🌙' : 'Panel en Modo Claro ☀️', isDark ? 'fa-moon' : 'fa-sun');
-  }
+  if (btn) btn.style.display = 'none';
 }
-
-// Sincronización bidireccional en tiempo real entre la Web y el Panel de Administración
-window.addEventListener('storage', (e) => {
-  if (e.key === 'mates_rio_theme_mode' || e.key === 'mates_rio_admin_theme') {
-    if (e.newValue && (e.newValue === 'light' || e.newValue === 'dark')) {
-      const isCurrentDark = document.body.classList.contains('admin-dark-mode');
-      const targetIsDark = e.newValue === 'dark';
-      if (isCurrentDark !== targetIsDark) {
-        applyAdminThemeMode(e.newValue, false);
-      }
-    }
-  }
-});
 
 function toggleAdminThemeMode() {
-  const isCurrentlyDark = document.body.classList.contains('admin-dark-mode');
-  applyAdminThemeMode(isCurrentlyDark ? 'light' : 'dark', true);
+  applyAdminThemeMode('light', false);
 }
 
 // ==========================================================================
@@ -3552,7 +3527,7 @@ function openWholesaleOrderDetail(id) {
       </table>
     </div>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.06); padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid rgba(255, 255, 255, 0.2);">
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
       <div>
         <span style="font-size: 0.75rem; color: var(--admin-text-muted);">Rentabilidad de la Orden B2B:</span>
         <div style="font-size: 1.05rem; font-weight: 800; color: var(--admin-gold);">+${formatARS(grossMargin)} (${marginPct}% Margen Bruto)</div>

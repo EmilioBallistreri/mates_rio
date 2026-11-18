@@ -671,34 +671,20 @@
   </style>
   <script>
     (function () {
-      try {
-        var saved = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme');
-        var isLight = saved === 'light' || localStorage.getItem('mates_rio_theme_inverted') === 'true';
-        if (isLight) {
-          document.documentElement.classList.add('theme-light');
-          document.documentElement.classList.remove('theme-dark');
-        } else {
-          document.documentElement.classList.add('theme-dark');
-          document.documentElement.classList.remove('theme-light');
-        }
-      } catch (e) { }
+      document.documentElement.classList.add('theme-light', 'theme-inverted');
+      document.documentElement.classList.remove('theme-dark');
+      localStorage.setItem('mates_rio_theme_mode', 'light');
+      localStorage.setItem('mates_rio_admin_theme', 'light');
+      localStorage.setItem('mates_rio_theme_inverted', 'true');
     })();
   </script>
 </head>
 
-<body class="wholesale-page">
+<body class="wholesale-page theme-light theme-inverted">
   <script>
     (function () {
-      try {
-        var isLight = document.documentElement.classList.contains('theme-light');
-        if (isLight) {
-          document.body.classList.add('theme-light', 'theme-inverted');
-          document.body.classList.remove('theme-dark');
-        } else {
-          document.body.classList.add('theme-dark');
-          document.body.classList.remove('theme-light', 'theme-inverted');
-        }
-      } catch (e) { }
+      document.body.classList.add('theme-light', 'theme-inverted');
+      document.body.classList.remove('theme-dark');
     })();
   </script>
 
@@ -1060,7 +1046,7 @@
         <span><i class="fas fa-boxes-packing"></i> Pedido Mayorista B2B</span>
         <span>•</span>
         <button type="button" onclick="clearB2BCart()" class="cart-clear-link"
-          style="color: #ffffff; text-decoration: underline;">
+          style="color: #111111; text-decoration: underline;">
           Vaciar carrito mayorista
         </button>
       </div>
@@ -1068,11 +1054,11 @@
   </aside>
 
   <!-- Footer -->
-  <footer class="site-footer" style="background: #000000; border-top: 1px solid rgba(255,255,255,0.18);">
+  <footer class="site-footer" style="background: #ffffff; border-top: 1px solid #e4e4e7;">
     <div class="container">
-      <div class="footer-bottom-bar" style="border-top: none; padding: 24px 0; color: #ffffff;">
+      <div class="footer-bottom-bar" style="border-top: none; padding: 24px 0; color: #111111;">
         <span>© 2026 Mates Río • Tienda Mayorista Oficial • Río Ceballos, Córdoba</span>
-        <a href="index.html" style="color: #ffffff; text-decoration: underline;">Volver a Tienda Minorista</a>
+        <a href="index.html" style="color: #111111; font-weight: 700; text-decoration: underline;">Volver a Tienda Minorista</a>
       </div>
     </div>
   </footer>
@@ -1202,28 +1188,28 @@
 
       if (b2bCart.length === 0) {
         container.innerHTML = `
-          <div style="text-align: center; padding: 48px 16px; color: #ffffff;">
-            <i class="fas fa-boxes-packing" style="font-size: 2.6rem; margin-bottom: 12px; opacity: 0.5;"></i>
-            <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: #ffffff;">Tu Carrito Mayorista está vacío</h4>
-            <p style="font-size: 0.84rem; color: rgba(255,255,255,0.7);">Seleccioná productos de la lista mayorista para armar tu pedido.</p>
+          <div style="text-align: center; padding: 48px 16px; color: #111111;">
+            <i class="fas fa-boxes-packing" style="font-size: 2.6rem; margin-bottom: 12px; color: #71717a;"></i>
+            <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: #111111;">Tu Carrito Mayorista está vacío</h4>
+            <p style="font-size: 0.84rem; color: #52525b;">Seleccioná productos de la lista mayorista para armar tu pedido.</p>
           </div>
         `;
         return;
       }
 
       container.innerHTML = b2bCart.map(item => `
-        <div style="display: flex; gap: 12px; align-items: center; padding: 12px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; margin-bottom: 10px; color: #ffffff;">
-          <img src="${item.image}" alt="${item.name}" style="width: 56px; height: 56px; object-fit: contain; background: #ffffff; border-radius: 6px; padding: 3px; flex-shrink: 0;" />
+        <div style="display: flex; gap: 12px; align-items: center; padding: 12px; background: #f8f9fa; border: 1px solid #e4e4e7; border-radius: 10px; margin-bottom: 10px; color: #111111;">
+          <img src="${item.image}" alt="${item.name}" style="width: 56px; height: 56px; object-fit: contain; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 6px; padding: 3px; flex-shrink: 0;" />
           <div style="flex: 1; min-width: 0;">
-            <div style="font-size: 0.86rem; font-weight: 800; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
-            <div style="font-size: 0.78rem; color: rgba(255,255,255,0.8); margin: 2px 0 6px;">${formatB2BARS(item.price)} c/u • Subtotal: <b>${formatB2BARS(item.price * item.quantity)}</b></div>
+            <div style="font-size: 0.86rem; font-weight: 800; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
+            <div style="font-size: 0.78rem; color: #52525b; margin: 2px 0 6px;">${formatB2BARS(item.price)} c/u • Subtotal: <b style="color: #111111;">${formatB2BARS(item.price * item.quantity)}</b></div>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <div style="display: inline-flex; align-items: center; background: #000000; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px;">
-                <button type="button" onclick="updateB2BCartItemQty('${item.id}', -1)" style="width: 26px; height: 26px; color: #ffffff; font-weight: 800;">−</button>
-                <span style="padding: 0 8px; font-size: 0.82rem; font-weight: 800; color: #ffffff;">${item.quantity}</span>
-                <button type="button" onclick="updateB2BCartItemQty('${item.id}', 1)" style="width: 26px; height: 26px; color: #ffffff; font-weight: 800;">+</button>
+              <div style="display: inline-flex; align-items: center; background: #ffffff; border: 1px solid #d4d4d8; border-radius: 6px;">
+                <button type="button" onclick="updateB2BCartItemQty('${item.id}', -1)" style="width: 26px; height: 26px; color: #111111; font-weight: 800;">−</button>
+                <span style="padding: 0 8px; font-size: 0.82rem; font-weight: 800; color: #111111;">${item.quantity}</span>
+                <button type="button" onclick="updateB2BCartItemQty('${item.id}', 1)" style="width: 26px; height: 26px; color: #111111; font-weight: 800;">+</button>
               </div>
-              <button type="button" onclick="removeB2BCartItem('${item.id}')" style="margin-left: auto; color: #f87171; font-size: 0.8rem;" title="Quitar">
+              <button type="button" onclick="removeB2BCartItem('${item.id}')" style="margin-left: auto; color: #dc2626; font-size: 0.8rem;" title="Quitar">
                 <i class="fas fa-trash-alt"></i>
               </button>
             </div>
@@ -1363,7 +1349,7 @@
                   <span style="text-decoration: line-through;">${formatB2BARS(p.price)}</span>
                 </div>
                 <div class="ws-main-price-row">
-                  <span style="font-size: 0.78rem; font-weight: 700; color: #ffffff;">Mayorista:</span>
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #111111;">Mayorista:</span>
                   <span class="ws-price-val">${formatB2BARS(wsPrice)}</span>
                 </div>
               </div>

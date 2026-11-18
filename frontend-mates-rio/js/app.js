@@ -144,57 +144,30 @@ function showToast(message, icon = 'fa-check-circle') {
 }
 
 // ==========================================================================
-// COLOR INVERSION / THEME TOGGLE (MODO CLARO / MODO OSCURO)
+// COLOR INVERSION / THEME TOGGLE (MODO CLARO EXCLUSIVO)
 // ==========================================================================
 function getPreferredThemeMode() {
-  const saved = localStorage.getItem('mates_rio_theme_mode') || localStorage.getItem('mates_rio_admin_theme');
-  if (saved) return saved;
-  const legacyInverted = localStorage.getItem('mates_rio_theme_inverted');
-  if (legacyInverted === 'true') return 'light';
-  return 'dark'; // Modo oscuro artesanal original de Mates Río
+  return 'light'; // Modo claro exclusivo en toda la web
 }
 
 function initThemeMode() {
-  const currentMode = getPreferredThemeMode();
-  applyThemeMode(currentMode, false);
+  applyThemeMode('light', false);
 }
 
-function applyThemeMode(mode, showNotification = false) {
-  const isLight = mode === 'light';
-  document.documentElement.classList.toggle('theme-light', isLight);
-  document.documentElement.classList.toggle('theme-dark', !isLight);
-  document.documentElement.classList.toggle('theme-inverted', isLight);
-  document.body.classList.toggle('theme-light', isLight);
-  document.body.classList.toggle('theme-dark', !isLight);
-  document.body.classList.toggle('theme-inverted', isLight);
-  localStorage.setItem('mates_rio_theme_mode', mode);
-  localStorage.setItem('mates_rio_admin_theme', mode); // Sincronizado con panel de administradores
-  localStorage.setItem('mates_rio_theme_inverted', isLight ? 'true' : 'false');
+function applyThemeMode(mode = 'light', showNotification = false) {
+  document.documentElement.classList.add('theme-light', 'theme-inverted');
+  document.documentElement.classList.remove('theme-dark');
+  document.body.classList.add('theme-light', 'theme-inverted');
+  document.body.classList.remove('theme-dark');
+  localStorage.setItem('mates_rio_theme_mode', 'light');
+  localStorage.setItem('mates_rio_admin_theme', 'light');
+  localStorage.setItem('mates_rio_theme_inverted', 'true');
 
-  updateThemeToggleIcons(isLight);
-
-  if (showNotification) {
-    showToast(isLight ? 'Modo Claro activado' : 'Modo Oscuro activado', isLight ? 'fa-sun' : 'fa-moon');
-  }
+  updateThemeToggleIcons(true);
 }
-
-// Sincronización en tiempo real entre pestañas (Web y Panel de Administradores)
-window.addEventListener('storage', (e) => {
-  if (e.key === 'mates_rio_theme_mode' || e.key === 'mates_rio_admin_theme') {
-    if (e.newValue && (e.newValue === 'light' || e.newValue === 'dark')) {
-      const isCurrentLight = document.body.classList.contains('theme-light') || document.body.classList.contains('theme-inverted');
-      const targetIsLight = e.newValue === 'light';
-      if (isCurrentLight !== targetIsLight) {
-        applyThemeMode(e.newValue, false);
-      }
-    }
-  }
-});
 
 function toggleColorTheme() {
-  const isLightNow = document.body.classList.contains('theme-light') || document.body.classList.contains('theme-inverted');
-  const newMode = isLightNow ? 'dark' : 'light';
-  applyThemeMode(newMode, true);
+  applyThemeMode('light', false);
 }
 
 function updateThemeToggleIcons(isLight) {
@@ -2682,13 +2655,71 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 10. Close dropdowns and popups on document click
+  // 10. Close dropdowns and popups on document click + Persistencia del Menú "Productos"
+  document.querySelectorAll('.nav-item-dropdown').forEach(dropdownWrap => {
+    let closeTimer = null;
+    const triggerLink = dropdownWrap.querySelector('.nav-link-dropdown-trigger, .nav-dropdown-trigger');
+    const menu = dropdownWrap.querySelector('.nav-dropdown-menu');
+
+    const openDropdown = () => {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+      dropdownWrap.classList.add('dropdown-open');
+    };
+
+    const scheduleCloseDropdown = () => {
+      if (dropdownWrap.dataset.pinned === 'true') return;
+      if (closeTimer) clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        if (dropdownWrap.dataset.pinned !== 'true') {
+          dropdownWrap.classList.remove('dropdown-open');
+        }
+      }, 380);
+    };
+
+    dropdownWrap.addEventListener('mouseenter', openDropdown);
+    dropdownWrap.addEventListener('mouseleave', scheduleCloseDropdown);
+    if (menu) {
+      menu.addEventListener('mouseenter', openDropdown);
+      menu.addEventListener('mouseleave', scheduleCloseDropdown);
+      menu.querySelectorAll('a.nav-dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+          dropdownWrap.dataset.pinned = 'false';
+          dropdownWrap.classList.remove('dropdown-open');
+        });
+      });
+    }
+
+    if (triggerLink) {
+      triggerLink.addEventListener('click', (e) => {
+        // Si el usuario hace click sobre "Productos", fijamos/desfijamos el menú desplegable para que pueda bajar tranquilo
+        const isAlreadyPinned = dropdownWrap.dataset.pinned === 'true';
+        if (!isAlreadyPinned) {
+          e.preventDefault();
+          dropdownWrap.dataset.pinned = 'true';
+          openDropdown();
+        } else {
+          dropdownWrap.dataset.pinned = 'false';
+          dropdownWrap.classList.remove('dropdown-open');
+        }
+      });
+    }
+  });
+
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.user-btn-wrap')) {
       closeUserDropdown();
     }
     if (!e.target.closest('.floating-whatsapp-container')) {
       document.getElementById('whatsapp-chat-popup')?.classList.remove('active');
+    }
+    if (!e.target.closest('.nav-item-dropdown')) {
+      document.querySelectorAll('.nav-item-dropdown').forEach(d => {
+        d.dataset.pinned = 'false';
+        d.classList.remove('dropdown-open');
+      });
     }
   });
 

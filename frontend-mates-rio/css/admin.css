@@ -4741,3 +4741,45 @@ html.admin-dark-mode .occasion-emoji-cat-btn.active {
   }
 }
 
+/* ==========================================================================
+   MODO CLARO EXCLUSIVO EN PANEL ADMINISTRATIVO — CONTRASTE 100% VISIBLE
+   ========================================================================== */
+#admin-theme-toggle-btn,
+.admin-theme-toggle-btn {
+  display: none !important;
+}
+
+.minimal-order-id {
+  color: #111111 !important;
+  font-weight: 800 !important;
+}
+
+.status-prep {
+  background: #f4f4f5 !important;
+  color: #111111 !important;
+  border: 1px solid #d4d4d8 !important;
+}
+
+.topbar-user-avatar {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border: 1px solid #111111 !important;
+}
+
+.admin-gate-screen {
+  background: #f8f9fa !important;
+}
+
+.admin-gate-box {
+  background: #ffffff !important;
+  border: 1.5px solid #e4e4e7 !important;
+  color: #111111 !important;
+}
+
+.admin-gate-header {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border-bottom: 1.5px solid #111111 !important;
+}
+
+

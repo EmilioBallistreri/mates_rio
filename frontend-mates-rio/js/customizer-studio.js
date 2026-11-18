@@ -374,7 +374,7 @@ function renderRibbonFontDropdown() {
   if (!container) return;
 
   container.innerHTML = `
-    <div style="padding: 6px 10px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.18); margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
+    <div style="padding: 6px 10px 10px; border-bottom: 1px solid #e4e4e7; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between;">
       <span style="font-size: 0.76rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.8px;">
         <i class="fas fa-font" style="margin-right: 6px;"></i>Tipografías Orfebres
       </span>
@@ -390,7 +390,7 @@ function renderRibbonFontDropdown() {
             <span style="font-size: 0.95rem; font-weight: 700;">${f.name}</span>
             <span style="font-size: 0.72rem; opacity: 0.65; letter-spacing: 0.5px;">Mates Río 1810</span>
           </div>
-          ${isSel ? '<i class="fas fa-check" style="color: #120e0a; font-size: 0.85rem;"></i>' : ''}
+          ${isSel ? '<i class="fas fa-check" style="color: #ffffff; font-size: 0.85rem;"></i>' : ''}
         </div>
       `;
     }).join('')}
