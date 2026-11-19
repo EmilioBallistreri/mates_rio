@@ -1327,6 +1327,9 @@
     }
 
     function renderWholesaleProducts() {
+      if (typeof window.syncProductsFromStorage === 'function') {
+        window.syncProductsFromStorage();
+      }
       const grid = document.getElementById('wholesale-products-grid');
       if (!grid || typeof PRODUCTS_DATA === 'undefined') return;
 

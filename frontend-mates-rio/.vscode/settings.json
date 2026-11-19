@@ -1,0 +1,7 @@
+{
+  "liveServer.settings.ignoreFiles": [
+    ".vscode/**",
+    "**/api/store-state.json",
+    "**/storeState.json"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "data": {
+    "customProducts": null,
+    "editedProducts": null,
+    "deletedProducts": null,
+    "inventory": null,
+    "categories": null,
+    "homeSlides": null,
+    "specialOccasion": null,
+    "customizationPricing": null,
+    "themeMode": "light",
+    "supplierPurchases": null,
+    "orders": null,
+    "wholesaleOrders": null,
+    "wholesaleClients": null,
+    "wholesaleAccounts": null,
+    "usersDb": null,
+    "auditLog": null,
+    "version": 1,
+    "updatedAt": 0
+  }
+}

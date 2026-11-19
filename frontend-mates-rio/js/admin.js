@@ -47,9 +47,17 @@ if (typeof cleanStr !== 'function') {
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
   initLiveClock();
-  initInventoryDB();
-  initOrdersDB();
-  initUsersDB();
+  window._isInitialSeeding = true;
+  try {
+    initInventoryDB();
+    initOrdersDB();
+    initUsersDB();
+    if (typeof initWholesaleOrders === 'function') {
+      initWholesaleOrders();
+    }
+  } finally {
+    window._isInitialSeeding = false;
+  }
   initDragAndDropZones();
   onCategorySelectChange('new');
   initAdminThemeMode();
@@ -521,7 +529,15 @@ function initInventoryDB() {
       }
     });
 
-    // Sincronizar productos nuevos o creados por el admin que falten en inventory
+    // Sincronizar productos nuevos o editados por otros administradores en PRODUCTS_DATA
+    if (typeof window.syncProductsFromStorage === 'function') {
+      window.syncProductsFromStorage();
+    }
+    let editsMap = {};
+    try {
+      editsMap = JSON.parse(localStorage.getItem('mates_rio_edited_products') || '{}') || {};
+    } catch (e) {}
+
     if (typeof PRODUCTS_DATA !== 'undefined') {
       PRODUCTS_DATA.forEach(p => {
         if (deletedIds.has(p.id)) return;
@@ -531,18 +547,34 @@ function initInventoryDB() {
             name: p.name,
             category: p.category,
             categoryName: p.categoryName || (p.category ? p.category.toUpperCase() : 'GENERAL'),
+            subcategory: p.subcategory || '',
             price: p.price,
             originalPrice: p.originalPrice || null,
             image: p.image,
+            images: Array.isArray(p.images) ? p.images : [p.image],
             stock: p.stock !== undefined ? p.stock : 10,
             minStock: p.minStock !== undefined ? p.minStock : 5,
             inStock: (p.stock !== undefined ? p.stock : 10) > 0,
             badge: p.badge || '',
             badgeType: p.badgeType || 'new',
             description: p.description || '',
+            specs: p.specs || [],
             isCustom: !!p.isCustom
           };
           changed = true;
+        } else if (editsMap[p.id] || p.isCustom) {
+          const src = editsMap[p.id] || p;
+          if (src.name && inventory[p.id].name !== src.name) { inventory[p.id].name = src.name; changed = true; }
+          if (typeof src.price === 'number' && inventory[p.id].price !== src.price) { inventory[p.id].price = src.price; changed = true; }
+          if (src.image && inventory[p.id].image !== src.image) { inventory[p.id].image = src.image; changed = true; }
+          if (Array.isArray(src.images) && src.images.length > 0) { inventory[p.id].images = src.images; }
+          if (src.category && inventory[p.id].category !== src.category) { inventory[p.id].category = src.category; changed = true; }
+          if (src.categoryName && inventory[p.id].categoryName !== src.categoryName) { inventory[p.id].categoryName = src.categoryName; changed = true; }
+          if (typeof src.stock === 'number' && inventory[p.id].stock !== src.stock) {
+            inventory[p.id].stock = src.stock;
+            inventory[p.id].inStock = src.stock > 0;
+            changed = true;
+          }
         }
       });
     }
@@ -2944,7 +2976,9 @@ function insertOccasionEmoji(emoji) {
   }
 }
 
-function selectOccasionPosition(posKey) {
+let occasionAutoSaveTimer = null;
+
+function selectOccasionPosition(posKey, skipAutoSave = false) {
   const validPositions = ['top-bar', 'after-hero', 'before-custom', 'bottom'];
   const pos = validPositions.includes(posKey) ? posKey : 'top-bar';
 
@@ -2967,7 +3001,10 @@ function selectOccasionPosition(posKey) {
     tag.textContent = `📍 Sector: ${positionLabels[pos] || pos}`;
   }
 
-  updateOccasionLivePreview();
+  updateOccasionLivePreview(true);
+  if (!skipAutoSave) {
+    saveOccasionSettings(true);
+  }
 }
 
 function renderOccasionSettings() {
@@ -3003,13 +3040,13 @@ function renderOccasionSettings() {
   const btnLinkIn = document.getElementById('occasion-btn-link');
   if (btnLinkIn) btnLinkIn.value = def.btnLink || '';
 
-  // Select position
-  selectOccasionPosition(def.position || 'top-bar');
+  // Select position without re-triggering auto-save
+  selectOccasionPosition(def.position || 'top-bar', true);
 
   // Render emoji palette
   renderOccasionEmojiPalette('halloween');
 
-  updateOccasionLivePreview();
+  updateOccasionLivePreview(true);
 }
 
 function selectOccasionPreset(presetKey) {
@@ -3035,7 +3072,7 @@ function selectOccasionPreset(presetKey) {
   if (btnLinkIn) btnLinkIn.value = preset.btnLink;
 
   if (preset.position) {
-    selectOccasionPosition(preset.position);
+    selectOccasionPosition(preset.position, true);
   }
 
   // Switch emoji category automatically based on preset
@@ -3055,9 +3092,10 @@ function selectOccasionPreset(presetKey) {
     switchEmojiCategory('cyber');
   }
 
-  updateOccasionLivePreview();
+  updateOccasionLivePreview(true);
+  saveOccasionSettings(true);
   if (typeof showAdminToast === 'function') {
-    showAdminToast(`Plantilla "${preset.badge}" cargada`, 'fa-wand-magic-sparkles');
+    showAdminToast(`Plantilla "${preset.badge}" aplicada y sincronizada automáticamente`, 'fa-wand-magic-sparkles');
   }
 }
 
@@ -3067,9 +3105,10 @@ function toggleOccasionActive(checked) {
     statusLabel.textContent = checked ? 'Anuncio Activado en la Web' : 'Anuncio Desactivado';
     statusLabel.style.color = checked ? 'var(--admin-success)' : 'var(--admin-text-muted)';
   }
+  saveOccasionSettings(false);
 }
 
-function updateOccasionLivePreview() {
+function updateOccasionLivePreview(skipAutoSave = false) {
   const previewBox = document.getElementById('occasion-preview-container');
   const badgeEl = document.getElementById('preview-occasion-badge');
   const titleEl = document.getElementById('preview-occasion-title');
@@ -3089,9 +3128,16 @@ function updateOccasionLivePreview() {
   if (titleEl) titleEl.textContent = title;
   if (subEl) subEl.textContent = sub;
   if (btnEl) btnEl.textContent = btnText;
+
+  if (!skipAutoSave) {
+    clearTimeout(occasionAutoSaveTimer);
+    occasionAutoSaveTimer = setTimeout(() => {
+      saveOccasionSettings(true);
+    }, 250);
+  }
 }
 
-function saveOccasionSettings() {
+function saveOccasionSettings(silent = false) {
   const active = !!document.getElementById('occasion-active-toggle')?.checked;
   const theme = document.getElementById('occasion-theme-select')?.value || 'patria';
   const badge = document.getElementById('occasion-badge-input')?.value.trim() || 'ANUNCIO';
@@ -3116,9 +3162,15 @@ function saveOccasionSettings() {
     saveSpecialOccasionConfig(config);
   }
 
-  logAuditAction('Diseño Web', `Anuncio de Fecha Especial (${badge}) [Ubicación: ${position}] ${active ? 'ACTIVADO' : 'desactivado'}.`);
-  if (typeof showAdminToast === 'function') {
-    showAdminToast(`Configuración guardada (${active ? 'Activo' : 'Inactivo'}) en sector "${position}"`, 'fa-circle-check');
+  if (window.MatesRioCloudSync && typeof window.MatesRioCloudSync.pushNow === 'function') {
+    window.MatesRioCloudSync.pushNow();
+  }
+
+  if (!silent) {
+    logAuditAction('Diseño Web', `Anuncio de Fecha Especial (${badge}) [Ubicación: ${position}] ${active ? 'ACTIVADO' : 'desactivado'}.`);
+    if (typeof showAdminToast === 'function') {
+      showAdminToast(`Configuración aplicada y sincronizada (${active ? 'Activo' : 'Inactivo'}) en sector "${position}"`, 'fa-circle-check');
+    }
   }
 }
 
@@ -4084,19 +4136,19 @@ function injectCustomizerPricingAdminPanel() {
       <div class="admin-form-grid-2" style="margin-bottom: 22px;">
         <div class="admin-form-group">
           <label class="admin-form-label" for="cfg-price-mate">Precio Base: Mate ($ ARS)</label>
-          <input type="number" id="cfg-price-mate" class="admin-input modal-input" min="1000" step="100" />
+          <input type="number" id="cfg-price-mate" class="admin-input modal-input" min="1000" step="100" onchange="saveCustomizerPricingFromAdmin(true)" />
         </div>
         <div class="admin-form-group">
           <label class="admin-form-label" for="cfg-price-termo">Precio Base: Termo ($ ARS)</label>
-          <input type="number" id="cfg-price-termo" class="admin-input modal-input" min="1000" step="100" />
+          <input type="number" id="cfg-price-termo" class="admin-input modal-input" min="1000" step="100" onchange="saveCustomizerPricingFromAdmin(true)" />
         </div>
         <div class="admin-form-group">
           <label class="admin-form-label" for="cfg-price-caja">Precio Base: Caja de presentación ($ ARS)</label>
-          <input type="number" id="cfg-price-caja" class="admin-input modal-input" min="1000" step="100" />
+          <input type="number" id="cfg-price-caja" class="admin-input modal-input" min="1000" step="100" onchange="saveCustomizerPricingFromAdmin(true)" />
         </div>
         <div class="admin-form-group">
           <label class="admin-form-label" for="cfg-engraving-retail">Costo de Grabado Minorista ($ ARS • 0 = Bonificado)</label>
-          <input type="number" id="cfg-engraving-retail" class="admin-input modal-input" min="0" step="100" />
+          <input type="number" id="cfg-engraving-retail" class="admin-input modal-input" min="0" step="100" onchange="saveCustomizerPricingFromAdmin(true)" />
         </div>
       </div>
 
@@ -4106,15 +4158,15 @@ function injectCustomizerPricingAdminPanel() {
       <div class="admin-form-grid-2" style="margin-bottom: 20px;">
         <div class="admin-form-group">
           <label class="admin-form-label" for="cfg-vol-10-24">10 a 24 unidades (Costo Grabado por unidad $ ARS)</label>
-          <input type="number" id="cfg-vol-10-24" class="admin-input modal-input" min="0" step="100" />
+          <input type="number" id="cfg-vol-10-24" class="admin-input modal-input" min="0" step="100" onchange="saveCustomizerPricingFromAdmin(true)" />
         </div>
         <div class="admin-form-group">
           <label class="admin-form-label" for="cfg-vol-25-49">25 a 49 unidades (Costo Grabado por unidad $ ARS)</label>
-          <input type="number" id="cfg-vol-25-49" class="admin-input modal-input" min="0" step="100" />
+          <input type="number" id="cfg-vol-25-49" class="admin-input modal-input" min="0" step="100" onchange="saveCustomizerPricingFromAdmin(true)" />
         </div>
         <div class="admin-form-group">
           <label class="admin-form-label" for="cfg-vol-50-plus">+50 unidades (Costo Grabado por unidad $ ARS)</label>
-          <input type="number" id="cfg-vol-50-plus" class="admin-input modal-input" min="0" step="100" />
+          <input type="number" id="cfg-vol-50-plus" class="admin-input modal-input" min="0" step="100" onchange="saveCustomizerPricingFromAdmin(true)" />
         </div>
       </div>
 
@@ -4153,7 +4205,7 @@ function renderCustomizerPricingAdmin() {
   if (v3El) v3El.value = t3.engravingCostPerUnit;
 }
 
-function saveCustomizerPricingFromAdmin() {
+function saveCustomizerPricingFromAdmin(silent = false) {
   const matePrice = parseInt(document.getElementById('cfg-price-mate')?.value, 10) || 44500;
   const termoPrice = parseInt(document.getElementById('cfg-price-termo')?.value, 10) || 46900;
   const cajaPrice = parseInt(document.getElementById('cfg-price-caja')?.value, 10) || 24900;
@@ -4181,8 +4233,14 @@ function saveCustomizerPricingFromAdmin() {
     localStorage.setItem('mates_rio_customization_pricing', JSON.stringify(newConfig));
   }
 
-  logAuditAction('Precios de Personalización', `Mate: ${formatARS(matePrice)}, Termo: ${formatARS(termoPrice)}, Caja: ${formatARS(cajaPrice)}`);
-  showAdminToast('¡Precios del personalizador y grabado por volumen actualizados!', 'fa-circle-check');
+  if (window.MatesRioCloudSync && typeof window.MatesRioCloudSync.pushNow === 'function') {
+    window.MatesRioCloudSync.pushNow();
+  }
+
+  if (!silent) {
+    logAuditAction('Precios de Personalización', `Mate: ${formatARS(matePrice)}, Termo: ${formatARS(termoPrice)}, Caja: ${formatARS(cajaPrice)}`);
+  }
+  showAdminToast('¡Precios del personalizador actualizados y sincronizados!', 'fa-circle-check');
 }
 
 const _origSwitchDesignTab = switchDesignTab;

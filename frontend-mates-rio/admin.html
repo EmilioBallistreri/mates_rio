@@ -215,11 +215,6 @@
             <span class="topbar-notif-dot"></span>
           </button>
 
-          <!-- Botón de Sincronización en la Nube / Servidor Central -->
-          <button type="button" class="topbar-icon-btn topbar-sync-btn" id="admin-cloud-sync-btn" onclick="forceAdminCloudSync()" title="Sincronizar cambios en el servidor central (visible para todos los usuarios)" aria-label="Sincronizar en la Nube">
-            <i class="fas fa-rotate" id="admin-sync-icon"></i>
-          </button>
-
           <!-- Selector Modo Claro / Modo Oscuro en Admin -->
           <button type="button" class="admin-theme-toggle-btn topbar-icon-btn" id="admin-theme-toggle-btn" onclick="toggleAdminThemeMode()" title="Cambiar Tema de Panel" aria-label="Cambiar Tema de Panel">
             <i class="fas fa-moon" id="admin-theme-icon"></i>
@@ -251,9 +246,6 @@
             <div class="section-actions">
               <button class="btn-admin btn-admin-minimal" onclick="openCreateProductModal()">
                 <i class="fas fa-plus"></i> Nuevo Producto
-              </button>
-              <button class="btn-admin btn-admin-minimal" onclick="refreshDashboardData()">
-                <i class="fas fa-rotate"></i> Actualizar
               </button>
               <button class="btn-admin btn-admin-minimal" onclick="exportSalesReportCSV()">
                 <i class="fas fa-download"></i> Exportar Ventas

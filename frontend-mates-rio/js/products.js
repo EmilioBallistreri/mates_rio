@@ -841,35 +841,34 @@ const COUPONS = {
 // ==========================================================================
 // SINCRONIZACIÓN DE PRODUCTOS CON LOCALSTORAGE (ADMIN & TIENDA)
 // ==========================================================================
+const INITIAL_PRODUCTS_DATA = JSON.parse(JSON.stringify(PRODUCTS_DATA));
+
 function syncProductsFromStorage() {
   if (typeof localStorage === 'undefined') return;
   try {
-    // 1. Filtrar productos eliminados por el administrador
+    // 0. Restaurar copia base limpia para reconstrucción determinística en todos los dispositivos
     const deletedRaw = localStorage.getItem('mates_rio_deleted_products');
-    if (deletedRaw) {
-      const deletedIds = new Set(JSON.parse(deletedRaw) || []);
-      if (deletedIds.size > 0) {
-        for (let i = PRODUCTS_DATA.length - 1; i >= 0; i--) {
-          if (deletedIds.has(PRODUCTS_DATA[i].id)) {
-            PRODUCTS_DATA.splice(i, 1);
-          }
-        }
-      }
-    }
+    const deletedIds = new Set(deletedRaw ? (JSON.parse(deletedRaw) || []) : []);
 
-    // 2. Cargar productos creados desde el panel (excluyendo eliminados)
+    PRODUCTS_DATA.length = 0;
+    INITIAL_PRODUCTS_DATA.forEach(baseProd => {
+      if (!deletedIds.has(baseProd.id)) {
+        PRODUCTS_DATA.push(JSON.parse(JSON.stringify(baseProd)));
+      }
+    });
+
+    // 1. Cargar productos creados desde el panel (excluyendo eliminados)
     const raw = localStorage.getItem('mates_rio_custom_products');
     if (raw) {
       const customList = JSON.parse(raw);
       if (Array.isArray(customList) && customList.length > 0) {
-        const deletedIds = new Set(deletedRaw ? (JSON.parse(deletedRaw) || []) : []);
         const existingMap = new Map(PRODUCTS_DATA.map((p, idx) => [p.id, idx]));
         customList.forEach(prod => {
           if (prod && prod.id && !deletedIds.has(prod.id)) {
             if (existingMap.has(prod.id)) {
               Object.assign(PRODUCTS_DATA[existingMap.get(prod.id)], prod);
             } else {
-              PRODUCTS_DATA.push(prod);
+              PRODUCTS_DATA.push(JSON.parse(JSON.stringify(prod)));
               existingMap.set(prod.id, PRODUCTS_DATA.length - 1);
             }
           }
@@ -877,7 +876,7 @@ function syncProductsFromStorage() {
       }
     }
 
-    // 3. Sincronizar ediciones guardadas desde el panel de admin
+    // 2. Sincronizar ediciones guardadas desde el panel de admin
     const editsRaw = localStorage.getItem('mates_rio_edited_products');
     if (editsRaw) {
       const edits = JSON.parse(editsRaw) || {};
@@ -888,10 +887,20 @@ function syncProductsFromStorage() {
       });
     }
 
-    // 4. Sincronizar precios, fotos y stock actualizados en el panel de inventario
+    // 3. Sincronizar precios, fotos y stock actualizados en el panel de inventario
     const invRaw = localStorage.getItem('mates_rio_inventory');
     if (invRaw) {
-      const inv = JSON.parse(invRaw);
+      const inv = JSON.parse(invRaw) || {};
+      const existingIds = new Set(PRODUCTS_DATA.map(p => p.id));
+
+      // Si en inventory existe un producto custom que aún no estaba en PRODUCTS_DATA, incorporarlo
+      Object.values(inv).forEach(item => {
+        if (item && item.id && item.name && item.price && !existingIds.has(item.id) && !deletedIds.has(item.id)) {
+          PRODUCTS_DATA.push(JSON.parse(JSON.stringify(item)));
+          existingIds.add(item.id);
+        }
+      });
+
       PRODUCTS_DATA.forEach(p => {
         if (inv[p.id]) {
           const item = inv[p.id];
@@ -910,8 +919,8 @@ function syncProductsFromStorage() {
           if (typeof item.category === 'string' && item.category) p.category = item.category;
           if (typeof item.categoryName === 'string' && item.categoryName) p.categoryName = item.categoryName;
           if (typeof item.subcategory === 'string') p.subcategory = item.subcategory;
-          if (typeof item.description === 'string') p.description = item.description;
-          if (Array.isArray(item.specs)) p.specs = item.specs;
+          if (typeof item.description === 'string' && item.description) p.description = item.description;
+          if (item.specs && (Array.isArray(item.specs) || typeof item.specs === 'object')) p.specs = item.specs;
           if (typeof item.badge === 'string') p.badge = item.badge;
           if (typeof item.badgeType === 'string') p.badgeType = item.badgeType;
           if (typeof item.featured === 'boolean') p.featured = item.featured;
@@ -928,11 +937,10 @@ window.syncProductsFromStorage = syncProductsFromStorage;
 
 
 // ==========================================================================
-// 8. MOTOR DE SINCRONIZACIÓN GLOBAL CON SERVIDOR (BACKEND + MULTI-DISPOSITIVO)
-// Garantiza que cualquier cambio realizado por un administrador (productos,
-// fotos, precios, banners, categorías, etc.) se guarde en el servidor y se vea
-// reflejado para clientes registrados, otros administradores y visitantes sin
-// iniciar sesión en cualquier navegador o dispositivo.
+// 8. MOTOR DE SINCRONIZACIÓN AUTOMÁTICA EN TIEMPO REAL (MULTI-DISPOSITIVO)
+// Garantiza que cualquier cambio realizado por un administrador se guarde y
+// aplique automáticamente en el acto, reflejándose en tiempo real en otras
+// computadoras, teléfonos, clientes registrados y visitantes sin sesión.
 // ==========================================================================
 (function() {
   const KEY_MAP = {
@@ -953,6 +961,18 @@ window.syncProductsFromStorage = syncProductsFromStorage;
     mates_rio_audit_log: 'auditLog'
   };
 
+  // Claves exclusivas de personalización del administrador (para detectar si hay cambios reales para inicializar el servidor)
+  const ADMIN_CUSTOMIZATION_KEYS = [
+    'mates_rio_custom_products',
+    'mates_rio_edited_products',
+    'mates_rio_deleted_products',
+    'mates_rio_categories',
+    'mates_rio_home_slides',
+    'mates_rio_special_occasion',
+    'mates_rio_customization_pricing',
+    'mates_rio_inventory'
+  ];
+
   const REVERSE_KEY_MAP = {};
   Object.keys(KEY_MAP).forEach((lsKey) => {
     REVERSE_KEY_MAP[KEY_MAP[lsKey]] = lsKey;
@@ -969,10 +989,14 @@ window.syncProductsFromStorage = syncProductsFromStorage;
         if (window.location.port === '5000') {
           urls.push(window.location.origin + '/api/store-state');
         } else {
+          // Si es HTTPS (por ejemplo un túnel devtunnels/ngrok), priorizar mismo origen primero
+          if (window.location.protocol === 'https:') {
+            urls.push(window.location.origin + '/api/store-state');
+          }
           urls.push(`http://${hostname}:5000/api/store-state`);
+          urls.push(window.location.origin + '/api/store-state');
           urls.push('http://localhost:5000/api/store-state');
           urls.push('http://127.0.0.1:5000/api/store-state');
-          urls.push(window.location.origin + '/api/store-state');
         }
       } else {
         urls.push('http://localhost:5000/api/store-state');
@@ -985,9 +1009,12 @@ window.syncProductsFromStorage = syncProductsFromStorage;
   }
 
   let activeApiUrl = null;
-  let lastAppliedTimestamp = Number(localStorage.getItem('mates_rio_state_updated_at') || 0);
+  let lastKnownServerTimestamp = 0;
+  let lastKnownServerVersion = 0;
+  let hasCompletedInitialPull = false;
   let pushDebounceTimer = null;
   let pendingPatch = {};
+  let sseSource = null;
 
   const syncChannel = typeof BroadcastChannel !== 'undefined'
     ? new BroadcastChannel('mates_rio_live_sync')
@@ -995,11 +1022,13 @@ window.syncProductsFromStorage = syncProductsFromStorage;
 
   function collectLocalStoreState() {
     const payload = {};
-    let hasAnyData = false;
+    let hasAdminCustomizations = false;
     Object.keys(KEY_MAP).forEach((lsKey) => {
       const raw = localStorage.getItem(lsKey);
       if (raw !== null) {
-        hasAnyData = true;
+        if (ADMIN_CUSTOMIZATION_KEYS.includes(lsKey)) {
+          hasAdminCustomizations = true;
+        }
         try {
           payload[KEY_MAP[lsKey]] = JSON.parse(raw);
         } catch (e) {
@@ -1007,7 +1036,7 @@ window.syncProductsFromStorage = syncProductsFromStorage;
         }
       }
     });
-    return { payload, hasAnyData };
+    return { payload, hasAdminCustomizations };
   }
 
   function refreshAllPageViews() {
@@ -1015,8 +1044,13 @@ window.syncProductsFromStorage = syncProductsFromStorage;
       if (typeof window.syncProductsFromStorage === 'function') {
         window.syncProductsFromStorage();
       }
-      if (typeof window.initThemeMode === 'function') {
-        window.initThemeMode();
+      if (typeof window.initInventoryDB === 'function') {
+        window._isInitialSeeding = true;
+        try {
+          window.initInventoryDB();
+        } finally {
+          window._isInitialSeeding = false;
+        }
       }
       if (typeof window.renderSpecialOccasionBanner === 'function') {
         window.renderSpecialOccasionBanner();
@@ -1026,6 +1060,9 @@ window.syncProductsFromStorage = syncProductsFromStorage;
       }
       if (typeof window.renderCategoriesGrid === 'function') {
         window.renderCategoriesGrid();
+      }
+      if (typeof window.renderCatalogCategoryPills === 'function') {
+        window.renderCatalogCategoryPills();
       }
       if (typeof window.renderProducts === 'function') {
         window.renderProducts();
@@ -1038,6 +1075,9 @@ window.syncProductsFromStorage = syncProductsFromStorage;
       }
       if (typeof window.renderInventoryTable === 'function') {
         window.renderInventoryTable();
+      }
+      if (typeof window.populateCategorySelects === 'function') {
+        window.populateCategorySelects();
       }
       if (typeof window.renderAdminSlidesList === 'function') {
         window.renderAdminSlidesList();
@@ -1054,14 +1094,23 @@ window.syncProductsFromStorage = syncProductsFromStorage;
       if (typeof window.renderOrdersTable === 'function') {
         window.renderOrdersTable();
       }
+      if (typeof window.renderWholesaleOrdersTable === 'function') {
+        window.renderWholesaleOrdersTable();
+      }
       if (typeof window.renderUsersTable === 'function') {
         window.renderUsersTable();
       }
       if (typeof window.renderPurchasesSection === 'function') {
         window.renderPurchasesSection();
       }
+      if (typeof window.renderAuditTable === 'function') {
+        window.renderAuditTable();
+      }
       if (typeof window.updateKPIs === 'function') {
         window.updateKPIs();
+      }
+      if (typeof window.renderDashboardRecentOrders === 'function') {
+        window.renderDashboardRecentOrders();
       }
       if (typeof state !== 'undefined' && state) {
         try {
@@ -1091,39 +1140,90 @@ window.syncProductsFromStorage = syncProductsFromStorage;
             localStorage.setItem(lsKey, serialized);
             anyChanged = true;
           }
-          if (lsKey === 'mates_rio_theme_mode') {
-            localStorage.setItem('mates_rio_admin_theme', serialized.replace(/^"|"$/g, ''));
-          }
         }
       });
       if (remoteData.updatedAt) {
-        lastAppliedTimestamp = Number(remoteData.updatedAt);
-        localStorage.setItem('mates_rio_state_updated_at', String(lastAppliedTimestamp));
+        lastKnownServerTimestamp = Number(remoteData.updatedAt);
+        localStorage.setItem('mates_rio_state_updated_at', String(lastKnownServerTimestamp));
+      }
+      if (remoteData.version) {
+        lastKnownServerVersion = Number(remoteData.version);
       }
     } finally {
       window._isApplyingCloudSync = false;
     }
 
-    if (anyChanged) {
+    if (anyChanged || !hasCompletedInitialPull) {
       refreshAllPageViews();
     }
     return anyChanged;
   }
 
   async function fetchWithFallback(options = {}) {
-    const candidates = activeApiUrl ? [activeApiUrl, ...getCandidateApiUrls()] : getCandidateApiUrls();
-    for (const url of [...new Set(candidates)]) {
+    const isGet = !options.method || options.method.toUpperCase() === 'GET';
+    const cacheBuster = `?t=${Date.now()}`;
+    const baseCandidates = activeApiUrl ? [activeApiUrl, ...getCandidateApiUrls()] : getCandidateApiUrls();
+
+    for (const url of [...new Set(baseCandidates)]) {
       try {
-        const res = await fetch(url, options);
+        const targetUrl = isGet ? `${url}${url.includes('?') ? '&' : '?'}t=${Date.now()}` : url;
+        const res = await fetch(targetUrl, options);
         if (res.ok) {
-          activeApiUrl = url;
-          return await res.json();
+          const json = await res.json();
+          if (json && json.success && json.data) {
+            activeApiUrl = url;
+            connectRealtimeStream(url);
+            return json;
+          }
         }
       } catch (e) {
         // Intentar siguiente URL candidata
       }
     }
+
+    // Fallback de lectura estática en el mismo origen/puerto (para celulares conectados por Live Server o túnel de un solo puerto)
+    if (isGet && typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
+      try {
+        const staticMirrorUrl = `api/store-state.json${cacheBuster}`;
+        const res = await fetch(staticMirrorUrl, { method: 'GET', cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.success && json.data) {
+            return json;
+          }
+        }
+      } catch (e) {}
+    }
+
     return null;
+  }
+
+  function connectRealtimeStream(baseApiUrl) {
+    if (sseSource || typeof EventSource === 'undefined' || !baseApiUrl) return;
+    try {
+      const streamUrl = baseApiUrl.replace(/\/$/, '') + '/stream';
+      sseSource = new EventSource(streamUrl);
+      sseSource.onmessage = (event) => {
+        try {
+          const parsed = JSON.parse(event.data);
+          if (parsed && parsed.success && parsed.data) {
+            const remoteTs = Number(parsed.data.updatedAt || 0);
+            const remoteVer = Number(parsed.data.version || 0);
+            if (remoteTs > 0 && (remoteTs !== lastKnownServerTimestamp || remoteVer !== lastKnownServerVersion)) {
+              applyRemoteStateToLocal(parsed.data);
+            }
+          }
+        } catch (err) {}
+      };
+      sseSource.onerror = () => {
+        try {
+          sseSource.close();
+        } catch (e) {}
+        sseSource = null;
+      };
+    } catch (e) {
+      sseSource = null;
+    }
   }
 
   async function pushStoreStateToServer(patchObj) {
@@ -1136,80 +1236,106 @@ window.syncProductsFromStorage = syncProductsFromStorage;
       body: JSON.stringify(bodyObj)
     });
 
-    if (json && json.success && json.data && json.data.updatedAt) {
-      lastAppliedTimestamp = Number(json.data.updatedAt);
-      window._isApplyingCloudSync = true;
-      localStorage.setItem('mates_rio_state_updated_at', String(lastAppliedTimestamp));
-      window._isApplyingCloudSync = false;
+    if (json && json.success && json.data) {
+      if (json.data.updatedAt) {
+        lastKnownServerTimestamp = Number(json.data.updatedAt);
+        window._isApplyingCloudSync = true;
+        localStorage.setItem('mates_rio_state_updated_at', String(lastKnownServerTimestamp));
+        window._isApplyingCloudSync = false;
+      }
+      if (json.data.version) {
+        lastKnownServerVersion = Number(json.data.version);
+      }
     }
 
     if (syncChannel) {
       try {
-        syncChannel.postMessage({ type: 'STORE_STATE_UPDATED', updatedAt: lastAppliedTimestamp });
+        syncChannel.postMessage({
+          type: 'STORE_STATE_UPDATED',
+          updatedAt: lastKnownServerTimestamp,
+          version: lastKnownServerVersion
+        });
       } catch (e) {}
     }
   }
 
+  async function flushPendingPatchesNow() {
+    if (pushDebounceTimer) {
+      clearTimeout(pushDebounceTimer);
+      pushDebounceTimer = null;
+    }
+    const patchToSend = Object.keys(pendingPatch).length > 0
+      ? { ...pendingPatch }
+      : collectLocalStoreState().payload;
+    pendingPatch = {};
+    await pushStoreStateToServer(patchToSend);
+  }
+
   async function pullStoreStateFromServer() {
+    // Si hay cambios locales del admin pendientes de enviarse en este mismo instante, enviarlos primero
+    if (Object.keys(pendingPatch).length > 0) {
+      await flushPendingPatchesNow();
+      return;
+    }
+
     const json = await fetchWithFallback({ method: 'GET', cache: 'no-store' });
     if (!json || !json.success || !json.data) return;
 
     const serverState = json.data;
     const serverUpdated = Number(serverState.updatedAt || 0);
-    const localUpdated = Number(localStorage.getItem('mates_rio_state_updated_at') || 0);
-    const { payload, hasAnyData } = collectLocalStoreState();
+    const serverVersion = Number(serverState.version || 0);
+    const { payload, hasAdminCustomizations } = collectLocalStoreState();
 
-    // Si el servidor aún está vacío pero este navegador tiene cambios locales del admin, subirlos al servidor
-    if (serverUpdated === 0 && hasAnyData) {
+    // Si el servidor aún no fue inicializado (updatedAt === 0) y este navegador tiene personalizaciones del admin, inicializar servidor
+    if (serverUpdated === 0 && hasAdminCustomizations) {
+      hasCompletedInitialPull = true;
       await pushStoreStateToServer(payload);
       return;
     }
 
-    // Si el servidor tiene cambios más recientes (o este navegador es un visitante nuevo), aplicarlos
-    if (serverUpdated > 0 && (serverUpdated > localUpdated || !hasAnyData)) {
+    // El servidor es la fuente única de verdad para todos los dispositivos (computadoras, celulares, usuarios con o sin sesión)
+    if (serverUpdated > 0 && (!hasCompletedInitialPull || serverUpdated !== lastKnownServerTimestamp || serverVersion !== lastKnownServerVersion)) {
       applyRemoteStateToLocal(serverState);
-    } else if (localUpdated > serverUpdated && hasAnyData) {
-      await pushStoreStateToServer(payload);
+      hasCompletedInitialPull = true;
+    } else {
+      hasCompletedInitialPull = true;
     }
   }
 
-  // Interceptar localStorage.setItem para detectar automáticamente cualquier cambio hecho en el Admin
+  // Interceptar localStorage.setItem para sincronizar automáticamente al instante cualquier cambio hecho en el Admin
   const _origSetItem = Storage.prototype.setItem;
   Storage.prototype.setItem = function(key, value) {
+    const prevValue = this === window.localStorage ? this.getItem(key) : null;
     _origSetItem.call(this, key, value);
 
-    if (this === window.localStorage && !window._isApplyingCloudSync) {
-      let mappedKey = KEY_MAP[key];
-      let finalVal = value;
-
-      if (key === 'mates_rio_admin_theme') {
-        mappedKey = 'themeMode';
-        _origSetItem.call(this, 'mates_rio_theme_mode', value);
-      }
-
+    // Ignorar si estamos aplicando datos del servidor, haciendo seeding inicial por defecto, o si el valor no cambió
+    if (
+      this === window.localStorage &&
+      !window._isApplyingCloudSync &&
+      !window._isInitialSeeding &&
+      prevValue !== value
+    ) {
+      const mappedKey = KEY_MAP[key];
       if (mappedKey) {
-        const now = Date.now();
-        lastAppliedTimestamp = now;
-        _origSetItem.call(this, 'mates_rio_state_updated_at', String(now));
-
         try {
-          pendingPatch[mappedKey] = JSON.parse(finalVal);
+          pendingPatch[mappedKey] = JSON.parse(value);
         } catch (e) {
-          pendingPatch[mappedKey] = finalVal;
+          pendingPatch[mappedKey] = value;
         }
 
         if (syncChannel) {
           try {
-            syncChannel.postMessage({ type: 'STORE_STATE_UPDATED', updatedAt: now });
+            syncChannel.postMessage({ type: 'STORE_STATE_UPDATED', updatedAt: Date.now() });
           } catch (e) {}
         }
 
+        // Auto-aplicar en las vistas abiertas de inmediato y enviar al servidor automáticamente en 50ms
         clearTimeout(pushDebounceTimer);
         pushDebounceTimer = setTimeout(() => {
           const patchToSend = { ...pendingPatch };
           pendingPatch = {};
           pushStoreStateToServer(patchToSend);
-        }, 120);
+        }, 50);
       }
     }
   };
@@ -1230,28 +1356,35 @@ window.syncProductsFromStorage = syncProductsFromStorage;
     };
   }
 
-  // Sincronizar al cargar la página, al volver a la pestaña y periódicamente cada 6 segundos
+  // Sincronizar inmediatamente al cargar, al enfocar o cambiar visibilidad, y cada 2.5 segundos
+  pullStoreStateFromServer();
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       pullStoreStateFromServer();
     });
-  } else {
-    pullStoreStateFromServer();
   }
 
   window.addEventListener('focus', () => {
     pullStoreStateFromServer();
   });
 
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      pullStoreStateFromServer();
+    }
+  });
+
   setInterval(() => {
     if (!document.hidden) {
       pullStoreStateFromServer();
     }
-  }, 6000);
+  }, 2500);
 
   window.MatesRioCloudSync = {
     pull: pullStoreStateFromServer,
     push: pushStoreStateToServer,
+    pushNow: flushPendingPatchesNow,
     refresh: refreshAllPageViews
   };
 })();

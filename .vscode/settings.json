@@ -1,3 +1,7 @@
 {
-  "liveServer.settings.port": 5005
+  "liveServer.settings.ignoreFiles": [
+    ".vscode/**",
+    "**/api/store-state.json",
+    "**/storeState.json"
+  ]
 }

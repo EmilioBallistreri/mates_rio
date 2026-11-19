@@ -4745,7 +4745,9 @@ html.admin-dark-mode .occasion-emoji-cat-btn.active {
    MODO CLARO EXCLUSIVO EN PANEL ADMINISTRATIVO — CONTRASTE 100% VISIBLE
    ========================================================================== */
 #admin-theme-toggle-btn,
-.admin-theme-toggle-btn {
+.admin-theme-toggle-btn,
+#admin-cloud-sync-btn,
+.topbar-sync-btn {
   display: none !important;
 }
 
