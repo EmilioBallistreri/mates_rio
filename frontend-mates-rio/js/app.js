@@ -572,6 +572,9 @@ function setPromoSubfilter(subfilter, btnEl) {
 
 function getAllProducts() {
   if (typeof PRODUCTS_DATA === 'undefined') return [];
+  if (typeof window.syncProductsFromStorage === 'function') {
+    window.syncProductsFromStorage();
+  }
   try {
     const deletedRaw = localStorage.getItem('mates_rio_deleted_products');
     const deletedIds = new Set(deletedRaw ? (JSON.parse(deletedRaw) || []) : []);
@@ -2496,6 +2499,9 @@ function switchCureTab(type) {
 // APP INITIALIZATION & EVENT LISTENERS
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
+  if (typeof window.syncProductsFromStorage === 'function') {
+    window.syncProductsFromStorage();
+  }
   // 0. Parse URL query parameters (e.g. catalogo.html?categoria=mates or ?buscar=imperial)
   try {
     const urlParams = new URLSearchParams(window.location.search);
