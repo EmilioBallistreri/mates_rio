@@ -846,6 +846,11 @@
         </a>
       </li>
       <li class="mobile-nav-item">
+        <a href="blogs.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-play-circle" style="width: 22px; color: var(--accent-gold);"></i> Blogs & Videos</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
         <a href="contacto.html" onclick="closeMobileDrawer()">
           <span><i class="fas fa-envelope" style="width: 22px;"></i> Contacto</span>
         </a>
@@ -1032,8 +1037,9 @@
       </div>
 
       <div class="cart-checkout-actions" style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
-        <button type="button" class="btn-ws-submit" style="margin-top: 0; height: 46px; font-size: 0.86rem;"
-          onclick="confirmB2BOrderOnline()">
+        <div id="b2b-min-warning-box"></div>
+        <button type="button" class="btn-ws-submit" id="btn-b2b-confirm-checkout" style="margin-top: 0; height: 46px; font-size: 0.86rem;"
+          onclick="openB2BCheckoutWizard()">
           <i class="fas fa-check-circle"></i> Confirmar Pedido Mayorista
         </button>
         <button type="button" class="btn btn-whatsapp" style="width: 100%; height: 44px; font-weight: 800;"
@@ -1097,16 +1103,74 @@
       updateB2BCartUI();
     }
 
-    function getWholesalePriceForProduct(prod) {
+    const B2B_MIN_UNITS = 5;
+
+    function getWholesaleBasePrice(prod) {
       if (prod.wholesalePrice && prod.wholesalePrice > 0) return prod.wholesalePrice;
       return Math.round((prod.price || 0) * 0.70);
+    }
+
+    function getWholesaleTierPrice(prod, qty) {
+      const base = getWholesaleBasePrice(prod);
+      const q = Number(qty) || 5;
+      if (q >= 20) return Math.round(base * 0.82); // 18% descuento adicional por volumen
+      if (q >= 10) return Math.round(base * 0.90); // 10% descuento adicional por volumen
+      return base; // 5 a 9 unidades (Precio base mayorista)
+    }
+
+    function getWholesaleTierDiscountPct(qty) {
+      const q = Number(qty) || 5;
+      if (q >= 20) return 18;
+      if (q >= 10) return 10;
+      return 0;
     }
 
     function changeCardWsQty(prodId, delta) {
       const input = document.getElementById(`ws-qty-${prodId}`);
       if (!input) return;
-      const current = parseInt(input.value, 10) || 1;
+      const current = parseInt(input.value, 10) || 5;
       input.value = Math.max(1, current + delta);
+      updateCardWsLivePreview(prodId);
+    }
+
+    function updateCardWsLivePreview(prodId) {
+      const prod = (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA : []).find(p => p.id === prodId);
+      if (!prod) return;
+      const input = document.getElementById(`ws-qty-${prodId}`);
+      const qty = input ? Math.max(1, parseInt(input.value, 10) || 1) : 5;
+      const unitPrice = getWholesaleTierPrice(prod, qty);
+      const subtotal = unitPrice * qty;
+      const discountPct = getWholesaleTierDiscountPct(qty);
+
+      const priceValEl = document.getElementById(`ws-price-val-${prodId}`);
+      if (priceValEl) priceValEl.textContent = formatB2BARS(unitPrice);
+
+      const subtotalEl = document.getElementById(`ws-subtotal-val-${prodId}`);
+      if (subtotalEl) {
+        subtotalEl.innerHTML = `${qty} u. × ${formatB2BARS(unitPrice)} = <b style="color: #111111;">${formatB2BARS(subtotal)}</b>` +
+          (discountPct > 0 ? ` <span style="background: #111111; color: #ffffff; padding: 1px 6px; border-radius: 4px; font-size: 0.68rem; margin-left: 4px; font-weight: 800;">¡${discountPct}% OFF EXTRA!</span>` : '');
+      }
+
+      // Resaltar escala activa
+      const chip5 = document.getElementById(`tier-chip-5-${prodId}`);
+      const chip10 = document.getElementById(`tier-chip-10-${prodId}`);
+      const chip20 = document.getElementById(`tier-chip-20-${prodId}`);
+
+      if (chip5) {
+        chip5.style.background = (qty < 10) ? '#111111' : '#f4f4f5';
+        chip5.style.color = (qty < 10) ? '#ffffff' : '#52525b';
+        chip5.style.fontWeight = (qty < 10) ? '800' : '500';
+      }
+      if (chip10) {
+        chip10.style.background = (qty >= 10 && qty < 20) ? '#111111' : '#f4f4f5';
+        chip10.style.color = (qty >= 10 && qty < 20) ? '#ffffff' : '#52525b';
+        chip10.style.fontWeight = (qty >= 10 && qty < 20) ? '800' : '500';
+      }
+      if (chip20) {
+        chip20.style.background = (qty >= 20) ? '#111111' : '#f4f4f5';
+        chip20.style.color = (qty >= 20) ? '#ffffff' : '#52525b';
+        chip20.style.fontWeight = (qty >= 20) ? '800' : '500';
+      }
     }
 
     function addToB2BCart(prodId) {
@@ -1115,19 +1179,19 @@
 
       const qtyInput = document.getElementById(`ws-qty-${prodId}`);
       const qtyToAdd = qtyInput ? Math.max(1, parseInt(qtyInput.value, 10) || 1) : 5;
-      const wsPrice = getWholesalePriceForProduct(prod);
 
       const existing = b2bCart.find(item => item.id === prod.id);
       if (existing) {
         existing.quantity += qtyToAdd;
-        existing.price = wsPrice;
+        existing.price = getWholesaleTierPrice(prod, existing.quantity);
       } else {
+        const unitPrice = getWholesaleTierPrice(prod, qtyToAdd);
         b2bCart.push({
           id: prod.id,
           name: prod.name,
-          price: wsPrice,
+          price: unitPrice,
           retailPrice: prod.price,
-          cost: prod.cost || Math.round(wsPrice * 0.75),
+          cost: prod.cost || Math.round(unitPrice * 0.75),
           image: prod.image,
           quantity: qtyToAdd
         });
@@ -1143,6 +1207,11 @@
       b2bCart[idx].quantity += delta;
       if (b2bCart[idx].quantity <= 0) {
         b2bCart.splice(idx, 1);
+      } else {
+        const prod = (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA : []).find(p => p.id === prodId);
+        if (prod) {
+          b2bCart[idx].price = getWholesaleTierPrice(prod, b2bCart[idx].quantity);
+        }
       }
       saveB2BCart();
     }
@@ -1183,6 +1252,50 @@
       const totalEl = document.getElementById('b2b-cart-total');
       if (totalEl) totalEl.textContent = formatB2BARS(totalAmount);
 
+      // Verificación de mínimo de compra mayorista (mínimo 5 unidades en total)
+      const warningBox = document.getElementById('b2b-min-warning-box');
+      const checkoutBtn = document.getElementById('btn-b2b-confirm-checkout');
+      if (warningBox) {
+        if (b2bCart.length === 0) {
+          warningBox.innerHTML = '';
+          if (checkoutBtn) {
+            checkoutBtn.disabled = true;
+            checkoutBtn.style.opacity = '0.5';
+            checkoutBtn.style.cursor = 'not-allowed';
+          }
+        } else if (totalUnits < B2B_MIN_UNITS) {
+          const missing = B2B_MIN_UNITS - totalUnits;
+          warningBox.innerHTML = `
+            <div style="background: #fffbeb; border: 1.5px solid #fef08a; border-radius: 8px; padding: 10px 12px; font-size: 0.8rem; color: #854d0e; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-exclamation-triangle" style="font-size: 1.1rem; flex-shrink: 0; color: #d97706;"></i>
+              <div>
+                <strong>Mínimo de compra mayorista: 5 unidades en total</strong>.<br />
+                Tenés ${totalUnits} u. en tu carrito (agregá <b>${missing} ${missing === 1 ? 'unidad más' : 'unidades más'}</b> para habilitar el pedido).
+              </div>
+            </div>
+          `;
+          if (checkoutBtn) {
+            checkoutBtn.disabled = true;
+            checkoutBtn.style.opacity = '0.5';
+            checkoutBtn.style.cursor = 'not-allowed';
+          }
+        } else {
+          warningBox.innerHTML = `
+            <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 8px; padding: 8px 12px; font-size: 0.78rem; color: #166534; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-circle-check" style="font-size: 1rem; flex-shrink: 0; color: #16a34a;"></i>
+              <div>
+                <strong>¡Mínimo mayorista alcanzado!</strong> Tenés ${totalUnits} unidades con precio mayorista por volumen aplicado.
+              </div>
+            </div>
+          `;
+          if (checkoutBtn) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.style.opacity = '1';
+            checkoutBtn.style.cursor = 'pointer';
+          }
+        }
+      }
+
       const container = document.getElementById('b2b-cart-items-container');
       if (!container) return;
 
@@ -1191,31 +1304,37 @@
           <div style="text-align: center; padding: 48px 16px; color: #111111;">
             <i class="fas fa-boxes-packing" style="font-size: 2.6rem; margin-bottom: 12px; color: #71717a;"></i>
             <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px; color: #111111;">Tu Carrito Mayorista está vacío</h4>
-            <p style="font-size: 0.84rem; color: #52525b;">Seleccioná productos de la lista mayorista para armar tu pedido.</p>
+            <p style="font-size: 0.84rem; color: #52525b;">Seleccioná productos de la lista mayorista (mínimo 5 u. en total) para armar tu pedido.</p>
           </div>
         `;
         return;
       }
 
-      container.innerHTML = b2bCart.map(item => `
-        <div style="display: flex; gap: 12px; align-items: center; padding: 12px; background: #f8f9fa; border: 1px solid #e4e4e7; border-radius: 10px; margin-bottom: 10px; color: #111111;">
-          <img src="${item.image}" alt="${item.name}" style="width: 56px; height: 56px; object-fit: contain; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 6px; padding: 3px; flex-shrink: 0;" />
-          <div style="flex: 1; min-width: 0;">
-            <div style="font-size: 0.86rem; font-weight: 800; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
-            <div style="font-size: 0.78rem; color: #52525b; margin: 2px 0 6px;">${formatB2BARS(item.price)} c/u • Subtotal: <b style="color: #111111;">${formatB2BARS(item.price * item.quantity)}</b></div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <div style="display: inline-flex; align-items: center; background: #ffffff; border: 1px solid #d4d4d8; border-radius: 6px;">
-                <button type="button" onclick="updateB2BCartItemQty('${item.id}', -1)" style="width: 26px; height: 26px; color: #111111; font-weight: 800;">−</button>
-                <span style="padding: 0 8px; font-size: 0.82rem; font-weight: 800; color: #111111;">${item.quantity}</span>
-                <button type="button" onclick="updateB2BCartItemQty('${item.id}', 1)" style="width: 26px; height: 26px; color: #111111; font-weight: 800;">+</button>
+      container.innerHTML = b2bCart.map(item => {
+        const discountPct = getWholesaleTierDiscountPct(item.quantity);
+        return `
+          <div style="display: flex; gap: 12px; align-items: center; padding: 12px; background: #f8f9fa; border: 1px solid #e4e4e7; border-radius: 10px; margin-bottom: 10px; color: #111111;">
+            <img src="${item.image}" alt="${item.name}" style="width: 56px; height: 56px; object-fit: contain; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 6px; padding: 3px; flex-shrink: 0;" />
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 0.86rem; font-weight: 800; color: #111111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</div>
+              <div style="font-size: 0.78rem; color: #52525b; margin: 2px 0 6px;">
+                ${formatB2BARS(item.price)} c/u • Subtotal: <b style="color: #111111;">${formatB2BARS(item.price * item.quantity)}</b>
+                ${discountPct > 0 ? `<span style="background: #111111; color: #ffffff; padding: 1px 6px; border-radius: 4px; font-size: 0.68rem; margin-left: 4px; font-weight: 800;">${discountPct}% OFF</span>` : ''}
               </div>
-              <button type="button" onclick="removeB2BCartItem('${item.id}')" style="margin-left: auto; color: #dc2626; font-size: 0.8rem;" title="Quitar">
-                <i class="fas fa-trash-alt"></i>
-              </button>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="display: inline-flex; align-items: center; background: #ffffff; border: 1px solid #d4d4d8; border-radius: 6px;">
+                  <button type="button" onclick="updateB2BCartItemQty('${item.id}', -1)" style="width: 26px; height: 26px; color: #111111; font-weight: 800;">−</button>
+                  <span style="padding: 0 8px; font-size: 0.82rem; font-weight: 800; color: #111111;">${item.quantity}</span>
+                  <button type="button" onclick="updateB2BCartItemQty('${item.id}', 1)" style="width: 26px; height: 26px; color: #111111; font-weight: 800;">+</button>
+                </div>
+                <button type="button" onclick="removeB2BCartItem('${item.id}')" style="margin-left: auto; color: #dc2626; font-size: 0.8rem;" title="Quitar">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function switchWholesaleAuthTab(tab) {
@@ -1338,28 +1457,54 @@
         : PRODUCTS_DATA.filter(p => p.category === currentWsCategory);
 
       grid.innerHTML = list.map(p => {
-        const wsPrice = getWholesalePriceForProduct(p);
+        const basePrice = getWholesaleBasePrice(p);
+        const tier10Price = getWholesaleTierPrice(p, 10);
+        const tier20Price = getWholesaleTierPrice(p, 20);
+
         return `
-          <article class="ws-product-card">
+          <article class="ws-product-card" id="ws-card-${p.id}">
             <div class="ws-product-img-wrap">
               <img src="${p.image}" alt="${p.name}" loading="lazy" />
             </div>
             <div class="ws-product-body">
               <h3 class="ws-product-title">${p.name}</h3>
+
+              <!-- Escala de Precios por Volumen -->
+              <div class="ws-tier-pills-bar" style="background: #f8f9fa; border: 1px solid #e4e4e7; border-radius: 8px; padding: 6px 8px; margin-bottom: 10px;">
+                <div style="font-size: 0.7rem; font-weight: 800; color: #52525b; text-transform: uppercase; margin-bottom: 4px;">
+                  <i class="fas fa-layer-group"></i> Escala por Cantidad:
+                </div>
+                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                  <span id="tier-chip-5-${p.id}" style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: #111111; color: #ffffff; font-weight: 800;">
+                    5-9 u: <b>${formatB2BARS(basePrice)}</b>
+                  </span>
+                  <span id="tier-chip-10-${p.id}" style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: #f4f4f5; color: #52525b; font-weight: 500;">
+                    10-19 u: <b>${formatB2BARS(tier10Price)}</b> (-10%)
+                  </span>
+                  <span id="tier-chip-20-${p.id}" style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: #f4f4f5; color: #52525b; font-weight: 500;">
+                    +20 u: <b>${formatB2BARS(tier20Price)}</b> (-18%)
+                  </span>
+                </div>
+              </div>
+
               <div class="ws-price-box">
                 <div class="ws-retail-ref">
-                  <span>PVP Sugerido:</span>
+                  <span>PVP Sugerido Minorista:</span>
                   <span style="text-decoration: line-through;">${formatB2BARS(p.price)}</span>
                 </div>
                 <div class="ws-main-price-row">
-                  <span style="font-size: 0.78rem; font-weight: 700; color: #111111;">Mayorista:</span>
-                  <span class="ws-price-val">${formatB2BARS(wsPrice)}</span>
+                  <span style="font-size: 0.78rem; font-weight: 700; color: #111111;">Precio Mayorista:</span>
+                  <span class="ws-price-val" id="ws-price-val-${p.id}">${formatB2BARS(basePrice)}</span>
+                </div>
+                <div id="ws-subtotal-val-${p.id}" style="font-size: 0.74rem; color: #52525b; margin-top: 4px; text-align: right;">
+                  5 u. × ${formatB2BARS(basePrice)} = <b style="color: #111111;">${formatB2BARS(basePrice * 5)}</b>
                 </div>
               </div>
+
               <div class="ws-qty-row">
                 <div class="ws-qty-stepper">
                   <button type="button" class="ws-qty-btn" onclick="changeCardWsQty('${p.id}', -1)">−</button>
-                  <input type="number" id="ws-qty-${p.id}" class="ws-qty-input" value="5" min="1" />
+                  <input type="number" id="ws-qty-${p.id}" class="ws-qty-input" value="5" min="1" oninput="updateCardWsLivePreview('${p.id}')" />
                   <button type="button" class="ws-qty-btn" onclick="changeCardWsQty('${p.id}', 1)">+</button>
                 </div>
                 <button type="button" class="btn-ws-add-cart" onclick="addToB2BCart('${p.id}')">
@@ -1372,26 +1517,323 @@
       }).join('');
     }
 
-    function confirmB2BOrderOnline() {
+    // ==========================================================================
+    // CHECKOUT MAYORISTA EN 3 PASOS (B2B WIZARD)
+    // ==========================================================================
+    let currentB2BCheckoutStep = 1;
+
+    function openB2BCheckoutWizard() {
+      const totalUnits = b2bCart.reduce((acc, item) => acc + (item.quantity || 0), 0);
       if (b2bCart.length === 0) {
-        alert('Tu Carrito Mayorista está vacío.');
+        alert('Tu Carrito Mayorista está vacío. Agregá al menos 5 unidades para continuar.');
         return;
       }
-      const user = JSON.parse(localStorage.getItem(B2B_SESSION_KEY) || '{}');
+      if (totalUnits < B2B_MIN_UNITS) {
+        alert(`El pedido mayorista requiere un mínimo de 5 unidades en total. Tenés ${totalUnits} unidades en el carrito.`);
+        return;
+      }
+
+      closeB2BCartDrawer();
+      const modal = document.getElementById('b2b-checkout-modal');
+      if (modal) modal.classList.add('active');
+
+      // Precargar datos de la sesión mayorista
+      try {
+        const user = JSON.parse(localStorage.getItem(B2B_SESSION_KEY) || '{}');
+        const compEl = document.getElementById('b2b-checkout-company');
+        const nameEl = document.getElementById('b2b-checkout-name');
+        const phoneEl = document.getElementById('b2b-checkout-phone');
+        const cityEl = document.getElementById('b2b-checkout-city');
+
+        if (compEl && !compEl.value) compEl.value = user.businessName || '';
+        if (nameEl && !nameEl.value) nameEl.value = user.ownerName || user.businessName || '';
+        if (phoneEl && !phoneEl.value) phoneEl.value = user.phone || '';
+        if (cityEl && !cityEl.value) cityEl.value = user.city || user.location || '';
+      } catch (e) { }
+
+      goToB2BCheckoutStep(1);
+      onB2BProvinceChanged();
+      updateB2BCheckoutSummary();
+    }
+
+    function closeB2BCheckoutWizard() {
+      const modal = document.getElementById('b2b-checkout-modal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function goToB2BCheckoutStep(step) {
+      currentB2BCheckoutStep = step;
+      [1, 2, 3].forEach(s => {
+        const pane = document.getElementById(`b2b-step-pane-${s}`);
+        const pill = document.getElementById(`b2b-wizard-pill-${s}`);
+        const badge = document.getElementById(`b2b-step-badge-${s}`);
+        const line = document.getElementById(`b2b-wizard-line-${s}`);
+
+        if (pane) pane.style.display = (s === step) ? 'block' : 'none';
+
+        if (pill && badge) {
+          if (s === step) {
+            pill.style.color = '#09090b';
+            pill.style.fontWeight = '800';
+            badge.style.background = '#09090b';
+            badge.style.color = '#ffffff';
+          } else if (s < step) {
+            pill.style.color = '#16a34a';
+            pill.style.fontWeight = '700';
+            badge.style.background = '#16a34a';
+            badge.style.color = '#ffffff';
+          } else {
+            pill.style.color = '#71717a';
+            pill.style.fontWeight = '600';
+            badge.style.background = '#f4f4f5';
+            badge.style.color = '#71717a';
+          }
+        }
+
+        if (line) {
+          line.style.background = (s < step) ? '#16a34a' : '#e4e4e7';
+        }
+      });
+    }
+
+    function validateAndGoToB2BStep(targetStep) {
+      if (targetStep === 2) {
+        const comp = document.getElementById('b2b-checkout-company')?.value.trim();
+        const name = document.getElementById('b2b-checkout-name')?.value.trim();
+        const phone = document.getElementById('b2b-checkout-phone')?.value.trim();
+        const cuit = document.getElementById('b2b-checkout-cuit')?.value.trim();
+        const email = document.getElementById('b2b-checkout-email')?.value.trim();
+
+        if (!comp || !name || !phone || !cuit || !email) {
+          alert('Por favor completá todos los campos del Paso 1 (Razón Social, Contacto, WhatsApp, CUIT/DNI y Email).');
+          return;
+        }
+        goToB2BCheckoutStep(2);
+      } else if (targetStep === 3) {
+        const prov = document.getElementById('b2b-checkout-province')?.value;
+        const city = document.getElementById('b2b-checkout-city')?.value.trim();
+        const address = document.getElementById('b2b-checkout-address')?.value.trim();
+        const zip = document.getElementById('b2b-checkout-zip')?.value.trim();
+
+        if (!prov || !city || !address || !zip) {
+          alert('Por favor completá los datos de ubicación y entrega (Provincia, Ciudad, Dirección y Código Postal).');
+          return;
+        }
+        updateB2BCheckoutSummary();
+        goToB2BCheckoutStep(3);
+      }
+    }
+
+    function onB2BProvinceChanged() {
+      const provEl = document.getElementById('b2b-checkout-province');
+      const container = document.getElementById('b2b-shipping-method-options');
+      if (!provEl || !container) return;
+
+      const prov = provEl.value;
+      const isCordoba = (prov === 'Córdoba');
+
+      if (isCordoba) {
+        // Envíos Inmediatos / Express para Córdoba y Sierras Chicas
+        container.innerHTML = `
+          <label style="display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1.5px solid #111111; border-radius: 8px; cursor: pointer; background: #ffffff; color: #111111;">
+            <input type="radio" name="b2b_shipping_choice" value="express" checked onchange="updateB2BCheckoutSummary()" style="margin-top: 3px;" />
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between;">
+                <b><i class="fas fa-motorcycle" style="color: #27ae60;"></i> Flete Express Inmediato (En el Día)</b>
+                <span style="font-weight: 800; color: #111111;">$ 4.500</span>
+              </div>
+              <small style="color: #52525b;">Despacho rápido dentro de Córdoba Capital y Sierras Chicas.</small>
+            </div>
+          </label>
+          <label style="display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid #d4d4d8; border-radius: 8px; cursor: pointer; background: #ffffff; color: #111111;">
+            <input type="radio" name="b2b_shipping_choice" value="standard" onchange="updateB2BCheckoutSummary()" style="margin-top: 3px;" />
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between;">
+                <b><i class="fas fa-truck" style="color: #3b82f6;"></i> Logística Programada 24/48 hs</b>
+                <span style="font-weight: 800; color: #111111;">$ 3.200</span>
+              </div>
+              <small style="color: #52525b;">Entrega en depósito o comercio dentro de las 24 a 48 hs.</small>
+            </div>
+          </label>
+          <label style="display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid #d4d4d8; border-radius: 8px; cursor: pointer; background: #ffffff; color: #111111;">
+            <input type="radio" name="b2b_shipping_choice" value="pickup" onchange="updateB2BCheckoutSummary()" style="margin-top: 3px;" />
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between;">
+                <b><i class="fas fa-store"></i> Retiro en Taller / Depósito Central</b>
+                <span style="font-weight: 800; color: #16a34a;">GRATIS</span>
+              </div>
+              <small style="color: #52525b;">Río Ceballos, Córdoba (coordinar horario con el taller).</small>
+            </div>
+          </label>
+        `;
+      } else {
+        // Envíos por Paquetería / Transporte de Cargas para otras Provincias (NO Andreani)
+        container.innerHTML = `
+          <label style="display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1.5px solid #111111; border-radius: 8px; cursor: pointer; background: #ffffff; color: #111111;">
+            <input type="radio" name="b2b_shipping_choice" value="paqueteria_expreso" checked onchange="updateB2BCheckoutSummary()" style="margin-top: 3px;" />
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between;">
+                <b><i class="fas fa-boxes-packing" style="color: #ea580c;"></i> Paquetería y Transporte de Cargas / Encomienda</b>
+                <span style="font-weight: 800; color: #16a34a;">A Pagar en Destino</span>
+              </div>
+              <small style="color: #52525b;">Despacho sin costo adicional al expreso de tu preferencia (Vía Cargo, Buspack, Expreso Luján, etc.). Abonás el flete al recibir en tu terminal o depósito.</small>
+            </div>
+          </label>
+          <label style="display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid #d4d4d8; border-radius: 8px; cursor: pointer; background: #ffffff; color: #111111;">
+            <input type="radio" name="b2b_shipping_choice" value="paqueteria_seguro" onchange="updateB2BCheckoutSummary()" style="margin-top: 3px;" />
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between;">
+                <b><i class="fas fa-shield-alt" style="color: #2563eb;"></i> Paquetería Puerta a Puerta con Seguro Integral</b>
+                <span style="font-weight: 800; color: #111111;">$ 6.800</span>
+              </div>
+              <small style="color: #52525b;">Entrega directa a domicilio comercial con cobertura de carga total contra rotura o siniestro.</small>
+            </div>
+          </label>
+        `;
+      }
+
+      updateB2BCheckoutSummary();
+    }
+
+    function updateB2BCheckoutSummary() {
+      const summaryBox = document.getElementById('b2b-checkout-order-summary-box');
+      if (!summaryBox) return;
+
+      const subtotalMayorista = b2bCart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
       const totalUnits = b2bCart.reduce((acc, i) => acc + i.quantity, 0);
-      const totalWholesale = b2bCart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
+
+      const prov = document.getElementById('b2b-checkout-province')?.value || 'Córdoba';
+      const shippingChoice = document.querySelector('input[name="b2b_shipping_choice"]:checked')?.value || 'paqueteria_expreso';
+
+      let shippingCost = 0;
+      let shippingLabel = 'Paquetería y Transporte de Cargas (A pagar en destino)';
+
+      if (prov === 'Córdoba') {
+        if (shippingChoice === 'express') {
+          shippingCost = 4500;
+          shippingLabel = 'Flete Express Inmediato en el día ($ 4.500)';
+        } else if (shippingChoice === 'standard') {
+          shippingCost = 3200;
+          shippingLabel = 'Logística Programada 24/48 hs ($ 3.200)';
+        } else {
+          shippingCost = 0;
+          shippingLabel = 'Retiro en Depósito Central Río Ceballos (Gratis)';
+        }
+      } else {
+        if (shippingChoice === 'paqueteria_seguro') {
+          shippingCost = 6800;
+          shippingLabel = 'Paquetería Puerta a Puerta con Seguro Integral ($ 6.800)';
+        } else {
+          shippingCost = 0;
+          shippingLabel = 'Paquetería y Transporte de Cargas / Encomienda (A pagar en destino)';
+        }
+      }
+
+      const paymentMethod = document.querySelector('input[name="b2b_payment_method"]:checked')?.value || 'transferencia';
+      const transferDiscount = (paymentMethod === 'transferencia') ? Math.round(subtotalMayorista * 0.10) : 0;
+      const totalFinal = Math.max(0, subtotalMayorista - transferDiscount + shippingCost);
+
+      summaryBox.innerHTML = `
+        <div style="font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; border-bottom: 1px solid #e4e4e7; padding-bottom: 6px; color: #111111;">
+          <i class="fas fa-receipt"></i> Resumen del Pedido Mayorista (${totalUnits} unidades)
+        </div>
+        <div style="max-height: 120px; overflow-y: auto; margin-bottom: 8px; padding-right: 4px; font-size: 0.8rem; color: #52525b;">
+          ${b2bCart.map(i => {
+            const disc = getWholesaleTierDiscountPct(i.quantity);
+            return `
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span>${i.quantity}x ${i.name} ${disc > 0 ? `<b style="color: #16a34a;">(${disc}% OFF)</b>` : ''}</span>
+                <span style="font-weight: 700; color: #111111;">${formatB2BARS(i.price * i.quantity)}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <div style="border-top: 1px dashed #d4d4d8; padding-top: 8px; font-size: 0.84rem; display: flex; flex-direction: column; gap: 4px; color: #27272a;">
+          <div style="display: flex; justify-content: space-between;">
+            <span>Subtotal Mayorista:</span>
+            <span style="font-weight: 700;">${formatB2BARS(subtotalMayorista)}</span>
+          </div>
+          ${transferDiscount > 0 ? `
+            <div style="display: flex; justify-content: space-between; color: #16a34a; font-weight: 700;">
+              <span><i class="fas fa-tag"></i> Descuento Transferencia (10% OFF EXTRA):</span>
+              <span>- ${formatB2BARS(transferDiscount)}</span>
+            </div>
+          ` : ''}
+          <div style="display: flex; justify-content: space-between;">
+            <span>Logística (${prov}):</span>
+            <span style="font-weight: 700;">${shippingCost === 0 ? (prov === 'Córdoba' ? 'GRATIS' : 'A convenir en destino') : formatB2BARS(shippingCost)}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 900; margin-top: 4px; padding-top: 4px; border-top: 1.5px solid #111111; color: #111111;">
+            <span>Total Final Mayorista:</span>
+            <span style="color: #16a34a;">${formatB2BARS(totalFinal)}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function processB2BCheckoutWizard(e) {
+      if (e) e.preventDefault();
+
+      const totalUnits = b2bCart.reduce((acc, item) => acc + (item.quantity || 0), 0);
+      if (b2bCart.length === 0 || totalUnits < B2B_MIN_UNITS) {
+        alert(`Tu pedido debe tener un mínimo de 5 unidades en total para procesarse. Actualmente tenés ${totalUnits} unidades.`);
+        return;
+      }
+
+      const company = document.getElementById('b2b-checkout-company')?.value.trim();
+      const name = document.getElementById('b2b-checkout-name')?.value.trim();
+      const phone = document.getElementById('b2b-checkout-phone')?.value.trim();
+      const email = document.getElementById('b2b-checkout-email')?.value.trim();
+      const cuit = document.getElementById('b2b-checkout-cuit')?.value.trim();
+      const province = document.getElementById('b2b-checkout-province')?.value || 'Córdoba';
+      const city = document.getElementById('b2b-checkout-city')?.value.trim();
+      const address = document.getElementById('b2b-checkout-address')?.value.trim();
+      const zip = document.getElementById('b2b-checkout-zip')?.value.trim();
+
+      const shippingChoice = document.querySelector('input[name="b2b_shipping_choice"]:checked')?.value || 'paqueteria_expreso';
+      const paymentMethod = document.querySelector('input[name="b2b_payment_method"]:checked')?.value || 'transferencia';
+
+      let shippingLabel = '';
+      let shippingCost = 0;
+      if (province === 'Córdoba') {
+        if (shippingChoice === 'express') {
+          shippingLabel = 'Flete Express Inmediato en el día';
+          shippingCost = 4500;
+        } else if (shippingChoice === 'standard') {
+          shippingLabel = 'Logística Programada 24/48 hs';
+          shippingCost = 3200;
+        } else {
+          shippingLabel = 'Retiro en Depósito Central Río Ceballos';
+          shippingCost = 0;
+        }
+      } else {
+        if (shippingChoice === 'paqueteria_seguro') {
+          shippingLabel = 'Paquetería Puerta a Puerta con Seguro Integral';
+          shippingCost = 6800;
+        } else {
+          shippingLabel = 'Paquetería y Transporte de Cargas / Encomienda a todo el país (Flete en destino)';
+          shippingCost = 0;
+        }
+      }
+
+      const subtotalMayorista = b2bCart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
+      const transferDiscount = (paymentMethod === 'transferencia') ? Math.round(subtotalMayorista * 0.10) : 0;
+      const totalFinal = Math.max(0, subtotalMayorista - transferDiscount + shippingCost);
       const totalCost = b2bCart.reduce((acc, i) => acc + ((i.cost || Math.round(i.price * 0.75)) * i.quantity), 0);
       const itemsSummary = b2bCart.map(i => `${i.quantity}x ${i.name}`).join(', ');
 
+      const orderId = 'B2B-MR-' + Math.floor(100000 + Math.random() * 900000);
+
       const newOrder = {
-        id: 'B2B-' + Math.floor(1000 + Math.random() * 9000),
+        id: orderId,
         date: new Date().toISOString(),
-        businessName: user.businessName || 'Cliente Mayorista',
-        cuit: '-',
-        contactName: user.ownerName || user.businessName || 'Cliente Mayorista',
-        phone: user.phone || '-',
-        email: '-',
-        location: user.city || user.location || '-',
+        businessName: company || name || 'Cliente Mayorista',
+        cuit: cuit || '-',
+        contactName: name,
+        phone: phone || '-',
+        email: email || '-',
+        province: province,
+        location: `${city}, ${province} (${address}, CP: ${zip})`,
         businessType: 'Mayorista',
         itemsSummary,
         items: b2bCart.map(i => ({
@@ -1401,41 +1843,76 @@
           cost: i.cost || Math.round(i.price * 0.75)
         })),
         totalUnits,
-        totalWholesale,
+        subtotalWholesale: subtotalMayorista,
+        shippingCost,
+        shippingMethod: shippingLabel,
+        discount: transferDiscount,
+        paymentMethod: (paymentMethod === 'transferencia') ? 'Transferencia Bancaria (10% OFF EXTRA)' : 'Mercado Pago Mayorista',
+        totalWholesale: totalFinal,
         totalCost,
         status: 'Pendiente de Aprobación',
-        notes: `Pedido desde Carrito Mayorista Web (${user.city || ''})`
+        notes: `Pedido Mayorista B2B (${province}). Despacho: ${shippingLabel}.`
       };
 
       try {
         const orders = JSON.parse(localStorage.getItem('mates_rio_wholesale_orders') || '[]');
         orders.unshift(newOrder);
         localStorage.setItem('mates_rio_wholesale_orders', JSON.stringify(orders));
-      } catch (e) { }
+      } catch (err) { }
 
-      alert(`¡Pedido Mayorista #${newOrder.id} registrado con éxito!\nTotal: ${formatB2BARS(totalWholesale)} (${totalUnits} unidades).\nNos contactaremos por WhatsApp al ${user.phone || ''} para coordinar el despacho.`);
+      // Actualizar modal de éxito
+      const orderIdEl = document.getElementById('b2b-success-order-id');
+      const shipEl = document.getElementById('b2b-success-shipping');
+      const payEl = document.getElementById('b2b-success-payment');
+      const totEl = document.getElementById('b2b-success-total');
+
+      if (orderIdEl) orderIdEl.textContent = newOrder.id;
+      if (shipEl) shipEl.textContent = shippingLabel;
+      if (payEl) payEl.textContent = newOrder.paymentMethod;
+      if (totEl) totEl.textContent = formatB2BARS(totalFinal);
+
+      // WhatsApp receipt
+      const waBtn = document.getElementById('b2b-btn-whatsapp-receipt');
+      if (waBtn) {
+        const lines = b2bCart.map(i => `• ${i.quantity}x ${i.name} (${formatB2BARS(i.price * i.quantity)})`).join('\n');
+        const msg = `¡Hola Mates Río! Acabo de confirmar mi *Pedido Mayorista #${orderId}*:\n\n` +
+          `🏢 *Empresa / Comercio:* ${company}\n` +
+          `👤 *Responsable:* ${name}\n` +
+          `📋 *CUIT/DNI:* ${cuit}\n` +
+          `📍 *Destino:* ${city}, ${province} (${address})\n` +
+          `🚚 *Logística / Despacho:* ${shippingLabel}\n` +
+          `💳 *Medio de Pago:* ${newOrder.paymentMethod}\n\n` +
+          `📦 *Detalle del Pedido (${totalUnits} u.):*\n${lines}\n\n` +
+          `💰 *Total a Abonar:* ${formatB2BARS(totalFinal)}`;
+
+        waBtn.onclick = () => {
+          window.open(`https://wa.me/5493513830111?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+      }
+
       clearB2BCart();
-      closeB2BCartDrawer();
+      closeB2BCheckoutWizard();
+
+      const successModal = document.getElementById('b2b-order-success-modal');
+      if (successModal) successModal.classList.add('active');
+    }
+
+    function closeB2BOrderSuccess() {
+      const modal = document.getElementById('b2b-order-success-modal');
+      if (modal) modal.classList.remove('active');
     }
 
     function checkoutB2BWhatsApp() {
+      const totalUnits = b2bCart.reduce((acc, i) => acc + i.quantity, 0);
       if (b2bCart.length === 0) {
         alert('Tu Carrito Mayorista está vacío.');
         return;
       }
-      const user = JSON.parse(localStorage.getItem(B2B_SESSION_KEY) || '{}');
-      const totalUnits = b2bCart.reduce((acc, i) => acc + i.quantity, 0);
-      const totalWholesale = b2bCart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
-      const lines = b2bCart.map(i => `• ${i.quantity}x ${i.name} (${formatB2BARS(i.price * i.quantity)})`).join('\n');
-
-      const msg = `¡Hola Mates Río! Quiero confirmar mi *Pedido del Carrito Mayorista*:\n\n` +
-        `👤 *Nombre:* ${user.businessName || '-'}\n` +
-        `📍 *Ciudad:* ${user.city || user.location || '-'}\n` +
-        `📱 *WhatsApp:* ${user.phone || '-'}\n\n` +
-        `📦 *Detalle del Pedido (${totalUnits} u.):*\n${lines}\n\n` +
-        `💰 *Total Mayorista:* ${formatB2BARS(totalWholesale)}`;
-
-      window.open(`https://wa.me/5493513830111?text=${encodeURIComponent(msg)}`, '_blank');
+      if (totalUnits < B2B_MIN_UNITS) {
+        alert(`El pedido mayorista requiere un mínimo de 5 unidades en total. Tenés ${totalUnits} unidades en el carrito.`);
+        return;
+      }
+      openB2BCheckoutWizard();
     }
 
     function openMobileDrawer() {
@@ -1754,6 +2231,247 @@
       <button class="btn btn-outline-dark" onclick="logoutUser()" style="width: 100%; margin-top: 16px;">
         <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
       </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: FINALIZAR COMPRA MAYORISTA (CHECKOUT 3 PASOS B2B)
+       ========================================================================== -->
+  <div class="modal-overlay" id="b2b-checkout-modal">
+    <div class="modal-box modal-box-padded" style="max-width: 640px; background: #ffffff; color: #111111; border: 1.5px solid #e4e4e7; border-radius: 16px;">
+      <button class="modal-close-icon" onclick="closeB2BCheckoutWizard()" aria-label="Cerrar modal" style="color: #111111;">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="checkout-header-wrap" style="text-align: center; margin-bottom: 16px;">
+        <div style="display: inline-block; background: #111111; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 3px 12px; border-radius: 20px; text-transform: uppercase; margin-bottom: 8px;">
+          <i class="fas fa-boxes-packing"></i> Portal Mayorista B2B
+        </div>
+        <h3 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 900; margin-bottom: 4px; color: #111111;">
+          Finalizar Pedido Mayorista
+        </h3>
+        <p style="font-size: 0.85rem; color: #52525b;">
+          Despacho por Paquetería y Transporte de Cargas a todo el país. Mínimo 5 unidades.
+        </p>
+      </div>
+
+      <!-- Stepper Wizard Indicator -->
+      <div class="checkout-wizard-steps" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 8px;">
+        <div class="checkout-step-pill active" id="b2b-wizard-pill-1" onclick="goToB2BCheckoutStep(1)" style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 800; color: #09090b; cursor: pointer;">
+          <span class="step-num" id="b2b-step-badge-1" style="width: 26px; height: 26px; border-radius: 50%; background: #09090b; color: #ffffff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.78rem;">1</span>
+          <span>Empresa</span>
+        </div>
+        <div style="flex: 1; height: 2px; background: #e4e4e7; margin: 0 8px;" id="b2b-wizard-line-1"></div>
+        <div class="checkout-step-pill" id="b2b-wizard-pill-2" onclick="goToB2BCheckoutStep(2)" style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 700; color: #71717a; cursor: pointer;">
+          <span class="step-num" id="b2b-step-badge-2" style="width: 26px; height: 26px; border-radius: 50%; background: #f4f4f5; color: #71717a; display: inline-flex; align-items: center; justify-content: center; font-size: 0.78rem;">2</span>
+          <span>Despacho</span>
+        </div>
+        <div style="flex: 1; height: 2px; background: #e4e4e7; margin: 0 8px;" id="b2b-wizard-line-2"></div>
+        <div class="checkout-step-pill" id="b2b-wizard-pill-3" onclick="goToB2BCheckoutStep(3)" style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 700; color: #71717a; cursor: pointer;">
+          <span class="step-num" id="b2b-step-badge-3" style="width: 26px; height: 26px; border-radius: 50%; background: #f4f4f5; color: #71717a; display: inline-flex; align-items: center; justify-content: center; font-size: 0.78rem;">3</span>
+          <span>Pago B2B</span>
+        </div>
+      </div>
+
+      <form id="b2b-checkout-form" onsubmit="processB2BCheckoutWizard(event)">
+        <!-- PASO 1: DATOS DE LA EMPRESA O TITULAR -->
+        <div class="checkout-step-pane" id="b2b-step-pane-1">
+          <div style="background: #fafafa; border: 1px solid #e4e4e7; border-radius: 12px; padding: 16px; margin-bottom: 16px; color: #111111;">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label" style="font-weight: 700; color: #111111;">Razón Social o Nombre del Comercio *</label>
+              <input type="text" id="b2b-checkout-company" required class="form-input" placeholder="Ej: Tienda de Mates Cba / Lucas González" style="background: #ffffff; color: #111111; border: 1px solid #d4d4d8;" />
+            </div>
+
+            <div class="form-grid-2col" style="margin-bottom: 14px;">
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700; color: #111111;">Titular / Contacto Responsable *</label>
+                <input type="text" id="b2b-checkout-name" required class="form-input" placeholder="Ej: Lucas González" style="background: #ffffff; color: #111111; border: 1px solid #d4d4d8;" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700; color: #111111;">WhatsApp / Teléfono *</label>
+                <input type="tel" id="b2b-checkout-phone" required class="form-input" placeholder="Ej: 351 555-1234" style="background: #ffffff; color: #111111; border: 1px solid #d4d4d8;" />
+              </div>
+            </div>
+
+            <div class="form-grid-2col" style="margin-bottom: 0;">
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700; color: #111111;">CUIT o DNI (para Facturación) *</label>
+                <input type="text" id="b2b-checkout-cuit" required class="form-input" placeholder="Ej: 30-71234567-9 o 38.456.789" style="background: #ffffff; color: #111111; border: 1px solid #d4d4d8;" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700; color: #111111;">Email Corporativo *</label>
+                <input type="email" id="b2b-checkout-email" required class="form-input" placeholder="ventas@comercio.com" style="background: #ffffff; color: #111111; border: 1px solid #d4d4d8;" />
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary" onclick="validateAndGoToB2BStep(2)" style="width: 100%; height: 46px; font-weight: 800; font-size: 0.95rem; background: #111111; color: #ffffff;">
+            Continuar a Ubicación y Despacho <i class="fas fa-arrow-right" style="margin-left: 6px;"></i>
+          </button>
+        </div>
+
+        <!-- PASO 2: UBICACIÓN Y DESPACHO POR PAQUETERÍA / FLETE -->
+        <div class="checkout-step-pane" id="b2b-step-pane-2" style="display: none;">
+          <div style="background: #fafafa; border: 1px solid #e4e4e7; border-radius: 12px; padding: 16px; margin-bottom: 16px; color: #111111;">
+            <div class="form-grid-2col" style="margin-bottom: 12px;">
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700; color: #111111;">Provincia de Destino *</label>
+                <select id="b2b-checkout-province" required class="form-input" style="height: 42px; background: #ffffff; color: #111111; border: 1px solid #d4d4d8;" onchange="onB2BProvinceChanged()">
+                  <option value="Córdoba">Córdoba</option>
+                  <option value="Buenos Aires">Buenos Aires</option>
+                  <option value="CABA">Ciudad de Buenos Aires (CABA)</option>
+                  <option value="Santa Fe">Santa Fe</option>
+                  <option value="Mendoza">Mendoza</option>
+                  <option value="Entre Ríos">Entre Ríos</option>
+                  <option value="Salta">Salta</option>
+                  <option value="Tucumán">Tucumán</option>
+                  <option value="Chaco">Chaco</option>
+                  <option value="Corrientes">Corrientes</option>
+                  <option value="Misiones">Misiones</option>
+                  <option value="San Juan">San Juan</option>
+                  <option value="San Luis">San Luis</option>
+                  <option value="Catamarca">Catamarca</option>
+                  <option value="La Rioja">La Rioja</option>
+                  <option value="Santiago del Estero">Santiago del Estero</option>
+                  <option value="Jujuy">Jujuy</option>
+                  <option value="Neuquén">Neuquén</option>
+                  <option value="Río Negro">Río Negro</option>
+                  <option value="Chubut">Chubut</option>
+                  <option value="Santa Cruz">Santa Cruz</option>
+                  <option value="Tierra del Fuego">Tierra del Fuego</option>
+                  <option value="La Pampa">La Pampa</option>
+                  <option value="Formosa">Formosa</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700; color: #111111;">Ciudad / Localidad *</label>
+                <input type="text" id="b2b-checkout-city" required class="form-input" placeholder="Ej: Río Ceballos / Rosario / CABA" style="background: #ffffff; color: #111111; border: 1px solid #d4d4d8;" oninput="updateB2BCheckoutSummary()" />
+              </div>
+            </div>
+
+            <div class="form-grid-2col" style="margin-bottom: 14px;">
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700; color: #111111;">Dirección de Entrega / Depósito *</label>
+                <input type="text" id="b2b-checkout-address" required class="form-input" placeholder="Ej: Av. San Martín 1234" style="background: #ffffff; color: #111111; border: 1px solid #d4d4d8;" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700; color: #111111;">Código Postal *</label>
+                <input type="text" id="b2b-checkout-zip" required class="form-input" placeholder="Ej: 5111" style="background: #ffffff; color: #111111; border: 1px solid #d4d4d8;" />
+              </div>
+            </div>
+
+            <!-- Selector Dinámico de Logística Mayorista -->
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-weight: 700; margin-bottom: 8px; color: #111111;">Seleccioná el transporte o medio de entrega:</label>
+              <div id="b2b-shipping-method-options" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Dinámico: Córdoba (Inmediato o 24hs) vs Otras Provincias (Paquetería y Transporte de Cargas / Encomienda) -->
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn btn-secondary" onclick="goToB2BCheckoutStep(1)" style="flex: 1; height: 46px;">
+              <i class="fas fa-arrow-left"></i> Volver a Datos
+            </button>
+            <button type="button" class="btn btn-primary" onclick="validateAndGoToB2BStep(3)" style="flex: 2; height: 46px; font-weight: 800; background: #111111; color: #ffffff;">
+              Continuar al Pago <i class="fas fa-arrow-right" style="margin-left: 6px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- PASO 3: MEDIO DE PAGO & CONFIRMACIÓN B2B -->
+        <div class="checkout-step-pane" id="b2b-step-pane-3" style="display: none;">
+          <!-- Order Summary Box -->
+          <div id="b2b-checkout-order-summary-box" style="background: #fafafa; border: 1px solid #e4e4e7; border-radius: 12px; padding: 14px; margin-bottom: 16px; color: #111111;"></div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" style="font-weight: 800; font-size: 0.95rem; margin-bottom: 10px; color: #111111;">Medio de Pago Mayorista:</label>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <label class="payment-radio-card" style="border: 1.5px solid #d4d4d8; padding: 12px 14px; border-radius: 12px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: #ffffff; color: #111111;">
+                <input type="radio" name="b2b_payment_method" value="transferencia" checked onchange="updateB2BCheckoutSummary()" style="margin-top: 3px;" />
+                <div class="pay-card-content" style="flex: 1;">
+                  <b style="color: #09090b; font-size: 0.92rem;"><i class="fas fa-bolt" style="color: #27ae60;"></i> Transferencia Bancaria Directa (10% OFF EXTRA Mayorista)</b>
+                  <p style="font-size: 0.78rem; color: #52525b; margin: 3px 0 8px;">El 10% adicional se descuenta directamente sobre el total del pedido.</p>
+                  <div style="background: #f4f4f5; border: 1px dashed #d4d4d8; border-radius: 8px; padding: 8px 12px; font-size: 0.78rem; color: #27272a;">
+                    <div><b>Banco Santander</b> • Mates Río</div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+                      <span><b>Alias:</b> MATES.RIO.OFICIAL</span>
+                      <button type="button" onclick="navigator.clipboard.writeText('MATES.RIO.OFICIAL'); alert('¡Alias copiado!');" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: #111; color: #fff; border: none; cursor: pointer;">Copiar</button>
+                    </div>
+                    <div style="margin-top: 2px;"><b>CBU:</b> 0720123920000001234567</div>
+                  </div>
+                </div>
+              </label>
+
+              <label class="payment-radio-card" style="border: 1.5px solid #d4d4d8; padding: 12px 14px; border-radius: 12px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: #ffffff; color: #111111;">
+                <input type="radio" name="b2b_payment_method" value="mercadopago" onchange="updateB2BCheckoutSummary()" style="margin-top: 3px;" />
+                <div class="pay-card-content" style="flex: 1;">
+                  <b style="color: #09090b; font-size: 0.92rem;"><i class="fas fa-credit-card" style="color: #009ee3;"></i> Pasarela Mercado Pago Mayorista</b>
+                  <p style="font-size: 0.78rem; color: #52525b; margin: 3px 0 0;">Tarjetas de Débito, Crédito corporativo o dinero en cuenta con acreditación instantánea.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn btn-secondary" onclick="goToB2BCheckoutStep(2)" style="flex: 1; height: 46px;">
+              <i class="fas fa-arrow-left"></i> Volver a Despacho
+            </button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-b2b-checkout" style="flex: 2; height: 46px; font-weight: 800; background: #111111; color: #ffffff;">
+              <i class="fas fa-check-circle"></i> Confirmar y Registrar Pedido
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: ÉXITO DE PEDIDO MAYORISTA REGISTRADO
+       ========================================================================== -->
+  <div class="modal-overlay" id="b2b-order-success-modal">
+    <div class="modal-box modal-box-padded" style="max-width: 520px; text-align: center; background: #ffffff; color: #111111; border-radius: 16px;">
+      <div style="width: 64px; height: 64px; border-radius: 50%; background: #dcfce7; color: #16a34a; font-size: 2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+        <i class="fas fa-check"></i>
+      </div>
+      <h3 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 900; color: #111111; margin-bottom: 8px;">
+        ¡Pedido Mayorista Confirmado!
+      </h3>
+      <p style="font-size: 0.88rem; color: #52525b; margin-bottom: 16px;">
+        Tu orden fue registrada en nuestro sistema comercial mayorista.
+      </p>
+
+      <div style="background: #f4f4f5; border: 1px solid #e4e4e7; border-radius: 12px; padding: 14px; text-align: left; margin-bottom: 18px; font-size: 0.85rem; color: #27272a;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="color: #71717a;">N° de Pedido:</span>
+          <b id="b2b-success-order-id" style="font-family: monospace; color: #09090b;">-</b>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="color: #71717a;">Logística de Entrega:</span>
+          <b id="b2b-success-shipping" style="color: #09090b;">-</b>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="color: #71717a;">Medio de Pago:</span>
+          <b id="b2b-success-payment" style="color: #09090b;">-</b>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding-top: 6px; border-top: 1px dashed #d4d4d8;">
+          <span style="color: #71717a;">Total a Abonar:</span>
+          <b id="b2b-success-total" style="font-size: 1.1rem; color: #16a34a;">-</b>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button type="button" class="btn btn-whatsapp" id="b2b-btn-whatsapp-receipt" style="width: 100%; height: 46px; font-weight: 800;">
+          <i class="fab fa-whatsapp"></i> Enviar Comprobante por WhatsApp
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="closeB2BOrderSuccess()" style="width: 100%; height: 42px;">
+          Seguir en el Catálogo Mayorista
+        </button>
+      </div>
     </div>
   </div>
 

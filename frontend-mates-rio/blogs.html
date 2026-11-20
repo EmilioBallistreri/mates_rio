@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blogs & Reels Materos | Videos Oficiales de TikTok e Instagram | Mates Río</title>
+  <meta name="description" content="Descubrí los videos virales, reels y tutoriales de Mates Río. Aprendé a curar tu mate imperial, armar la montañita perfecta y mirá el grabado láser en vivo en TikTok e Instagram." />
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons 6.5.1 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css?v=20261120-v1" />
+
+  <!-- Immediate Theme Initializer (Modo Claro Exclusivo) -->
+  <script>
+    (function() {
+      document.documentElement.classList.add('theme-light', 'theme-inverted');
+      document.documentElement.classList.remove('theme-dark');
+    })();
+  </script>
+
+  <style>
+    /* Estilos específicos de la sección Blogs & Reels */
+    .blogs-hero-section {
+      background: linear-gradient(180deg, #f8f6f0 0%, #ffffff 100%);
+      padding: 56px 0 36px;
+      text-align: center;
+      border-bottom: 1.5px solid #e4e4e7;
+    }
+    .blogs-hero-title {
+      font-family: var(--font-heading, 'Cinzel', serif);
+      font-size: clamp(1.8rem, 3.8vw, 2.7rem);
+      font-weight: 800;
+      color: #09090b;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .blogs-hero-subtitle {
+      font-size: clamp(0.95rem, 1.8vw, 1.12rem);
+      color: #52525b;
+      max-width: 760px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+    .blogs-social-badges {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .blogs-social-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .blogs-social-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+    .blogs-social-pill.instagram {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      color: #ffffff;
+    }
+    .blogs-social-pill.tiktok {
+      background: #000000;
+      color: #ffffff;
+      border: 1px solid #27272a;
+    }
+
+    /* Barra de Filtros de Videos */
+    .blogs-filter-wrap {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 36px 0 28px;
+    }
+    .blogs-filter-btn {
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border: 1.5px solid #d4d4d8;
+      background: #ffffff;
+      color: #27272a;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .blogs-filter-btn.active,
+    .blogs-filter-btn:hover {
+      background: #09090b;
+      color: #ffffff;
+      border-color: #09090b;
+    }
+
+    /* Grilla de Videos */
+    .blogs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 28px;
+      margin-bottom: 60px;
+    }
+    .blog-video-card {
+      background: #ffffff;
+      border: 1.5px solid #e4e4e7;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .blog-video-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.1);
+    }
+    .blog-video-media-wrap {
+      position: relative;
+      background: #09090b;
+      aspect-ratio: 9 / 14;
+      max-height: 440px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .blog-video-media-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .blog-video-media-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .blog-platform-tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 2;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .blog-platform-tag.tag-tiktok {
+      background: #000000;
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .blog-platform-tag.tag-instagram {
+      background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+      color: #ffffff;
+    }
+    .blog-duration-tag {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.75);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .blog-video-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .blog-video-category {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--accent-gold, #c5a059);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .blog-video-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #09090b;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .blog-video-desc {
+      font-size: 0.86rem;
+      color: #52525b;
+      line-height: 1.5;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+    .blog-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #f4f4f5;
+      padding-top: 12px;
+      font-size: 0.78rem;
+      color: #71717a;
+    }
+    .blog-cta-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 800;
+      color: #09090b;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .blog-cta-action:hover {
+      color: var(--accent-gold, #c5a059);
+    }
+  </style>
+</head>
+<body class="page-blogs theme-light theme-inverted">
+  <script>
+    (function() {
+      document.body.classList.add('theme-light', 'theme-inverted');
+      document.body.classList.remove('theme-dark');
+    })();
+  </script>
+
+  <!-- Top Scroll Progress Indicator -->
+  <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+
+  <!-- Announcement Bar -->
+  <aside class="announcement-bar">
+    <div class="container announcement-inner">
+      <div class="announcement-center-msg">
+        <span class="announcement-item"><i class="fas fa-play-circle"></i> <b>Mates Río TV & Reels</b></span>
+        <span class="announcement-sep">•</span>
+        <span class="announcement-item"><i class="fab fa-tiktok"></i> @mates_rio en TikTok</span>
+        <span class="announcement-sep announcement-sep-desktop">•</span>
+        <span class="announcement-item announcement-item-desktop"><i class="fab fa-instagram"></i> @mates_rio_ en Instagram</span>
+      </div>
+
+      <div class="announcement-links">
+        <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" title="TikTok Oficial">
+          <i class="fab fa-tiktok"></i> TikTok
+        </a>
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" title="Instagram Oficial" style="margin-left: 12px;">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Sticky Header -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <div class="header-left">
+        <button class="mobile-menu-toggle action-btn" id="mobile-menu-toggle" onclick="openMobileDrawer()" aria-label="Abrir Menú de Navegación">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <a href="index.html" class="brand-logo-wrap" title="Mates Río - Inicio">
+          <img src="assets/images/logo.jpg" alt="Logo de Mates Río" class="brand-logo-img" />
+          <div class="brand-name-group">
+            <span class="brand-name">MATES RÍO</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="header-center" aria-label="Navegación Principal">
+        <ul class="main-nav">
+          <li><a href="index.html" class="nav-link">Inicio</a></li>
+
+          <!-- Dropdown: Productos -->
+          <li class="nav-item-dropdown" id="nav-dropdown-products">
+            <a href="catalogo.html" class="nav-link nav-dropdown-trigger">
+              Productos <i class="fas fa-chevron-down dropdown-arrow"></i>
+            </a>
+            <div class="nav-dropdown-menu">
+              <div class="dropdown-categories-grid">
+                <a href="promos.html" class="dropdown-cat-card">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_promos.svg" alt="Promos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">PROMOS & COMBOS</span>
+                    <span class="dropdown-cat-desc">Hasta 25% OFF en sets completos</span>
+                  </div>
+                </a>
+                <a href="catalogo.html?categoria=mates" class="dropdown-cat-card" onclick="setCategoryFilter('mates')">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_mates.svg" alt="Mates" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">MATES IMPERIALES</span>
+                    <span class="dropdown-cat-desc">Calabaza, alpaca y cuero vacuno</span>
+                  </div>
+                </a>
+                <a href="catalogo.html?categoria=termos" class="dropdown-cat-card" onclick="setCategoryFilter('termos')">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_termos.svg" alt="Termos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">TERMOS TÉRMICOS</span>
+                    <span class="dropdown-cat-desc">Acero inoxidable 1L y Media Manija</span>
+                  </div>
+                </a>
+                <a href="catalogo.html?categoria=accesorios" class="dropdown-cat-card" onclick="setCategoryFilter('accesorios')">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_accesorios.svg" alt="Accesorios" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">ACCESORIOS</span>
+                    <span class="dropdown-cat-desc">Bombillas pico de loro y yerberas</span>
+                  </div>
+                </a>
+                <a href="catalogo.html?categoria=yerbas" class="dropdown-cat-card" onclick="setCategoryFilter('yerbas')">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_yerbas.svg" alt="Yerbas" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">YERBAS DE AUTOR</span>
+                    <span class="dropdown-cat-desc">Barbacuá, orgánicas y serranas</span>
+                  </div>
+                </a>
+                <a href="catalogo.html?categoria=equipos" class="dropdown-cat-card" onclick="setCategoryFilter('equipos')">
+                  <div class="dropdown-cat-icon"><img src="assets/images/icons-cat/cat_equipos.svg" alt="Equipos" class="mono-cat-icon-img" /></div>
+                  <div class="dropdown-cat-info">
+                    <span class="dropdown-cat-name">EQUIPOS DE MATE</span>
+                    <span class="dropdown-cat-desc">Mochilas y canastas de cuero</span>
+                  </div>
+                </a>
+              </div>
+              <div class="dropdown-footer">
+                <a href="catalogo.html" onclick="setCategoryFilter('all')" class="dropdown-all-link">
+                  Ver todo el catálogo completo <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="mayorista.html" class="nav-link" style="font-weight: 700;">
+              Mayorista <span class="nav-badge-pill pill-gold" style="font-size: 0.65rem;">B2B</span>
+            </a>
+          </li>
+          <li>
+            <a href="promos.html" class="nav-link">
+              Promos <span class="nav-badge-pill">OFF</span>
+            </a>
+          </li>
+          <li><a href="corporativo.html" class="nav-link">Corporativo</a></li>
+          <li><a href="blogs.html" class="nav-link active" style="font-weight: 800; color: #09090b;"><i class="fas fa-play-circle" style="color: var(--accent-gold); margin-right: 4px;"></i> Blogs</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-right">
+        <!-- Direct Instagram Link -->
+        <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="action-btn instagram-btn" title="Instagram Oficial @mates_rio_">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="action-btn" title="TikTok Oficial @mates_rio">
+          <i class="fab fa-tiktok"></i>
+        </a>
+
+        <!-- User Account -->
+        <div class="user-btn-wrap">
+          <button class="user-account-btn" id="user-account-btn" onclick="openAuthModal('login')" title="Mi Cuenta">
+            <i class="far fa-user"></i>
+            <span class="user-name-display" id="user-btn-name">Ingresar</span>
+          </button>
+        </div>
+
+        <!-- Cart Button -->
+        <button class="action-btn cart-btn-highlight" id="open-cart-btn" onclick="openCartDrawer()" title="Ver Carrito de Compras">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="cart-count-badge" id="cart-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer-overlay" id="mobile-drawer-overlay" onclick="closeMobileDrawer()"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="Menú Móvil">
+    <div class="drawer-header">
+      <div class="drawer-logo">
+        <img src="assets/images/logo.jpg" alt="Mates Río" class="drawer-logo-img" />
+        <span class="drawer-brand-name">MATES RÍO</span>
+      </div>
+      <button class="drawer-close-btn" onclick="closeMobileDrawer()" aria-label="Cerrar Menú">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="drawer-nav">
+      <ul class="drawer-menu-list">
+        <li><a href="index.html" class="drawer-nav-link"><i class="fas fa-home"></i> Inicio</a></li>
+        <li><a href="catalogo.html" class="drawer-nav-link"><i class="fas fa-th-large"></i> Catálogo Completo</a></li>
+        <li><a href="personaliza-tu-mate.html" class="drawer-nav-link highlight-gold"><i class="fas fa-wand-magic-sparkles"></i> Personalizá tu Mate</a></li>
+        <li><a href="mayorista.html" class="drawer-nav-link"><i class="fas fa-boxes-packing"></i> Portal Mayorista B2B</a></li>
+        <li><a href="promos.html" class="drawer-nav-link"><i class="fas fa-tags"></i> Promos & Combos</a></li>
+        <li><a href="corporativo.html" class="drawer-nav-link"><i class="fas fa-building"></i> División Corporativa</a></li>
+        <li><a href="blogs.html" class="drawer-nav-link active" style="font-weight: 800;"><i class="fas fa-play-circle" style="color: var(--accent-gold);"></i> Blogs & Videos Virales</a></li>
+        <li><a href="contacto.html" class="drawer-nav-link"><i class="fas fa-envelope"></i> Contacto & Taller</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <!-- HERO DE BLOGS Y VIDEOS -->
+    <section class="blogs-hero-section">
+      <div class="container">
+        <span class="section-tag" style="margin-bottom: 12px; display: inline-flex; align-items: center; gap: 8px;">
+          <i class="fas fa-video"></i> Mates Río Multimedia & Comunidad
+        </span>
+        <h1 class="blogs-hero-title">BLOGS, REELS & VIDEOS VIRALES</h1>
+        <p class="blogs-hero-subtitle">
+          Mirá cómo curar tu mate imperial, armar la montañita que dura todo el día, y observá el grabado láser de precisión en tiempo real directamente desde nuestras cuentas oficiales de TikTok e Instagram.
+        </p>
+
+        <div class="blogs-social-badges">
+          <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="blogs-social-pill tiktok">
+            <i class="fab fa-tiktok"></i> Seguir en TikTok @mates_rio
+          </a>
+          <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="blogs-social-pill instagram">
+            <i class="fab fa-instagram"></i> Seguir en Instagram @mates_rio_
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTROS Y GRILLA DE VIDEOS -->
+    <section class="section-padded">
+      <div class="container">
+        <!-- Filtros de categorías -->
+        <div class="blogs-filter-wrap">
+          <button type="button" class="blogs-filter-btn active" onclick="filterBlogCards('all', this)">
+            <i class="fas fa-border-all"></i> Todos los Videos
+          </button>
+          <button type="button" class="blogs-filter-btn" onclick="filterBlogCards('tiktok', this)">
+            <i class="fab fa-tiktok"></i> TikTok Virales
+          </button>
+          <button type="button" class="blogs-filter-btn" onclick="filterBlogCards('instagram', this)">
+            <i class="fab fa-instagram"></i> Instagram Reels
+          </button>
+          <button type="button" class="blogs-filter-btn" onclick="filterBlogCards('curado', this)">
+            <i class="fas fa-seedling"></i> Curado de Mates
+          </button>
+          <button type="button" class="blogs-filter-btn" onclick="filterBlogCards('tutoriales', this)">
+            <i class="fas fa-fire-burner"></i> Tutoriales de Cebado
+          </button>
+          <button type="button" class="blogs-filter-btn" onclick="filterBlogCards('taller', this)">
+            <i class="fas fa-hammer"></i> Grabado en Taller
+          </button>
+        </div>
+
+        <!-- Grilla de Cards de Videos -->
+        <div class="blogs-grid" id="blogs-grid">
+
+          <!-- Card 1: Curado de Mate Imperial -->
+          <article class="blog-video-card" data-category="tiktok curado">
+            <div class="blog-video-media-wrap">
+              <span class="blog-platform-tag tag-tiktok"><i class="fab fa-tiktok"></i> TikTok</span>
+              <!-- Video Player interactivo nativo -->
+              <video controls playsinline preload="metadata" poster="assets/images/blog_curado_poster.jpg">
+                <source src="assets/videos/curado_mate.mp4" type="video/mp4" />
+                Tu navegador no soporta reproducción de video.
+              </video>
+              <span class="blog-duration-tag"><i class="fas fa-clock"></i> 0:58</span>
+            </div>
+            <div class="blog-video-content">
+              <span class="blog-video-category">Curado Paso a Paso</span>
+              <h2 class="blog-video-title">Cómo curar tu Mate Imperial de calabaza sin que se rompa ni honguee</h2>
+              <p class="blog-video-desc">
+                El método serrano definitivo: yerba usada húmeda, agua tibia y 24 horas de reposo. Raspá suavemente la pulpa interior para sellar la calabaza de por vida.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fas fa-eye"></i> +145K vistas</span>
+                <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="blog-cta-action">
+                  Ver en TikTok <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Montañita Perfecta -->
+          <article class="blog-video-card" data-category="instagram tutoriales">
+            <div class="blog-video-media-wrap">
+              <span class="blog-platform-tag tag-instagram"><i class="fab fa-instagram"></i> Reels</span>
+              <video controls playsinline preload="metadata" poster="assets/images/blog_montanita_poster.jpg">
+                <source src="assets/videos/montanita_tutorial.mp4" type="video/mp4" />
+                Tu navegador no soporta reproducción de video.
+              </video>
+              <span class="blog-duration-tag"><i class="fas fa-clock"></i> 0:45</span>
+            </div>
+            <div class="blog-video-content">
+              <span class="blog-video-category">Técnica de Cebado</span>
+              <h2 class="blog-video-title">El truco de los 45° para que la montañita dure más de 2 litros</h2>
+              <p class="blog-video-desc">
+                El orden hace a la magia: sacudida vertical para subir el polvillo, agua tibia en el hueco antes de calentar el agua final, y entrada firme de la bombilla pico de loro.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fas fa-eye"></i> +89K vistas</span>
+                <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="blog-cta-action">
+                  Ver en Reels <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3: Grabado Láser en Taller -->
+          <article class="blog-video-card" data-category="tiktok taller">
+            <div class="blog-video-media-wrap">
+              <span class="blog-platform-tag tag-tiktok"><i class="fab fa-tiktok"></i> TikTok</span>
+              <video controls playsinline preload="metadata" poster="assets/images/blog_laser_poster.jpg">
+                <source src="assets/videos/grabado_laser.mp4" type="video/mp4" />
+                Tu navegador no soporta reproducción de video.
+              </video>
+              <span class="blog-duration-tag"><i class="fas fa-clock"></i> 0:34</span>
+            </div>
+            <div class="blog-video-content">
+              <span class="blog-video-category">Detrás de Escena</span>
+              <h2 class="blog-video-title">Grabado Láser CNC en Virola de Alpaca: Mirá la precisión al milímetro</h2>
+              <p class="blog-video-desc">
+                Así personalizamos los mates en nuestro taller de Río Ceballos: haz de luz concentrado quemando el relieve de nombres, escudos de fútbol y fechas especiales.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fas fa-eye"></i> +210K vistas</span>
+                <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="blog-cta-action">
+                  Ver en TikTok <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4: Termo Media Manija vs Tradicional -->
+          <article class="blog-video-card" data-category="instagram tutoriales">
+            <div class="blog-video-media-wrap">
+              <span class="blog-platform-tag tag-instagram"><i class="fab fa-instagram"></i> Reels</span>
+              <video controls playsinline preload="metadata" poster="assets/images/blog_termo_poster.jpg">
+                <source src="assets/videos/termo_test.mp4" type="video/mp4" />
+                Tu navegador no soporta reproducción de video.
+              </video>
+              <span class="blog-duration-tag"><i class="fas fa-clock"></i> 1:12</span>
+            </div>
+            <div class="blog-video-content">
+              <span class="blog-video-category">Test & Review</span>
+              <h2 class="blog-video-title">Test de Temperatura: ¿Cuánto aguanta el Termo Media Manija de 1 Litro?</h2>
+              <p class="blog-video-desc">
+                Pusimos a prueba el aislamiento al vacío durante 24 horas continuas en la intemperie de las sierras cordobesas. Mirá el resultado del termómetro.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fas fa-eye"></i> +64K vistas</span>
+                <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="blog-cta-action">
+                  Ver en Reels <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 5: Mates Imperiales en Río Ceballos -->
+          <article class="blog-video-card" data-category="tiktok taller">
+            <div class="blog-video-media-wrap">
+              <span class="blog-platform-tag tag-tiktok"><i class="fab fa-tiktok"></i> TikTok</span>
+              <video controls playsinline preload="metadata" poster="assets/images/blog_taller_poster.jpg">
+                <source src="assets/videos/taller_mates.mp4" type="video/mp4" />
+                Tu navegador no soporta reproducción de video.
+              </video>
+              <span class="blog-duration-tag"><i class="fas fa-clock"></i> 0:48</span>
+            </div>
+            <div class="blog-video-content">
+              <span class="blog-video-category">Nuestra Fábrica</span>
+              <h2 class="blog-video-title">De la calabaza cruda al mate terminado: 6 etapas artesanales</h2>
+              <p class="blog-video-desc">
+                Selección de grosor, teñido con anilinas orgánicas, confección del cuero vacuno, cincelado y remate de la virola de alpaca maciza.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fas fa-eye"></i> +178K vistas</span>
+                <a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener noreferrer" class="blog-cta-action">
+                  Ver en TikTok <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 6: Empaquetado y Envíos Andreani -->
+          <article class="blog-video-card" data-category="instagram taller">
+            <div class="blog-video-media-wrap">
+              <span class="blog-platform-tag tag-instagram"><i class="fab fa-instagram"></i> Reels</span>
+              <video controls playsinline preload="metadata" poster="assets/images/blog_packing_poster.jpg">
+                <source src="assets/videos/packing_pedidos.mp4" type="video/mp4" />
+                Tu navegador no soporta reproducción de video.
+              </video>
+              <span class="blog-duration-tag"><i class="fas fa-clock"></i> 0:52</span>
+            </div>
+            <div class="blog-video-content">
+              <span class="blog-video-category">Envíos Seguros</span>
+              <h2 class="blog-video-title">Empacando 50 mates para despacho nacional con Andreani</h2>
+              <p class="blog-video-desc">
+                Caja rígida reforzada, envoltura alveolar de alta densidad y rotulado con código de seguimiento en tiempo real para que llegue impecable a cualquier rincón del país.
+              </p>
+              <div class="blog-card-footer">
+                <span><i class="fas fa-eye"></i> +92K vistas</span>
+                <a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener noreferrer" class="blog-cta-action">
+                  Ver en Reels <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Banner de llamada a la acción -->
+        <div style="background: #ffffff; border: 1.5px solid #d4d4d8; border-radius: 18px; padding: 36px 24px; text-align: center; margin-bottom: 50px;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; margin-bottom: 10px;">¿Tenés un video con tu Mate Río?</h3>
+          <p style="color: #52525b; max-width: 600px; margin: 0 auto 20px; font-size: 0.95rem;">
+            Etiquetanós en TikTok con <b>@mates_rio</b> o en Instagram con <b>@mates_rio_</b>. ¡Compartimos los mejores cebados y sorteamos premios todos los meses!
+          </p>
+          <a href="https://wa.me/5493513830111?text=Hola%20Mates%20R%C3%ADo!%20Les%20mando%20mi%20video%20para%20aparecer%20en%20la%20web" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 12px 24px;">
+            <i class="fab fa-whatsapp"></i> Enviar mi Video por WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Professional Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="assets/images/logo.jpg" alt="Mates Río Logo" class="footer-logo-img" />
+            <div>
+              <span class="footer-brand-title">MATES RÍO</span>
+              <p style="font-size: 0.7rem; color: var(--accent-gold); letter-spacing: 1px; font-weight: 600;">INDUSTRIA ARGENTINA</p>
+            </div>
+          </div>
+          <p class="footer-brand-bio">
+            Taller artesanal de mates imperiales, termos térmicos y grabados láser de precisión en Río Ceballos, Córdoba.
+          </p>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">Navegación</h4>
+          <ul class="footer-links-list">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="catalogo.html">Catálogo Online</a></li>
+            <li><a href="personaliza-tu-mate.html">Personalizá tu Mate</a></li>
+            <li><a href="mayorista.html">Venta Mayorista B2B</a></li>
+            <li><a href="promos.html">Promos & Combos</a></li>
+            <li><a href="corporativo.html">División Corporativa</a></li>
+            <li><a href="blogs.html" style="font-weight: 700; color: #ffffff;">Blogs & Reels</a></li>
+            <li><a href="contacto.html">Contacto & Taller</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links-col">
+          <h4 class="footer-col-title">Redes & Contacto</h4>
+          <ul class="footer-links-list">
+            <li><a href="https://www.instagram.com/mates_rio_/" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> @mates_rio_</a></li>
+            <li><a href="https://www.tiktok.com/@mates_rio" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i> @mates_rio</a></li>
+            <li><a href="https://wa.me/5493513830111" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> +54 9 351 383-0111</a></li>
+            <li><a href="contacto.html"><i class="fas fa-map-marker-alt"></i> Río Ceballos, Córdoba</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar" style="border-top: 1px solid rgba(255,255,255,0.12); padding-top: 20px; margin-top: 30px; text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.6);">
+        <p>© 2026 Mates Río. Todos los derechos reservados. Diseñado y Desarrollado con pasión matera.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    function filterBlogCards(category, btnEl) {
+      document.querySelectorAll('.blogs-filter-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      const cards = document.querySelectorAll('.blog-video-card');
+      cards.forEach(card => {
+        const catData = card.getAttribute('data-category') || '';
+        if (category === 'all' || catData.includes(category)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -252,6 +252,9 @@
             <a href="corporativo.html" class="nav-link">Corporativo</a>
           </li>
           <li>
+            <a href="blogs.html" class="nav-link"><i class="fas fa-play-circle" style="color: var(--accent-gold); font-size: 0.85rem; margin-right: 4px;"></i> Blogs</a>
+          </li>
+          <li>
             <a href="contacto.html" class="nav-link">Contacto</a>
           </li>
         </ul>
@@ -355,6 +358,11 @@
       <li class="mobile-nav-item">
         <a href="corporativo.html" onclick="closeMobileDrawer()">
           <span><i class="fas fa-building" style="width: 22px;"></i> Corporativo</span>
+        </a>
+      </li>
+      <li class="mobile-nav-item">
+        <a href="blogs.html" onclick="closeMobileDrawer()">
+          <span><i class="fas fa-play-circle" style="width: 22px; color: var(--accent-gold);"></i> Blogs & Videos</span>
         </a>
       </li>
       <li class="mobile-nav-item">
@@ -591,6 +599,7 @@
             <li><a href="catalogo.html?categoria=mates" class="footer-nav-link" onclick="setCategoryFilter('mates')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Mates Imperiales</a></li>
             <li><a href="catalogo.html?categoria=termos" class="footer-nav-link" onclick="setCategoryFilter('termos')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Termos de Acero</a></li>
             <li><a href="catalogo.html?categoria=accesorios" class="footer-nav-link" onclick="setCategoryFilter('accesorios')"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Bombillas & Accesorios</a></li>
+            <li><a href="blogs.html" class="footer-nav-link"><i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i> Blogs & Videos</a></li>
           </ul>
         </div>
 
@@ -762,115 +771,187 @@
   </aside>
 
   <!-- ==========================================================================
-       MODAL: WEB CHECKOUT (CON PROVINCIA Y ENVÍO DINÁMICO DESDE RÍO CEBALLOS)
+       MODAL: WEB CHECKOUT EN 3 PASOS (DATOS, ENVÍO ANDREANI/CBA Y PAGO)
        ========================================================================== -->
   <div class="modal-overlay" id="checkout-modal">
-    <div class="modal-box modal-box-padded" style="max-width: 640px;">
+    <div class="modal-box modal-box-padded" style="max-width: 620px;">
       <button class="modal-close-icon" onclick="closeWebCheckout()" aria-label="Cerrar">
         <i class="fas fa-times"></i>
       </button>
 
-      <div class="checkout-header-wrap">
-        <h3 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; margin-bottom: 6px;">
-          Datos de Envío y Facturación
+      <div class="checkout-header-wrap" style="text-align: center; margin-bottom: 16px;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 800; margin-bottom: 4px;">
+          Finalizar Compra Minorista
         </h3>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px;">
-          Despachamos desde nuestro taller en Río Ceballos, Córdoba a todo el país.
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+          Despachos a todo el país desde nuestro taller en Río Ceballos, Córdoba.
         </p>
       </div>
 
-      <!-- Order Summary Box inside Checkout -->
-      <div id="checkout-order-summary-box" style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 20px;"></div>
-
-      <form onsubmit="processWebCheckout(event)">
-        <div class="form-group">
-          <label class="form-label">Nombre y Apellido *</label>
-          <input type="text" id="checkout-name" required class="form-input" placeholder="Ej: Santiago Pérez" />
+      <!-- Stepper Wizard Indicator -->
+      <div class="checkout-wizard-steps" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 4px;">
+        <div class="checkout-step-pill active" id="wizard-pill-1" onclick="goToCheckoutStep(1)" style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 800; color: #09090b; cursor: pointer;">
+          <span class="step-num" id="step-badge-1" style="width: 26px; height: 26px; border-radius: 50%; background: #09090b; color: #ffffff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.78rem;">1</span>
+          <span>Datos</span>
         </div>
-
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label class="form-label">Teléfono / WhatsApp *</label>
-            <input type="tel" id="checkout-phone" required class="form-input" placeholder="Ej: 351 555-1234" />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Email *</label>
-            <input type="email" id="checkout-email" required class="form-input" placeholder="tunombre@email.com" />
-          </div>
+        <div style="flex: 1; height: 2px; background: #e4e4e7; margin: 0 8px;" id="wizard-line-1"></div>
+        <div class="checkout-step-pill" id="wizard-pill-2" onclick="goToCheckoutStep(2)" style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 700; color: #71717a; cursor: pointer;">
+          <span class="step-num" id="step-badge-2" style="width: 26px; height: 26px; border-radius: 50%; background: #f4f4f5; color: #71717a; display: inline-flex; align-items: center; justify-content: center; font-size: 0.78rem;">2</span>
+          <span>Envío</span>
         </div>
-
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label class="form-label">Provincia de Entrega *</label>
-            <select id="checkout-province" required class="form-input" style="height: 42px;" onchange="updateCheckoutSummary()">
-              <option value="Córdoba">Córdoba</option>
-              <option value="Buenos Aires">Buenos Aires</option>
-              <option value="CABA">Ciudad de Buenos Aires (CABA)</option>
-              <option value="Santa Fe">Santa Fe</option>
-              <option value="Mendoza">Mendoza</option>
-              <option value="Entre Ríos">Entre Ríos</option>
-              <option value="Salta">Salta</option>
-              <option value="Tucumán">Tucumán</option>
-              <option value="Chaco">Chaco</option>
-              <option value="Corrientes">Corrientes</option>
-              <option value="Misiones">Misiones</option>
-              <option value="San Juan">San Juan</option>
-              <option value="San Luis">San Luis</option>
-              <option value="Catamarca">Catamarca</option>
-              <option value="La Rioja">La Rioja</option>
-              <option value="Santiago del Estero">Santiago del Estero</option>
-              <option value="Jujuy">Jujuy</option>
-              <option value="Neuquén">Neuquén</option>
-              <option value="Río Negro">Río Negro</option>
-              <option value="Chubut">Chubut</option>
-              <option value="Santa Cruz">Santa Cruz</option>
-              <option value="Tierra del Fuego">Tierra del Fuego</option>
-              <option value="La Pampa">La Pampa</option>
-              <option value="Formosa">Formosa</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Ciudad / Localidad *</label>
-            <input type="text" id="checkout-city" required class="form-input" placeholder="Ej: Río Ceballos / Córdoba / Rosario" oninput="updateCheckoutSummary()" />
-          </div>
+        <div style="flex: 1; height: 2px; background: #e4e4e7; margin: 0 8px;" id="wizard-line-2"></div>
+        <div class="checkout-step-pill" id="wizard-pill-3" onclick="goToCheckoutStep(3)" style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; font-weight: 700; color: #71717a; cursor: pointer;">
+          <span class="step-num" id="step-badge-3" style="width: 26px; height: 26px; border-radius: 50%; background: #f4f4f5; color: #71717a; display: inline-flex; align-items: center; justify-content: center; font-size: 0.78rem;">3</span>
+          <span>Pago</span>
         </div>
+      </div>
 
-        <div class="form-grid-2col">
-          <div class="form-group">
-            <label class="form-label">Dirección (Calle y Número) *</label>
-            <input type="text" id="checkout-address" required class="form-input" placeholder="Ej: Av. San Martín 1234 4to B" />
-          </div>
+      <form id="web-checkout-form" onsubmit="processWebCheckout(event)">
+        <!-- PASO 1: DATOS PERSONALES -->
+        <div class="checkout-step-pane" id="step-pane-1">
+          <div style="background: #fafafa; border: 1px solid #e4e4e7; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label" style="font-weight: 700;">Nombre y Apellido *</label>
+              <input type="text" id="checkout-name" required class="form-input" placeholder="Ej: Santiago Pérez" />
+            </div>
 
-          <div class="form-group">
-            <label class="form-label">Código Postal *</label>
-            <input type="text" id="checkout-zip" required class="form-input" placeholder="Ej: 5111" />
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-top: 10px;">
-          <label class="form-label">Forma de Pago:</label>
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label class="payment-radio-card">
-              <input type="radio" name="payment_method" value="transferencia" checked onchange="updateCheckoutSummary()" />
-              <div class="pay-card-content">
-                <b>Transferencia Bancaria (10% OFF EXTRA)</b>
-                <p style="font-size: 0.78rem; color: var(--text-secondary);">Te enviamos los datos bancarios y Alias oficial con el descuento directo ya aplicado.</p>
+            <div class="form-grid-2col" style="margin-bottom: 14px;">
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700;">Teléfono / WhatsApp *</label>
+                <input type="tel" id="checkout-phone" required class="form-input" placeholder="Ej: 351 555-1234" />
               </div>
-            </label>
 
-            <label class="payment-radio-card">
-              <input type="radio" name="payment_method" value="tarjeta" onchange="updateCheckoutSummary()" />
-              <div class="pay-card-content">
-                <b>Tarjeta de Crédito / Débito (3 Cuotas Sin Interés)</b>
-                <p style="font-size: 0.78rem; color: var(--text-secondary);">Pago 100% seguro con todas las tarjetas bancarias.</p>
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700;">Email *</label>
+                <input type="email" id="checkout-email" required class="form-input" placeholder="tunombre@email.com" />
               </div>
-            </label>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-weight: 700;">DNI o CUIT (para Facturación & Despacho) *</label>
+              <input type="text" id="checkout-dni" required class="form-input" placeholder="Ej: 38.456.789 o 20-38456789-4" />
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-primary" onclick="validateAndGoToStep(2)" style="width: 100%; height: 46px; font-weight: 800; font-size: 0.95rem;">
+            Continuar a Ubicación y Envío <i class="fas fa-arrow-right" style="margin-left: 6px;"></i>
+          </button>
+        </div>
+
+        <!-- PASO 2: UBICACIÓN Y MÉTODO DE ENVÍO -->
+        <div class="checkout-step-pane" id="step-pane-2" style="display: none;">
+          <div style="background: #fafafa; border: 1px solid #e4e4e7; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+            <div class="form-grid-2col" style="margin-bottom: 12px;">
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700;">Provincia de Destino *</label>
+                <select id="checkout-province" required class="form-input" style="height: 42px;" onchange="onProvinceChanged()">
+                  <option value="Córdoba">Córdoba</option>
+                  <option value="Buenos Aires">Buenos Aires</option>
+                  <option value="CABA">Ciudad de Buenos Aires (CABA)</option>
+                  <option value="Santa Fe">Santa Fe</option>
+                  <option value="Mendoza">Mendoza</option>
+                  <option value="Entre Ríos">Entre Ríos</option>
+                  <option value="Salta">Salta</option>
+                  <option value="Tucumán">Tucumán</option>
+                  <option value="Chaco">Chaco</option>
+                  <option value="Corrientes">Corrientes</option>
+                  <option value="Misiones">Misiones</option>
+                  <option value="San Juan">San Juan</option>
+                  <option value="San Luis">San Luis</option>
+                  <option value="Catamarca">Catamarca</option>
+                  <option value="La Rioja">La Rioja</option>
+                  <option value="Santiago del Estero">Santiago del Estero</option>
+                  <option value="Jujuy">Jujuy</option>
+                  <option value="Neuquén">Neuquén</option>
+                  <option value="Río Negro">Río Negro</option>
+                  <option value="Chubut">Chubut</option>
+                  <option value="Santa Cruz">Santa Cruz</option>
+                  <option value="Tierra del Fuego">Tierra del Fuego</option>
+                  <option value="La Pampa">La Pampa</option>
+                  <option value="Formosa">Formosa</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700;">Ciudad / Localidad *</label>
+                <input type="text" id="checkout-city" required class="form-input" placeholder="Ej: Río Ceballos / Rosario" oninput="updateCheckoutSummary()" />
+              </div>
+            </div>
+
+            <div class="form-grid-2col" style="margin-bottom: 14px;">
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700;">Dirección (Calle y Número) *</label>
+                <input type="text" id="checkout-address" required class="form-input" placeholder="Ej: Av. San Martín 1234" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" style="font-weight: 700;">Código Postal *</label>
+                <input type="text" id="checkout-zip" required class="form-input" placeholder="Ej: 5111" />
+              </div>
+            </div>
+
+            <!-- Selector Dinámico de Envíos según Provincia -->
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-weight: 700; margin-bottom: 8px;">Seleccioná el tipo de despacho:</label>
+              <div id="shipping-method-options" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Dinámico: Córdoba (Inmediato o 24hs) vs Otras Provincias (Andreani con código de seguimiento) -->
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn btn-secondary" onclick="goToCheckoutStep(1)" style="flex: 1; height: 46px;">
+              <i class="fas fa-arrow-left"></i> Volver a Datos
+            </button>
+            <button type="button" class="btn btn-primary" onclick="validateAndGoToStep(3)" style="flex: 2; height: 46px; font-weight: 800;">
+              Continuar al Pago <i class="fas fa-arrow-right" style="margin-left: 6px;"></i>
+            </button>
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 14px;">
+        <!-- PASO 3: MEDIO DE PAGO & CONFIRMACIÓN -->
+        <div class="checkout-step-pane" id="step-pane-3" style="display: none;">
+          <!-- Order Summary Box -->
+          <div id="checkout-order-summary-box" style="background: var(--bg-main); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px; margin-bottom: 16px;"></div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label class="form-label" style="font-weight: 800; font-size: 0.95rem; margin-bottom: 10px;">Medio de Pago:</label>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <label class="payment-radio-card" style="border: 1.5px solid #d4d4d8; padding: 12px 14px; border-radius: 12px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: #ffffff;">
+                <input type="radio" name="payment_method" value="transferencia" checked onchange="updateCheckoutSummary()" style="margin-top: 3px;" />
+                <div class="pay-card-content" style="flex: 1;">
+                  <b style="color: #09090b; font-size: 0.92rem;"><i class="fas fa-bolt" style="color: #27ae60;"></i> Transferencia Bancaria (10% OFF EXTRA)</b>
+                  <p style="font-size: 0.78rem; color: #52525b; margin: 3px 0 8px;">El 10% de descuento se descuenta directamente del total.</p>
+                  <div style="background: #f4f4f5; border: 1px dashed #d4d4d8; border-radius: 8px; padding: 8px 12px; font-size: 0.78rem; color: #27272a;">
+                    <div><b>Banco Santander</b> • Mates Río</div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+                      <span>Alias: <code>MATES.RIO.OFICIAL</code></span>
+                      <button type="button" onclick="copyCBU('MATES.RIO.OFICIAL')" class="btn btn-sm" style="padding: 2px 8px; font-size: 0.7rem; background: #ffffff; border: 1px solid #d4d4d8;">Copiar</button>
+                    </div>
+                  </div>
+                </div>
+              </label>
+
+              <label class="payment-radio-card" style="border: 1.5px solid #d4d4d8; padding: 12px 14px; border-radius: 12px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; background: #ffffff;">
+                <input type="radio" name="payment_method" value="mercadopago" onchange="updateCheckoutSummary()" style="margin-top: 3px;" />
+                <div class="pay-card-content" style="flex: 1;">
+                  <b style="color: #09090b; font-size: 0.92rem;"><i class="fas fa-credit-card" style="color: #009ee3;"></i> Pasarela Mercado Pago Oficial</b>
+                  <p style="font-size: 0.78rem; color: #52525b; margin-top: 3px;">Pagá con todas las tarjetas de crédito / débito (hasta 3 cuotas) o dinero en cuenta de Mercado Pago.</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn btn-secondary" onclick="goToCheckoutStep(2)" style="flex: 1; height: 46px;">
+              <i class="fas fa-arrow-left"></i> Volver a Envío
+            </button>
+            <button type="submit" class="btn btn-primary" style="flex: 2; height: 46px; font-weight: 800; font-size: 0.95rem;">
+              <i class="fas fa-check-circle"></i> Confirmar Pedido
+            </button>
+          </div>
+        </div>
+      </form>
           <i class="fas fa-check-circle"></i> Confirmar Pedido
         </button>
       </form>
@@ -901,6 +982,14 @@
         <div class="success-data-row">
           <span>Total a abonar:</span>
           <strong id="success-order-total">$ 0</strong>
+        </div>
+        <div class="success-data-row" id="success-shipping-row">
+          <span>Despacho:</span>
+          <strong id="success-order-shipping" style="color: var(--text-main);">Andreani Nacional</strong>
+        </div>
+        <div id="success-andreani-row" style="display: none; justify-content: space-between; align-items: center; margin-top: 6px; background: #e8f0fe; padding: 6px 10px; border-radius: 6px; border: 1px dashed #004b93;">
+          <span style="color: #004b93; font-weight: 700; font-size: 0.8rem;"><i class="fas fa-barcode"></i> Código Andreani:</span>
+          <strong id="success-andreani-code" style="color: #004b93; font-family: monospace; font-size: 0.85rem; letter-spacing: 0.5px;">ANDREANI-MR-000000</strong>
         </div>
       </div>
 

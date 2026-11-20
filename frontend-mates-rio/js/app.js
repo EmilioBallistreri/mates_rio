@@ -1362,8 +1362,11 @@ function checkoutWhatsApp(bypassUpsell = false) {
 }
 
 // ==========================================================================
-// WEB CHECKOUT MODAL & ORDER CREATION (DESDE RÍO CEBALLOS, CÓRDOBA)
+// WEB CHECKOUT MODAL & ORDER CREATION EN 3 PASOS (DATOS, ENVÍO Y PAGO)
 // ==========================================================================
+let currentCheckoutStep = 1;
+let currentAndreaniTrackingCode = '';
+
 function openWebCheckout(bypassUpsell = false) {
   if (state.cart.length === 0) {
     showToast('Tu carrito está vacío.', 'fa-exclamation-triangle');
@@ -1384,6 +1387,7 @@ function openWebCheckout(bypassUpsell = false) {
     const nameInput = document.getElementById('checkout-name');
     const emailInput = document.getElementById('checkout-email');
     const phoneInput = document.getElementById('checkout-phone');
+    const dniInput = document.getElementById('checkout-dni');
     const provinceSelect = document.getElementById('checkout-province');
     const cityInput = document.getElementById('checkout-city');
     const addressInput = document.getElementById('checkout-address');
@@ -1392,6 +1396,7 @@ function openWebCheckout(bypassUpsell = false) {
     if (nameInput) nameInput.value = state.currentUser.name || '';
     if (emailInput) emailInput.value = state.currentUser.email || '';
     if (phoneInput) phoneInput.value = state.currentUser.phone || '';
+    if (dniInput && state.currentUser.dni) dniInput.value = state.currentUser.dni;
 
     const addr = state.currentUser.address || {};
     if (provinceSelect && addr.province) provinceSelect.value = addr.province;
@@ -1404,7 +1409,7 @@ function openWebCheckout(bypassUpsell = false) {
   const provEl = document.getElementById('checkout-province');
   const cityEl = document.getElementById('checkout-city');
   if (provEl && !provEl.dataset.hasListener) {
-    provEl.addEventListener('change', updateCheckoutSummary);
+    provEl.addEventListener('change', onProvinceChanged);
     provEl.dataset.hasListener = 'true';
   }
   if (cityEl && !cityEl.dataset.hasListener) {
@@ -1412,11 +1417,139 @@ function openWebCheckout(bypassUpsell = false) {
     cityEl.dataset.hasListener = 'true';
   }
 
-  // Update checkout order summary preview
-  updateCheckoutSummary();
+  // Reset Andreani tracking code for new order
+  currentAndreaniTrackingCode = 'ANDREANI-MR-' + Math.floor(100000 + Math.random() * 900000);
+
+  // Inicializar en el Paso 1
+  goToCheckoutStep(1);
+  onProvinceChanged();
 
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
+}
+
+function goToCheckoutStep(step) {
+  currentCheckoutStep = step;
+
+  // Actualizar paneles
+  for (let s = 1; s <= 3; s++) {
+    const pane = document.getElementById(`step-pane-${s}`);
+    const pill = document.getElementById(`wizard-pill-${s}`);
+    const badge = document.getElementById(`step-badge-${s}`);
+    if (pane) pane.style.display = s === step ? 'block' : 'none';
+    if (pill) {
+      pill.classList.toggle('active', s === step);
+      pill.style.color = s === step ? '#09090b' : (s < step ? '#16a34a' : '#71717a');
+    }
+    if (badge) {
+      if (s < step) {
+        badge.innerHTML = '<i class="fas fa-check"></i>';
+        badge.style.background = '#16a34a';
+        badge.style.color = '#ffffff';
+      } else if (s === step) {
+        badge.textContent = s;
+        badge.style.background = '#09090b';
+        badge.style.color = '#ffffff';
+      } else {
+        badge.textContent = s;
+        badge.style.background = '#f4f4f5';
+        badge.style.color = '#71717a';
+      }
+    }
+  }
+
+  if (step === 2) {
+    onProvinceChanged();
+  }
+  if (step === 3) {
+    updateCheckoutSummary();
+  }
+}
+
+function validateAndGoToStep(targetStep) {
+  if (targetStep === 2) {
+    const name = document.getElementById('checkout-name')?.value.trim();
+    const phone = document.getElementById('checkout-phone')?.value.trim();
+    const email = document.getElementById('checkout-email')?.value.trim();
+    const dni = document.getElementById('checkout-dni')?.value.trim();
+    if (!name || !phone || !email || !dni) {
+      showToast('Por favor completá Nombre, Teléfono, Email y DNI/CUIT', 'fa-exclamation-triangle');
+      return;
+    }
+    goToCheckoutStep(2);
+  } else if (targetStep === 3) {
+    const prov = document.getElementById('checkout-province')?.value;
+    const city = document.getElementById('checkout-city')?.value.trim();
+    const address = document.getElementById('checkout-address')?.value.trim();
+    const zip = document.getElementById('checkout-zip')?.value.trim();
+    if (!prov || !city || !address || !zip) {
+      showToast('Por favor completá los datos de ubicación y dirección', 'fa-exclamation-triangle');
+      return;
+    }
+    const selectedShipping = document.querySelector('input[name="shipping_method"]:checked')?.value;
+    if (!selectedShipping) {
+      showToast('Por favor seleccioná un método de despacho', 'fa-truck');
+      return;
+    }
+    goToCheckoutStep(3);
+  } else {
+    goToCheckoutStep(targetStep);
+  }
+}
+
+function onProvinceChanged() {
+  const prov = (document.getElementById('checkout-province')?.value || '').toLowerCase().trim();
+  const optionsContainer = document.getElementById('shipping-method-options');
+  if (!optionsContainer) return;
+
+  const isCordoba = prov.includes('cordoba') || prov.includes('córdoba');
+
+  if (isCordoba) {
+    optionsContainer.innerHTML = `
+      <label class="payment-radio-card" style="border: 1.5px solid #d4d4d8; padding: 10px 12px; border-radius: 10px; cursor: pointer; display: flex; gap: 10px; align-items: flex-start; background: #ffffff;">
+        <input type="radio" name="shipping_method" value="local_inmediato" checked onchange="updateCheckoutSummary()" style="margin-top: 3px;" />
+        <div style="flex: 1;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <b style="color: #09090b; font-size: 0.88rem;"><i class="fas fa-motorcycle" style="color: var(--accent-gold);"></i> Envío Inmediato (Moto Mensajería Express en el día)</b>
+            <span style="font-weight: 800; font-size: 0.88rem;">$ 3.800</span>
+          </div>
+          <p style="font-size: 0.76rem; color: #52525b; margin-top: 2px;">Entrega en el día para Córdoba Capital y Sierras Chicas.</p>
+        </div>
+      </label>
+
+      <label class="payment-radio-card" style="border: 1.5px solid #d4d4d8; padding: 10px 12px; border-radius: 10px; cursor: pointer; display: flex; gap: 10px; align-items: flex-start; background: #ffffff;">
+        <input type="radio" name="shipping_method" value="local_24hs" onchange="updateCheckoutSummary()" style="margin-top: 3px;" />
+        <div style="flex: 1;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <b style="color: #09090b; font-size: 0.88rem;"><i class="fas fa-truck-fast"></i> Envío dentro de las 24 / 48 hs hábiles</b>
+            <span style="font-weight: 800; font-size: 0.88rem;">$ 2.500</span>
+          </div>
+          <p style="font-size: 0.76rem; color: #52525b; margin-top: 2px;">Despacho rápido desde Río Ceballos a toda la provincia de Córdoba.</p>
+        </div>
+      </label>
+    `;
+  } else {
+    if (!currentAndreaniTrackingCode) {
+      currentAndreaniTrackingCode = 'ANDREANI-MR-' + Math.floor(100000 + Math.random() * 900000);
+    }
+    optionsContainer.innerHTML = `
+      <label class="payment-radio-card" style="border: 1.5px solid #004b93; padding: 12px 14px; border-radius: 10px; cursor: pointer; display: flex; gap: 10px; align-items: flex-start; background: #f8fafc;">
+        <input type="radio" name="shipping_method" value="andreani_nacional" checked onchange="updateCheckoutSummary()" style="margin-top: 3px;" />
+        <div style="flex: 1;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <b style="color: #004b93; font-size: 0.9rem;"><i class="fas fa-truck"></i> Envío Nacional Andreani a Domicilio / Sucursal</b>
+            <span style="font-weight: 800; font-size: 0.88rem; color: #09090b;">$ 6.900</span>
+          </div>
+          <p style="font-size: 0.78rem; color: #52525b; margin-top: 2px;">Despacho certificado con seguimiento en tiempo real (3 a 5 días hábiles).</p>
+          <div style="margin-top: 6px; background: #e8f0fe; border: 1px dashed #004b93; border-radius: 6px; padding: 4px 8px; font-size: 0.76rem; color: #004b93; display: inline-flex; align-items: center; gap: 6px;">
+            <i class="fas fa-barcode"></i> Código de Seguimiento Andreani vinculado: <b>${currentAndreaniTrackingCode}</b>
+          </div>
+        </div>
+      </label>
+    `;
+  }
+
+  updateCheckoutSummary();
 }
 
 function updateCheckoutSummary() {
@@ -1424,14 +1557,23 @@ function updateCheckoutSummary() {
   if (!summaryEl) return;
 
   const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-  // Dynamic Shipping Calculation based on Río Ceballos, Córdoba
-  const provVal = document.getElementById('checkout-province')?.value || state.currentUser?.address?.province || 'Córdoba';
-  const cityVal = document.getElementById('checkout-city')?.value || state.currentUser?.address?.city || '';
-  const zone = calculateShippingZone(provVal, cityVal);
-
   const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold;
-  const shippingAmount = isFreeShipping ? 0 : zone.cost;
+
+  // Calcular costo según el método de envío seleccionado en el Paso 2
+  const selectedShipping = document.querySelector('input[name="shipping_method"]:checked')?.value || 'local_24hs';
+  let shippingCost = 2500;
+  let shippingLabel = 'Envío dentro de las 24 hs';
+
+  if (selectedShipping === 'local_inmediato') {
+    shippingCost = isFreeShipping ? 0 : 3800;
+    shippingLabel = 'Envío Inmediato (Moto Mensajería Express en el día)';
+  } else if (selectedShipping === 'local_24hs') {
+    shippingCost = isFreeShipping ? 0 : 2500;
+    shippingLabel = 'Envío dentro de las 24 / 48 hs';
+  } else if (selectedShipping === 'andreani_nacional') {
+    shippingCost = isFreeShipping ? 0 : 6900;
+    shippingLabel = `Envío Nacional Andreani (${currentAndreaniTrackingCode || 'Oficial'})`;
+  }
 
   const selectedPayment = document.querySelector('input[name="payment_method"]:checked')?.value || 'transferencia';
   let paymentDiscount = 0;
@@ -1439,7 +1581,7 @@ function updateCheckoutSummary() {
     paymentDiscount = Math.round(subtotal * CONFIG.transferDiscountRate);
   }
 
-  const total = Math.max(0, subtotal - paymentDiscount + shippingAmount);
+  const total = Math.max(0, subtotal - paymentDiscount + shippingCost);
 
   const itemsSummaryHtml = state.cart.map(item => `
     <div style="padding: 4px 0; border-bottom: 1px dashed var(--border-light);">
@@ -1449,7 +1591,7 @@ function updateCheckoutSummary() {
       </div>
       ${item.customization ? `
         <div style="font-size: 0.74rem; color: var(--accent-leather); margin-top: 2px;">
-          <i class="fas fa-magic"></i> Grabado Virola: ${item.customization.typeName}
+          <i class="fas fa-magic"></i> Grabado: ${item.customization.typeName || 'Personalizado'}
           ${item.customization.text ? `("${item.customization.text}")` : ''}
           ${item.customization.graphicName ? `[${item.customization.graphicName}]` : ''}
         </div>
@@ -1468,17 +1610,17 @@ function updateCheckoutSummary() {
       </div>
       ${paymentDiscount > 0 ? `
       <div style="display: flex; justify-content: space-between; color: #27ae60;">
-        <span>10% OFF Transferencia:</span>
+        <span>10% OFF Transferencia Bancaria:</span>
         <b>-${formatARS(paymentDiscount)}</b>
       </div>` : ''}
       <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed var(--border-light); padding-top: 4px;">
         <div>
-          <span>Envío:</span>
+          <span>Despacho:</span>
           <small style="color: var(--accent-leather); display: block; font-size: 0.74rem;">
-            ${zone.name} • ${zone.time}
+            ${shippingLabel}
           </small>
         </div>
-        <b>${isFreeShipping ? '<span style="color: #27ae60;">¡GRATIS! (Supera los ' + formatARS(CONFIG.freeShippingThreshold) + ')</span>' : formatARS(shippingAmount)}</b>
+        <b>${isFreeShipping ? '<span style="color: #27ae60;">¡GRATIS! (Supera los ' + formatARS(CONFIG.freeShippingThreshold) + ')</span>' : formatARS(shippingCost)}</b>
       </div>
       <div style="display: flex; justify-content: space-between; font-size: 1.1rem; color: var(--text-main); font-weight: 800; border-top: 1px solid var(--border-light); margin-top: 6px; padding-top: 6px;">
         <span>Total:</span>
@@ -1499,39 +1641,56 @@ function processWebCheckout(e) {
   const name = document.getElementById('checkout-name')?.value.trim();
   const phone = document.getElementById('checkout-phone')?.value.trim();
   const email = document.getElementById('checkout-email')?.value.trim();
+  const dni = document.getElementById('checkout-dni')?.value.trim();
   const province = document.getElementById('checkout-province')?.value || 'Córdoba';
   const city = document.getElementById('checkout-city')?.value.trim();
   const address = document.getElementById('checkout-address')?.value.trim();
   const zip = document.getElementById('checkout-zip')?.value.trim();
   const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'transferencia';
+  const shippingMethod = document.querySelector('input[name="shipping_method"]:checked')?.value || 'local_24hs';
 
-  if (!name || !address || !city) {
-    showToast('Por favor completá los campos obligatorios', 'fa-exclamation-triangle');
+  if (!name || !phone || !email || !dni || !address || !city) {
+    showToast('Por favor completá todos los campos requeridos', 'fa-exclamation-triangle');
     return;
   }
 
   const orderId = 'RIO-' + Math.floor(1000 + Math.random() * 9000);
   const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold;
+
+  let shippingAmount = 2500;
+  let shippingName = 'Envío dentro de las 24 hs';
+  let trackingCode = null;
+
+  if (shippingMethod === 'local_inmediato') {
+    shippingAmount = isFreeShipping ? 0 : 3800;
+    shippingName = 'Envío Inmediato (Moto Mensajería en el día)';
+  } else if (shippingMethod === 'local_24hs') {
+    shippingAmount = isFreeShipping ? 0 : 2500;
+    shippingName = 'Envío dentro de las 24 / 48 hs hábiles';
+  } else if (shippingMethod === 'andreani_nacional') {
+    shippingAmount = isFreeShipping ? 0 : 6900;
+    trackingCode = currentAndreaniTrackingCode || ('ANDREANI-MR-' + Math.floor(100000 + Math.random() * 900000));
+    shippingName = `Envío Nacional Andreani a Domicilio (Guía: ${trackingCode})`;
+  }
 
   let paymentDiscount = 0;
   if (paymentMethod === 'transferencia') {
     paymentDiscount = Math.round(subtotal * CONFIG.transferDiscountRate);
   }
 
-  const zone = calculateShippingZone(province, city);
-  const isFreeShipping = subtotal >= CONFIG.freeShippingThreshold;
-  const shippingAmount = isFreeShipping ? 0 : zone.cost;
   const total = Math.max(0, subtotal - paymentDiscount + shippingAmount);
-
   const hasCustomization = state.cart.some(i => i.customization);
   const firstCustomItem = state.cart.find(i => i.customization);
 
   // Save address into logged in user profile for future purchases
   if (state.currentUser) {
+    state.currentUser.dni = dni;
     state.currentUser.address = { province, city, street: address, zip };
     localStorage.setItem('mates_rio_user', JSON.stringify(state.currentUser));
     const uIdx = state.usersDb.findIndex(u => u.email.toLowerCase() === state.currentUser.email.toLowerCase());
     if (uIdx !== -1) {
+      state.usersDb[uIdx].dni = dni;
       state.usersDb[uIdx].address = state.currentUser.address;
       localStorage.setItem('mates_rio_users_db', JSON.stringify(state.usersDb));
     }
@@ -1541,15 +1700,18 @@ function processWebCheckout(e) {
     id: orderId,
     date: new Date().toLocaleDateString('es-AR'),
     customerName: name,
+    customerDni: dni,
     customerPhone: phone || (state.currentUser?.phone || ''),
     customerEmail: email || (state.currentUser?.email || ''),
     items: state.cart.map(i => `${i.quantity}x ${i.name}`).join(', '),
     total: total,
     status: "Confirmado - En preparación artesanal",
     address: `${address}, ${city}, ${province} (CP ${zip})`,
-    shippingZone: zone.name,
+    shippingZone: shippingName,
+    shippingMethod: shippingMethod,
+    andreaniTrackingCode: trackingCode,
     shippingCost: shippingAmount,
-    paymentMethod: paymentMethod,
+    paymentMethod: paymentMethod === 'transferencia' ? 'Transferencia Bancaria (10% OFF)' : 'Mercado Pago (Tarjetas/Dinero)',
     hasCustomEngraving: hasCustomization,
     engravingDetails: firstCustomItem ? {
       text: firstCustomItem.customization.text || 'Sin texto',
@@ -1589,8 +1751,20 @@ function processWebCheckout(e) {
   const successModal = document.getElementById('order-success-modal');
   const orderIdSpan = document.getElementById('success-order-id');
   const orderTotalSpan = document.getElementById('success-order-total');
+  const shippingSpan = document.getElementById('success-order-shipping');
+  const andreaniRow = document.getElementById('success-andreani-row');
+  const andreaniCodeSpan = document.getElementById('success-andreani-code');
+
   if (orderIdSpan) orderIdSpan.textContent = orderId;
   if (orderTotalSpan) orderTotalSpan.textContent = formatARS(total);
+  if (shippingSpan) shippingSpan.textContent = shippingName;
+
+  if (trackingCode && andreaniRow && andreaniCodeSpan) {
+    andreaniRow.style.display = 'flex';
+    andreaniCodeSpan.textContent = trackingCode;
+  } else if (andreaniRow) {
+    andreaniRow.style.display = 'none';
+  }
 
   if (successModal) {
     successModal.classList.add('active');

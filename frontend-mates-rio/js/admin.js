@@ -846,6 +846,32 @@ function initDragAndDropZones() {
   });
 }
 
+function updateWholesaleTiersPreview(prefix) {
+  let wsInput = document.getElementById(`${prefix}-prod-wholesale-price`);
+  let wsPrice = wsInput ? parseInt(wsInput.value, 10) : 0;
+  if (!wsPrice || wsPrice <= 0) {
+    const retailPrice = parseInt(document.getElementById(`${prefix}-prod-price`)?.value, 10) || 0;
+    wsPrice = Math.round(retailPrice * 0.70);
+    if (wsInput && !wsInput.value && wsPrice > 0) wsInput.value = wsPrice;
+  }
+  const tier10 = Math.round(wsPrice * 0.90);
+  const tier20 = Math.round(wsPrice * 0.82);
+
+  const infoEl = document.getElementById(`${prefix}-prod-ws-tiers-info`);
+  if (infoEl) {
+    infoEl.innerHTML = `
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+        <span>5-9 u: <b style="color: var(--admin-text-main);">${formatARS(wsPrice)}</b> (Base)</span>
+        <span>•</span>
+        <span>10-19 u: <b style="color: #27ae60;">${formatARS(tier10)}</b> (-10%)</span>
+        <span>•</span>
+        <span>+20 u: <b style="color: #27ae60;">${formatARS(tier20)}</b> (-18%)</span>
+      </div>
+    `;
+  }
+}
+window.updateWholesaleTiersPreview = updateWholesaleTiersPreview;
+
 function openEditProductModal(productId) {
   const inv = getInventory();
   let prod = inv[productId];
@@ -957,6 +983,12 @@ function openEditProductModal(productId) {
   const specExtraEl = document.getElementById('edit-prod-spec-extra');
   if (specExtraEl) specExtraEl.value = (fullProd.specs && (fullProd.specs.garantia || fullProd.specs.extra)) || '';
 
+  // Precios Mayoristas y escala por volumen
+  const wsPriceVal = (fullProd && fullProd.wholesalePrice) || prod.wholesalePrice || Math.round(prod.price * 0.70);
+  const wsPriceEl = document.getElementById('edit-prod-wholesale-price');
+  if (wsPriceEl) wsPriceEl.value = wsPriceVal;
+  updateWholesaleTiersPreview('edit');
+
   const modal = document.getElementById('edit-product-modal');
   if (modal) modal.classList.add('active');
 }
@@ -993,6 +1025,8 @@ function saveProductEdits() {
   const specMaterial = document.getElementById('edit-prod-spec-material')?.value.trim();
   const specVirola = document.getElementById('edit-prod-spec-virola')?.value.trim();
   const specExtra = document.getElementById('edit-prod-spec-extra')?.value.trim();
+  const wsPriceVal = parseInt(document.getElementById('edit-prod-wholesale-price')?.value, 10);
+  const wsPrice = (!isNaN(wsPriceVal) && wsPriceVal > 0) ? wsPriceVal : Math.round(price * 0.70);
 
   if (!name || !category || isNaN(price) || price <= 0 || isNaN(stock) || stock < 0) {
     alert('Por favor completá los campos obligatorios con valores válidos (Nombre, Categoría, Precio y Stock).');
@@ -1019,6 +1053,7 @@ function saveProductEdits() {
   inv[id].categoryName = categoryName;
   inv[id].subcategory = subcategory;
   inv[id].price = price;
+  inv[id].wholesalePrice = wsPrice;
   inv[id].originalPrice = origPrice;
   inv[id].stock = stock;
   inv[id].minStock = minStock;
@@ -1040,6 +1075,7 @@ function saveProductEdits() {
       categoryName,
       subcategory,
       price,
+      wholesalePrice: wsPrice,
       originalPrice,
       stock,
       minStock,
@@ -1070,6 +1106,7 @@ function saveProductEdits() {
       cp.categoryName = categoryName;
       cp.subcategory = subcategory;
       cp.price = price;
+      cp.wholesalePrice = wsPrice;
       cp.originalPrice = origPrice;
       cp.stock = stock;
       cp.minStock = minStock;
@@ -1096,6 +1133,7 @@ function saveProductEdits() {
       p.categoryName = categoryName;
       p.subcategory = subcategory;
       p.price = price;
+      p.wholesalePrice = wsPrice;
       p.originalPrice = origPrice;
       p.stock = stock;
       p.minStock = minStock;
@@ -4012,6 +4050,9 @@ handleCreateProduct = function() {
   };
   const categoryName = catNamesMap[category] || category.toUpperCase();
 
+  const wsPriceVal = parseInt(document.getElementById('new-prod-wholesale-price')?.value, 10);
+  const wsPrice = (!isNaN(wsPriceVal) && wsPriceVal > 0) ? wsPriceVal : Math.round(price * 0.70);
+
   const newProduct = {
     id: prodId,
     name,
@@ -4030,7 +4071,7 @@ handleCreateProduct = function() {
     minStock,
     inStock: stock > 0,
     cost: Math.round(price * 0.55),
-    wholesalePrice: Math.round(price * 0.70),
+    wholesalePrice: wsPrice,
     isCustom: true
   };
 

@@ -311,10 +311,6 @@ function initStudioEngine() {
 // 2. NAVEGACIÓN Y TABS DEL RIBBON (WORD / PAINT CAD)
 // ==========================================================================
 function switchRibbonTab(tabKey) {
-  if (tabKey === 'templates') {
-    openTemplatesRibbonTab();
-    return;
-  }
   studio.activeRibbonTab = tabKey;
   
   // Actualizar botones de pestaña
@@ -327,21 +323,17 @@ function switchRibbonTab(tabKey) {
     panel.classList.toggle('active', panel.getAttribute('data-panel') === tabKey);
   });
 
+  if (tabKey === 'templates') {
+    renderRibbonTemplatesForActiveProduct();
+  }
+
   // Cerrar dropdown de fuentes si estuviera abierto
   const fontDropdown = document.getElementById('ribbon-font-dropdown');
   if (fontDropdown) fontDropdown.classList.remove('open');
 }
 
 function openTemplatesRibbonTab() {
-  studio.activeRibbonTab = 'icons';
-  document.querySelectorAll('.ribbon-tab-btn').forEach(btn => {
-    const t = btn.getAttribute('data-tab');
-    btn.classList.toggle('active', t === 'templates' || (t === 'icons' && !document.querySelector('.ribbon-tab-btn[data-tab="templates"]')));
-  });
-  document.querySelectorAll('.ribbon-tab-panel').forEach(panel => {
-    panel.classList.toggle('active', panel.getAttribute('data-panel') === 'icons');
-  });
-  filterRibbonDesigns('plantillas');
+  switchRibbonTab('templates');
 }
 
 // Compatibilidad con llamadas legacy
@@ -446,6 +438,7 @@ function switchActiveProduct(prodKey) {
   renderModelsDropdown();
   updateStageBadge();
   updatePriceDisplay();
+  renderRibbonTemplatesForActiveProduct();
 
   // Adaptar o rebalancear elementos
   autoCenterAndBalanceVirola();
@@ -833,6 +826,349 @@ function renderRibbonQuickDesigns(catKey) {
       <img src="${item.file}" alt="${item.name}" loading="lazy" />
     </button>
   `).join('');
+}
+
+// ==========================================================================
+// SISTEMA DE PLANTILLAS PREDISEÑADAS EXCLUSIVAS POR PRODUCTO (MATE, TERMO, CAJA)
+// ==========================================================================
+const PRODUCT_TEMPLATES = {
+  mate: [
+    {
+      id: 'tpl_papa_leon_xiv',
+      templateId: 'tpl_papa_leon_xiv',
+      name: 'Papa León XIV',
+      subtitle: 'Virola con Arcos & Cruz',
+      file: 'assets/images/designs/papa_leon/thumb_papa_leon.png',
+      apply: () => applyVirolaPresetTemplate('tpl_papa_leon_xiv')
+    },
+    {
+      id: 'tpl_guarda_pampa',
+      name: 'Guarda Pampa Tradicional',
+      subtitle: 'Guarda Criolla Perimetral',
+      file: 'assets/images/designs/criollos/sol_mayo.svg',
+      apply: () => applyVirolaGuardaPampaTemplate()
+    },
+    {
+      id: 'tpl_campeones_mundo',
+      name: '3 Estrellas AFA',
+      subtitle: 'Campeones del Mundo',
+      file: 'assets/images/designs/deportes/escudo_afa.svg',
+      apply: () => applyVirolaCampeonesTemplate()
+    }
+  ],
+  caja: [
+    {
+      id: 'tpl_caja_mates_rio',
+      name: 'Tapa Mates Río',
+      subtitle: 'Plantilla de Caja Vertical',
+      file: 'assets/images/designs/criollos/guarda_lineal.svg',
+      apply: () => applyCajaMatesRioTemplate()
+    },
+    {
+      id: 'tpl_caja_dedicatoria',
+      name: 'Dedicatoria & Escudo',
+      subtitle: 'Grabado Láser en Madera',
+      file: 'assets/images/designs/criollos/escudo_nacional.svg',
+      apply: () => applyCajaDedicatoriaTemplate()
+    }
+  ],
+  termo: [
+    {
+      id: 'tpl_termo_franja',
+      name: 'Franja Gaucha 360°',
+      subtitle: 'Plantilla de Termo 1L',
+      file: 'assets/images/designs/criollos/guarda_pampa.svg',
+      apply: () => applyTermoFranjaTemplate()
+    },
+    {
+      id: 'tpl_termo_escudo',
+      name: 'Escudo Nacional Argentino',
+      subtitle: 'Grabado sobre Acero Inox',
+      file: 'assets/images/designs/criollos/escudo_nacional.svg',
+      apply: () => applyTermoEscudoTemplate()
+    }
+  ]
+};
+
+function renderRibbonTemplatesForActiveProduct() {
+  const container = document.getElementById('ribbon-quick-templates');
+  const labelEl = document.getElementById('templates-product-label');
+  const instrEl = document.getElementById('ribbon-templates-instruction');
+  if (!container) return;
+
+  const prodKey = studio.activeProduct || 'mate';
+  const prodNames = { mate: 'Virola de Mate', termo: 'Termo de Acero', caja: 'Caja de Presentación' };
+  if (labelEl) labelEl.textContent = prodNames[prodKey] || 'Plantillas';
+  if (instrEl) instrEl.textContent = `Plantillas prediseñadas para ${prodNames[prodKey] || 'este producto'}`;
+
+  const list = PRODUCT_TEMPLATES[prodKey] || [];
+  if (list.length === 0) {
+    container.innerHTML = `<span style="font-size: 0.8rem; color: #71717a; padding: 10px;">Próximamente plantillas para este producto</span>`;
+    return;
+  }
+
+  container.innerHTML = list.map(item => `
+    <button type="button" class="ribbon-template-card-btn" onclick="applyProductTemplate('${prodKey}', '${item.id}')" title="Aplicar plantilla: ${item.name}">
+      <span class="ribbon-template-thumb">
+        <img src="${item.file}" alt="${item.name}" loading="lazy" />
+      </span>
+      <span class="ribbon-template-info">
+        <strong class="ribbon-template-title">${item.name}</strong>
+        <small class="ribbon-template-sub">${item.subtitle || 'Plantilla Editable'}</small>
+      </span>
+    </button>
+  `).join('');
+}
+
+function applyProductTemplate(prodKey, tplId) {
+  const list = PRODUCT_TEMPLATES[prodKey] || [];
+  const tpl = list.find(t => t.id === tplId);
+  if (tpl && typeof tpl.apply === 'function') {
+    tpl.apply();
+  }
+}
+
+function scrollRibbonTemplates(delta) {
+  const track = document.getElementById('ribbon-quick-templates');
+  if (track) track.scrollBy({ left: delta, behavior: 'smooth' });
+}
+
+function applyVirolaGuardaPampaTemplate() {
+  saveStudioHistoryState();
+  studio.items = [
+    {
+      id: `tpl_txt_top_${Date.now()}`,
+      type: 'text',
+      text: 'TRADICIÓN & COSTUMBRES',
+      font: 'Cinzel',
+      fontSize: 20,
+      scale: 1.0,
+      location: 'top',
+      angle: 90,
+      radius: STUDIO_CONFIG.rRing,
+      rotation: 0
+    },
+    {
+      id: `tpl_sol_${Date.now()}`,
+      type: 'icon',
+      graphicId: 'sol_mayo',
+      name: 'Sol Criollo',
+      file: 'assets/images/designs/criollos/sol_mayo.svg',
+      fileBlack: 'assets/images/designs/criollos/sol_mayo.svg',
+      fileWhite: 'assets/images/designs/criollos/sol_mayo.svg',
+      scale: 1.05,
+      angle: 270,
+      radius: STUDIO_CONFIG.rRing,
+      rotation: 0,
+      x: STUDIO_CONFIG.cx,
+      y: STUDIO_CONFIG.cy + STUDIO_CONFIG.rRing
+    }
+  ];
+  studio.activeItemId = studio.items[0].id;
+  renderVirolaCanvas();
+  showNotificationToast('Plantilla Guarda Pampa aplicada con éxito', 'fa-check');
+}
+
+function applyVirolaCampeonesTemplate() {
+  saveStudioHistoryState();
+  studio.items = [
+    {
+      id: `tpl_txt_camp_${Date.now()}`,
+      type: 'text',
+      text: 'CAMPEONES DEL MUNDO',
+      font: 'Cinzel',
+      fontSize: 19,
+      scale: 1.0,
+      location: 'top',
+      angle: 90,
+      radius: STUDIO_CONFIG.rRing,
+      rotation: 0
+    },
+    {
+      id: `tpl_afa_${Date.now()}`,
+      type: 'icon',
+      graphicId: 'escudo_afa',
+      name: 'Escudo AFA 3 Estrellas',
+      file: 'assets/images/designs/deportes/escudo_afa.svg',
+      fileBlack: 'assets/images/designs/deportes/escudo_afa.svg',
+      fileWhite: 'assets/images/designs/deportes/escudo_afa.svg',
+      scale: 1.15,
+      angle: 270,
+      radius: STUDIO_CONFIG.rRing,
+      rotation: 0,
+      x: STUDIO_CONFIG.cx,
+      y: STUDIO_CONFIG.cy + STUDIO_CONFIG.rRing
+    }
+  ];
+  studio.activeItemId = studio.items[0].id;
+  renderVirolaCanvas();
+  showNotificationToast('Plantilla 3 Estrellas AFA aplicada con éxito', 'fa-check');
+}
+
+function applyCajaMatesRioTemplate() {
+  if (studio.activeProduct !== 'caja') {
+    switchActiveProduct('caja');
+  }
+  saveStudioHistoryState();
+  const { cx } = STUDIO_CONFIG;
+  studio.items = [
+    {
+      id: `tpl_caja_txt1_${Date.now()}`,
+      type: 'text',
+      text: 'MATES RÍO',
+      font: 'Cinzel',
+      fontSize: 26,
+      scale: 1.1,
+      x: cx,
+      y: 140,
+      rotation: 0
+    },
+    {
+      id: `tpl_caja_ic1_${Date.now()}`,
+      type: 'icon',
+      graphicId: 'cruz_pampa',
+      name: 'Cruz Pampa',
+      file: 'assets/images/designs/simbolos/cruz_pampa.svg',
+      fileWhite: 'assets/images/designs/simbolos/cruz_pampa.svg',
+      scale: 1.4,
+      x: cx,
+      y: 250,
+      rotation: 0
+    },
+    {
+      id: `tpl_caja_txt2_${Date.now()}`,
+      type: 'text',
+      text: 'INDUSTRIA ARGENTINA',
+      font: 'Montserrat',
+      fontSize: 13,
+      scale: 1.0,
+      x: cx,
+      y: 350,
+      rotation: 0
+    }
+  ];
+  studio.activeItemId = studio.items[0].id;
+  renderVirolaCanvas();
+  showNotificationToast('Plantilla Tapa Mates Río aplicada a la Caja', 'fa-box');
+}
+
+function applyCajaDedicatoriaTemplate() {
+  if (studio.activeProduct !== 'caja') {
+    switchActiveProduct('caja');
+  }
+  saveStudioHistoryState();
+  const { cx } = STUDIO_CONFIG;
+  studio.items = [
+    {
+      id: `tpl_caja_dedic_${Date.now()}`,
+      type: 'text',
+      text: 'CON TODO NUESTRO AFECTO',
+      font: 'Cinzel',
+      fontSize: 17,
+      scale: 1.0,
+      x: cx,
+      y: 150,
+      rotation: 0
+    },
+    {
+      id: `tpl_caja_esc_${Date.now()}`,
+      type: 'icon',
+      graphicId: 'escudo_nacional',
+      name: 'Escudo Nacional',
+      file: 'assets/images/designs/criollos/escudo_nacional.svg',
+      fileWhite: 'assets/images/designs/criollos/escudo_nacional.svg',
+      scale: 1.35,
+      x: cx,
+      y: 255,
+      rotation: 0
+    },
+    {
+      id: `tpl_caja_fecha_${Date.now()}`,
+      type: 'text',
+      text: 'FAMILIA & AMIGOS • 2026',
+      font: 'Montserrat',
+      fontSize: 14,
+      scale: 1.0,
+      x: cx,
+      y: 345,
+      rotation: 0
+    }
+  ];
+  studio.activeItemId = studio.items[0].id;
+  renderVirolaCanvas();
+  showNotificationToast('Plantilla Dedicatoria aplicada a la Caja', 'fa-box');
+}
+
+function applyTermoFranjaTemplate() {
+  if (studio.activeProduct !== 'termo') {
+    switchActiveProduct('termo');
+  }
+  saveStudioHistoryState();
+  const { cx } = STUDIO_CONFIG;
+  studio.items = [
+    {
+      id: `tpl_termo_nom_${Date.now()}`,
+      type: 'text',
+      text: 'RÍO CEBALLOS',
+      font: 'Cinzel',
+      fontSize: 22,
+      scale: 1.0,
+      x: cx,
+      y: 170,
+      rotation: 0
+    },
+    {
+      id: `tpl_termo_ic_${Date.now()}`,
+      type: 'icon',
+      graphicId: 'sol_mayo',
+      name: 'Sol Criollo',
+      file: 'assets/images/designs/criollos/sol_mayo.svg',
+      fileBlack: 'assets/images/designs/criollos/sol_mayo.svg',
+      scale: 1.3,
+      x: cx,
+      y: 260,
+      rotation: 0
+    }
+  ];
+  studio.activeItemId = studio.items[0].id;
+  renderVirolaCanvas();
+  showNotificationToast('Plantilla Franja Gaucha aplicada al Termo', 'fa-mug-hot');
+}
+
+function applyTermoEscudoTemplate() {
+  if (studio.activeProduct !== 'termo') {
+    switchActiveProduct('termo');
+  }
+  saveStudioHistoryState();
+  const { cx } = STUDIO_CONFIG;
+  studio.items = [
+    {
+      id: `tpl_termo_esc_${Date.now()}`,
+      type: 'icon',
+      graphicId: 'escudo_nacional',
+      name: 'Escudo Nacional',
+      file: 'assets/images/designs/criollos/escudo_nacional.svg',
+      fileBlack: 'assets/images/designs/criollos/escudo_nacional.svg',
+      scale: 1.45,
+      x: cx,
+      y: 220,
+      rotation: 0
+    },
+    {
+      id: `tpl_termo_sub_${Date.now()}`,
+      type: 'text',
+      text: 'REPÚBLICA ARGENTINA',
+      font: 'Cinzel',
+      fontSize: 16,
+      scale: 1.0,
+      x: cx,
+      y: 310,
+      rotation: 0
+    }
+  ];
+  studio.activeItemId = studio.items[0].id;
+  renderVirolaCanvas();
+  showNotificationToast('Plantilla Escudo Nacional aplicada al Termo', 'fa-mug-hot');
 }
 
 // ==========================================================================
@@ -1739,10 +2075,10 @@ function renderVirolaCanvas() {
         </linearGradient>
 
         <radialGradient id="calabaza-interior" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#0a0a0a" />
-          <stop offset="65%" stop-color="#171717" />
-          <stop offset="90%" stop-color="#242424" />
-          <stop offset="100%" stop-color="#080808" />
+          <stop offset="0%" stop-color="#ffffff" />
+          <stop offset="65%" stop-color="#fafafa" />
+          <stop offset="90%" stop-color="#f4f4f5" />
+          <stop offset="100%" stop-color="#e4e4e7" />
         </radialGradient>
 
         <mask id="virola-groove-mask">
@@ -1765,7 +2101,6 @@ function renderVirolaCanvas() {
 
       <!-- Cuero vacuno exterior bitono negro -->
       <circle cx="${cx}" cy="${cy}" r="${rOuter + 8}" fill="#111111" stroke="#2b2b2b" stroke-width="4" />
-      <circle cx="${cx}" cy="${cy}" r="${rOuter + 5}" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="2,3" opacity="0.45" />
 
       <!-- Corona de Alpaca / Virola Metálica (Ancho 70px) -->
       <path d="M ${cx} ${cy - rOuter} 
@@ -1793,10 +2128,9 @@ function renderVirolaCanvas() {
       <!-- Ranuras concéntricas -->
       ${circularLinesHtml}
 
-      <!-- Boca interior de la calabaza bitono -->
-      <circle cx="${cx}" cy="${cy}" r="${rInner}" fill="url(#calabaza-interior)" stroke="#2e2e2e" stroke-width="3" />
-      <circle cx="${cx}" cy="${cy}" r="${rInner - 22}" fill="#161616" opacity="0.85" />
-      <circle cx="${cx}" cy="${cy}" r="${rInner - 26}" fill="none" stroke="#2c2c2c" stroke-width="3" stroke-dasharray="3,4" opacity="0.7" />
+      <!-- Boca interior del mate en color blanco esmaltado -->
+      <circle cx="${cx}" cy="${cy}" r="${rInner}" fill="url(#calabaza-interior)" stroke="#b5b5b5" stroke-width="2.5" />
+      <circle cx="${cx}" cy="${cy}" r="${rInner - 18}" fill="#ffffff" opacity="0.95" />
 
       <!-- Grabados Láser -->
       <g class="virola-engravings-container" ${studio.clipToMetal ? 'clip-path="url(#metal-ring-clip)"' : ''}>
@@ -4051,17 +4385,16 @@ function escapeHtml(str) {
     const boxY = 52;            // 52..452
 
     let textsHtml = '';
+    let handlesHtml = '';
     const textItems = studio.items.filter(i => i.type === 'text');
     textItems.forEach((t, idx) => {
       const isActive = t.id === studio.activeItemId;
-      if (t.x === undefined || t.x < boxX + 20 || t.x > boxX + boxW - 20 || t.y < boxY + 25 || t.y > boxY + boxH - 25) {
+      if (t.x === undefined) {
         t.x = cx;
         t.y = 165 + idx * 45;
       }
-      const x = Math.max(boxX + 24, Math.min(boxX + boxW - 24, t.x));
-      const y = Math.max(boxY + 28, Math.min(boxY + boxH - 28, t.y));
-      t.x = x;
-      t.y = y;
+      const x = t.x;
+      const y = t.y;
       const rot = t.rotation !== undefined ? t.rotation : 0;
       const fSize = Math.round((t.fontSize || 22) * (t.scale || 1));
       const approxHalfW = Math.max(38, ((t.text || '').length * fSize * 0.34));
@@ -4085,9 +4418,16 @@ function escapeHtml(str) {
                 data-item-id="${t.id}">
             ${escapeHtml(t.text)}
           </text>
-          ${build2DItemHandlesHtml(t, approxHalfW, approxHalfH, true)}
         </g>
       `;
+
+      if (isActive) {
+        handlesHtml += `
+          <g class="box-active-handle-wrap" transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})">
+            ${build2DItemHandlesHtml(t, approxHalfW, approxHalfH, true)}
+          </g>
+        `;
+      }
     });
 
     let iconsHtml = '';
@@ -4098,14 +4438,12 @@ function escapeHtml(str) {
       const scale = item.scale || 1.0;
       const rot = item.rotation || 0;
       const isActive = item.id === studio.activeItemId;
-      if (item.x === undefined || item.x < boxX + 20 || item.x > boxX + boxW - 20 || item.y < boxY + 25 || item.y > boxY + boxH - 25) {
+      if (item.x === undefined) {
         item.x = cx;
         item.y = 275 + idx * 58;
       }
-      const x = Math.max(boxX + 26, Math.min(boxX + boxW - 26, item.x));
-      const y = Math.max(boxY + 30, Math.min(boxY + boxH - 30, item.y));
-      item.x = x;
-      item.y = y;
+      const x = item.x;
+      const y = item.y;
       const baseSize = 48;
       const wRatio = item.wRatio || 1.0;
       const hRatio = item.hRatio || 1.0;
@@ -4129,12 +4467,19 @@ function escapeHtml(str) {
            ontouchstart="startFreeItemDrag('${item.id}', event)"
            style="cursor: grab;">
           ${contentHtml}
-          ${build2DItemHandlesHtml(item, halfW, halfH, true)}
         </g>
       `;
+
+      if (isActive) {
+        handlesHtml += `
+          <g class="box-active-handle-wrap" transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})">
+            ${build2DItemHandlesHtml(item, halfW, halfH, true)}
+          </g>
+        `;
+      }
     });
 
-    // Formato rectangular VERTICAL de la Caja de presentación negra con grabado en blanco
+    // Formato rectangular VERTICAL de la Caja de presentación negra con grabado en blanco recortado en bordes
     svg.innerHTML = `
       <defs>
         <linearGradient id="box-dark-finish" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -4142,6 +4487,9 @@ function escapeHtml(str) {
           <stop offset="50%" stop-color="#121212" />
           <stop offset="100%" stop-color="#0a0a0a" />
         </linearGradient>
+        <clipPath id="box-face-clip">
+          <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" rx="10" />
+        </clipPath>
       </defs>
 
       <!-- Sombra exterior vertical -->
@@ -4150,13 +4498,16 @@ function escapeHtml(str) {
       <!-- Cuerpo Rectangular VERTICAL de la Caja de Presentación -->
       <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" rx="10" fill="url(#box-dark-finish)" stroke="#333333" stroke-width="3" />
 
-      <!-- Marco interior sutil del frente vertical -->
-      <rect x="${boxX + 16}" y="${boxY + 16}" width="${boxW - 32}" height="${boxH - 32}" rx="6" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.2" stroke-dasharray="4,4" />
       <text x="250" y="38" text-anchor="middle" fill="#ffffff" opacity="0.75" font-size="10.5" font-weight="700" letter-spacing="1.4">CAJA DE PRESENTACIÓN VERTICAL (GRABADO EN BLANCO)</text>
 
-      <!-- Grabados invertidos en color blanco -->
-      <g class="virola-texts-layer">${textsHtml}</g>
-      <g class="virola-icons-layer">${iconsHtml}</g>
+      <!-- Grabados invertidos en color blanco recortados con los bordes de la caja (misma lógica que virola) -->
+      <g class="virola-engravings-container" clip-path="url(#box-face-clip)">
+        <g class="virola-texts-layer">${textsHtml}</g>
+        <g class="virola-icons-layer">${iconsHtml}</g>
+      </g>
+
+      <!-- Controles del elemento activo (sin recorte para que las manijas siempre sean accesibles) -->
+      <g class="virola-active-handles-layer">${handlesHtml}</g>
     `;
   };
 
@@ -4588,6 +4939,7 @@ function escapeHtml(str) {
     syncCurvatureControlsVisibility();
     renderModelsDropdown();
     updatePriceDisplay();
+    renderRibbonTemplatesForActiveProduct();
     renderVirolaCanvas();
   });
 })();
