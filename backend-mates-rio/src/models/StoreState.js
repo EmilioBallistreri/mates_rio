@@ -1,8 +1,41 @@
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
 
 const stateFilePath = path.join(__dirname, '../data/storeState.json');
 const frontendMirrorFilePath = path.join(__dirname, '../../../frontend-mates-rio/api/store-state.json');
+const repoRootPath = path.join(__dirname, '../../..');
+
+let gitAutoPushTimer = null;
+let gitPushInProgress = false;
+let gitPushPending = false;
+
+function scheduleAutoGitPush() {
+  if (process.env.DISABLE_AUTO_GIT_PUSH === 'true') return;
+  if (gitAutoPushTimer) clearTimeout(gitAutoPushTimer);
+
+  gitAutoPushTimer = setTimeout(() => {
+    runAutoGitPush();
+  }, 3000);
+}
+
+function runAutoGitPush() {
+  if (gitPushInProgress) {
+    gitPushPending = true;
+    return;
+  }
+  gitPushInProgress = true;
+
+  const cmd = 'git add "backend-mates-rio/src/data/storeState.json" "frontend-mates-rio/api/store-state.json" && git commit -m "chore(sync): sincronizacion automatica de cambios del panel admin" && git push origin HEAD';
+
+  exec(cmd, { cwd: repoRootPath }, (err) => {
+    gitPushInProgress = false;
+    if (gitPushPending) {
+      gitPushPending = false;
+      scheduleAutoGitPush();
+    }
+  });
+}
 
 const DEFAULT_STORE_STATE = {
   customProducts: null,
@@ -31,12 +64,11 @@ function readStateFromDisk() {
       const raw = fs.readFileSync(stateFilePath, 'utf8');
       const parsed = JSON.parse(raw);
       const merged = { ...DEFAULT_STORE_STATE, ...parsed };
-      // Asegurar espejo en frontend-mates-rio/api/store-state.json
       writeMirrorToFrontend(merged);
       return merged;
     } else {
       const initial = { ...DEFAULT_STORE_STATE, updatedAt: Date.now() };
-      writeStateToDisk(initial);
+      writeStateToDisk(initial, false);
       return initial;
     }
   } catch (err) {
@@ -61,7 +93,7 @@ function writeMirrorToFrontend(stateObj) {
   }
 }
 
-function writeStateToDisk(stateObj) {
+function writeStateToDisk(stateObj, triggerGitPush = true) {
   try {
     const dir = path.dirname(stateFilePath);
     if (!fs.existsSync(dir)) {
@@ -69,6 +101,9 @@ function writeStateToDisk(stateObj) {
     }
     fs.writeFileSync(stateFilePath, JSON.stringify(stateObj, null, 2), 'utf8');
     writeMirrorToFrontend(stateObj);
+    if (triggerGitPush) {
+      scheduleAutoGitPush();
+    }
     return true;
   } catch (err) {
     console.error('Error guardando storeState.json:', err.message);
@@ -116,7 +151,7 @@ const StoreState = {
     if (changed || patch.forceTimestamp) {
       currentState.version = (Number(currentState.version) || 0) + 1;
       currentState.updatedAt = Date.now();
-      writeStateToDisk(currentState);
+      writeStateToDisk(currentState, true);
     }
 
     return currentState;
