@@ -3,7 +3,7 @@ const path = require('path');
 const { exec } = require('child_process');
 
 const stateFilePath = path.join(__dirname, '../data/storeState.json');
-const frontendMirrorFilePath = path.join(__dirname, '../../../frontend-mates-rio/api/store-state.json');
+const frontendMirrorFilePath = path.join(__dirname, '../../../frontend-mates-rio/assets/store-state.json');
 const repoRootPath = path.join(__dirname, '../../..');
 
 let gitAutoPushTimer = null;
@@ -26,7 +26,7 @@ function runAutoGitPush() {
   }
   gitPushInProgress = true;
 
-  const cmd = 'git add "backend-mates-rio/src/data/storeState.json" "frontend-mates-rio/api/store-state.json" && git commit -m "chore(sync): sincronizacion automatica de cambios del panel admin" && git push origin HEAD';
+  const cmd = 'git add "backend-mates-rio/src/data/storeState.json" "frontend-mates-rio/assets/store-state.json" && git commit -m "chore(sync): sincronizacion automatica de cambios del panel admin" && git push origin HEAD';
 
   exec(cmd, { cwd: repoRootPath }, (err) => {
     gitPushInProgress = false;

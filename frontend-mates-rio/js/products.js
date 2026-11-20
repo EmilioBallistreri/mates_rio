@@ -1184,7 +1184,7 @@ window.syncProductsFromStorage = syncProductsFromStorage;
     // Fallback de lectura estática en el mismo origen/puerto (para celulares conectados por Live Server o túnel de un solo puerto)
     if (isGet && typeof window !== 'undefined' && window.location && window.location.protocol.startsWith('http')) {
       try {
-        const staticMirrorUrl = `api/store-state.json${cacheBuster}`;
+        const staticMirrorUrl = `assets/store-state.json${cacheBuster}`;
         const res = await fetch(staticMirrorUrl, { method: 'GET', cache: 'no-store' });
         if (res.ok) {
           const json = await res.json();

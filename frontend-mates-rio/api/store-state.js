@@ -2,8 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const TMP_STATE_FILE = path.join('/tmp', 'mates_rio_store_state.json');
-const REPO_MIRROR_FILE = path.join(__dirname, 'store-state.json');
-const BACKEND_STATE_FILE = path.join(__dirname, '../../backend-mates-rio/src/data/storeState.json');
+const STATIC_STATE_FILE = path.join(__dirname, '../assets/store-state.json');
 
 const ALLOWED_KEYS = [
   'customProducts',
@@ -58,10 +57,9 @@ function readCandidateFile(filePath) {
   return null;
 }
 
-function readCurrentState() {
+function readTmpState() {
   const candidates = [
-    readCandidateFile(REPO_MIRROR_FILE),
-    readCandidateFile(BACKEND_STATE_FILE),
+    readCandidateFile(STATIC_STATE_FILE),
     readCandidateFile(TMP_STATE_FILE)
   ].filter(Boolean);
 
@@ -78,25 +76,9 @@ function readCurrentState() {
   return memoryState;
 }
 
-function writeCurrentState(stateObj) {
-  // 1. Guardar siempre en /tmp (compatible con Vercel Serverless)
+function writeTmpState(stateObj) {
   try {
-    fs.writeFileSync(TMP_STATE_FILE, JSON.stringify(stateObj, null, 2), 'utf8');
-  } catch (e) {}
-
-  // 2. Guardar también en los archivos del repositorio si el entorno tiene disco escribible
-  try {
-    fs.writeFileSync(
-      REPO_MIRROR_FILE,
-      JSON.stringify({ success: true, data: stateObj }, null, 2),
-      'utf8'
-    );
-  } catch (e) {}
-
-  try {
-    if (fs.existsSync(path.dirname(BACKEND_STATE_FILE))) {
-      fs.writeFileSync(BACKEND_STATE_FILE, JSON.stringify(stateObj, null, 2), 'utf8');
-    }
+    fs.writeFileSync(TMP_STATE_FILE, JSON.stringify(stateObj), 'utf8');
   } catch (e) {}
 }
 
@@ -114,7 +96,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).end();
   }
 
-  const current = readCurrentState();
+  const current = readTmpState();
 
   if (req.method === 'GET') {
     return res.status(200).json({
@@ -144,12 +126,12 @@ module.exports = async function handler(req, res) {
       current.version = (Number(current.version) || 0) + 1;
       current.updatedAt = Date.now();
       memoryState = current;
-      writeCurrentState(current);
+      writeTmpState(current);
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Estado global de la tienda sincronizado automáticamente',
+      message: 'Estado global de la tienda sincronizado correctamente',
       data: current
     });
   }
