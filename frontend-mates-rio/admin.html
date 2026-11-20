@@ -161,6 +161,10 @@
           <i class="fas fa-clock-rotate-left"></i>
           <span>Registro de Actividad</span>
         </a>
+        <a class="sidebar-nav-item" data-section="sync" onclick="switchAdminSection('sync')">
+          <i class="fas fa-arrows-rotate"></i>
+          <span>Sincronización & Dispositivos</span>
+        </a>
       </nav>
 
       <!-- Sidebar Footer with User Details & Logout -->
@@ -202,6 +206,11 @@
         </div>
 
         <div class="topbar-right">
+          <!-- Indicador de Sincronización Multi-Dispositivos -->
+          <button type="button" class="admin-topbar-sync-status status-offline" id="admin-topbar-sync-status" onclick="switchAdminSection('sync')" title="Estado de Sincronización Multi-Dispositivos">
+            <i class="fas fa-arrows-rotate"></i> <span class="sync-badge-text">Sincronización</span>
+          </button>
+
           <div class="topbar-live-clock" id="topbar-live-clock" style="display: none;">
             <i class="fas fa-clock"></i> <span id="clock-display">--:--:--</span> (Bs. As.)
           </div>
@@ -1089,6 +1098,161 @@
           </div>
         </section>
 
+        <!-- ==========================================================================
+             SECCIÓN: SINCRONIZACIÓN MULTI-DISPOSITIVOS & RESPALDOS
+             ========================================================================== -->
+        <section class="admin-section" id="sec-sync">
+          <div class="section-head-bar">
+            <div>
+              <h2 class="section-page-title">Sincronización Multi-Dispositivos & Respaldos</h2>
+              <p class="section-page-desc">Transferí y reflejá instantáneamente cualquier cambio hecho por el dueño o administradores en celulares, tablets o computadoras.</p>
+            </div>
+            <div class="section-actions" style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" class="btn-admin btn-admin-gold" onclick="copyAdminSyncCode()">
+                <i class="fas fa-copy"></i> Copiar Código de Cambios
+              </button>
+              <button type="button" class="btn-admin btn-admin-primary" onclick="copyAdminSyncLink()">
+                <i class="fas fa-link"></i> Copiar Enlace Directo
+              </button>
+              <button type="button" class="btn-admin btn-admin-outline" onclick="openImportSyncModal()">
+                <i class="fas fa-file-import"></i> Pegar / Importar Cambios
+              </button>
+            </div>
+          </div>
+
+          <!-- Métricas de Estado de Sincronización -->
+          <div class="sync-stats-grid">
+            <div class="sync-stat-card">
+              <span class="sync-stat-number" id="sync-stat-custom">0</span>
+              <span class="sync-stat-label">Productos Creados</span>
+            </div>
+            <div class="sync-stat-card">
+              <span class="sync-stat-number" id="sync-stat-edited">0</span>
+              <span class="sync-stat-label">Productos Editados</span>
+            </div>
+            <div class="sync-stat-card">
+              <span class="sync-stat-number" id="sync-stat-inv">0</span>
+              <span class="sync-stat-label">Artículos en Inventario</span>
+            </div>
+            <div class="sync-stat-card">
+              <span class="sync-stat-number" id="sync-stat-slides">0</span>
+              <span class="sync-stat-label">Banners de Inicio</span>
+            </div>
+          </div>
+
+          <!-- Instrucciones Claras: Cómo transferir los cambios del dueño -->
+          <div class="admin-card sync-guide-card" style="margin-top: 20px; padding: 24px;">
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 16px;">
+              <div class="sync-guide-icon-badge">
+                <i class="fas fa-mobile-screen-button"></i>
+              </div>
+              <div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--admin-text-main); margin-bottom: 4px;">
+                  ¿Cómo ver en tu dispositivo los cambios que hizo el dueño en su celular o computadora?
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--admin-text-muted); margin: 0;">
+                  Cuando el dueño hace cambios en su navegador, estos se guardan de forma segura en su dispositivo. Para reflejarlos de inmediato en el tuyo:
+                </p>
+              </div>
+            </div>
+
+            <div class="sync-steps-grid">
+              <div class="sync-step-item">
+                <div class="sync-step-num">1</div>
+                <div class="sync-step-text">
+                  <b>En el dispositivo del dueño:</b>
+                  <span>Ingresar al panel de administración y presionar <b>"Copiar Enlace Directo"</b> (o "Copiar Código de Cambios").</span>
+                </div>
+              </div>
+              <div class="sync-step-item">
+                <div class="sync-step-num">2</div>
+                <div class="sync-step-text">
+                  <b>Enviar por WhatsApp o mensaje:</b>
+                  <span>El dueño te envía el enlace o código generado por WhatsApp en 1 solo paso.</span>
+                </div>
+              </div>
+              <div class="sync-step-item">
+                <div class="sync-step-num">3</div>
+                <div class="sync-step-text">
+                  <b>En tu dispositivo:</b>
+                  <span>Abrir el enlace directo en tu celular o PC (o presionar <b>"Pegar / Importar Cambios"</b> en este panel). ¡Los productos, precios, fotos y banners se actualizarán al instante!</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="sync-actions-inline" style="margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
+              <button type="button" class="btn-admin btn-admin-gold" onclick="copyAdminSyncLink()">
+                <i class="fab fa-whatsapp"></i> Generar Enlace para Enviar por WhatsApp
+              </button>
+              <button type="button" class="btn-admin btn-admin-outline" onclick="openImportSyncModal()">
+                <i class="fas fa-paste"></i> Pegar Código Recibido
+              </button>
+            </div>
+          </div>
+
+          <!-- Tarjeta de Respaldos JSON -->
+          <div class="admin-card" style="margin-top: 20px; padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--admin-text-main); margin-bottom: 4px;">
+                  <i class="fas fa-box-archive" style="color: var(--admin-gold);"></i> Copias de Seguridad del Catálogo (Archivos JSON)
+                </h3>
+                <p style="font-size: 0.84rem; color: var(--admin-text-muted); margin: 0;">
+                  Descargá un archivo con todos los productos, categorías, fotos, stock y precios configurados, o restauralo en cualquier momento.
+                </p>
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button type="button" class="btn-admin btn-admin-outline" onclick="exportAdminBackupJson()">
+                  <i class="fas fa-download"></i> Descargar Respaldo (.json)
+                </button>
+                <button type="button" class="btn-admin btn-admin-outline" onclick="triggerImportBackupFileInput()">
+                  <i class="fas fa-upload"></i> Restaurar Respaldo (.json)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tarjeta de Configuración de Servidor & Nube -->
+          <div class="admin-card" style="margin-top: 20px; padding: 24px;">
+            <div style="margin-bottom: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+                <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--admin-text-main); margin: 0;">
+                  <i class="fas fa-server" style="color: var(--admin-gold);"></i> Conexión con Servidor & Nube
+                </h3>
+                <div id="sync-server-status-badge" class="sync-status-badge">
+                  <span class="sync-dot dot-local"></span> Verificando conexión...
+                </div>
+              </div>
+              <p style="font-size: 0.84rem; color: var(--admin-text-muted); margin: 0;">
+                Última sincronización registrada: <b id="sync-stat-date" style="color: var(--admin-text-main);">Verificando...</b>
+              </p>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 14px;">
+              <div style="flex: 1; min-width: 260px;">
+                <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--admin-text-muted); margin-bottom: 6px;">
+                  URL Personalizada de API / Backend (opcional para redes locales o túneles):
+                </label>
+                <input type="url" id="sync-custom-api-input" class="admin-form-input" placeholder="Ej: http://192.168.0.211:5000/api o https://tu-backend.com/api" />
+              </div>
+              <button type="button" class="btn-admin btn-admin-primary" onclick="saveCustomApiUrl()">
+                <i class="fas fa-save"></i> Guardar Servidor
+              </button>
+              <button type="button" class="btn-admin btn-admin-outline" onclick="resetCustomApiUrl()" title="Restablecer a automático">
+                <i class="fas fa-rotate-left"></i> Restablecer
+              </button>
+              <button type="button" class="btn-admin btn-admin-gold" onclick="forceAdminCloudSync()" id="btn-force-server-sync">
+                <i class="fas fa-arrows-rotate" id="admin-sync-icon"></i> <span id="admin-sync-label">Sincronizar Ahora</span>
+              </button>
+            </div>
+
+            <div style="background: rgba(184, 134, 11, 0.08); border: 1px solid rgba(184, 134, 11, 0.25); border-radius: var(--radius-md); padding: 14px; font-size: 0.82rem; color: var(--admin-text-main); line-height: 1.5;">
+              <i class="fas fa-info-circle" style="color: var(--admin-gold); margin-right: 6px;"></i>
+              <b>Persistencia 24/7 en Vercel:</b> Si la web está desplegada en Vercel sin servidor local encendido, podés agregar la variable de entorno <code>GITHUB_TOKEN</code> o <code>KV_REST_API_URL</code> en Vercel para que cada cambio guardado en el admin se autoguarde permanentemente en la nube y se refleje en todo el mundo sin necesidad de enlaces.
+            </div>
+          </div>
+        </section>
+
       </div>
     </main>
   </div>
@@ -1669,6 +1833,37 @@
     </div>
   </div>
 
+
+  <!-- ==========================================================================
+       MODAL: IMPORTAR / PEGAR CAMBIOS DE SINCRONIZACIÓN
+       ========================================================================== -->
+  <div class="admin-modal-overlay" id="import-sync-modal" style="display: none;">
+    <div class="admin-modal-card" style="max-width: 600px;">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title" id="sync-modal-title">
+          <i class="fas fa-file-import" style="color: var(--admin-gold);"></i> Pegar Cambios de Otro Dispositivo
+        </h3>
+        <button type="button" class="btn-modal-close" onclick="closeImportSyncModal()" aria-label="Cerrar modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="admin-modal-body">
+        <p style="font-size: 0.85rem; color: var(--admin-text-muted); margin-bottom: 12px; line-height: 1.5;">
+          Pegá aquí el código de sincronización o el enlace directo que te envió el dueño de la web desde su celular o computadora. Al aplicar, todos los productos creados, precios editados, fotos y categorías se reflejarán de inmediato en este dispositivo.
+        </p>
+        <textarea id="sync-import-textarea" class="admin-form-input" style="height: 180px; font-family: monospace; font-size: 0.8rem; resize: vertical; line-height: 1.4;" placeholder="Pegá el código de sincronización o enlace aquí..."></textarea>
+      </div>
+      <div class="admin-modal-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn-admin btn-admin-outline" onclick="closeImportSyncModal()">Cancelar</button>
+        <button type="button" class="btn-admin btn-admin-gold" id="sync-apply-btn" onclick="applyAdminImportSync()">
+          <i class="fas fa-check"></i> Aplicar y Sincronizar Catálogo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input oculto para carga de respaldos JSON -->
+  <input type="file" id="sync-backup-file-input" accept=".json" style="display:none;" onchange="handleBackupFileUpload(event)" />
 
   <!-- Toast Notification Box -->
   <div class="admin-toast-box" id="admin-toast-box"></div>

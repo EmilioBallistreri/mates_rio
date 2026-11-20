@@ -28,8 +28,13 @@ function runAutoGitPush() {
 
   const cmd = 'git add "backend-mates-rio/src/data/storeState.json" "frontend-mates-rio/assets/store-state.json" && git commit -m "chore(sync): sincronizacion automatica de cambios del panel admin" && git push origin HEAD';
 
-  exec(cmd, { cwd: repoRootPath }, (err) => {
+  exec(cmd, { cwd: repoRootPath }, (err, stdout, stderr) => {
     gitPushInProgress = false;
+    if (err) {
+      console.log('Aviso Auto-Git:', err.message);
+    } else {
+      console.log('🚀 Cambios sincronizados y subidos a GitHub:', stdout ? stdout.trim() : 'OK');
+    }
     if (gitPushPending) {
       gitPushPending = false;
       scheduleAutoGitPush();

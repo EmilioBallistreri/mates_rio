@@ -980,6 +980,10 @@ window.syncProductsFromStorage = syncProductsFromStorage;
 
   function getCandidateApiUrls() {
     const urls = [];
+    const customUrl = typeof localStorage !== 'undefined' ? localStorage.getItem('mates_rio_custom_api_url') : null;
+    if (customUrl) {
+      urls.push(customUrl.replace(/\/$/, '') + (customUrl.includes('/store-state') ? '' : '/store-state'));
+    }
     if (window.MATES_RIO_API_URL) {
       urls.push(window.MATES_RIO_API_URL.replace(/\/$/, '') + '/store-state');
     }
@@ -1005,7 +1009,7 @@ window.syncProductsFromStorage = syncProductsFromStorage;
     } else {
       urls.push('http://localhost:5000/api/store-state');
     }
-    return [...new Set(urls)];
+    return [...new Set(urls.filter(Boolean))];
   }
 
   let activeApiUrl = null;
@@ -1285,6 +1289,14 @@ window.syncProductsFromStorage = syncProductsFromStorage;
     const serverUpdated = Number(serverState.updatedAt || 0);
     const serverVersion = Number(serverState.version || 0);
     const { payload, hasAdminCustomizations } = collectLocalStoreState();
+    const localUpdated = Number(localStorage.getItem('mates_rio_state_updated_at') || 0);
+
+    // Si el dispositivo local tiene personalizaciones del admin más recientes que el servidor, preservarlas y subirlas al servidor
+    if (hasAdminCustomizations && localUpdated > serverUpdated) {
+      hasCompletedInitialPull = true;
+      await pushStoreStateToServer(payload);
+      return;
+    }
 
     // Si el servidor aún no fue inicializado (updatedAt === 0) y este navegador tiene personalizaciones del admin, inicializar servidor
     if (serverUpdated === 0 && hasAdminCustomizations) {
@@ -1299,6 +1311,45 @@ window.syncProductsFromStorage = syncProductsFromStorage;
       hasCompletedInitialPull = true;
     } else {
       hasCompletedInitialPull = true;
+    }
+  }
+
+  // Comprobar si la URL trae un hash de sincronización directa (#sync=...)
+  function checkUrlSyncHash() {
+    if (typeof window === 'undefined' || !window.location || !window.location.hash) return;
+    const hash = window.location.hash;
+    if (hash.startsWith('#sync=')) {
+      const raw = hash.substring(6);
+      try {
+        let parsed = null;
+        try {
+          const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(raw))));
+          parsed = JSON.parse(jsonStr);
+        } catch (e1) {
+          try {
+            parsed = JSON.parse(decodeURIComponent(raw));
+          } catch (e2) {}
+        }
+
+        if (parsed && typeof parsed === 'object') {
+          const dataToApply = parsed.data || parsed;
+          applyRemoteStateToLocal(dataToApply);
+          try {
+            const cleanUrl = window.location.pathname + window.location.search;
+            if (window.history && window.history.replaceState) {
+              window.history.replaceState(null, '', cleanUrl);
+            } else {
+              window.location.hash = '';
+            }
+          } catch (err) {}
+          pushStoreStateToServer(dataToApply);
+          if (typeof window.showAdminToast === 'function') {
+            window.showAdminToast('¡Catálogo sincronizado exitosamente desde el enlace directo!', 'fa-cloud-arrow-down');
+          }
+        }
+      } catch (err) {
+        console.warn('No se pudo decodificar el enlace de sincronización:', err);
+      }
     }
   }
 
@@ -1356,11 +1407,15 @@ window.syncProductsFromStorage = syncProductsFromStorage;
     };
   }
 
+  window.addEventListener('hashchange', checkUrlSyncHash);
+  checkUrlSyncHash();
+
   // Sincronizar inmediatamente al cargar, al enfocar o cambiar visibilidad, y cada 2.5 segundos
   pullStoreStateFromServer();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
+      checkUrlSyncHash();
       pullStoreStateFromServer();
     });
   }
@@ -1380,6 +1435,110 @@ window.syncProductsFromStorage = syncProductsFromStorage;
       pullStoreStateFromServer();
     }
   }, 2500);
+
+  // Gestor unificado de sincronización y respaldo
+  window.MatesRioSyncManager = {
+    exportData() {
+      const { payload } = collectLocalStoreState();
+      return {
+        brand: 'Mates Río',
+        version: lastKnownServerVersion || 1,
+        updatedAt: Number(localStorage.getItem('mates_rio_state_updated_at') || Date.now()),
+        exportedAt: new Date().toISOString(),
+        data: payload
+      };
+    },
+
+    exportString() {
+      const full = this.exportData();
+      return JSON.stringify(full, null, 2);
+    },
+
+    exportCompactToken() {
+      const full = this.exportData();
+      try {
+        return btoa(unescape(encodeURIComponent(JSON.stringify(full))));
+      } catch (e) {
+        return JSON.stringify(full);
+      }
+    },
+
+    generateShareLink() {
+      const token = this.exportCompactToken();
+      const origin = window.location.origin;
+      const path = window.location.pathname.replace(/admin\.html$/, 'index.html');
+      return `${origin}${path}#sync=${encodeURIComponent(token)}`;
+    },
+
+    importData(rawInput) {
+      if (!rawInput || typeof rawInput !== 'string') return false;
+      let text = rawInput.trim();
+
+      // Si es un enlace completo con #sync=...
+      if (text.includes('#sync=')) {
+        text = text.split('#sync=')[1];
+      }
+
+      let parsed = null;
+      try {
+        const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(text))));
+        parsed = JSON.parse(jsonStr);
+      } catch (e1) {
+        try {
+          parsed = JSON.parse(text);
+        } catch (e2) {}
+      }
+
+      if (!parsed || typeof parsed !== 'object') {
+        throw new Error('El formato del código o archivo no es válido.');
+      }
+
+      const storeObj = parsed.data && typeof parsed.data === 'object' ? parsed.data : parsed;
+      applyRemoteStateToLocal(storeObj);
+      pushStoreStateToServer(storeObj);
+      return true;
+    },
+
+    downloadBackup() {
+      const jsonStr = this.exportString();
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const now = new Date();
+      const dateStr = now.toISOString().slice(0, 10);
+      a.href = url;
+      a.download = `mates_rio_respaldo_catalogo_${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 200);
+    },
+
+    getStats() {
+      const { payload, hasAdminCustomizations } = collectLocalStoreState();
+      const customCount = Array.isArray(payload.customProducts) ? payload.customProducts.length : 0;
+      const editedCount = payload.editedProducts && typeof payload.editedProducts === 'object' ? Object.keys(payload.editedProducts).length : 0;
+      const invCount = payload.inventory && typeof payload.inventory === 'object' ? Object.keys(payload.inventory).length : 0;
+      const slidesCount = Array.isArray(payload.homeSlides) ? payload.homeSlides.length : 0;
+      const lastTs = Number(localStorage.getItem('mates_rio_state_updated_at') || lastKnownServerTimestamp || 0);
+
+      return {
+        hasAdminCustomizations,
+        customCount,
+        editedCount,
+        invCount,
+        slidesCount,
+        lastUpdatedAt: lastTs,
+        activeApiUrl: activeApiUrl || 'Local / Ephemeral'
+      };
+    },
+
+    syncNow() {
+      return flushPendingPatchesNow().then(() => pullStoreStateFromServer());
+    }
+  };
 
   window.MatesRioCloudSync = {
     pull: pullStoreStateFromServer,

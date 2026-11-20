@@ -326,7 +326,8 @@ const ADMIN_SECTION_LABELS = {
   stats: 'Estadísticas & Rendimiento',
   'home-design': 'Diseño & Inicio Web',
   users: 'Clientes & Accesos',
-  audit: 'Registro de Actividad'
+  audit: 'Registro de Actividad',
+  sync: 'Sincronización & Multi-Dispositivos'
 };
 
 function updateAdminBackButtonsUI() {
@@ -430,6 +431,7 @@ function switchAdminSection(sectionId, fromNotifBell = false, isGoingBack = fals
   if (sectionId === 'home-design') renderHomeDesignSection();
   if (sectionId === 'users') renderUsersTable();
   if (sectionId === 'audit') renderAuditTable();
+  if (sectionId === 'sync') renderSyncSection();
 
   // Close mobile sidebar if open
   closeMobileSidebar();
@@ -4274,4 +4276,211 @@ switchDesignTab = function(tabName) {
 
 document.addEventListener('DOMContentLoaded', () => {
   injectCustomizerPricingAdminPanel();
+  updateAdminTopSyncBadge();
+  setInterval(updateAdminTopSyncBadge, 4000);
 });
+
+// ==========================================================================
+// 10. GESTOR DE SINCRONIZACIÓN MULTI-DISPOSITIVOS & RESPALDOS
+// ==========================================================================
+function renderSyncSection() {
+  if (!window.MatesRioSyncManager) return;
+  const stats = window.MatesRioSyncManager.getStats();
+
+  const customEl = document.getElementById('sync-stat-custom');
+  const editedEl = document.getElementById('sync-stat-edited');
+  const invEl = document.getElementById('sync-stat-inv');
+  const slidesEl = document.getElementById('sync-stat-slides');
+  const dateEl = document.getElementById('sync-stat-date');
+  const apiInput = document.getElementById('sync-custom-api-input');
+  const statusBadge = document.getElementById('sync-server-status-badge');
+
+  if (customEl) customEl.textContent = stats.customCount;
+  if (editedEl) editedEl.textContent = stats.editedCount;
+  if (invEl) invEl.textContent = stats.invCount;
+  if (slidesEl) slidesEl.textContent = stats.slidesCount;
+
+  if (dateEl) {
+    if (stats.lastUpdatedAt > 0) {
+      const d = new Date(stats.lastUpdatedAt);
+      dateEl.textContent = d.toLocaleString('es-AR');
+    } else {
+      dateEl.textContent = 'Sin sincronizaciones previas';
+    }
+  }
+
+  const storedCustom = localStorage.getItem('mates_rio_custom_api_url') || '';
+  if (apiInput && !apiInput.value) {
+    apiInput.value = storedCustom;
+  }
+
+  if (statusBadge) {
+    const isOnline = stats.activeApiUrl && !stats.activeApiUrl.includes('Ephemeral');
+    statusBadge.innerHTML = isOnline
+      ? `<span class="sync-dot dot-online"></span> Conectado a Servidor (${stats.activeApiUrl})`
+      : `<span class="sync-dot dot-local"></span> Almacenamiento Local Activo`;
+  }
+
+  updateAdminTopSyncBadge();
+}
+
+function updateAdminTopSyncBadge() {
+  const pill = document.getElementById('admin-topbar-sync-status');
+  if (!pill || !window.MatesRioSyncManager) return;
+  const stats = window.MatesRioSyncManager.getStats();
+
+  if (stats.hasAdminCustomizations) {
+    pill.classList.remove('status-offline');
+    pill.classList.add('status-active');
+    pill.innerHTML = `<i class="fas fa-arrows-rotate"></i> <span>${stats.customCount + stats.editedCount} Cambios Activos</span>`;
+    pill.title = 'Hacé clic para ver o transferir cambios entre dispositivos';
+  } else {
+    pill.classList.remove('status-active');
+    pill.classList.add('status-offline');
+    pill.innerHTML = `<i class="fas fa-circle-check"></i> <span>Catálogo Sincronizado</span>`;
+    pill.title = 'Todos los dispositivos están sincronizados';
+  }
+}
+
+async function copyAdminSyncCode() {
+  try {
+    if (!window.MatesRioSyncManager) return;
+    const token = window.MatesRioSyncManager.exportCompactToken();
+    await navigator.clipboard.writeText(token);
+    showAdminToast('¡Código de sincronización copiado al portapapeles! Pegalo en el otro dispositivo para aplicar los cambios.', 'fa-copy');
+  } catch (err) {
+    console.error('Error copiando código:', err);
+    // Fallback: mostrar modal con textarea
+    openImportSyncModal(true);
+  }
+}
+
+async function copyAdminSyncLink() {
+  try {
+    if (!window.MatesRioSyncManager) return;
+    const link = window.MatesRioSyncManager.generateShareLink();
+    await navigator.clipboard.writeText(link);
+    showAdminToast('¡Enlace directo copiado! Abrilo en cualquier teléfono o computadora para sincronizarlo en 1 clic.', 'fa-link');
+  } catch (err) {
+    console.error('Error copiando enlace:', err);
+    showAdminToast('No se pudo copiar el enlace automáticamente al portapapeles.', 'fa-triangle-exclamation');
+  }
+}
+
+function openImportSyncModal(isExport = false) {
+  const modal = document.getElementById('import-sync-modal');
+  const textarea = document.getElementById('sync-import-textarea');
+  const title = document.getElementById('sync-modal-title');
+  const applyBtn = document.getElementById('sync-apply-btn');
+
+  if (modal) modal.style.display = 'flex';
+  if (textarea) {
+    if (isExport && window.MatesRioSyncManager) {
+      textarea.value = window.MatesRioSyncManager.exportCompactToken();
+      textarea.select();
+      if (title) title.innerHTML = '<i class="fas fa-share-nodes"></i> Código de Sincronización para Compartir';
+      if (applyBtn) applyBtn.style.display = 'none';
+    } else {
+      textarea.value = '';
+      textarea.placeholder = 'Pegá aquí el código de sincronización o el enlace directo enviado por el dueño de la web...';
+      if (title) title.innerHTML = '<i class="fas fa-file-import"></i> Pegar Cambios de Otro Dispositivo';
+      if (applyBtn) applyBtn.style.display = 'inline-flex';
+    }
+  }
+}
+
+function closeImportSyncModal() {
+  const modal = document.getElementById('import-sync-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function applyAdminImportSync() {
+  const textarea = document.getElementById('sync-import-textarea');
+  const val = (textarea?.value || '').trim();
+  if (!val) {
+    showAdminToast('Por favor pegá el código o enlace antes de aplicar.', 'fa-triangle-exclamation');
+    return;
+  }
+
+  try {
+    if (!window.MatesRioSyncManager) throw new Error('Gestor de sincronización no disponible');
+    window.MatesRioSyncManager.importData(val);
+    closeImportSyncModal();
+    renderInventoryTable();
+    renderAdminSlidesList();
+    renderAdminCategoriesGrid();
+    renderSyncSection();
+    showAdminToast('¡Cambios importados y aplicados con éxito en todo el catálogo!', 'fa-circle-check');
+    logAuditAction('Importación de Sincronización', 'Se aplicaron cambios transferidos desde otro dispositivo');
+  } catch (err) {
+    console.error('Error importando sincronización:', err);
+    showAdminToast('El código ingresado no es válido. Verificá que esté completo.', 'fa-triangle-exclamation');
+  }
+}
+
+function exportAdminBackupJson() {
+  if (window.MatesRioSyncManager) {
+    window.MatesRioSyncManager.downloadBackup();
+    showAdminToast('¡Descarga de respaldo iniciada!', 'fa-download');
+    logAuditAction('Respaldo de Catálogo', 'Se descargó una copia de seguridad en formato JSON');
+  }
+}
+
+function triggerImportBackupFileInput() {
+  const input = document.getElementById('sync-backup-file-input');
+  if (input) input.click();
+}
+
+function handleBackupFileUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const content = e.target.result;
+      if (window.MatesRioSyncManager) {
+        window.MatesRioSyncManager.importData(content);
+        renderInventoryTable();
+        renderAdminSlidesList();
+        renderAdminCategoriesGrid();
+        renderSyncSection();
+        showAdminToast('¡Respaldo JSON restaurado y aplicado exitosamente!', 'fa-circle-check');
+        logAuditAction('Restauración de Respaldo', `Se cargó el archivo ${file.name}`);
+      }
+    } catch (err) {
+      console.error('Error leyendo archivo de respaldo:', err);
+      showAdminToast('El archivo seleccionado no tiene un formato válido de respaldo.', 'fa-triangle-exclamation');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function saveCustomApiUrl() {
+  const input = document.getElementById('sync-custom-api-input');
+  const val = (input?.value || '').trim();
+  if (val) {
+    localStorage.setItem('mates_rio_custom_api_url', val);
+    showAdminToast('URL de servidor personalizada guardada.', 'fa-check');
+  } else {
+    localStorage.removeItem('mates_rio_custom_api_url');
+    showAdminToast('URL de servidor restablecida al valor por defecto.', 'fa-check');
+  }
+  if (window.MatesRioCloudSync && typeof window.MatesRioCloudSync.pull === 'function') {
+    window.MatesRioCloudSync.pull();
+  }
+  renderSyncSection();
+}
+
+function resetCustomApiUrl() {
+  const input = document.getElementById('sync-custom-api-input');
+  if (input) input.value = '';
+  localStorage.removeItem('mates_rio_custom_api_url');
+  showAdminToast('URL de servidor restablecida a automática.', 'fa-rotate-left');
+  if (window.MatesRioCloudSync && typeof window.MatesRioCloudSync.pull === 'function') {
+    window.MatesRioCloudSync.pull();
+  }
+  renderSyncSection();
+}
+
