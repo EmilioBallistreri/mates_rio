@@ -5026,6 +5026,20 @@ function handleCustIconSvgFileUpload(e) {
   reader.readAsText(file);
 }
 
+function handleCustIconDrop(e, mode) {
+  if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    const file = e.dataTransfer.files[0];
+    if (mode === 'svg' || file.name.endsWith('.svg') || file.type === 'image/svg+xml') {
+      const fakeEvt = { target: { files: [file] } };
+      handleCustIconSvgFileUpload(fakeEvt);
+    } else {
+      const fakeEvt = { target: { files: [file] } };
+      handleCustIconRasterUpload(fakeEvt);
+    }
+  }
+}
+window.handleCustIconDrop = handleCustIconDrop;
+
 function handleCustIconRasterUpload(e) {
   const file = e.target.files && e.target.files[0];
   if (!file) return;

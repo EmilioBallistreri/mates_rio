@@ -299,6 +299,7 @@ function initStudioEngine() {
 
   // 4. Iniciar eventos del lienzo
   initCanvasInteraction();
+  initCanvasDragDrop();
   init360CanvasEvents();
 
   // 5. Renderizado inicial
@@ -821,10 +822,14 @@ function renderRibbonQuickDesigns(catKey) {
     return;
   }
 
-  // ITEM 2: ÚNICAMENTE ÍCONOS, SIN NINGÚN NOMBRE O TEXTO
+  // ITEM 2: ÚNICAMENTE ÍCONOS, SIN NINGÚN NOMBRE O TEXTO (Arrastrables al lienzo)
   container.innerHTML = items.map(item => `
-    <button type="button" class="ribbon-icon-quick-btn" onclick="addVectorToVirola('${item.id}', '${catKey}')" title="${item.name}">
-      <img src="${item.file}" alt="${item.name}" loading="lazy" />
+    <button type="button" class="ribbon-icon-quick-btn" 
+      draggable="true" 
+      ondragstart="handleRibbonDesignDragStart(event, '${item.id}', '${catKey}')"
+      onclick="addVectorToVirola('${item.id}', '${catKey}')" 
+      title="${item.name} • Hacé clic o arrastralo directamente a la superficie">
+      <img src="${item.file}" alt="${item.name}" loading="lazy" draggable="false" />
     </button>
   `).join('');
 }
@@ -1855,15 +1860,18 @@ function renderModalCatalogGrid(catKey) {
     return;
   }
 
-  // ITEM 1: Cuadrícula ultra profesional con miniaturas acotadas y elegantes
+  // ITEM 1: Cuadrícula ultra profesional con miniaturas acotadas y elegantes (Arrastrables)
   grid.innerHTML = itemsToRender.map(item => {
     const clickAction = item.isTemplate
       ? `applyVirolaPresetTemplate('${item.templateId || item.id}'); closeDesignCatalogModal();`
       : `addVectorToVirola('${item.id}'); closeDesignCatalogModal();`;
+    const dragAttr = !item.isTemplate
+      ? `draggable="true" ondragstart="handleRibbonDesignDragStart(event, '${item.id}', 'all'); closeDesignCatalogModal();"`
+      : '';
     return `
-      <div class="vector-icon-card ${item.isTemplate ? 'is-template-card' : ''}" onclick="${clickAction}" title="${item.name}">
+      <div class="vector-icon-card ${item.isTemplate ? 'is-template-card' : ''}" ${dragAttr} onclick="${clickAction}" title="${item.name} • Hacé clic o arrastralo al producto">
         <div class="vector-thumb-wrap">
-          <img src="${item.file}" alt="${item.name}" loading="lazy" />
+          <img src="${item.file}" alt="${item.name}" loading="lazy" draggable="false" />
         </div>
         <span class="vector-name">${item.name}</span>
         ${item.isTemplate ? '<small style="font-size:0.68rem;opacity:0.75;display:block;margin-top:2px;">Plantilla Completa</small>' : ''}
@@ -4232,9 +4240,18 @@ function escapeHtml(str) {
     return _origStartFreeItemDrag(itemId, e);
   };
 
-  // 6. Subida de imagen personalizada: eliminación total de bordes blancos y generación automática en Negro (Mate/Termo) y Blanco (Caja)
-  window.handleCustomImageUpload = function(e) {
-    const file = e.target.files && e.target.files[0];
+  // 6. Subida y arrastre de imagen personalizada: eliminación de bordes blancos, auto-vectorización monocrómica y colocación directa
+  function handleRibbonDesignDragStart(e, itemId, catKey) {
+    if (!e || !e.dataTransfer) return;
+    try {
+      e.dataTransfer.setData('application/json', JSON.stringify({ type: 'icon', itemId, catKey }));
+      e.dataTransfer.setData('text/plain', itemId);
+      e.dataTransfer.effectAllowed = 'copy';
+    } catch (err) {}
+  }
+  window.handleRibbonDesignDragStart = handleRibbonDesignDragStart;
+
+  function processAndAddCustomImageFile(file, dropCoords = null) {
     if (!file) return;
 
     const reader = new FileReader();
@@ -4332,23 +4349,53 @@ function escapeHtml(str) {
         }
 
         saveStudioHistoryState();
-        const placement = findNonOverlappingPosition('icon');
         const isBox = studio.activeProduct === 'caja';
+        const { cx, cy, rRing } = STUDIO_CONFIG;
+
+        let itemAngle = 0;
+        let itemRadius = rRing;
+        let itemX = 250;
+        let itemY = 265;
+
+        if (dropCoords && typeof dropCoords.x === 'number' && typeof dropCoords.y === 'number') {
+          if (studio.activeProduct === 'mate') {
+            const dx = dropCoords.x - cx;
+            const dy = dropCoords.y - cy;
+            let deg = (Math.atan2(dy, dx) * 180 / Math.PI);
+            deg = (deg + 360) % 360;
+            itemAngle = deg;
+            itemRadius = Math.max(140, Math.min(240, Math.hypot(dx, dy)));
+            const rad = (itemAngle * Math.PI) / 180;
+            itemX = cx + itemRadius * Math.cos(rad);
+            itemY = cy + itemRadius * Math.sin(rad);
+          } else {
+            itemX = Math.max(60, Math.min(440, dropCoords.x));
+            itemY = Math.max(60, Math.min(440, dropCoords.y));
+            itemAngle = 0;
+            itemRadius = 0;
+          }
+        } else {
+          const placement = findNonOverlappingPosition('icon');
+          itemAngle = studio.activeProduct === 'termo' ? 0 : placement.angle;
+          itemRadius = placement.radius;
+          itemX = studio.activeProduct === 'mate' ? placement.x : 250;
+          itemY = studio.activeProduct === 'mate' ? placement.y : 265;
+        }
 
         const newItem = {
           id: 'custom_img_' + Date.now(),
           type: 'icon',
           graphicId: 'custom_upload',
-          name: file.name.substring(0, 20),
+          name: (file.name || 'Logo personalizado').substring(0, 20),
           file: isBox ? processedWhiteDataUrl : processedBlackDataUrl,
           fileBlack: processedBlackDataUrl,
           fileWhite: processedWhiteDataUrl,
-          angle: studio.activeProduct === 'termo' ? 0 : placement.angle,
-          radius: placement.radius,
+          angle: itemAngle,
+          radius: itemRadius,
           rotation: 0,
           scale: 1.15,
-          x: studio.activeProduct === 'mate' ? placement.x : 250,
-          y: studio.activeProduct === 'mate' ? placement.y : 265
+          x: itemX,
+          y: itemY
         };
 
         studio.items.push(newItem);
@@ -4360,15 +4407,215 @@ function escapeHtml(str) {
         if (studio.viewMode === '360') render360Canvas();
         showNotificationToast(
           isBox
-            ? 'Imagen vectorizada en color blanco para grabado en Caja'
-            : 'Imagen vectorizada sin bordes blancos y lista para grabar',
+            ? 'Imagen colocada y vectorizada en blanco para Caja'
+            : '¡Imagen colocada y vectorizada lista para grabar!',
           'fa-circle-check'
         );
       };
       img.src = rawDataUrl;
     };
     reader.readAsDataURL(file);
+  }
+  window.processAndAddCustomImageFile = processAndAddCustomImageFile;
+
+  window.handleCustomImageUpload = function(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    processAndAddCustomImageFile(file, null);
+    if (e.target) e.target.value = '';
   };
+
+  function addVectorToVirolaAtCoords(itemId, catKey, dropCoords) {
+    let itemDef = null;
+    if (catKey && VECTOR_CATEGORIES[catKey]) {
+      itemDef = VECTOR_CATEGORIES[catKey].items.find(i => i.id === itemId);
+    }
+    if (!itemDef) {
+      for (const k of Object.keys(VECTOR_CATEGORIES)) {
+        const found = VECTOR_CATEGORIES[k].items.find(i => i.id === itemId);
+        if (found) {
+          itemDef = found;
+          break;
+        }
+      }
+    }
+    if (!itemDef) return;
+
+    if (itemDef.isTemplate) {
+      applyVirolaPresetTemplate(itemDef.templateId || itemDef.id);
+      return;
+    }
+
+    saveStudioHistoryState();
+    const { cx, cy, rRing } = STUDIO_CONFIG;
+
+    let itemAngle = 0;
+    let itemRadius = rRing;
+    let itemX = 250;
+    let itemY = 250;
+
+    if (dropCoords && typeof dropCoords.x === 'number' && typeof dropCoords.y === 'number') {
+      if (studio.activeProduct === 'mate') {
+        const dx = dropCoords.x - cx;
+        const dy = dropCoords.y - cy;
+        let deg = (Math.atan2(dy, dx) * 180 / Math.PI);
+        deg = (deg + 360) % 360;
+        itemAngle = deg;
+        itemRadius = Math.max(140, Math.min(240, Math.hypot(dx, dy)));
+        const rad = (itemAngle * Math.PI) / 180;
+        itemX = cx + itemRadius * Math.cos(rad);
+        itemY = cy + itemRadius * Math.sin(rad);
+      } else {
+        itemX = Math.max(60, Math.min(440, dropCoords.x));
+        itemY = Math.max(60, Math.min(440, dropCoords.y));
+        itemAngle = 0;
+        itemRadius = 0;
+      }
+    } else {
+      const placement = findNonOverlappingPosition('icon');
+      itemAngle = placement.angle;
+      itemRadius = placement.radius;
+      itemX = placement.x;
+      itemY = placement.y;
+    }
+
+    const newItem = {
+      id: 'icon_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+      type: 'icon',
+      graphicId: itemDef.id,
+      name: itemDef.name,
+      file: itemDef.file,
+      fileBlack: itemDef.fileBlack || itemDef.file,
+      fileWhite: itemDef.fileWhite || itemDef.file,
+      angle: itemAngle,
+      radius: itemRadius,
+      rotation: 0,
+      scale: 1.0,
+      x: itemX,
+      y: itemY
+    };
+
+    studio.items.push(newItem);
+    studio.activeItemId = newItem.id;
+
+    renderVirolaCanvas();
+    updateActiveItemFloatingBar();
+    updatePriceDisplay();
+    if (studio.viewMode === '360') render360Canvas();
+    showNotificationToast(`Diseño "${newItem.name}" colocado en la superficie`, 'fa-palette');
+  }
+  window.addVectorToVirolaAtCoords = addVectorToVirolaAtCoords;
+
+  function initCanvasDragDrop() {
+    const canvasWrap = document.getElementById('studio-canvas-wrap');
+    const overlay = document.getElementById('studio-canvas-drop-overlay');
+    if (!canvasWrap) return;
+
+    let dragCounter = 0;
+
+    function showOverlay(msg) {
+      if (overlay) {
+        overlay.style.display = 'flex';
+        const textEl = overlay.querySelector('h3');
+        if (textEl && msg) textEl.textContent = msg;
+      }
+    }
+
+    function hideOverlay() {
+      if (overlay) overlay.style.display = 'none';
+    }
+
+    // Prevenir apertura automática del archivo de imagen en el navegador al arrastrar
+    window.addEventListener('dragover', (e) => {
+      if (e.target && e.target.closest && (e.target.closest('.customizer-stage') || e.target.closest('#studio-canvas-wrap') || e.target.closest('.studio-stage-panel'))) {
+        e.preventDefault();
+      }
+    }, false);
+
+    window.addEventListener('drop', (e) => {
+      if (e.target && e.target.closest && (e.target.closest('.customizer-stage') || e.target.closest('#studio-canvas-wrap') || e.target.closest('.studio-stage-panel'))) {
+        e.preventDefault();
+      }
+    }, false);
+
+    canvasWrap.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      dragCounter++;
+      const isFile = e.dataTransfer && e.dataTransfer.types && Array.from(e.dataTransfer.types).includes('Files');
+      showOverlay(isFile ? 'Soltá tu imagen aquí para colocarla en el producto' : 'Soltá el diseño para colocarlo aquí');
+    });
+
+    canvasWrap.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+    });
+
+    canvasWrap.addEventListener('dragleave', (e) => {
+      dragCounter--;
+      if (dragCounter <= 0) {
+        dragCounter = 0;
+        hideOverlay();
+      }
+    });
+
+    canvasWrap.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dragCounter = 0;
+      hideOverlay();
+
+      const coords = getPointerCoords(e);
+
+      // 1. Archivo arrastrado desde la PC / Explorador
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        const file = e.dataTransfer.files[0];
+        if (file.type.startsWith('image/') || /\.(png|jpe?g|svg|webp|bmp)$/i.test(file.name)) {
+          processAndAddCustomImageFile(file, coords);
+          return;
+        }
+      }
+
+      // 2. Ícono interno arrastrado desde el Ribbon o Modal
+      try {
+        const rawData = e.dataTransfer.getData('application/json');
+        if (rawData) {
+          const payload = JSON.parse(rawData);
+          if (payload && payload.type === 'icon' && payload.itemId) {
+            addVectorToVirolaAtCoords(payload.itemId, payload.catKey, coords);
+            return;
+          }
+        }
+        const plainId = e.dataTransfer.getData('text/plain');
+        if (plainId) {
+          addVectorToVirolaAtCoords(plainId, null, coords);
+          return;
+        }
+      } catch (err) {}
+    });
+
+    // Dropzone del Ribbon (pestaña Subir)
+    const ribbonDropzone = document.getElementById('ribbon-custom-dropzone');
+    if (ribbonDropzone) {
+      ribbonDropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        ribbonDropzone.classList.add('dropzone-hover');
+        if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+      });
+      ribbonDropzone.addEventListener('dragleave', () => {
+        ribbonDropzone.classList.remove('dropzone-hover');
+      });
+      ribbonDropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        ribbonDropzone.classList.remove('dropzone-hover');
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          const file = e.dataTransfer.files[0];
+          if (file.type.startsWith('image/') || /\.(png|jpe?g|svg|webp|bmp)$/i.test(file.name)) {
+            processAndAddCustomImageFile(file, null);
+          }
+        }
+      });
+    }
+  }
+  window.initCanvasDragDrop = initCanvasDragDrop;
 
   function syncCurvatureControlsVisibility() {
     const curveBtn = document.querySelector('.active-text-curve-btn');

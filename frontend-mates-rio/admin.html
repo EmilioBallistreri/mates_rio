@@ -2056,10 +2056,14 @@
 
           <!-- MODO 1: Subir SVG -->
           <div id="icon-mode-svg-file" class="icon-vector-pane">
-            <div class="image-dropzone" style="padding: 22px; cursor: pointer; text-align: center;" onclick="document.getElementById('cust-icon-file-svg').click()">
+            <div class="image-dropzone" id="cust-icon-dropzone-svg" style="padding: 22px; cursor: pointer; text-align: center;" 
+              onclick="document.getElementById('cust-icon-file-svg').click()"
+              ondragover="event.preventDefault(); this.classList.add('dragover');"
+              ondragleave="this.classList.remove('dragover');"
+              ondrop="event.preventDefault(); this.classList.remove('dragover'); handleCustIconDrop(event, 'svg');">
               <input type="file" id="cust-icon-file-svg" accept=".svg,image/svg+xml" style="display: none;" onchange="handleCustIconSvgFileUpload(event)" />
               <i class="fas fa-cloud-arrow-up" style="font-size: 2rem; color: var(--admin-gold); margin-bottom: 6px;"></i>
-              <div style="font-weight: 700; font-size: 0.9rem;">Hacé clic para subir tu vector SVG (.svg)</div>
+              <div style="font-weight: 700; font-size: 0.9rem;">Hacé clic o arrastrá tu vector SVG (.svg) aquí</div>
               <small style="color: var(--admin-text-muted);">Acepta archivos vectoriales limpios listos para grabado láser</small>
             </div>
           </div>
@@ -2071,10 +2075,14 @@
 
           <!-- MODO 3: Silueta PNG / JPG con vectorización / binarización -->
           <div id="icon-mode-raster-file" class="icon-vector-pane" style="display: none;">
-            <div class="image-dropzone" style="padding: 22px; cursor: pointer; text-align: center;" onclick="document.getElementById('cust-icon-file-raster').click()">
+            <div class="image-dropzone" id="cust-icon-dropzone-raster" style="padding: 22px; cursor: pointer; text-align: center;" 
+              onclick="document.getElementById('cust-icon-file-raster').click()"
+              ondragover="event.preventDefault(); this.classList.add('dragover');"
+              ondragleave="this.classList.remove('dragover');"
+              ondrop="event.preventDefault(); this.classList.remove('dragover'); handleCustIconDrop(event, 'raster');">
               <input type="file" id="cust-icon-file-raster" accept="image/png,image/jpeg,image/webp" style="display: none;" onchange="handleCustIconRasterUpload(event)" />
               <i class="fas fa-wand-magic-sparkles" style="font-size: 2rem; color: var(--admin-gold); margin-bottom: 6px;"></i>
-              <div style="font-weight: 700; font-size: 0.9rem;">Subir imagen en blanco y negro (PNG / JPG)</div>
+              <div style="font-weight: 700; font-size: 0.9rem;">Hacé clic o arrastrá tu imagen (PNG / JPG) aquí</div>
               <small style="color: var(--admin-text-muted);">Se convertirá automáticamente en silueta limpia para grabado</small>
             </div>
           </div>

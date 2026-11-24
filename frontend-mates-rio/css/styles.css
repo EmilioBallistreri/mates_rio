@@ -12048,6 +12048,114 @@ body.theme-light .stage-mode-btn {
   z-index: 5;
 }
 
+/* Overlay interactivo de arrastre y colocación de imágenes */
+.studio-canvas-drop-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.85);
+  backdrop-filter: blur(8px);
+  border: 2.5px dashed var(--accent-gold, #c5a059);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  pointer-events: none;
+  animation: fadeInDrop 0.2s ease-out;
+}
+
+body.theme-light .studio-canvas-drop-overlay,
+html.theme-light .studio-canvas-drop-overlay {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--accent-gold, #c5a059);
+}
+
+.drop-overlay-content {
+  text-align: center;
+  padding: 24px;
+  max-width: 380px;
+}
+
+.drop-bounce-icon {
+  font-size: 3.2rem;
+  color: var(--accent-gold, #c5a059);
+  margin-bottom: 12px;
+  display: inline-block;
+  animation: bounceDrop 1.1s infinite ease-in-out;
+}
+
+@keyframes bounceDrop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes fadeInDrop {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.drop-overlay-content h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+body.theme-light .drop-overlay-content h3,
+html.theme-light .drop-overlay-content h3 {
+  color: #111111;
+}
+
+.drop-overlay-content p {
+  font-size: 0.85rem;
+  color: #e4e4e7;
+  margin: 0;
+}
+
+body.theme-light .drop-overlay-content p,
+html.theme-light .drop-overlay-content p {
+  color: #4b5563;
+}
+
+/* Dropzone de subida en la barra Ribbon */
+.ribbon-file-dropzone {
+  border: 1.5px dashed var(--border-color, #e4e4e7);
+  background: var(--bg-soft, #f8f9fa);
+  border-radius: 8px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ribbon-file-dropzone:hover,
+.ribbon-file-dropzone.dropzone-hover {
+  border-color: var(--accent-gold, #c5a059);
+  background: rgba(197, 160, 89, 0.08);
+  transform: translateY(-1px);
+}
+
+.ribbon-file-dropzone i {
+  font-size: 1.5rem;
+  color: var(--accent-gold, #c5a059);
+}
+
+.ribbon-file-dropzone strong {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main, #111111);
+}
+
+.ribbon-file-dropzone small {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted, #71717a);
+}
+
 .studio-svg-viewport {
   width: 100%;
   height: 100%;
