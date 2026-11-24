@@ -149,6 +149,11 @@
         </a>
 
         <div class="sidebar-nav-group-title">Administración & Diseño</div>
+        <a class="sidebar-nav-item" data-section="customizer" onclick="switchAdminSection('customizer')">
+          <i class="fas fa-wand-magic-sparkles"></i>
+          <span>Personalizador</span>
+          <span class="sidebar-badge badge-gold" id="sidebar-customizer-badge">Studio</span>
+        </a>
         <a class="sidebar-nav-item" data-section="home-design" onclick="switchAdminSection('home-design')">
           <i class="fas fa-palette"></i>
           <span>Diseño & Inicio Web</span>
@@ -1099,6 +1104,87 @@
         </section>
 
         <!-- ==========================================================================
+             SECCIÓN: PERSONALIZADOR, ÍCONOS & PLANTILLAS VECTORIALES
+             ========================================================================== -->
+        <section class="admin-section" id="sec-customizer">
+          <div class="section-head-bar">
+            <div>
+              <h2 class="section-page-title">Personalizador & Activos de Grabado Láser</h2>
+              <p class="section-page-desc">Administrá los íconos vectoriales y plantillas prediseñadas (mates, termos y cajas) que tus clientes eligen en la web.</p>
+            </div>
+            <div class="section-actions-group" style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" class="btn-admin btn-admin-gold" onclick="openCreateCustomizerIconModal()">
+                <i class="fas fa-plus"></i> Nuevo Ícono Vectorial
+              </button>
+              <button type="button" class="btn-admin btn-admin-primary" onclick="openCreateCustomizerTemplateModal()">
+                <i class="fas fa-layer-group"></i> Nueva Plantilla
+              </button>
+            </div>
+          </div>
+
+          <!-- Pestañas internas del Personalizador -->
+          <div class="home-design-tabs-bar" style="margin-bottom: 20px;">
+            <button type="button" class="home-design-tab-btn active" id="tab-btn-cust-icons" onclick="switchCustomizerAdminTab('icons')">
+              <i class="fas fa-icons"></i> Íconos & Diseños (<span id="cust-icons-count-badge">0</span>)
+            </button>
+            <button type="button" class="home-design-tab-btn" id="tab-btn-cust-templates" onclick="switchCustomizerAdminTab('templates')">
+              <i class="fas fa-cubes-stacked"></i> Plantillas por Producto (<span id="cust-templates-count-badge">0</span>)
+            </button>
+          </div>
+
+          <!-- PANEL 1: ÍCONOS Y DISEÑOS VECTORIALES -->
+          <div id="cust-panel-icons" class="cust-admin-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 14px; flex-wrap: wrap;">
+              <!-- Filtro de Categoría -->
+              <div id="cust-icons-cat-filters" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <!-- Populated dynamically via JS -->
+              </div>
+
+              <!-- Buscador de íconos -->
+              <div style="position: relative; width: 260px; max-width: 100%;">
+                <input type="text" id="cust-icons-search" class="admin-input" placeholder="Buscar ícono por nombre..." oninput="filterCustomizerIcons()" style="height: 38px; padding-left: 34px; font-size: 0.85rem;" />
+                <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--admin-text-muted); font-size: 0.8rem;"></i>
+              </div>
+            </div>
+
+            <!-- Grilla de Íconos -->
+            <div id="cust-icons-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px;">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- PANEL 2: PLANTILLAS PREDISEÑADAS -->
+          <div id="cust-panel-templates" class="cust-admin-panel" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 14px; flex-wrap: wrap;">
+              <!-- Filtro de Producto -->
+              <div id="cust-templates-prod-filters" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button type="button" class="btn-admin btn-admin-outline active btn-cust-prod-filter" data-prod="all" onclick="filterCustomizerTemplates('all', this)">
+                  Todos los Productos
+                </button>
+                <button type="button" class="btn-admin btn-admin-outline btn-cust-prod-filter" data-prod="mate" onclick="filterCustomizerTemplates('mate', this)">
+                  <i class="fas fa-mug-hot"></i> Mates (Virola)
+                </button>
+                <button type="button" class="btn-admin btn-admin-outline btn-cust-prod-filter" data-prod="termo" onclick="filterCustomizerTemplates('termo', this)">
+                  <i class="fas fa-bottle-water"></i> Termos
+                </button>
+                <button type="button" class="btn-admin btn-admin-outline btn-cust-prod-filter" data-prod="caja" onclick="filterCustomizerTemplates('caja', this)">
+                  <i class="fas fa-box"></i> Cajas de Madera
+                </button>
+              </div>
+
+              <span style="font-size: 0.82rem; color: var(--admin-text-muted);">
+                <i class="fas fa-info-circle"></i> Los clientes verán las plantillas que correspondan al producto seleccionado.
+              </span>
+            </div>
+
+            <!-- Grilla de Plantillas -->
+            <div id="cust-templates-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px;">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
              SECCIÓN: SINCRONIZACIÓN MULTI-DISPOSITIVOS & RESPALDOS
              ========================================================================== -->
         <section class="admin-section" id="sec-sync">
@@ -1904,7 +1990,210 @@
     </div>
   </div>
 
-  <!-- Input oculto para carga de respaldos JSON -->
+  <!-- ==========================================================================
+       MODAL: CREAR / EDITAR ÍCONO VECTORIAL
+       ========================================================================== -->
+  <div class="admin-modal-overlay" id="modal-customizer-icon" style="display: none;">
+    <div class="admin-modal-card" style="max-width: 620px;">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title" id="cust-icon-modal-title">
+          <i class="fas fa-icons" style="color: var(--admin-gold);"></i> Cargar Nuevo Ícono Vectorial
+        </h3>
+        <button type="button" class="btn-modal-close" onclick="closeCustomizerIconModal()" aria-label="Cerrar modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <form id="form-customizer-icon" onsubmit="handleSaveCustomizerIcon(event)">
+        <input type="hidden" id="cust-icon-edit-id" value="" />
+
+        <div class="admin-modal-body" style="padding: 18px 24px;">
+          <div class="admin-form-group" style="margin-bottom: 14px;">
+            <label class="admin-form-label" for="cust-icon-name">
+              Nombre del Ícono o Diseño <span style="color: var(--admin-danger);">*</span>
+            </label>
+            <input type="text" id="cust-icon-name" class="admin-input modal-input" placeholder="Ej: Escudo Belgrano, Flor de Ceibo, Logo Corporativo" required />
+          </div>
+
+          <div class="admin-form-group" style="margin-bottom: 14px;">
+            <label class="admin-form-label" for="cust-icon-cat-select">
+              Categoría del Personalizador <span style="color: var(--admin-danger);">*</span>
+            </label>
+            <select id="cust-icon-cat-select" class="admin-select modal-input" onchange="onCustomizerIconCatChange()" required>
+              <option value="deportes">🏆 Escudos Deportivos</option>
+              <option value="criollo">🇦🇷 Motivos Criollos & Tradición</option>
+              <option value="fauna">🦅 Fauna & Naturaleza</option>
+              <option value="simbolos">✨ Símbolos & Formas</option>
+              <option value="emojis">😊 Emojis</option>
+              <option value="__new__">+ Crear Nueva Categoría...</option>
+            </select>
+          </div>
+
+          <div class="admin-form-group" id="cust-icon-new-cat-wrap" style="display: none; margin-bottom: 14px;">
+            <label class="admin-form-label" for="cust-icon-new-cat-name">
+              Nombre de la Nueva Categoría <span style="color: var(--admin-danger);">*</span>
+            </label>
+            <input type="text" id="cust-icon-new-cat-name" class="admin-input modal-input" placeholder="Ej: 🎵 Música, 💼 Profesiones, 🌸 Flores" />
+          </div>
+
+          <!-- Pestañas de método de carga vectorial -->
+          <div style="margin-bottom: 12px;">
+            <label class="admin-form-label" style="font-weight: 700; margin-bottom: 8px;">
+              Contenido Vectorial (Láser Monocromo) <span style="color: var(--admin-danger);">*</span>
+            </label>
+            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
+              <button type="button" class="btn-admin btn-admin-outline active btn-cust-icon-mode" id="btn-mode-svg-file" onclick="switchIconVectorMode('svg_file')">
+                <i class="fas fa-file-code"></i> Subir Archivo SVG
+              </button>
+              <button type="button" class="btn-admin btn-admin-outline btn-cust-icon-mode" id="btn-mode-svg-code" onclick="switchIconVectorMode('svg_code')">
+                <i class="fas fa-code"></i> Pegar Código SVG
+              </button>
+              <button type="button" class="btn-admin btn-admin-outline btn-cust-icon-mode" id="btn-mode-raster-file" onclick="switchIconVectorMode('raster_file')">
+                <i class="fas fa-wand-magic-sparkles"></i> Silueta PNG / JPG
+              </button>
+            </div>
+          </div>
+
+          <!-- MODO 1: Subir SVG -->
+          <div id="icon-mode-svg-file" class="icon-vector-pane">
+            <div class="image-dropzone" style="padding: 22px; cursor: pointer; text-align: center;" onclick="document.getElementById('cust-icon-file-svg').click()">
+              <input type="file" id="cust-icon-file-svg" accept=".svg,image/svg+xml" style="display: none;" onchange="handleCustIconSvgFileUpload(event)" />
+              <i class="fas fa-cloud-arrow-up" style="font-size: 2rem; color: var(--admin-gold); margin-bottom: 6px;"></i>
+              <div style="font-weight: 700; font-size: 0.9rem;">Hacé clic para subir tu vector SVG (.svg)</div>
+              <small style="color: var(--admin-text-muted);">Acepta archivos vectoriales limpios listos para grabado láser</small>
+            </div>
+          </div>
+
+          <!-- MODO 2: Pegar Código SVG -->
+          <div id="icon-mode-svg-code" class="icon-vector-pane" style="display: none;">
+            <textarea id="cust-icon-code-input" class="admin-input" rows="4" style="font-family: monospace; font-size: 0.78rem; line-height: 1.4; resize: vertical;" placeholder='Pegá aquí el código <svg ...> o el <path d="..." /> del diseño...' oninput="onCustIconCodeInput()"></textarea>
+          </div>
+
+          <!-- MODO 3: Silueta PNG / JPG con vectorización / binarización -->
+          <div id="icon-mode-raster-file" class="icon-vector-pane" style="display: none;">
+            <div class="image-dropzone" style="padding: 22px; cursor: pointer; text-align: center;" onclick="document.getElementById('cust-icon-file-raster').click()">
+              <input type="file" id="cust-icon-file-raster" accept="image/png,image/jpeg,image/webp" style="display: none;" onchange="handleCustIconRasterUpload(event)" />
+              <i class="fas fa-wand-magic-sparkles" style="font-size: 2rem; color: var(--admin-gold); margin-bottom: 6px;"></i>
+              <div style="font-weight: 700; font-size: 0.9rem;">Subir imagen en blanco y negro (PNG / JPG)</div>
+              <small style="color: var(--admin-text-muted);">Se convertirá automáticamente en silueta limpia para grabado</small>
+            </div>
+          </div>
+
+          <!-- Cuadro de Previsualización Vectorial en Vivo -->
+          <div style="margin-top: 16px;">
+            <label class="admin-form-label" style="display: flex; justify-content: space-between; align-items: center;">
+              <span><i class="fas fa-eye"></i> Previsualización Vectorial (Grabado Láser):</span>
+              <span id="cust-icon-vector-status" style="font-size: 0.75rem; color: #16a34a; font-weight: 700;">Vector Válido</span>
+            </label>
+            <div id="cust-icon-preview-box" style="height: 140px; background: #ffffff; border: 1.5px solid #d4d4d8; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 12px; overflow: hidden;">
+              <span style="color: #71717a; font-size: 0.85rem;">Ningún vector cargado</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-modal-footer" style="padding: 16px 24px; display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-admin btn-admin-outline" onclick="closeCustomizerIconModal()">Cancelar</button>
+          <button type="submit" class="btn-admin btn-admin-gold" id="btn-save-cust-icon">
+            <i class="fas fa-save"></i> Guardar Ícono Vectorial
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: CREAR / EDITAR PLANTILLA PREDISEÑADA POR PRODUCTO
+       ========================================================================== -->
+  <div class="admin-modal-overlay" id="modal-customizer-template" style="display: none;">
+    <div class="admin-modal-card admin-modal-lg" style="max-width: 820px;">
+      <div class="admin-modal-header">
+        <h3 class="admin-modal-title" id="cust-template-modal-title">
+          <i class="fas fa-layer-group" style="color: var(--admin-gold);"></i> Cargar Nueva Plantilla Prediseñada
+        </h3>
+        <button type="button" class="btn-modal-close" onclick="closeCustomizerTemplateModal()" aria-label="Cerrar modal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <form id="form-customizer-template" onsubmit="handleSaveCustomizerTemplate(event)">
+        <input type="hidden" id="cust-template-edit-id" value="" />
+
+        <div class="admin-modal-body" style="padding: 18px 24px;">
+          <div class="admin-form-grid-2" style="margin-bottom: 14px;">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="cust-tpl-product">
+                Producto Destino <span style="color: var(--admin-danger);">*</span>
+              </label>
+              <select id="cust-tpl-product" class="admin-select modal-input" onchange="onCustomizerTemplateProductChange()" required>
+                <option value="mate">Virola de Mate (Circular 360°)</option>
+                <option value="termo">Termo de Acero Inoxidable</option>
+                <option value="caja">Caja de Madera / Packaging</option>
+              </select>
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="cust-tpl-name">
+                Nombre de la Plantilla <span style="color: var(--admin-danger);">*</span>
+              </label>
+              <input type="text" id="cust-tpl-name" class="admin-input modal-input" placeholder="Ej: 3 Estrellas AFA & Escarapela" required />
+            </div>
+          </div>
+
+          <div class="admin-form-group" style="margin-bottom: 18px;">
+            <label class="admin-form-label" for="cust-tpl-subtitle">
+              Subtítulo / Descripción Breve <small style="color: var(--admin-text-muted);">(Visible bajo el título)</small>
+            </label>
+            <input type="text" id="cust-tpl-subtitle" class="admin-input modal-input" placeholder="Ej: Virola con arcos y texto superior personalizado" />
+          </div>
+
+          <!-- Constructor de Elementos de la Plantilla -->
+          <div style="background: var(--admin-bg-darker); border: 1px solid var(--admin-border); border-radius: 12px; padding: 16px; margin-bottom: 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <strong style="font-size: 0.92rem; color: var(--admin-text-main);">
+                  <i class="fas fa-cubes-stacked"></i> Elementos Vectoriales de la Plantilla
+                </strong>
+                <div style="font-size: 0.78rem; color: var(--admin-text-muted);">
+                  Agregá los textos y diseños que se colocarán automáticamente al elegir esta plantilla.
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn-admin btn-admin-outline" onclick="addTemplateTextElement()" style="font-size: 0.82rem; padding: 6px 12px;">
+                  <i class="fas fa-font"></i> + Agregar Texto
+                </button>
+                <button type="button" class="btn-admin btn-admin-gold" onclick="addTemplateIconElement()" style="font-size: 0.82rem; padding: 6px 12px;">
+                  <i class="fas fa-shield-halved"></i> + Agregar Ícono
+                </button>
+              </div>
+            </div>
+
+            <!-- Lista interactiva de elementos -->
+            <div id="cust-tpl-elements-container" style="display: flex; flex-direction: column; gap: 10px;">
+              <!-- Element rows populated via JS -->
+            </div>
+          </div>
+
+          <!-- Previsualizador de la Plantilla en Vivo -->
+          <div>
+            <label class="admin-form-label" style="display: flex; justify-content: space-between; align-items: center;">
+              <span><i class="fas fa-eye"></i> Previsualización Vectorial del Grabado:</span>
+              <span id="cust-tpl-preview-status" style="font-size: 0.75rem; color: var(--admin-gold);">Simulación en tiempo real</span>
+            </label>
+            <div id="cust-tpl-preview-box" style="height: 180px; background: #ffffff; border: 1.5px solid #d4d4d8; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 12px; overflow: hidden;">
+              <!-- Rendered via SVG in JS -->
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-modal-footer" style="padding: 16px 24px; display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn-admin btn-admin-outline" onclick="closeCustomizerTemplateModal()">Cancelar</button>
+          <button type="submit" class="btn-admin btn-admin-primary" id="btn-save-cust-template">
+            <i class="fas fa-save"></i> Guardar y Publicar Plantilla
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
   <input type="file" id="sync-backup-file-input" accept=".json" style="display:none;" onchange="handleBackupFileUpload(event)" />
 
   <!-- Toast Notification Box -->

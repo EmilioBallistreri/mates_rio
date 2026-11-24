@@ -952,6 +952,10 @@ window.syncProductsFromStorage = syncProductsFromStorage;
     mates_rio_home_slides: 'homeSlides',
     mates_rio_special_occasion: 'specialOccasion',
     mates_rio_customization_pricing: 'customizationPricing',
+    mates_rio_customizer_icons: 'customizerIcons',
+    mates_rio_deleted_customizer_icons: 'deletedCustomizerIcons',
+    mates_rio_customizer_templates: 'customizerTemplates',
+    mates_rio_deleted_customizer_templates: 'deletedCustomizerTemplates',
     mates_rio_supplier_purchases: 'supplierPurchases',
     mates_rio_orders: 'orders',
     mates_rio_wholesale_orders: 'wholesaleOrders',
@@ -970,6 +974,10 @@ window.syncProductsFromStorage = syncProductsFromStorage;
     'mates_rio_home_slides',
     'mates_rio_special_occasion',
     'mates_rio_customization_pricing',
+    'mates_rio_customizer_icons',
+    'mates_rio_deleted_customizer_icons',
+    'mates_rio_customizer_templates',
+    'mates_rio_deleted_customizer_templates',
     'mates_rio_inventory'
   ];
 
@@ -1095,6 +1103,13 @@ window.syncProductsFromStorage = syncProductsFromStorage;
       if (typeof window.renderCustomizerPricingAdmin === 'function') {
         window.renderCustomizerPricingAdmin();
       }
+      if (typeof window.renderCustomizerAdminSection === 'function') {
+        window.renderCustomizerAdminSection();
+      }
+      if (typeof window.loadDynamicCustomizerAssets === 'function') {
+        window.loadDynamicCustomizerAssets();
+      }
+      window.dispatchEvent(new CustomEvent('storeStateUpdated'));
       if (typeof window.renderOrdersTable === 'function') {
         window.renderOrdersTable();
       }

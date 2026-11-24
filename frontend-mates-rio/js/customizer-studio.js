@@ -285,6 +285,7 @@ function initStudioEngine() {
   }
 
   // 2. Renderizar componentes del Ribbon
+  loadDynamicCustomizerAssets();
   renderProductSelectorCardsUI();
   renderModelsDropdown();
   renderRibbonFontDropdown();
@@ -889,6 +890,259 @@ const PRODUCT_TEMPLATES = {
     }
   ]
 };
+
+// ==========================================================================
+// INTEGRACIÓN DINÁMICA DE ÍCONOS Y PLANTILLAS DEL PANEL DE ADMINISTRACIÓN
+// ==========================================================================
+const INITIAL_STATIC_VECTOR_CATEGORIES = JSON.parse(JSON.stringify(VECTOR_CATEGORIES));
+const INITIAL_STATIC_PRODUCT_TEMPLATES = {
+  mate: [...PRODUCT_TEMPLATES.mate],
+  termo: [...PRODUCT_TEMPLATES.termo],
+  caja: [...PRODUCT_TEMPLATES.caja]
+};
+
+function applyGenericCustomTemplate(tpl) {
+  if (!tpl) return;
+  const targetProduct = tpl.product || 'mate';
+  if (studio.activeProduct !== targetProduct) {
+    if (typeof switchActiveProduct === 'function') {
+      switchActiveProduct(targetProduct);
+    } else {
+      studio.activeProduct = targetProduct;
+    }
+  }
+
+  if (typeof saveStudioHistoryState === 'function') {
+    saveStudioHistoryState();
+  }
+
+  const { cx, cy, rRing } = STUDIO_CONFIG;
+  const ts = Date.now();
+
+  const newItems = (tpl.items || []).map((elem, idx) => {
+    const itemId = `tpl_${elem.type || 'item'}_${ts}_${idx}_${Math.floor(Math.random() * 1000)}`;
+    const loc = elem.location || (idx === 0 ? 'top' : (idx === 1 ? 'bottom' : 'center'));
+
+    if (elem.type === 'text') {
+      const isTop = loc === 'top' || elem.angle === 90;
+      const angle = isTop ? 90 : (loc === 'bottom' ? 270 : (elem.angle || 90));
+      return {
+        id: itemId,
+        type: 'text',
+        text: elem.text || 'TEXTO',
+        font: elem.font || 'Cinzel',
+        fontSize: elem.fontSize || 20,
+        scale: elem.scale || 1.0,
+        rotation: elem.rotation || 0,
+        location: loc,
+        arcPosition: isTop ? 'top' : 'bottom',
+        angle: angle,
+        radius: elem.radius || rRing,
+        x: targetProduct === 'mate' ? cx : (elem.x || cx),
+        y: targetProduct === 'mate' ? cy : (elem.y || (isTop ? 150 : (loc === 'bottom' ? 350 : 250)))
+      };
+    } else {
+      // Icon
+      const isTop = loc === 'top' || elem.angle === 90;
+      const isBottom = loc === 'bottom' || elem.angle === 270;
+      const angle = isTop ? 90 : (isBottom ? 270 : (elem.angle || 0));
+      const iconRadius = (loc === 'center') ? 0 : (elem.radius || rRing);
+
+      let calcX = cx;
+      let calcY = cy;
+      if (targetProduct === 'mate') {
+        const rad = (angle - 90) * (Math.PI / 180);
+        calcX = cx + iconRadius * Math.cos(rad);
+        calcY = cy + iconRadius * Math.sin(rad);
+      } else {
+        calcX = elem.x || cx;
+        calcY = elem.y || (isTop ? 180 : (isBottom ? 320 : 250));
+      }
+
+      return {
+        id: itemId,
+        type: 'icon',
+        graphicId: elem.graphicId || elem.id || 'custom_icon',
+        name: elem.name || 'Grabado',
+        file: elem.file,
+        fileBlack: elem.fileBlack || elem.file,
+        fileWhite: elem.fileWhite || elem.file,
+        scale: elem.scale || 1.1,
+        angle: angle,
+        radius: iconRadius,
+        rotation: elem.rotation || 0,
+        x: calcX,
+        y: calcY
+      };
+    }
+  });
+
+  studio.items = newItems;
+  studio.activeItemId = studio.items.length > 0 ? studio.items[0].id : null;
+
+  renderVirolaCanvas();
+  if (typeof renderTextLayersUI === 'function') renderTextLayersUI();
+  if (typeof updateActiveItemFloatingBar === 'function') updateActiveItemFloatingBar();
+  if (typeof updatePriceDisplay === 'function') updatePriceDisplay();
+  if (typeof updateFloatingBarValues === 'function') updateFloatingBarValues();
+  if (typeof renderRibbonHistoryControls === 'function') renderRibbonHistoryControls();
+  if (studio.viewMode === '360' && typeof render360Canvas === 'function') render360Canvas();
+
+  showNotificationToast(`Plantilla "${tpl.name}" aplicada con éxito`, 'fa-check');
+}
+
+function renderDynamicRibbonCategoryButtons() {
+  const panel = document.getElementById('ribbon-panel-icons');
+  if (!panel) return;
+  const groupContent = panel.querySelector('.ribbon-group:first-child .ribbon-group-content');
+  if (!groupContent) return;
+
+  Object.keys(VECTOR_CATEGORIES).forEach(catKey => {
+    if (catKey === 'plantillas') return;
+    let existingBtn = groupContent.querySelector(`[data-cat-filter="${catKey}"]`);
+    if (!existingBtn) {
+      const newBtn = document.createElement('button');
+      newBtn.type = 'button';
+      newBtn.className = `ribbon-btn ${studio.activeCategory === catKey ? 'active' : ''}`;
+      newBtn.setAttribute('data-cat-filter', catKey);
+      newBtn.onclick = () => filterRibbonDesigns(catKey);
+      const iconClass = catKey === 'deportes' ? 'fa-futbol' :
+                        catKey === 'criollo' ? 'fa-sun' :
+                        catKey === 'fauna' ? 'fa-feather' :
+                        catKey === 'simbolos' ? 'fa-star' :
+                        catKey === 'emojis' ? 'fa-face-smile' : 'fa-shapes';
+      newBtn.innerHTML = `<i class="fas ${iconClass}"></i> ${VECTOR_CATEGORIES[catKey].name || catKey}`;
+      groupContent.appendChild(newBtn);
+    }
+  });
+}
+
+function loadDynamicCustomizerAssets() {
+  // 1. Cargar íconos guardados y eliminados
+  const deletedIcons = (() => {
+    try {
+      const raw = localStorage.getItem('mates_rio_deleted_customizer_icons');
+      return raw ? (JSON.parse(raw) || []) : [];
+    } catch (e) { return []; }
+  })();
+
+  const customIcons = (() => {
+    try {
+      const raw = localStorage.getItem('mates_rio_customizer_icons');
+      return raw ? (JSON.parse(raw) || []) : [];
+    } catch (e) { return []; }
+  })();
+
+  // Restaurar categorías base eliminando IDs borrados
+  for (const k of Object.keys(VECTOR_CATEGORIES)) {
+    delete VECTOR_CATEGORIES[k];
+  }
+  for (const k of Object.keys(INITIAL_STATIC_VECTOR_CATEGORIES)) {
+    VECTOR_CATEGORIES[k] = {
+      name: INITIAL_STATIC_VECTOR_CATEGORIES[k].name,
+      items: INITIAL_STATIC_VECTOR_CATEGORIES[k].items.filter(i => !deletedIcons.includes(i.id))
+    };
+  }
+
+  // Incorporar íconos personalizados de admin
+  customIcons.forEach(icon => {
+    if (deletedIcons.includes(icon.id)) return;
+    const cat = icon.category || 'simbolos';
+    if (!VECTOR_CATEGORIES[cat]) {
+      const catDisplayName = cat.charAt(0).toUpperCase() + cat.slice(1);
+      VECTOR_CATEGORIES[cat] = {
+        name: icon.categoryName || catDisplayName,
+        items: []
+      };
+    }
+    const existingIdx = VECTOR_CATEGORIES[cat].items.findIndex(i => i.id === icon.id);
+    const itemData = {
+      id: icon.id,
+      name: icon.name,
+      file: icon.file,
+      fileBlack: icon.fileBlack || icon.file,
+      fileWhite: icon.fileWhite || icon.file,
+      isCustom: true
+    };
+    if (existingIdx !== -1) {
+      VECTOR_CATEGORIES[cat].items[existingIdx] = itemData;
+    } else {
+      VECTOR_CATEGORIES[cat].items.push(itemData);
+    }
+  });
+
+  // 2. Cargar plantillas guardadas y eliminadas
+  const deletedTemplates = (() => {
+    try {
+      const raw = localStorage.getItem('mates_rio_deleted_customizer_templates');
+      return raw ? (JSON.parse(raw) || []) : [];
+    } catch (e) { return []; }
+  })();
+
+  const customTemplates = (() => {
+    try {
+      const raw = localStorage.getItem('mates_rio_customizer_templates');
+      return raw ? (JSON.parse(raw) || []) : [];
+    } catch (e) { return []; }
+  })();
+
+  ['mate', 'termo', 'caja'].forEach(prod => {
+    PRODUCT_TEMPLATES[prod] = (INITIAL_STATIC_PRODUCT_TEMPLATES[prod] || []).filter(t => !deletedTemplates.includes(t.id));
+  });
+
+  customTemplates.forEach(tpl => {
+    if (deletedTemplates.includes(tpl.id)) return;
+    const prod = tpl.product || 'mate';
+    if (!PRODUCT_TEMPLATES[prod]) PRODUCT_TEMPLATES[prod] = [];
+
+    const existingIdx = PRODUCT_TEMPLATES[prod].findIndex(t => t.id === tpl.id);
+    const tplObj = {
+      id: tpl.id,
+      name: tpl.name,
+      subtitle: tpl.subtitle || 'Plantilla de Grabado',
+      file: tpl.file || 'assets/images/designs/papa_leon/thumb_papa_leon.png',
+      product: prod,
+      items: tpl.items || [],
+      isCustom: true,
+      apply: () => applyGenericCustomTemplate(tpl)
+    };
+    if (existingIdx !== -1) {
+      PRODUCT_TEMPLATES[prod][existingIdx] = tplObj;
+    } else {
+      PRODUCT_TEMPLATES[prod].push(tplObj);
+    }
+  });
+
+  // 3. Renderizar botones de categorías si se crearon nuevas
+  renderDynamicRibbonCategoryButtons();
+
+  // 4. Actualizar carruseles de ribbon y catálogo modal
+  if (typeof renderRibbonQuickDesigns === 'function') {
+    renderRibbonQuickDesigns(studio.activeCategory || 'deportes');
+  }
+  if (typeof renderRibbonTemplatesForActiveProduct === 'function') {
+    renderRibbonTemplatesForActiveProduct();
+  }
+  if (typeof renderModalCatalogGrid === 'function') {
+    renderModalCatalogGrid('all');
+  }
+}
+
+window.loadDynamicCustomizerAssets = loadDynamicCustomizerAssets;
+window.applyGenericCustomTemplate = applyGenericCustomTemplate;
+
+window.addEventListener('storage', (e) => {
+  if (e.key === 'mates_rio_customizer_icons' || 
+      e.key === 'mates_rio_customizer_templates' ||
+      e.key === 'mates_rio_deleted_customizer_icons' ||
+      e.key === 'mates_rio_deleted_customizer_templates') {
+    loadDynamicCustomizerAssets();
+  }
+});
+
+window.addEventListener('storeStateUpdated', () => {
+  loadDynamicCustomizerAssets();
+});
 
 function renderRibbonTemplatesForActiveProduct() {
   const container = document.getElementById('ribbon-quick-templates');

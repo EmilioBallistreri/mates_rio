@@ -324,6 +324,7 @@ const ADMIN_SECTION_LABELS = {
   purchases: 'Compras a Proveedores',
   orders: 'Ventas & Gestión de Pedidos',
   stats: 'Estadísticas & Rendimiento',
+  customizer: 'Personalizador & Grabados Láser',
   'home-design': 'Diseño & Inicio Web',
   users: 'Clientes & Accesos',
   audit: 'Registro de Actividad',
@@ -428,6 +429,7 @@ function switchAdminSection(sectionId, fromNotifBell = false, isGoingBack = fals
   if (sectionId === 'purchases') renderPurchasesSection();
   if (sectionId === 'orders') renderOrdersTable();
   if (sectionId === 'stats') renderStatsSection();
+  if (sectionId === 'customizer') renderCustomizerAdminSection();
   if (sectionId === 'home-design') renderHomeDesignSection();
   if (sectionId === 'users') renderUsersTable();
   if (sectionId === 'audit') renderAuditTable();
@@ -4524,4 +4526,1110 @@ function resetCustomApiUrl() {
   }
   renderSyncSection();
 }
+
+// ==========================================================================
+// GESTIÓN INTEGRAL DE ACTIVOS DEL PERSONALIZADOR (ÍCONOS & PLANTILLAS)
+// ==========================================================================
+
+const BUILTIN_CUSTOMIZER_ICONS = [
+  // Deportes
+  { id: 'afa', name: 'AFA 3 Estrellas', category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/afa.svg' },
+  { id: 'boca', name: 'Boca Juniors', category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/boca.svg' },
+  { id: 'river', name: 'River Plate', category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/river.svg' },
+  { id: 'belgrano', name: 'Belgrano de Córdoba', category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/belgrano.svg' },
+  { id: 'talleres', name: 'Talleres de Córdoba', category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/talleres.svg' },
+  { id: 'racing', name: 'Racing Club', category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/racing.svg' },
+  { id: 'independiente', name: 'Independiente', category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/independiente.svg' },
+  { id: 'sanlorenzo', name: 'San Lorenzo', category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/sanlorenzo.svg' },
+  { id: 'central', name: 'Rosario Central', category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/central.svg' },
+  { id: 'newells', name: "Newell's Old Boys", category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/newells.svg' },
+  { id: 'instituto', name: 'Instituto ACC', category: 'deportes', categoryName: '🏆 Escudos Deportivos', file: 'assets/images/designs/instituto.svg' },
+  // Criollos
+  { id: 'soldemayo', name: 'Sol de Mayo', category: 'criollo', categoryName: '🇦🇷 Motivos Criollos & Tradición', file: 'assets/images/designs/soldemayo.svg' },
+  { id: 'escarapela', name: 'Escarapela Argentina', category: 'criollo', categoryName: '🇦🇷 Motivos Criollos & Tradición', file: 'assets/images/designs/escarapela.svg' },
+  { id: 'ceibo', name: 'Flor de Ceibo Nacional', category: 'criollo', categoryName: '🇦🇷 Motivos Criollos & Tradición', file: 'assets/images/designs/ceibo.svg' },
+  { id: 'mate_icono', name: 'Mate Tradicional Imperial', category: 'criollo', categoryName: '🇦🇷 Motivos Criollos & Tradición', file: 'assets/images/designs/mate.svg' },
+  { id: 'cruz', name: 'Cruz Criolla Gauchesca', category: 'criollo', categoryName: '🇦🇷 Motivos Criollos & Tradición', file: 'assets/images/designs/cruz.svg' },
+  { id: 'caballo', name: 'Caballo Criollo', category: 'criollo', categoryName: '🇦🇷 Motivos Criollos & Tradición', file: 'assets/images/designs/caballo.svg' },
+  { id: 'guardapampa', name: 'Guarda Pampa', category: 'criollo', categoryName: '🇦🇷 Motivos Criollos & Tradición', file: 'assets/images/designs/guardapampa.svg' },
+  { id: 'malvinas', name: 'Islas Malvinas', category: 'criollo', categoryName: '🇦🇷 Motivos Criollos & Tradición', file: 'assets/images/designs/malvinas.svg' },
+  { id: 'mapa', name: 'Silueta Argentina', category: 'criollo', categoryName: '🇦🇷 Motivos Criollos & Tradición', file: 'assets/images/designs/mapa.svg' },
+  // Fauna
+  { id: 'condor', name: 'Cóndor Andino', category: 'fauna', categoryName: '🦅 Fauna & Naturaleza', file: 'assets/images/designs/condor.svg' },
+  { id: 'hornero', name: 'Hornero Nacional', category: 'fauna', categoryName: '🦅 Fauna & Naturaleza', file: 'assets/images/designs/hornero.svg' },
+  { id: 'carpincho', name: 'Carpincho', category: 'fauna', categoryName: '🦅 Fauna & Naturaleza', file: 'assets/images/designs/carpincho.svg' },
+  { id: 'guanaco', name: 'Guanaco Criollo', category: 'fauna', categoryName: '🦅 Fauna & Naturaleza', file: 'assets/images/designs/guanaco.svg' },
+  { id: 'ciervo', name: 'Ciervo de los Pantanos', category: 'fauna', categoryName: '🦅 Fauna & Naturaleza', file: 'assets/images/designs/ciervo.svg' },
+  // Símbolos
+  { id: 'corona', name: 'Corona Imperial', category: 'simbolos', categoryName: '✨ Símbolos & Formas', file: 'assets/images/designs/corona.svg' },
+  { id: 'laurel', name: 'Corona de Laureles', category: 'simbolos', categoryName: '✨ Símbolos & Formas', file: 'assets/images/designs/laurel.svg' },
+  { id: 'estrella_fed', name: 'Estrella Federal', category: 'simbolos', categoryName: '✨ Símbolos & Formas', file: 'assets/images/designs/estrella_fed.svg' },
+  { id: 'infinito', name: 'Infinito Eterno', category: 'simbolos', categoryName: '✨ Símbolos & Formas', file: 'assets/images/designs/infinito.svg' },
+  { id: 'corazon', name: 'Corazón de Gaucho', category: 'simbolos', categoryName: '✨ Símbolos & Formas', file: 'assets/images/designs/corazon.svg' }
+];
+
+const BUILTIN_CUSTOMIZER_TEMPLATES = [
+  {
+    id: 'tpl_papa_leon_xiv',
+    product: 'mate',
+    name: 'Papa León XIV',
+    subtitle: 'Virola con Arcos & Cruz',
+    file: 'assets/images/designs/papa_leon/thumb_papa_leon.png',
+    items: [
+      { type: 'text', text: 'PAPA LEÓN XIV', font: 'Cinzel', fontSize: 20, location: 'top', angle: 90, scale: 1.0 },
+      { type: 'icon', graphicId: 'cruz', name: 'Cruz Criolla', file: 'assets/images/designs/cruz.svg', angle: 270, scale: 1.1 }
+    ]
+  },
+  {
+    id: 'tpl_guarda_pampa',
+    product: 'mate',
+    name: 'Guarda Pampa Tradicional',
+    subtitle: 'Guarda Criolla Perimetral',
+    file: 'assets/images/designs/soldemayo.svg',
+    items: [
+      { type: 'text', text: 'TRADICIÓN & COSTUMBRES', font: 'Cinzel', fontSize: 19, location: 'top', angle: 90, scale: 1.0 },
+      { type: 'icon', graphicId: 'soldemayo', name: 'Sol Criollo', file: 'assets/images/designs/soldemayo.svg', angle: 270, scale: 1.05 }
+    ]
+  },
+  {
+    id: 'tpl_campeones_mundo',
+    product: 'mate',
+    name: '3 Estrellas AFA',
+    subtitle: 'Campeones del Mundo',
+    file: 'assets/images/designs/afa.svg',
+    items: [
+      { type: 'text', text: 'CAMPEONES DEL MUNDO', font: 'Cinzel', fontSize: 19, location: 'top', angle: 90, scale: 1.0 },
+      { type: 'icon', graphicId: 'afa', name: 'Escudo AFA 3 Estrellas', file: 'assets/images/designs/afa.svg', angle: 270, scale: 1.15 }
+    ]
+  },
+  {
+    id: 'tpl_caja_mates_rio',
+    product: 'caja',
+    name: 'Tapa Mates Río',
+    subtitle: 'Plantilla de Caja Vertical',
+    file: 'assets/images/designs/guardapampa.svg',
+    items: [
+      { type: 'text', text: 'MATES RÍO', font: 'Cinzel', fontSize: 26, location: 'top', y: 150, scale: 1.0 },
+      { type: 'text', text: 'TRADICIÓN ARGENTINA', font: 'Montserrat', fontSize: 14, location: 'bottom', y: 190, scale: 1.0 }
+    ]
+  },
+  {
+    id: 'tpl_caja_dedicatoria',
+    product: 'caja',
+    name: 'Dedicatoria & Escudo',
+    subtitle: 'Grabado Láser en Madera',
+    file: 'assets/images/designs/soldemayo.svg',
+    items: [
+      { type: 'text', text: 'CON AFECTO Y GRATITUD', font: 'Playfair Display', fontSize: 22, location: 'top', y: 140, scale: 1.0 },
+      { type: 'icon', graphicId: 'soldemayo', name: 'Sol de Mayo', file: 'assets/images/designs/soldemayo.svg', y: 240, scale: 1.2 }
+    ]
+  },
+  {
+    id: 'tpl_termo_franja',
+    product: 'termo',
+    name: 'Franja Gaucha 360°',
+    subtitle: 'Plantilla de Termo 1L',
+    file: 'assets/images/designs/guardapampa.svg',
+    items: [
+      { type: 'text', text: 'MATES RÍO OFICIAL', font: 'Cinzel', fontSize: 22, location: 'top', y: 160, scale: 1.0 },
+      { type: 'icon', graphicId: 'guardapampa', name: 'Guarda Pampa', file: 'assets/images/designs/guardapampa.svg', y: 260, scale: 1.3 }
+    ]
+  },
+  {
+    id: 'tpl_termo_escudo',
+    product: 'termo',
+    name: 'Escudo Nacional Argentino',
+    subtitle: 'Grabado sobre Acero Inox',
+    file: 'assets/images/designs/soldemayo.svg',
+    items: [
+      { type: 'icon', graphicId: 'soldemayo', name: 'Sol Criollo', file: 'assets/images/designs/soldemayo.svg', y: 220, scale: 1.4 },
+      { type: 'text', text: 'REPÚBLICA ARGENTINA', font: 'Cinzel', fontSize: 18, location: 'bottom', y: 310, scale: 1.0 }
+    ]
+  }
+];
+
+let currentCustAdminTab = 'icons';
+let currentCustIconCatFilter = 'all';
+let currentCustTplProdFilter = 'all';
+let currentTemplateBuilderElements = [];
+
+function getCustomizerIcons() {
+  try {
+    const raw = localStorage.getItem('mates_rio_customizer_icons');
+    return raw ? (JSON.parse(raw) || []) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCustomizerIcons(icons, silent = false) {
+  try {
+    localStorage.setItem('mates_rio_customizer_icons', JSON.stringify(icons));
+    if (window.MatesRioCloudSync && typeof window.MatesRioCloudSync.pushNow === 'function') {
+      window.MatesRioCloudSync.pushNow();
+    }
+  } catch (e) {
+    console.error('Error guardando íconos:', e);
+  }
+}
+
+function getCustomizerDeletedIcons() {
+  try {
+    const raw = localStorage.getItem('mates_rio_deleted_customizer_icons');
+    return raw ? (JSON.parse(raw) || []) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCustomizerDeletedIcons(ids) {
+  try {
+    localStorage.setItem('mates_rio_deleted_customizer_icons', JSON.stringify(ids));
+  } catch (e) {}
+}
+
+function getCustomizerTemplates() {
+  try {
+    const raw = localStorage.getItem('mates_rio_customizer_templates');
+    return raw ? (JSON.parse(raw) || []) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCustomizerTemplates(templates, silent = false) {
+  try {
+    localStorage.setItem('mates_rio_customizer_templates', JSON.stringify(templates));
+    if (window.MatesRioCloudSync && typeof window.MatesRioCloudSync.pushNow === 'function') {
+      window.MatesRioCloudSync.pushNow();
+    }
+  } catch (e) {
+    console.error('Error guardando plantillas:', e);
+  }
+}
+
+function getCustomizerDeletedTemplates() {
+  try {
+    const raw = localStorage.getItem('mates_rio_deleted_customizer_templates');
+    return raw ? (JSON.parse(raw) || []) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCustomizerDeletedTemplates(ids) {
+  try {
+    localStorage.setItem('mates_rio_deleted_customizer_templates', JSON.stringify(ids));
+  } catch (e) {}
+}
+
+function getAllCustomizerIconsList() {
+  const deleted = getCustomizerDeletedIcons();
+  const custom = getCustomizerIcons();
+  const builtin = BUILTIN_CUSTOMIZER_ICONS.filter(b => !deleted.includes(b.id));
+
+  // Combinar: los personalizados sobreescriben o se agregan
+  const map = new Map();
+  builtin.forEach(i => map.set(i.id, { ...i, isBuiltin: true }));
+  custom.forEach(i => map.set(i.id, { ...i, isCustom: true }));
+
+  return Array.from(map.values()).filter(i => !deleted.includes(i.id));
+}
+
+function getAllCustomizerTemplatesList() {
+  const deleted = getCustomizerDeletedTemplates();
+  const custom = getCustomizerTemplates();
+  const builtin = BUILTIN_CUSTOMIZER_TEMPLATES.filter(b => !deleted.includes(b.id));
+
+  const map = new Map();
+  builtin.forEach(t => map.set(t.id, { ...t, isBuiltin: true }));
+  custom.forEach(t => map.set(t.id, { ...t, isCustom: true }));
+
+  return Array.from(map.values()).filter(t => !deleted.includes(t.id));
+}
+
+function renderCustomizerAdminSection() {
+  const iconsList = getAllCustomizerIconsList();
+  const templatesList = getAllCustomizerTemplatesList();
+
+  const iconsBadge = document.getElementById('cust-icons-count-badge');
+  if (iconsBadge) iconsBadge.textContent = iconsList.length;
+
+  const tplBadge = document.getElementById('cust-templates-count-badge');
+  if (tplBadge) tplBadge.textContent = templatesList.length;
+
+  populateCustomizerIconCategoryFilters();
+  renderCustomizerIconsGrid();
+  renderCustomizerTemplatesGrid();
+}
+
+function switchCustomizerAdminTab(tabName) {
+  currentCustAdminTab = tabName;
+  const btnIcons = document.getElementById('tab-btn-cust-icons');
+  const btnTpl = document.getElementById('tab-btn-cust-templates');
+  const panelIcons = document.getElementById('cust-panel-icons');
+  const panelTpl = document.getElementById('cust-panel-templates');
+
+  if (btnIcons) btnIcons.classList.toggle('active', tabName === 'icons');
+  if (btnTpl) btnTpl.classList.toggle('active', tabName === 'templates');
+  if (panelIcons) panelIcons.style.display = tabName === 'icons' ? 'block' : 'none';
+  if (panelTpl) panelTpl.style.display = tabName === 'templates' ? 'block' : 'none';
+}
+
+function populateCustomizerIconCategoryFilters() {
+  const container = document.getElementById('cust-icons-cat-filters');
+  if (!container) return;
+
+  const icons = getAllCustomizerIconsList();
+  const catMap = {
+    all: 'Todos los Íconos',
+    deportes: '🏆 Deportes',
+    criollo: '🇦🇷 Criollos',
+    fauna: '🦅 Fauna',
+    simbolos: '✨ Símbolos',
+    emojis: '😊 Emojis'
+  };
+
+  icons.forEach(i => {
+    if (i.category && !catMap[i.category]) {
+      catMap[i.category] = i.categoryName || `📁 ${i.category.toUpperCase()}`;
+    }
+  });
+
+  container.innerHTML = Object.keys(catMap).map(k => `
+    <button type="button" class="btn-admin btn-admin-outline ${currentCustIconCatFilter === k ? 'active' : ''} btn-cust-cat-filter" onclick="filterCustomizerIconsByCat('${k}', this)" style="font-size: 0.8rem; padding: 6px 12px;">
+      ${catMap[k]}
+    </button>
+  `).join('');
+}
+
+function filterCustomizerIconsByCat(catKey, btn) {
+  currentCustIconCatFilter = catKey;
+  document.querySelectorAll('.btn-cust-cat-filter').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderCustomizerIconsGrid();
+}
+
+function filterCustomizerIcons() {
+  renderCustomizerIconsGrid();
+}
+
+function renderCustomizerIconsGrid() {
+  const container = document.getElementById('cust-icons-grid');
+  if (!container) return;
+
+  const query = (document.getElementById('cust-icons-search')?.value || '').trim().toLowerCase();
+  let list = getAllCustomizerIconsList();
+
+  if (currentCustIconCatFilter !== 'all') {
+    list = list.filter(i => (i.category || '').toLowerCase() === currentCustIconCatFilter.toLowerCase());
+  }
+
+  if (query) {
+    list = list.filter(i => (i.name || '').toLowerCase().includes(query) || (i.category || '').toLowerCase().includes(query));
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 48px 16px; background: var(--admin-bg-darker); border: 1px dashed var(--admin-border); border-radius: 12px; color: var(--admin-text-muted);">
+        <i class="fas fa-icons" style="font-size: 2.2rem; margin-bottom: 10px; display: block; opacity: 0.5;"></i>
+        <p style="font-weight: 700; margin-bottom: 4px;">No se encontraron íconos</p>
+        <small>Probá cambiando el filtro o agregá un nuevo vector haciendo clic en "Nuevo Ícono Vectorial".</small>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = list.map(item => `
+    <div style="background: var(--admin-bg-card); border: 1px solid var(--admin-border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: transform 0.2s ease, border-color 0.2s ease; position: relative;">
+      <span style="position: absolute; top: 8px; left: 8px; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; background: ${item.isCustom ? '#27ae60' : 'var(--admin-border)'}; color: #ffffff; font-weight: 700;">
+        ${item.isCustom ? 'Personalizado' : 'Sistema'}
+      </span>
+      
+      <!-- Preview Vector SVG en caja blanca para contraste óptico de grabado láser -->
+      <div style="width: 80px; height: 80px; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 6px; margin: 12px 0 10px; overflow: hidden;">
+        <img src="${item.file}" alt="${item.name}" style="max-width: 100%; max-height: 100%; object-fit: contain; filter: grayscale(100%) contrast(120%);" loading="lazy" onerror="this.src='assets/images/designs/mate.svg';" />
+      </div>
+
+      <div style="font-weight: 800; font-size: 0.86rem; color: var(--admin-text-main); margin-bottom: 3px; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+        ${item.name}
+      </div>
+      <div style="font-size: 0.72rem; color: var(--admin-gold); text-transform: uppercase; font-weight: 700; margin-bottom: 12px;">
+        ${item.category || 'General'}
+      </div>
+
+      <div style="display: flex; gap: 6px; width: 100%; margin-top: auto;">
+        <button type="button" class="btn-admin btn-admin-outline" onclick="openEditCustomizerIconModal('${item.id}')" style="flex: 1; padding: 5px 8px; font-size: 0.76rem;" title="Editar">
+          <i class="fas fa-pen"></i> Editar
+        </button>
+        <button type="button" class="btn-admin btn-admin-outline" onclick="deleteCustomizerIcon('${item.id}')" style="color: var(--admin-danger); border-color: rgba(239, 68, 68, 0.35); padding: 5px 8px; font-size: 0.76rem;" title="Eliminar">
+          <i class="fas fa-trash-can"></i>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// --------------------------------------------------------------------------
+// MODAL DE ÍCONO VECTORIAL
+// --------------------------------------------------------------------------
+let currentCustIconVectorDataUrl = '';
+let currentCustIconVectorMode = 'svg_file';
+
+function switchIconVectorMode(mode) {
+  currentCustIconVectorMode = mode;
+  document.querySelectorAll('.btn-cust-icon-mode').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.icon-vector-pane').forEach(p => p.style.display = 'none');
+
+  const btn = document.getElementById(`btn-mode-${mode.replace('_', '-')}`);
+  const pane = document.getElementById(`icon-mode-${mode.replace('_', '-')}`);
+  if (btn) btn.classList.add('active');
+  if (pane) pane.style.display = 'block';
+}
+
+function onCustomizerIconCatChange() {
+  const sel = document.getElementById('cust-icon-cat-select');
+  const wrap = document.getElementById('cust-icon-new-cat-wrap');
+  if (!sel || !wrap) return;
+  wrap.style.display = (sel.value === '__new__') ? 'block' : 'none';
+}
+
+function openCreateCustomizerIconModal() {
+  const modal = document.getElementById('modal-customizer-icon');
+  const title = document.getElementById('cust-icon-modal-title');
+  const idEl = document.getElementById('cust-icon-edit-id');
+  const nameEl = document.getElementById('cust-icon-name');
+  const codeEl = document.getElementById('cust-icon-code-input');
+  const catSel = document.getElementById('cust-icon-cat-select');
+  const newCatWrap = document.getElementById('cust-icon-new-cat-wrap');
+  const newCatName = document.getElementById('cust-icon-new-cat-name');
+
+  if (title) title.innerHTML = '<i class="fas fa-icons" style="color: var(--admin-gold);"></i> Cargar Nuevo Ícono Vectorial';
+  if (idEl) idEl.value = '';
+  if (nameEl) nameEl.value = '';
+  if (codeEl) codeEl.value = '';
+  if (catSel) catSel.value = 'deportes';
+  if (newCatWrap) newCatWrap.style.display = 'none';
+  if (newCatName) newCatName.value = '';
+
+  currentCustIconVectorDataUrl = '';
+  updateCustIconPreview('');
+  switchIconVectorMode('svg_file');
+
+  if (modal) modal.style.display = 'flex';
+}
+
+function openEditCustomizerIconModal(iconId) {
+  const list = getAllCustomizerIconsList();
+  const icon = list.find(i => i.id === iconId);
+  if (!icon) return;
+
+  const modal = document.getElementById('modal-customizer-icon');
+  const title = document.getElementById('cust-icon-modal-title');
+  const idEl = document.getElementById('cust-icon-edit-id');
+  const nameEl = document.getElementById('cust-icon-name');
+  const codeEl = document.getElementById('cust-icon-code-input');
+  const catSel = document.getElementById('cust-icon-cat-select');
+  const newCatWrap = document.getElementById('cust-icon-new-cat-wrap');
+
+  if (title) title.innerHTML = `<i class="fas fa-pen" style="color: var(--admin-gold);"></i> Editar Ícono: "${icon.name}"`;
+  if (idEl) idEl.value = icon.id;
+  if (nameEl) nameEl.value = icon.name;
+
+  if (catSel) {
+    let exists = Array.from(catSel.options).some(o => o.value === icon.category);
+    if (!exists) {
+      const opt = document.createElement('option');
+      opt.value = icon.category;
+      opt.textContent = icon.categoryName || icon.category;
+      catSel.insertBefore(opt, catSel.lastElementChild);
+    }
+    catSel.value = icon.category;
+  }
+  if (newCatWrap) newCatWrap.style.display = 'none';
+
+  currentCustIconVectorDataUrl = icon.file;
+  if (codeEl) {
+    if (icon.file.startsWith('data:image/svg+xml;utf8,')) {
+      codeEl.value = decodeURIComponent(icon.file.replace('data:image/svg+xml;utf8,', ''));
+    } else {
+      codeEl.value = `<image href="${icon.file}" />`;
+    }
+  }
+
+  updateCustIconPreview(icon.file);
+  switchIconVectorMode('svg_code');
+
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeCustomizerIconModal() {
+  const modal = document.getElementById('modal-customizer-icon');
+  if (modal) modal.style.display = 'none';
+}
+
+function updateCustIconPreview(content) {
+  const box = document.getElementById('cust-icon-preview-box');
+  const statusEl = document.getElementById('cust-icon-vector-status');
+  if (!box) return;
+
+  if (!content) {
+    box.innerHTML = `<span style="color: #71717a; font-size: 0.85rem;">Ningún vector cargado</span>`;
+    if (statusEl) { statusEl.textContent = 'Sin Vector'; statusEl.style.color = '#ef4444'; }
+    return;
+  }
+
+  // Si es un SVG string directo
+  if (content.trim().startsWith('<svg') || content.trim().startsWith('<path')) {
+    box.innerHTML = content;
+    const svgEl = box.querySelector('svg');
+    if (svgEl) {
+      svgEl.style.width = '100%';
+      svgEl.style.height = '100%';
+      svgEl.style.maxHeight = '120px';
+      svgEl.style.fill = '#111111';
+    }
+  } else {
+    // Es un URL o dataUrl
+    box.innerHTML = `<img src="${content}" alt="Vector Preview" style="max-height: 110px; max-width: 100%; object-fit: contain; filter: grayscale(100%) contrast(120%);" />`;
+  }
+
+  if (statusEl) {
+    statusEl.textContent = '✓ Vector Listo para Láser';
+    statusEl.style.color = '#16a34a';
+  }
+}
+
+function handleCustIconSvgFileUpload(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    let svgText = (evt.target.result || '').trim();
+    if (!svgText.includes('<svg')) {
+      alert('El archivo no contiene un formato SVG válido.');
+      return;
+    }
+
+    if (!svgText.includes('xmlns=')) {
+      svgText = svgText.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+    }
+
+    currentCustIconVectorDataUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent(svgText);
+    const codeEl = document.getElementById('cust-icon-code-input');
+    if (codeEl) codeEl.value = svgText;
+
+    updateCustIconPreview(currentCustIconVectorDataUrl);
+    showAdminToast('¡Archivo SVG cargado y vectorizado!', 'fa-check');
+  };
+  reader.readAsText(file);
+}
+
+function handleCustIconRasterUpload(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const img = new Image();
+    img.onload = () => {
+      const cvs = document.createElement('canvas');
+      const ctx = cvs.getContext('2d');
+      const maxDim = 320;
+      let w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+        else { w = Math.round((w * maxDim) / h); h = maxDim; }
+      }
+      cvs.width = w;
+      cvs.height = h;
+      ctx.drawImage(img, 0, 0, w, h);
+
+      const imgData = ctx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const lum = 0.299 * d[i] + 0.587 * d[i+1] + 0.114 * d[i+2];
+        const a = d[i+3];
+        if (a < 50 || lum > 165) {
+          d[i+3] = 0; // Transparente
+        } else {
+          d[i] = 17;   // Negro láser puro (#111111)
+          d[i+1] = 17;
+          d[i+2] = 17;
+          d[i+3] = 255;
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
+      const pngData = cvs.toDataURL('image/png');
+      const svgEnvelope = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><image href="${pngData}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet" /></svg>`;
+
+      currentCustIconVectorDataUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent(svgEnvelope);
+      const codeEl = document.getElementById('cust-icon-code-input');
+      if (codeEl) codeEl.value = svgEnvelope;
+
+      updateCustIconPreview(currentCustIconVectorDataUrl);
+      showAdminToast('¡Imagen convertida a silueta vectorial monocroma!', 'fa-wand-magic-sparkles');
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function onCustIconCodeInput() {
+  const code = (document.getElementById('cust-icon-code-input')?.value || '').trim();
+  if (!code) {
+    updateCustIconPreview('');
+    return;
+  }
+
+  let finalSvg = code;
+  if (!finalSvg.toLowerCase().includes('<svg') && finalSvg.includes('<path')) {
+    finalSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${finalSvg}</svg>`;
+  }
+  if (!finalSvg.includes('xmlns=')) {
+    finalSvg = finalSvg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+
+  currentCustIconVectorDataUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent(finalSvg);
+  updateCustIconPreview(currentCustIconVectorDataUrl);
+}
+
+function handleSaveCustomizerIcon(e) {
+  e.preventDefault();
+  const editId = document.getElementById('cust-icon-edit-id')?.value;
+  const name = (document.getElementById('cust-icon-name')?.value || '').trim();
+  let cat = document.getElementById('cust-icon-cat-select')?.value;
+  const newCatName = (document.getElementById('cust-icon-new-cat-name')?.value || '').trim();
+
+  if (cat === '__new__') {
+    if (!newCatName) {
+      alert('Por favor escribí el nombre de la nueva categoría.');
+      return;
+    }
+    cat = newCatName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+  }
+
+  if (!name) {
+    alert('Por favor ingresá un nombre para el ícono.');
+    return;
+  }
+
+  if (!currentCustIconVectorDataUrl) {
+    const code = (document.getElementById('cust-icon-code-input')?.value || '').trim();
+    if (code) {
+      onCustIconCodeInput();
+    } else {
+      alert('Por favor subí un archivo SVG o ingresá el vector para este ícono.');
+      return;
+    }
+  }
+
+  const icons = getCustomizerIcons();
+  const deleted = getCustomizerDeletedIcons();
+
+  if (editId) {
+    // Si editamos uno del sistema, lo removemos de deleted si estaba y lo guardamos como custom override
+    const idx = icons.findIndex(i => i.id === editId);
+    const updated = {
+      id: editId,
+      name: name,
+      category: cat,
+      categoryName: newCatName || cat.toUpperCase(),
+      file: currentCustIconVectorDataUrl,
+      isCustom: true,
+      updatedAt: new Date().toISOString()
+    };
+
+    if (idx !== -1) {
+      icons[idx] = updated;
+    } else {
+      icons.push(updated);
+    }
+    saveCustomizerIcons(icons);
+    logAuditAction('Edición de Ícono', `Ícono "${name}" actualizado (${cat})`);
+    showAdminToast(`¡Ícono "${name}" actualizado con éxito!`, 'fa-circle-check');
+  } else {
+    // Nuevo ícono
+    const newId = 'icon_custom_' + Date.now();
+    const newIcon = {
+      id: newId,
+      name: name,
+      category: cat,
+      categoryName: newCatName || cat.toUpperCase(),
+      file: currentCustIconVectorDataUrl,
+      isCustom: true,
+      createdAt: new Date().toISOString()
+    };
+    icons.push(newIcon);
+    saveCustomizerIcons(icons);
+    logAuditAction('Alta de Ícono', `Nuevo ícono vectorial "${name}" (${cat})`);
+    showAdminToast(`¡Ícono "${name}" publicado en el personalizador!`, 'fa-circle-check');
+  }
+
+  closeCustomizerIconModal();
+  renderCustomizerAdminSection();
+}
+
+function deleteCustomizerIcon(iconId) {
+  const list = getAllCustomizerIconsList();
+  const icon = list.find(i => i.id === iconId);
+  const name = icon ? icon.name : 'Ícono';
+
+  if (!confirm(`¿Estás seguro de eliminar el ícono "${name}" del personalizador?`)) return;
+
+  const customIcons = getCustomizerIcons().filter(i => i.id !== iconId);
+  saveCustomizerIcons(customIcons, true);
+
+  const deleted = getCustomizerDeletedIcons();
+  if (!deleted.includes(iconId)) {
+    deleted.push(iconId);
+    saveCustomizerDeletedIcons(deleted);
+  }
+
+  logAuditAction('Baja de Ícono', `Ícono "${name}" eliminado del catálogo`);
+  showAdminToast(`Ícono "${name}" eliminado`, 'fa-trash-can');
+  renderCustomizerAdminSection();
+}
+
+// --------------------------------------------------------------------------
+// GESTIÓN DE PLANTILLAS PREDISEÑADAS (MATE, TERMO, CAJA)
+// --------------------------------------------------------------------------
+
+function filterCustomizerTemplates(prodKey, btn) {
+  currentCustTplProdFilter = prodKey;
+  document.querySelectorAll('.btn-cust-prod-filter').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderCustomizerTemplatesGrid();
+}
+
+function renderCustomizerTemplatesGrid() {
+  const container = document.getElementById('cust-templates-grid');
+  if (!container) return;
+
+  let list = getAllCustomizerTemplatesList();
+  if (currentCustTplProdFilter !== 'all') {
+    list = list.filter(t => (t.product || '').toLowerCase() === currentCustTplProdFilter.toLowerCase());
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 48px 16px; background: var(--admin-bg-darker); border: 1px dashed var(--admin-border); border-radius: 12px; color: var(--admin-text-muted);">
+        <i class="fas fa-layer-group" style="font-size: 2.2rem; margin-bottom: 10px; display: block; opacity: 0.5;"></i>
+        <p style="font-weight: 700; margin-bottom: 4px;">No hay plantillas para este producto</p>
+        <small>Hacé clic en "Nueva Plantilla" para crear diseños prediseñados para mates, termos o cajas.</small>
+      </div>
+    `;
+    return;
+  }
+
+  const prodNames = {
+    mate: 'Virola de Mate',
+    termo: 'Termo de Acero',
+    caja: 'Caja de Madera'
+  };
+
+  container.innerHTML = list.map(item => {
+    const itemsCount = Array.isArray(item.items) ? item.items.length : 0;
+    const textCount = (item.items || []).filter(i => i.type === 'text').length;
+    const iconCount = (item.items || []).filter(i => i.type === 'icon').length;
+
+    return `
+      <div style="background: var(--admin-bg-card); border: 1px solid var(--admin-border); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; transition: transform 0.2s ease, border-color 0.2s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; background: var(--admin-bg-darker); color: var(--admin-gold); text-transform: uppercase;">
+            <i class="fas fa-tag"></i> ${prodNames[item.product] || (item.product ? item.product.toUpperCase() : 'MATE')}
+          </span>
+          <span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: ${item.isCustom ? '#27ae60' : 'var(--admin-border)'}; color: #ffffff; font-weight: 700;">
+            ${item.isCustom ? 'Personalizada' : 'Prediseñada'}
+          </span>
+        </div>
+
+        <div style="height: 120px; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 8px; display: flex; align-items: center; justify-content: center; padding: 10px; margin-bottom: 12px; overflow: hidden;">
+          <img src="${item.file || 'assets/images/designs/soldemayo.svg'}" alt="${item.name}" style="max-height: 100%; max-width: 100%; object-fit: contain; filter: grayscale(100%) contrast(120%);" loading="lazy" />
+        </div>
+
+        <h4 style="font-size: 1rem; font-weight: 900; color: var(--admin-text-main); margin: 0 0 4px; line-height: 1.3;">
+          ${item.name}
+        </h4>
+        <p style="font-size: 0.78rem; color: var(--admin-text-muted); margin: 0 0 10px; min-height: 24px;">
+          ${item.subtitle || 'Plantilla de grabado láser'}
+        </p>
+
+        <div style="display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;">
+          <span style="font-size: 0.7rem; background: var(--admin-bg-darker); padding: 2px 8px; border-radius: 4px; color: var(--admin-text-muted);">
+            <i class="fas fa-font"></i> ${textCount} ${textCount === 1 ? 'texto' : 'textos'}
+          </span>
+          <span style="font-size: 0.7rem; background: var(--admin-bg-darker); padding: 2px 8px; border-radius: 4px; color: var(--admin-text-muted);">
+            <i class="fas fa-shield-halved"></i> ${iconCount} ${iconCount === 1 ? 'grabado' : 'grabados'}
+          </span>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: auto;">
+          <button type="button" class="btn-admin btn-admin-outline" onclick="openEditCustomizerTemplateModal('${item.id}')" style="flex: 1; font-size: 0.8rem; padding: 7px 10px;" title="Editar">
+            <i class="fas fa-pen"></i> Editar
+          </button>
+          <button type="button" class="btn-admin btn-admin-outline" onclick="deleteCustomizerTemplate('${item.id}')" style="color: var(--admin-danger); border-color: rgba(239, 68, 68, 0.35); font-size: 0.8rem; padding: 7px 10px;" title="Eliminar">
+            <i class="fas fa-trash-can"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// --------------------------------------------------------------------------
+// MODAL DE PLANTILLAS PREDISEÑADAS & BUILDER VECTORIAL
+// --------------------------------------------------------------------------
+
+function openCreateCustomizerTemplateModal() {
+  const modal = document.getElementById('modal-customizer-template');
+  const title = document.getElementById('cust-template-modal-title');
+  const idEl = document.getElementById('cust-template-edit-id');
+  const prodSel = document.getElementById('cust-tpl-product');
+  const nameEl = document.getElementById('cust-tpl-name');
+  const subEl = document.getElementById('cust-tpl-subtitle');
+
+  if (title) title.innerHTML = '<i class="fas fa-layer-group" style="color: var(--admin-gold);"></i> Cargar Nueva Plantilla Prediseñada';
+  if (idEl) idEl.value = '';
+  if (prodSel) prodSel.value = 'mate';
+  if (nameEl) nameEl.value = '';
+  if (subEl) subEl.value = '';
+
+  // Elementos por defecto
+  currentTemplateBuilderElements = [
+    { type: 'text', text: 'TEXTO SUPERIOR', font: 'Cinzel', fontSize: 20, location: 'top', angle: 90, scale: 1.0 },
+    { type: 'icon', graphicId: 'soldemayo', name: 'Sol Criollo', file: 'assets/images/designs/soldemayo.svg', angle: 270, scale: 1.0 }
+  ];
+
+  renderTemplateElementRows();
+  renderTemplateLivePreview();
+
+  if (modal) modal.style.display = 'flex';
+}
+
+function openEditCustomizerTemplateModal(templateId) {
+  const list = getAllCustomizerTemplatesList();
+  const tpl = list.find(t => t.id === templateId);
+  if (!tpl) return;
+
+  const modal = document.getElementById('modal-customizer-template');
+  const title = document.getElementById('cust-template-modal-title');
+  const idEl = document.getElementById('cust-template-edit-id');
+  const prodSel = document.getElementById('cust-tpl-product');
+  const nameEl = document.getElementById('cust-tpl-name');
+  const subEl = document.getElementById('cust-tpl-subtitle');
+
+  if (title) title.innerHTML = `<i class="fas fa-pen" style="color: var(--admin-gold);"></i> Editar Plantilla: "${tpl.name}"`;
+  if (idEl) idEl.value = tpl.id;
+  if (prodSel) prodSel.value = tpl.product || 'mate';
+  if (nameEl) nameEl.value = tpl.name;
+  if (subEl) subEl.value = tpl.subtitle || '';
+
+  currentTemplateBuilderElements = Array.isArray(tpl.items) ? JSON.parse(JSON.stringify(tpl.items)) : [];
+  if (currentTemplateBuilderElements.length === 0) {
+    currentTemplateBuilderElements = [
+      { type: 'text', text: 'TEXTO PERSONALIZADO', font: 'Cinzel', fontSize: 20, location: 'top', angle: 90, scale: 1.0 }
+    ];
+  }
+
+  renderTemplateElementRows();
+  renderTemplateLivePreview();
+
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeCustomizerTemplateModal() {
+  const modal = document.getElementById('modal-customizer-template');
+  if (modal) modal.style.display = 'none';
+}
+
+function onCustomizerTemplateProductChange() {
+  renderTemplateLivePreview();
+}
+
+function addTemplateTextElement() {
+  currentTemplateBuilderElements.push({
+    type: 'text',
+    text: 'NUEVO TEXTO',
+    font: 'Cinzel',
+    fontSize: 20,
+    location: currentTemplateBuilderElements.some(e => e.location === 'top') ? 'bottom' : 'top',
+    angle: 90,
+    scale: 1.0
+  });
+  renderTemplateElementRows();
+  renderTemplateLivePreview();
+}
+
+function addTemplateIconElement() {
+  const allIcons = getAllCustomizerIconsList();
+  const defaultIcon = allIcons[0] || { id: 'soldemayo', name: 'Sol de Mayo', file: 'assets/images/designs/soldemayo.svg' };
+
+  currentTemplateBuilderElements.push({
+    type: 'icon',
+    graphicId: defaultIcon.id,
+    name: defaultIcon.name,
+    file: defaultIcon.file,
+    location: 'bottom',
+    angle: 270,
+    scale: 1.0
+  });
+  renderTemplateElementRows();
+  renderTemplateLivePreview();
+}
+
+function removeTemplateElement(idx) {
+  currentTemplateBuilderElements.splice(idx, 1);
+  renderTemplateElementRows();
+  renderTemplateLivePreview();
+}
+
+function updateTemplateElementField(idx, field, value) {
+  if (!currentTemplateBuilderElements[idx]) return;
+  currentTemplateBuilderElements[idx][field] = value;
+
+  // Si cambia el graphicId de un ícono, actualizar también su nombre y file
+  if (field === 'graphicId') {
+    const allIcons = getAllCustomizerIconsList();
+    const found = allIcons.find(i => i.id === value);
+    if (found) {
+      currentTemplateBuilderElements[idx].name = found.name;
+      currentTemplateBuilderElements[idx].file = found.file;
+    }
+  }
+
+  renderTemplateLivePreview();
+}
+
+function renderTemplateElementRows() {
+  const container = document.getElementById('cust-tpl-elements-container');
+  if (!container) return;
+
+  if (currentTemplateBuilderElements.length === 0) {
+    container.innerHTML = `<span style="font-size: 0.82rem; color: var(--admin-text-muted); text-align: center; padding: 12px;">No hay elementos agregados. Hacé clic en "+ Agregar Texto" o "+ Agregar Ícono".</span>`;
+    return;
+  }
+
+  const allIcons = getAllCustomizerIconsList();
+  const fontOptions = ['Cinzel', 'Montserrat', 'Playfair Display', 'Great Vibes', 'Bebas Neue', 'Oswald', 'Outfit', 'Lora'];
+
+  container.innerHTML = currentTemplateBuilderElements.map((elem, idx) => {
+    if (elem.type === 'text') {
+      return `
+        <div style="background: var(--admin-bg-card); border: 1px solid var(--admin-border); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <span style="font-size: 0.72rem; font-weight: 800; background: var(--admin-border); color: #fff; padding: 2px 6px; border-radius: 4px;">
+            <i class="fas fa-font"></i> TEXTO
+          </span>
+          <input type="text" class="admin-input" value="${elem.text || ''}" placeholder="Texto..." oninput="updateTemplateElementField(${idx}, 'text', this.value)" style="flex: 2; min-width: 140px; height: 34px; font-size: 0.82rem;" />
+          
+          <select class="admin-select" onchange="updateTemplateElementField(${idx}, 'font', this.value)" style="flex: 1; min-width: 120px; height: 34px; font-size: 0.8rem;">
+            ${fontOptions.map(f => `<option value="${f}" ${elem.font === f ? 'selected' : ''}>${f}</option>`).join('')}
+          </select>
+
+          <select class="admin-select" onchange="updateTemplateElementField(${idx}, 'location', this.value)" style="width: 110px; height: 34px; font-size: 0.8rem;">
+            <option value="top" ${elem.location === 'top' ? 'selected' : ''}>Arriba</option>
+            <option value="bottom" ${elem.location === 'bottom' ? 'selected' : ''}>Abajo</option>
+            <option value="center" ${elem.location === 'center' ? 'selected' : ''}>Centro</option>
+            <option value="free" ${elem.location === 'free' ? 'selected' : ''}>Libre</option>
+          </select>
+
+          <button type="button" class="btn-admin btn-admin-outline" onclick="removeTemplateElement(${idx})" style="color: var(--admin-danger); border-color: rgba(239, 68, 68, 0.4); padding: 4px 8px; height: 34px;" title="Quitar">
+            <i class="fas fa-trash-can"></i>
+          </button>
+        </div>
+      `;
+    } else {
+      return `
+        <div style="background: var(--admin-bg-card); border: 1px solid var(--admin-border); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <span style="font-size: 0.72rem; font-weight: 800; background: var(--admin-gold); color: #000; padding: 2px 6px; border-radius: 4px;">
+            <i class="fas fa-shield-halved"></i> ÍCONO
+          </span>
+          <select class="admin-select" onchange="updateTemplateElementField(${idx}, 'graphicId', this.value)" style="flex: 2; min-width: 160px; height: 34px; font-size: 0.8rem;">
+            ${allIcons.map(i => `<option value="${i.id}" ${elem.graphicId === i.id ? 'selected' : ''}>${i.name} (${i.category})</option>`).join('')}
+          </select>
+
+          <select class="admin-select" onchange="updateTemplateElementField(${idx}, 'location', this.value); updateTemplateElementField(${idx}, 'angle', this.value === 'top' ? 90 : (this.value === 'bottom' ? 270 : 0));" style="width: 110px; height: 34px; font-size: 0.8rem;">
+            <option value="bottom" ${elem.location === 'bottom' || elem.angle === 270 ? 'selected' : ''}>Abajo</option>
+            <option value="top" ${elem.location === 'top' || elem.angle === 90 ? 'selected' : ''}>Arriba</option>
+            <option value="center" ${elem.location === 'center' ? 'selected' : ''}>Centro</option>
+          </select>
+
+          <button type="button" class="btn-admin btn-admin-outline" onclick="removeTemplateElement(${idx})" style="color: var(--admin-danger); border-color: rgba(239, 68, 68, 0.4); padding: 4px 8px; height: 34px;" title="Quitar">
+            <i class="fas fa-trash-can"></i>
+          </button>
+        </div>
+      `;
+    }
+  }).join('');
+}
+
+function renderTemplateLivePreview() {
+  const box = document.getElementById('cust-tpl-preview-box');
+  if (!box) return;
+
+  const prod = document.getElementById('cust-tpl-product')?.value || 'mate';
+
+  if (prod === 'mate') {
+    // Dibujo vectorial circular de virola de mate
+    const topText = currentTemplateBuilderElements.find(e => e.type === 'text' && e.location === 'top')?.text || '';
+    const bottomText = currentTemplateBuilderElements.find(e => e.type === 'text' && e.location === 'bottom')?.text || '';
+    const iconElem = currentTemplateBuilderElements.find(e => e.type === 'icon');
+
+    box.innerHTML = `
+      <svg viewBox="0 0 240 240" style="width: 100%; height: 100%; max-height: 160px;">
+        <!-- Anillo virola -->
+        <circle cx="120" cy="120" r="105" fill="#f4f4f5" stroke="#111111" stroke-width="3" />
+        <circle cx="120" cy="120" r="65" fill="#ffffff" stroke="#111111" stroke-width="2.5" />
+        
+        <!-- Textos -->
+        ${topText ? `
+          <path id="preview-arc-top" d="M 35 120 A 85 85 0 0 1 205 120" fill="none" />
+          <text font-family="Cinzel, serif" font-size="11" font-weight="800" fill="#111111" text-anchor="middle">
+            <textPath href="#preview-arc-top" startOffset="50%">${topText}</textPath>
+          </text>
+        ` : ''}
+
+        ${bottomText ? `
+          <path id="preview-arc-bottom" d="M 35 120 A 85 85 0 0 0 205 120" fill="none" />
+          <text font-family="Cinzel, serif" font-size="11" font-weight="800" fill="#111111" text-anchor="middle">
+            <textPath href="#preview-arc-bottom" startOffset="50%">${bottomText}</textPath>
+          </text>
+        ` : ''}
+
+        <!-- Ícono -->
+        ${iconElem ? `
+          <image href="${iconElem.file || 'assets/images/designs/soldemayo.svg'}" x="100" y="172" width="40" height="40" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(120%);" />
+        ` : ''}
+      </svg>
+    `;
+  } else if (prod === 'termo') {
+    // Dibujo cilíndrico de termo
+    const texts = currentTemplateBuilderElements.filter(e => e.type === 'text');
+    const icons = currentTemplateBuilderElements.filter(e => e.type === 'icon');
+
+    box.innerHTML = `
+      <svg viewBox="0 0 160 220" style="width: 100%; height: 100%; max-height: 160px;">
+        <rect x="35" y="20" width="90" height="180" rx="12" fill="#f4f4f5" stroke="#111111" stroke-width="2.5" />
+        <rect x="55" y="6" width="50" height="14" rx="3" fill="#e4e4e7" stroke="#111111" stroke-width="2" />
+        
+        ${texts.map((t, idx) => `
+          <text x="80" y="${65 + (idx * 30)}" font-family="Cinzel, serif" font-size="10" font-weight="800" fill="#111111" text-anchor="middle">${t.text || ''}</text>
+        `).join('')}
+
+        ${icons.map((ic, idx) => `
+          <image href="${ic.file || 'assets/images/designs/soldemayo.svg'}" x="60" y="${110 + (idx * 40)}" width="40" height="40" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(120%);" />
+        `).join('')}
+      </svg>
+    `;
+  } else {
+    // Dibujo rectangular de caja de madera
+    const texts = currentTemplateBuilderElements.filter(e => e.type === 'text');
+    const icons = currentTemplateBuilderElements.filter(e => e.type === 'icon');
+
+    box.innerHTML = `
+      <svg viewBox="0 0 220 180" style="width: 100%; height: 100%; max-height: 160px;">
+        <rect x="15" y="15" width="190" height="150" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2.5" />
+        <rect x="23" y="23" width="174" height="134" rx="4" fill="none" stroke="#d97706" stroke-width="1" stroke-dasharray="3,3" />
+
+        ${texts.map((t, idx) => `
+          <text x="110" y="${60 + (idx * 30)}" font-family="Cinzel, serif" font-size="12" font-weight="800" fill="#111111" text-anchor="middle">${t.text || ''}</text>
+        `).join('')}
+
+        ${icons.map((ic, idx) => `
+          <image href="${ic.file || 'assets/images/designs/soldemayo.svg'}" x="87" y="${95 + (idx * 35)}" width="46" height="46" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(120%);" />
+        `).join('')}
+      </svg>
+    `;
+  }
+}
+
+function handleSaveCustomizerTemplate(e) {
+  e.preventDefault();
+  const editId = document.getElementById('cust-template-edit-id')?.value;
+  const prod = document.getElementById('cust-tpl-product')?.value || 'mate';
+  const name = (document.getElementById('cust-tpl-name')?.value || '').trim();
+  const subtitle = (document.getElementById('cust-tpl-subtitle')?.value || '').trim();
+
+  if (!name) {
+    alert('Por favor completá el nombre de la plantilla.');
+    return;
+  }
+
+  if (currentTemplateBuilderElements.length === 0) {
+    alert('Por favor agregá al menos un elemento (texto o grabado) a la plantilla.');
+    return;
+  }
+
+  // Generar preview vectorial Data URL
+  const previewBox = document.getElementById('cust-tpl-preview-box');
+  const svgMarkup = previewBox?.innerHTML ? previewBox.innerHTML.trim() : '';
+  const thumbUrl = svgMarkup ? ('data:image/svg+xml;utf8,' + encodeURIComponent(svgMarkup)) : 'assets/images/designs/soldemayo.svg';
+
+  const templates = getCustomizerTemplates();
+
+  if (editId) {
+    const idx = templates.findIndex(t => t.id === editId);
+    const updated = {
+      id: editId,
+      product: prod,
+      name: name,
+      subtitle: subtitle || 'Plantilla de Grabado',
+      file: thumbUrl,
+      items: JSON.parse(JSON.stringify(currentTemplateBuilderElements)),
+      isCustom: true,
+      updatedAt: new Date().toISOString()
+    };
+
+    if (idx !== -1) {
+      templates[idx] = updated;
+    } else {
+      templates.push(updated);
+    }
+    saveCustomizerTemplates(templates);
+    logAuditAction('Edición de Plantilla', `Plantilla "${name}" (${prod}) actualizada`);
+    showAdminToast(`¡Plantilla "${name}" actualizada con éxito!`, 'fa-circle-check');
+  } else {
+    const newId = 'tpl_custom_' + Date.now();
+    const newTpl = {
+      id: newId,
+      product: prod,
+      name: name,
+      subtitle: subtitle || 'Plantilla de Grabado',
+      file: thumbUrl,
+      items: JSON.parse(JSON.stringify(currentTemplateBuilderElements)),
+      isCustom: true,
+      createdAt: new Date().toISOString()
+    };
+    templates.push(newTpl);
+    saveCustomizerTemplates(templates);
+    logAuditAction('Alta de Plantilla', `Nueva plantilla "${name}" (${prod}) publicada`);
+    showAdminToast(`¡Plantilla "${name}" publicada con éxito!`, 'fa-circle-check');
+  }
+
+  closeCustomizerTemplateModal();
+  renderCustomizerAdminSection();
+}
+
+function deleteCustomizerTemplate(templateId) {
+  const list = getAllCustomizerTemplatesList();
+  const tpl = list.find(t => t.id === templateId);
+  const name = tpl ? tpl.name : 'Plantilla';
+
+  if (!confirm(`¿Estás seguro de eliminar la plantilla "${name}"?`)) return;
+
+  const customTpls = getCustomizerTemplates().filter(t => t.id !== templateId);
+  saveCustomizerTemplates(customTpls, true);
+
+  const deleted = getCustomizerDeletedTemplates();
+  if (!deleted.includes(templateId)) {
+    deleted.push(templateId);
+    saveCustomizerDeletedTemplates(deleted);
+  }
+
+  logAuditAction('Baja de Plantilla', `Plantilla "${name}" eliminada`);
+  showAdminToast(`Plantilla "${name}" eliminada`, 'fa-trash-can');
+  renderCustomizerAdminSection();
+}
+
 
