@@ -7,7 +7,7 @@
 
 :root {
   /* Color Palette */
-  --bg-main: #f9f8f6;
+  --bg-main: #FAF8F5;
   --bg-surface: #ffffff;
   --bg-surface-elevated: #ffffff;
   --bg-dark: #121212;
@@ -9626,7 +9626,7 @@ body.theme-inverted .action-btn.theme-toggle-btn:hover i {
    -------------------------------------------------------------------------- */
 body.theme-light,
 body.theme-inverted {
-  --bg-main: #f8f6f0;
+  --bg-main: #FAF8F5;
   --bg-surface: #ffffff;
   --bg-surface-elevated: #ffffff;
   --bg-card: #ffffff;
@@ -9645,7 +9645,7 @@ body.theme-inverted {
   --border-dark: #dfd7cb;
   --border-color: #e2dbcf;
 
-  background-color: #f8f6f0 !important;
+  background-color: #FAF8F5 !important;
   color: #141416 !important;
 }
 
@@ -13107,7 +13107,7 @@ body.theme-inverted {
   --accent-gold-hover: #2b2b2b !important;
   --accent-leather: #111111 !important;
   --accent-leather-light: #404040 !important;
-  --bg-main: #f6f6f6 !important;
+  --bg-main: #FAF8F5 !important;
   --bg-surface: #ffffff !important;
   --bg-card: #ffffff !important;
   --text-main: #111111 !important;
@@ -16779,7 +16779,7 @@ body.theme-inverted {
   --accent-leather: #27272a !important;
   --accent-leather-light: #52525b !important;
   --accent-olive: #18181b !important;
-  --bg-main: #ffffff !important;
+  --bg-main: #FAF8F5 !important;
   --bg-surface: #f4f4f5 !important;
   --bg-card: #ffffff !important;
   --text-main: #09090b !important;
@@ -17950,7 +17950,7 @@ body.theme-inverted {
   --accent-leather: #09090b !important;
   --accent-leather-light: #3f3f46 !important;
   --accent-olive: #18181b !important;
-  --bg-main: #f6f6f6 !important;
+  --bg-main: #FAF8F5 !important;
   --bg-surface: #ffffff !important;
   --bg-surface-elevated: #ffffff !important;
   --bg-card: #ffffff !important;
@@ -17959,7 +17959,7 @@ body.theme-inverted {
   --text-muted: #6e6e77 !important;
   --border-light: #e4e4e7 !important;
   --border-color: #d4d4d8 !important;
-  background-color: #f6f6f6 !important;
+  background-color: #FAF8F5 !important;
   color: #09090b !important;
 }
 
@@ -18216,7 +18216,7 @@ body.theme-light .banner-personalizado-card {
 
 .about-us-section {
   padding: 52px 0 !important;
-  background: #f6f6f6 !important;
+  background: #FAF8F5 !important;
   border-bottom: 1px solid #e4e4e7 !important;
 }
 

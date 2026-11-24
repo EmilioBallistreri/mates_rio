@@ -7,7 +7,7 @@
   --admin-bg-sidebar: #121214;
   --admin-sidebar-hover: #141416;
   --admin-sidebar-active: #38271a;
-  --admin-bg-main: #f7f5f0;
+  --admin-bg-main: #FAF8F5;
   --admin-card-bg: #ffffff;
   --admin-border: #e8e2d8;
   --admin-border-focus: #ffffff;
@@ -4188,7 +4188,7 @@ body.admin-body:not(.admin-dark-mode) {
   --admin-bg-sidebar: #111111 !important;
   --admin-sidebar-hover: #1f1f22 !important;
   --admin-sidebar-active: #27272a !important;
-  --admin-bg-main: #f4f4f5 !important;
+  --admin-bg-main: #FAF8F5 !important;
   --admin-card-bg: #ffffff !important;
   --admin-border: #e4e4e7 !important;
   --admin-border-focus: #000000 !important;
