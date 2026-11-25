@@ -18609,19 +18609,30 @@ body.theme-inverted .prod-select-card.active .prod-card-check {
   color: #09090b !important;
 }
 
-/* 7. Handles SVG del Personalizador (✕, ↻, ⤡) 100% FIJOS sin vibración al pasar el mouse */
-.virola-handle,
-.virola-handle:hover,
-.virola-handle:active,
-.virola-handle:focus {
+/* 7. Handles SVG del Personalizador (✕, ↻, ⤡) Táctiles directos y nítidos */
+.virola-handle {
+  cursor: pointer !important;
+  pointer-events: all !important;
+  touch-action: none !important;
+  user-select: none !important;
   transition: none !important;
   animation: none !important;
 }
 
-.virola-handle circle,
-.virola-handle:hover circle {
-  transition: none !important;
-  animation: none !important;
+.virola-handle circle {
+  pointer-events: all !important;
+  cursor: pointer !important;
+  transition: transform 0.12s ease, filter 0.12s ease !important;
+}
+
+.virola-handle:active circle {
+  transform: scale(0.92);
+  filter: brightness(1.25) !important;
+}
+
+.virola-handle text {
+  pointer-events: none !important;
+  user-select: none !important;
 }
 
 /* 8. Modales de Login, Perfil, Checkout y Finalización en Modo Claro */
