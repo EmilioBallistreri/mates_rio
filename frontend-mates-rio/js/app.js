@@ -2081,8 +2081,12 @@ function ensureMobileDrawerSocialCircles() {
     }
   });
 
-  // Normalizar todos los enlaces de TikTok para que en celular abran directamente el perfil @mates_rio y no el "Para ti"
+  // Normalizar solo enlaces generales de TikTok (no enlaces a videos específicos)
   document.querySelectorAll('a[href*="tiktok.com"]').forEach(link => {
+    const rawHref = link.getAttribute('href') || '';
+    if (rawHref.includes('/video/') || link.dataset.videoUrl) {
+      return; // Mantener enlace directo al video específico
+    }
     link.href = CONFIG.tiktokUrl;
     link.setAttribute('rel', 'noopener');
     if (!link.dataset.tiktokBound) {

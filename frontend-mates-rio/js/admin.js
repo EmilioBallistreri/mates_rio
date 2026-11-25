@@ -5293,8 +5293,70 @@ function renderCustomizerTemplatesGrid() {
 }
 
 // --------------------------------------------------------------------------
-// MODAL DE PLANTILLAS PREDISEÑADAS & BUILDER VECTORIAL
+// MODAL DE PLANTILLAS PREDISEÑADAS: CARGA DIRECTA DE DISEÑO (JPG / PNG)
 // --------------------------------------------------------------------------
+
+let currentTemplateUploadedImage = null; // { name, file (dataUrl), type, size }
+
+function triggerTemplateFileUpload(mode) {
+  const input = document.getElementById('cust-tpl-file-input');
+  if (input) {
+    input.dataset.uploadMode = mode || 'image';
+    input.click();
+  }
+}
+
+function handleTemplateFileSelect(event) {
+  const file = event.target?.files?.[0];
+  if (!file) return;
+
+  const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (!validTypes.includes(file.type) && !['jpg', 'jpeg', 'png'].includes(ext)) {
+    showAdminToast('Por favor subí un archivo en formato JPG o PNG.', 'fa-triangle-exclamation');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    currentTemplateUploadedImage = {
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      file: dataUrl
+    };
+
+    const dataEl = document.getElementById('cust-tpl-uploaded-data');
+    if (dataEl) dataEl.value = dataUrl;
+
+    const statusEl = document.getElementById('cust-tpl-file-status');
+    const nameEl = document.getElementById('cust-tpl-file-name');
+    if (statusEl) statusEl.style.display = 'inline-flex';
+    if (nameEl) nameEl.textContent = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+
+    const nameInput = document.getElementById('cust-tpl-name');
+    if (nameInput && !nameInput.value.trim()) {
+      const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      nameInput.value = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+    }
+
+    renderTemplateLivePreview();
+    showAdminToast('¡Diseño cargado con éxito! Previsualización actualizada.', 'fa-check');
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearTemplateUploadedFile() {
+  currentTemplateUploadedImage = null;
+  const input = document.getElementById('cust-tpl-file-input');
+  if (input) input.value = '';
+  const dataEl = document.getElementById('cust-tpl-uploaded-data');
+  if (dataEl) dataEl.value = '';
+  const statusEl = document.getElementById('cust-tpl-file-status');
+  if (statusEl) statusEl.style.display = 'none';
+  renderTemplateLivePreview();
+}
 
 function openCreateCustomizerTemplateModal() {
   const modal = document.getElementById('modal-customizer-template');
@@ -5310,13 +5372,7 @@ function openCreateCustomizerTemplateModal() {
   if (nameEl) nameEl.value = '';
   if (subEl) subEl.value = '';
 
-  // Elementos por defecto
-  currentTemplateBuilderElements = [
-    { type: 'text', text: 'TEXTO SUPERIOR', font: 'Cinzel', fontSize: 20, location: 'top', angle: 90, scale: 1.0 },
-    { type: 'icon', graphicId: 'soldemayo', name: 'Sol Criollo', file: 'assets/images/designs/soldemayo.svg', angle: 270, scale: 1.0 }
-  ];
-
-  renderTemplateElementRows();
+  clearTemplateUploadedFile();
   renderTemplateLivePreview();
 
   if (modal) modal.style.display = 'flex';
@@ -5340,14 +5396,21 @@ function openEditCustomizerTemplateModal(templateId) {
   if (nameEl) nameEl.value = tpl.name;
   if (subEl) subEl.value = tpl.subtitle || '';
 
-  currentTemplateBuilderElements = Array.isArray(tpl.items) ? JSON.parse(JSON.stringify(tpl.items)) : [];
-  if (currentTemplateBuilderElements.length === 0) {
-    currentTemplateBuilderElements = [
-      { type: 'text', text: 'TEXTO PERSONALIZADO', font: 'Cinzel', fontSize: 20, location: 'top', angle: 90, scale: 1.0 }
-    ];
+  if (tpl.file) {
+    currentTemplateUploadedImage = {
+      name: tpl.name,
+      file: tpl.file
+    };
+    const dataEl = document.getElementById('cust-tpl-uploaded-data');
+    if (dataEl) dataEl.value = tpl.file;
+    const statusEl = document.getElementById('cust-tpl-file-status');
+    const nameElDisplay = document.getElementById('cust-tpl-file-name');
+    if (statusEl) statusEl.style.display = 'inline-flex';
+    if (nameElDisplay) nameElDisplay.textContent = `${tpl.name} (Cargada)`;
+  } else {
+    clearTemplateUploadedFile();
   }
 
-  renderTemplateElementRows();
   renderTemplateLivePreview();
 
   if (modal) modal.style.display = 'flex';
@@ -5362,197 +5425,77 @@ function onCustomizerTemplateProductChange() {
   renderTemplateLivePreview();
 }
 
-function addTemplateTextElement() {
-  currentTemplateBuilderElements.push({
-    type: 'text',
-    text: 'NUEVO TEXTO',
-    font: 'Cinzel',
-    fontSize: 20,
-    location: currentTemplateBuilderElements.some(e => e.location === 'top') ? 'bottom' : 'top',
-    angle: 90,
-    scale: 1.0
-  });
-  renderTemplateElementRows();
-  renderTemplateLivePreview();
-}
-
-function addTemplateIconElement() {
-  const allIcons = getAllCustomizerIconsList();
-  const defaultIcon = allIcons[0] || { id: 'soldemayo', name: 'Sol de Mayo', file: 'assets/images/designs/soldemayo.svg' };
-
-  currentTemplateBuilderElements.push({
-    type: 'icon',
-    graphicId: defaultIcon.id,
-    name: defaultIcon.name,
-    file: defaultIcon.file,
-    location: 'bottom',
-    angle: 270,
-    scale: 1.0
-  });
-  renderTemplateElementRows();
-  renderTemplateLivePreview();
-}
-
-function removeTemplateElement(idx) {
-  currentTemplateBuilderElements.splice(idx, 1);
-  renderTemplateElementRows();
-  renderTemplateLivePreview();
-}
-
-function updateTemplateElementField(idx, field, value) {
-  if (!currentTemplateBuilderElements[idx]) return;
-  currentTemplateBuilderElements[idx][field] = value;
-
-  // Si cambia el graphicId de un ícono, actualizar también su nombre y file
-  if (field === 'graphicId') {
-    const allIcons = getAllCustomizerIconsList();
-    const found = allIcons.find(i => i.id === value);
-    if (found) {
-      currentTemplateBuilderElements[idx].name = found.name;
-      currentTemplateBuilderElements[idx].file = found.file;
-    }
-  }
-
-  renderTemplateLivePreview();
-}
-
-function renderTemplateElementRows() {
-  const container = document.getElementById('cust-tpl-elements-container');
-  if (!container) return;
-
-  if (currentTemplateBuilderElements.length === 0) {
-    container.innerHTML = `<span style="font-size: 0.82rem; color: var(--admin-text-muted); text-align: center; padding: 12px;">No hay elementos agregados. Hacé clic en "+ Agregar Texto" o "+ Agregar Ícono".</span>`;
-    return;
-  }
-
-  const allIcons = getAllCustomizerIconsList();
-  const fontOptions = ['Cinzel', 'Montserrat', 'Playfair Display', 'Great Vibes', 'Bebas Neue', 'Oswald', 'Outfit', 'Lora'];
-
-  container.innerHTML = currentTemplateBuilderElements.map((elem, idx) => {
-    if (elem.type === 'text') {
-      return `
-        <div style="background: var(--admin-bg-card); border: 1px solid var(--admin-border); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-          <span style="font-size: 0.72rem; font-weight: 800; background: var(--admin-border); color: #fff; padding: 2px 6px; border-radius: 4px;">
-            <i class="fas fa-font"></i> TEXTO
-          </span>
-          <input type="text" class="admin-input" value="${elem.text || ''}" placeholder="Texto..." oninput="updateTemplateElementField(${idx}, 'text', this.value)" style="flex: 2; min-width: 140px; height: 34px; font-size: 0.82rem;" />
-          
-          <select class="admin-select" onchange="updateTemplateElementField(${idx}, 'font', this.value)" style="flex: 1; min-width: 120px; height: 34px; font-size: 0.8rem;">
-            ${fontOptions.map(f => `<option value="${f}" ${elem.font === f ? 'selected' : ''}>${f}</option>`).join('')}
-          </select>
-
-          <select class="admin-select" onchange="updateTemplateElementField(${idx}, 'location', this.value)" style="width: 110px; height: 34px; font-size: 0.8rem;">
-            <option value="top" ${elem.location === 'top' ? 'selected' : ''}>Arriba</option>
-            <option value="bottom" ${elem.location === 'bottom' ? 'selected' : ''}>Abajo</option>
-            <option value="center" ${elem.location === 'center' ? 'selected' : ''}>Centro</option>
-            <option value="free" ${elem.location === 'free' ? 'selected' : ''}>Libre</option>
-          </select>
-
-          <button type="button" class="btn-admin btn-admin-outline" onclick="removeTemplateElement(${idx})" style="color: var(--admin-danger); border-color: rgba(239, 68, 68, 0.4); padding: 4px 8px; height: 34px;" title="Quitar">
-            <i class="fas fa-trash-can"></i>
-          </button>
-        </div>
-      `;
-    } else {
-      return `
-        <div style="background: var(--admin-bg-card); border: 1px solid var(--admin-border); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-          <span style="font-size: 0.72rem; font-weight: 800; background: var(--admin-gold); color: #000; padding: 2px 6px; border-radius: 4px;">
-            <i class="fas fa-shield-halved"></i> ÍCONO
-          </span>
-          <select class="admin-select" onchange="updateTemplateElementField(${idx}, 'graphicId', this.value)" style="flex: 2; min-width: 160px; height: 34px; font-size: 0.8rem;">
-            ${allIcons.map(i => `<option value="${i.id}" ${elem.graphicId === i.id ? 'selected' : ''}>${i.name} (${i.category})</option>`).join('')}
-          </select>
-
-          <select class="admin-select" onchange="updateTemplateElementField(${idx}, 'location', this.value); updateTemplateElementField(${idx}, 'angle', this.value === 'top' ? 90 : (this.value === 'bottom' ? 270 : 0));" style="width: 110px; height: 34px; font-size: 0.8rem;">
-            <option value="bottom" ${elem.location === 'bottom' || elem.angle === 270 ? 'selected' : ''}>Abajo</option>
-            <option value="top" ${elem.location === 'top' || elem.angle === 90 ? 'selected' : ''}>Arriba</option>
-            <option value="center" ${elem.location === 'center' ? 'selected' : ''}>Centro</option>
-          </select>
-
-          <button type="button" class="btn-admin btn-admin-outline" onclick="removeTemplateElement(${idx})" style="color: var(--admin-danger); border-color: rgba(239, 68, 68, 0.4); padding: 4px 8px; height: 34px;" title="Quitar">
-            <i class="fas fa-trash-can"></i>
-          </button>
-        </div>
-      `;
-    }
-  }).join('');
-}
-
 function renderTemplateLivePreview() {
   const box = document.getElementById('cust-tpl-preview-box');
   if (!box) return;
 
   const prod = document.getElementById('cust-tpl-product')?.value || 'mate';
+  const imgUrl = currentTemplateUploadedImage?.file || document.getElementById('cust-tpl-uploaded-data')?.value || '';
 
   if (prod === 'mate') {
-    // Dibujo vectorial circular de virola de mate
-    const topText = currentTemplateBuilderElements.find(e => e.type === 'text' && e.location === 'top')?.text || '';
-    const bottomText = currentTemplateBuilderElements.find(e => e.type === 'text' && e.location === 'bottom')?.text || '';
-    const iconElem = currentTemplateBuilderElements.find(e => e.type === 'icon');
-
+    // Dibujo circular de virola de mate
     box.innerHTML = `
-      <svg viewBox="0 0 240 240" style="width: 100%; height: 100%; max-height: 160px;">
-        <!-- Anillo virola -->
-        <circle cx="120" cy="120" r="105" fill="#f4f4f5" stroke="#111111" stroke-width="3" />
-        <circle cx="120" cy="120" r="65" fill="#ffffff" stroke="#111111" stroke-width="2.5" />
+      <svg viewBox="0 0 240 240" style="width: 100%; height: 100%; max-height: 170px;">
+        <!-- Fondo base y virola circular -->
+        <circle cx="120" cy="120" r="110" fill="#000000" />
+        <circle cx="120" cy="120" r="102" fill="#FAF8F5" stroke="#000000" stroke-width="2" />
+        <circle cx="120" cy="120" r="62" fill="#000000" />
         
-        <!-- Textos -->
-        ${topText ? `
-          <path id="preview-arc-top" d="M 35 120 A 85 85 0 0 1 205 120" fill="none" />
-          <text font-family="Cinzel, serif" font-size="11" font-weight="800" fill="#111111" text-anchor="middle">
-            <textPath href="#preview-arc-top" startOffset="50%">${topText}</textPath>
-          </text>
-        ` : ''}
+        <!-- Líneas guía de virola -->
+        <circle cx="120" cy="120" r="82" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1" stroke-dasharray="3,3" />
 
-        ${bottomText ? `
-          <path id="preview-arc-bottom" d="M 35 120 A 85 85 0 0 0 205 120" fill="none" />
-          <text font-family="Cinzel, serif" font-size="11" font-weight="800" fill="#111111" text-anchor="middle">
-            <textPath href="#preview-arc-bottom" startOffset="50%">${bottomText}</textPath>
+        <!-- Diseño de la plantilla grabado -->
+        ${imgUrl ? `
+          <image href="${imgUrl}" x="55" y="55" width="130" height="130" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(140%);" />
+        ` : `
+          <text x="120" y="118" font-family="Cinzel, serif" font-size="10" font-weight="700" fill="#71717a" text-anchor="middle">
+            Subí un JPG/PNG
           </text>
-        ` : ''}
-
-        <!-- Ícono -->
-        ${iconElem ? `
-          <image href="${iconElem.file || 'assets/images/designs/soldemayo.svg'}" x="100" y="172" width="40" height="40" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(120%);" />
-        ` : ''}
+          <text x="120" y="132" font-family="Montserrat, sans-serif" font-size="8" fill="#a1a1aa" text-anchor="middle">
+            para ver la virola
+          </text>
+        `}
       </svg>
     `;
   } else if (prod === 'termo') {
-    // Dibujo cilíndrico de termo
-    const texts = currentTemplateBuilderElements.filter(e => e.type === 'text');
-    const icons = currentTemplateBuilderElements.filter(e => e.type === 'icon');
-
+    // Dibujo rectangular vertical finito del termo
     box.innerHTML = `
-      <svg viewBox="0 0 160 220" style="width: 100%; height: 100%; max-height: 160px;">
-        <rect x="35" y="20" width="90" height="180" rx="12" fill="#f4f4f5" stroke="#111111" stroke-width="2.5" />
-        <rect x="55" y="6" width="50" height="14" rx="3" fill="#e4e4e7" stroke="#111111" stroke-width="2" />
-        
-        ${texts.map((t, idx) => `
-          <text x="80" y="${65 + (idx * 30)}" font-family="Cinzel, serif" font-size="10" font-weight="800" fill="#111111" text-anchor="middle">${t.text || ''}</text>
-        `).join('')}
+      <svg viewBox="0 0 160 220" style="width: 100%; height: 100%; max-height: 170px;">
+        <!-- Rectángulo finito vertical del termo -->
+        <rect x="52" y="12" width="56" height="196" rx="6" fill="#FAF8F5" stroke="#111111" stroke-width="2.2" />
+        <line x1="58" y1="28" x2="102" y2="28" stroke="rgba(0,0,0,0.12)" stroke-width="1" />
+        <line x1="58" y1="194" x2="102" y2="194" stroke="rgba(0,0,0,0.12)" stroke-width="1" />
 
-        ${icons.map((ic, idx) => `
-          <image href="${ic.file || 'assets/images/designs/soldemayo.svg'}" x="60" y="${110 + (idx * 40)}" width="40" height="40" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(120%);" />
-        `).join('')}
+        ${imgUrl ? `
+          <image href="${imgUrl}" x="56" y="45" width="48" height="130" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(140%);" />
+        ` : `
+          <text x="80" y="105" font-family="Cinzel, serif" font-size="9" font-weight="700" fill="#71717a" text-anchor="middle">
+            Termo
+          </text>
+          <text x="80" y="120" font-family="Montserrat, sans-serif" font-size="7.5" fill="#a1a1aa" text-anchor="middle">
+            Subí diseño
+          </text>
+        `}
       </svg>
     `;
   } else {
-    // Dibujo rectangular de caja de madera
-    const texts = currentTemplateBuilderElements.filter(e => e.type === 'text');
-    const icons = currentTemplateBuilderElements.filter(e => e.type === 'icon');
-
+    // Dibujo rectangular vertical de la caja de madera
     box.innerHTML = `
-      <svg viewBox="0 0 220 180" style="width: 100%; height: 100%; max-height: 160px;">
-        <rect x="15" y="15" width="190" height="150" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="2.5" />
-        <rect x="23" y="23" width="174" height="134" rx="4" fill="none" stroke="#d97706" stroke-width="1" stroke-dasharray="3,3" />
+      <svg viewBox="0 0 180 220" style="width: 100%; height: 100%; max-height: 170px;">
+        <!-- Caja vertical de presentación -->
+        <rect x="42" y="14" width="96" height="192" rx="6" fill="#18181b" stroke="#333333" stroke-width="2.5" />
+        <rect x="48" y="20" width="84" height="180" rx="4" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="4,4" />
 
-        ${texts.map((t, idx) => `
-          <text x="110" y="${60 + (idx * 30)}" font-family="Cinzel, serif" font-size="12" font-weight="800" fill="#111111" text-anchor="middle">${t.text || ''}</text>
-        `).join('')}
-
-        ${icons.map((ic, idx) => `
-          <image href="${ic.file || 'assets/images/designs/soldemayo.svg'}" x="87" y="${95 + (idx * 35)}" width="46" height="46" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(120%);" />
-        `).join('')}
+        ${imgUrl ? `
+          <image href="${imgUrl}" x="50" y="35" width="80" height="150" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) invert(1) contrast(140%);" />
+        ` : `
+          <text x="90" y="105" font-family="Cinzel, serif" font-size="9" font-weight="700" fill="#e4e4e7" text-anchor="middle">
+            Caja Madera
+          </text>
+          <text x="90" y="120" font-family="Montserrat, sans-serif" font-size="7.5" fill="#a1a1aa" text-anchor="middle">
+            Grabado blanco
+          </text>
+        `}
       </svg>
     `;
   }
@@ -5564,21 +5507,17 @@ function handleSaveCustomizerTemplate(e) {
   const prod = document.getElementById('cust-tpl-product')?.value || 'mate';
   const name = (document.getElementById('cust-tpl-name')?.value || '').trim();
   const subtitle = (document.getElementById('cust-tpl-subtitle')?.value || '').trim();
+  const uploadedImg = currentTemplateUploadedImage?.file || document.getElementById('cust-tpl-uploaded-data')?.value || '';
 
   if (!name) {
     alert('Por favor completá el nombre de la plantilla.');
     return;
   }
 
-  if (currentTemplateBuilderElements.length === 0) {
-    alert('Por favor agregá al menos un elemento (texto o grabado) a la plantilla.');
+  if (!uploadedImg) {
+    alert('Por favor agregá el diseño de la plantilla desde tu dispositivo (formato JPG o PNG).');
     return;
   }
-
-  // Generar preview vectorial Data URL
-  const previewBox = document.getElementById('cust-tpl-preview-box');
-  const svgMarkup = previewBox?.innerHTML ? previewBox.innerHTML.trim() : '';
-  const thumbUrl = svgMarkup ? ('data:image/svg+xml;utf8,' + encodeURIComponent(svgMarkup)) : 'assets/images/designs/soldemayo.svg';
 
   const templates = getCustomizerTemplates();
 
@@ -5589,8 +5528,8 @@ function handleSaveCustomizerTemplate(e) {
       product: prod,
       name: name,
       subtitle: subtitle || 'Plantilla de Grabado',
-      file: thumbUrl,
-      items: JSON.parse(JSON.stringify(currentTemplateBuilderElements)),
+      file: uploadedImg,
+      items: [{ type: 'image', file: uploadedImg, name: name }],
       isCustom: true,
       updatedAt: new Date().toISOString()
     };
@@ -5602,7 +5541,7 @@ function handleSaveCustomizerTemplate(e) {
     }
     saveCustomizerTemplates(templates);
     logAuditAction('Edición de Plantilla', `Plantilla "${name}" (${prod}) actualizada`);
-    showAdminToast(`¡Plantilla "${name}" actualizada con éxito!`, 'fa-circle-check');
+    showAdminToast(`¡Plantilla "${name}" actualizada y sincronizada con el servidor!`, 'fa-circle-check');
   } else {
     const newId = 'tpl_custom_' + Date.now();
     const newTpl = {
@@ -5610,15 +5549,23 @@ function handleSaveCustomizerTemplate(e) {
       product: prod,
       name: name,
       subtitle: subtitle || 'Plantilla de Grabado',
-      file: thumbUrl,
-      items: JSON.parse(JSON.stringify(currentTemplateBuilderElements)),
+      file: uploadedImg,
+      items: [{ type: 'image', file: uploadedImg, name: name }],
       isCustom: true,
       createdAt: new Date().toISOString()
     };
     templates.push(newTpl);
     saveCustomizerTemplates(templates);
     logAuditAction('Alta de Plantilla', `Nueva plantilla "${name}" (${prod}) publicada`);
-    showAdminToast(`¡Plantilla "${name}" publicada con éxito!`, 'fa-circle-check');
+    showAdminToast(`¡Plantilla "${name}" publicada y sincronizada con el servidor!`, 'fa-circle-check');
+  }
+
+  // AUTO-SINCRONIZACIÓN AUTOMÁTICA CON EL SERVIDOR Y DISPOSITIVOS
+  if (window.MatesRioCloudSync && typeof window.MatesRioCloudSync.pushNow === 'function') {
+    window.MatesRioCloudSync.pushNow();
+  }
+  if (window.MatesRioCloudSync && typeof window.MatesRioCloudSync.push === 'function') {
+    window.MatesRioCloudSync.push();
   }
 
   closeCustomizerTemplateModal();

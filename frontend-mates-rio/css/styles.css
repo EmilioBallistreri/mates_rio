@@ -17013,7 +17013,8 @@ body.theme-inverted .studio-main-stage-full {
   padding: 9px 18px !important;
   border-radius: 999px !important;
   cursor: pointer !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: none !important;
+  filter: none !important;
 }
 
 .stage-top-right-finish-btn i {
@@ -18598,4 +18599,76 @@ body.theme-inverted .prod-select-card.active .prod-card-check {
 .btn-completion-choice .choice-text span,
 .btn-completion-choice .choice-text small {
   color: #52525b !important;
+}
+
+/* ==========================================================================
+   PERSONALIZACIÓN: AJUSTES DE LÍNEA ÚNICA Y VISTA 360° SIN SOMBRAS
+   ========================================================================== */
+.stage-top-left-360-btn {
+  position: relative !important;
+  z-index: 50 !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1.5px solid #000000 !important;
+  font-weight: 800 !important;
+  padding: 8px 16px !important;
+  border-radius: 999px !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.6px !important;
+  text-transform: uppercase !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
+}
+
+.stage-top-left-360-btn i {
+  color: #000000 !important;
+}
+
+.stage-top-left-360-btn.active {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+
+.stage-top-left-360-btn.active i {
+  color: #ffffff !important;
+}
+
+/* Eliminación total de sombras en el personalizador */
+.stage-top-right-finish-btn,
+.stage-top-left-360-btn,
+.ribbon-top-right-finish-btn,
+.studio-canvas-stage,
+.studio-canvas-wrap {
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* Todo en una sola línea en la barra Ribbon superior (sin scrollbar horizontal en pantallas medianas y grandes) */
+@media (min-width: 992px) {
+  .ribbon-toolbar-content {
+    overflow-x: hidden !important;
+    padding: 10px 14px !important;
+  }
+  .ribbon-tab-panel.active {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+  }
+  .ribbon-group {
+    padding: 4px 8px !important;
+    margin-right: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  .ribbon-group-label {
+    font-size: 0.65rem !important;
+  }
 }

@@ -2361,8 +2361,8 @@ function renderVirolaCanvas() {
         ${defsTextPathsHtml}
       </defs>
 
-      <!-- Cuero vacuno exterior bitono negro -->
-      <circle cx="${cx}" cy="${cy}" r="${rOuter + 8}" fill="#111111" stroke="#2b2b2b" stroke-width="4" />
+      <!-- Círculo exterior grande color negro (sin sombras grises) -->
+      <circle cx="${cx}" cy="${cy}" r="${rOuter + 8}" fill="#000000" stroke="#000000" stroke-width="2" />
 
       <!-- Corona de Alpaca / Virola Metálica (Ancho 70px) -->
       <path d="M ${cx} ${cy - rOuter} 
@@ -2371,28 +2371,16 @@ function renderVirolaCanvas() {
                M ${cx} ${cy - rInner} 
                A ${rInner} ${rInner} 0 1 1 ${cx} ${cy + rInner} 
                A ${rInner} ${rInner} 0 1 1 ${cx} ${cy - rInner} Z"
-            fill="${metalFillGrad}" 
-            stroke="#666666" 
-            stroke-width="1.5"
+            fill="#FAF8F5" 
+            stroke="#000000" 
+            stroke-width="2" 
             fill-rule="evenodd" />
-
-      <!-- Brillo de Orfebre -->
-      <path d="M ${cx} ${cy - rOuter} 
-               A ${rOuter} ${rOuter} 0 1 0 ${cx} ${cy + rOuter} 
-               A ${rOuter} ${rOuter} 0 1 0 ${cx} ${cy - rOuter} Z
-               M ${cx} ${cy - rInner} 
-               A ${rInner} ${rInner} 0 1 1 ${cx} ${cy + rInner} 
-               A ${rInner} ${rInner} 0 1 1 ${cx} ${cy - rInner} Z"
-            fill="url(#metal-reflection)" 
-            fill-rule="evenodd" 
-            opacity="0.4" />
 
       <!-- Ranuras concéntricas -->
       ${circularLinesHtml}
 
-      <!-- Boca interior del mate en color blanco esmaltado -->
-      <circle cx="${cx}" cy="${cy}" r="${rInner}" fill="url(#calabaza-interior)" stroke="#b5b5b5" stroke-width="2.5" />
-      <circle cx="${cx}" cy="${cy}" r="${rInner - 18}" fill="#ffffff" opacity="0.95" />
+      <!-- Círculo interior color negro (sin sombreado gris) -->
+      <circle cx="${cx}" cy="${cy}" r="${rInner}" fill="#000000" stroke="#000000" stroke-width="2" />
 
       <!-- Grabados Láser -->
       <g class="virola-engravings-container" ${studio.clipToMetal ? 'clip-path="url(#metal-ring-clip)"' : ''}>
@@ -4757,30 +4745,130 @@ function escapeHtml(str) {
     const { cx } = STUDIO_CONFIG;
 
     // -------------------------------------------------------------------------
-    // VISTA 2D DEL TERMO
+    // VISTA 2D DEL TERMO (RECTÁNGULO FINITO EN VERTICAL / VISTA 360° HORIZONTAL)
     // -------------------------------------------------------------------------
     if (studio.activeProduct === 'termo') {
-      const tWidth = 170;
-      const tHeight = 390;
-      const tX = cx - tWidth / 2; // 165
-      const tY = 66;              // 66..456
+      if (studio.termo360Active) {
+        // Vista Horizontal 360°: Rectángulo grande horizontal sin sombras
+        const rectW = 440;
+        const rectH = 220;
+        const rectX = cx - rectW / 2; // 30
+        const rectY = 140;
+
+        let textsHtml = '';
+        const textItems = studio.items.filter(i => i.type === 'text');
+        textItems.forEach((t, idx) => {
+          const isActive = t.id === studio.activeItemId;
+          if (t.x === undefined || t.y < rectY || t.y > rectY + rectH) {
+            t.x = cx;
+            t.y = rectY + 60 + idx * 45;
+          }
+          const x = Math.max(rectX + 24, Math.min(rectX + rectW - 24, t.x));
+          const y = Math.max(rectY + 24, Math.min(rectY + rectH - 24, t.y));
+          t.x = x;
+          t.y = y;
+          const rot = t.rotation || 0;
+          const fSize = Math.round((t.fontSize || 22) * (t.scale || 1));
+          const approxHalfW = Math.max(36, ((t.text || '').length * fSize * 0.34));
+          const approxHalfH = Math.max(14, fSize * 0.65);
+
+          textsHtml += `
+            <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
+               data-item-id="${t.id}"
+               transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
+               onmousedown="startFreeItemDrag('${t.id}', event)"
+               ontouchstart="startFreeItemDrag('${t.id}', event)">
+              <text font-family="'${t.font || 'Cinzel'}', serif" 
+                    font-size="${fSize}" 
+                    font-weight="800" 
+                    letter-spacing="1.5px" 
+                    fill="#111111" 
+                    text-anchor="middle" 
+                    dominant-baseline="central" 
+                    style="cursor: grab; fill: #111111 !important;" 
+                    class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
+                    data-item-id="${t.id}">
+                ${escapeHtml(t.text)}
+              </text>
+              ${build2DItemHandlesHtml(t, approxHalfW, approxHalfH, false)}
+            </g>
+          `;
+        });
+
+        let iconsHtml = '';
+        const iconItems = studio.items.filter(i => i.type === 'icon' || i.type === 'image');
+        iconItems.forEach((item, idx) => {
+          if (item.fileBlack) item.file = item.fileBlack;
+          const scale = item.scale || 1.0;
+          const rot = item.rotation || 0;
+          const isActive = item.id === studio.activeItemId;
+          if (item.x === undefined || item.y < rectY || item.y > rectY + rectH) {
+            item.x = cx;
+            item.y = rectY + 110 + idx * 45;
+          }
+          const x = Math.max(rectX + 24, Math.min(rectX + rectW - 24, item.x));
+          const y = Math.max(rectY + 24, Math.min(rectY + rectH - 24, item.y));
+          item.x = x;
+          item.y = y;
+          const baseSize = 44;
+          const wRatio = item.wRatio || 1.0;
+          const hRatio = item.hRatio || 1.0;
+          const itemW = baseSize * scale * wRatio;
+          const itemH = baseSize * scale * hRatio;
+          const halfW = itemW / 2;
+          const halfH = itemH / 2;
+
+          const contentHtml = `<image href="${item.file}" x="${-halfW}" y="${-halfH}" width="${itemW}" height="${itemH}" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(115%);" />`;
+
+          iconsHtml += `
+            <g class="virola-sticker-group ${isActive ? 'active-sticker' : ''}" 
+               data-item-id="${item.id}" 
+               transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
+               onmousedown="startFreeItemDrag('${item.id}', event)"
+               ontouchstart="startFreeItemDrag('${item.id}', event)"
+               style="cursor: grab;">
+              ${contentHtml}
+              ${build2DItemHandlesHtml(item, halfW, halfH, false)}
+            </g>
+          `;
+        });
+
+        svg.innerHTML = `
+          <!-- Rectángulo Grande Horizontal 360° (Desarrollo cilíndrico completo del Termo, sin sombreados) -->
+          <rect x="${rectX}" y="${rectY}" width="${rectW}" height="${rectH}" rx="8" fill="#FAF8F5" stroke="#111111" stroke-width="2.5" />
+          <line x1="${rectX + rectW / 3}" y1="${rectY}" x2="${rectX + rectW / 3}" y2="${rectY + rectH}" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="4,4" />
+          <line x1="${rectX + (rectW / 3) * 2}" y1="${rectY}" x2="${rectX + (rectW / 3) * 2}" y2="${rectY + rectH}" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="4,4" />
+          <rect x="${rectX + 16}" y="${rectY + 16}" width="${rectW - 32}" height="${rectH - 32}" rx="4" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="1" stroke-dasharray="5,5" />
+
+          <!-- Grabados en color negro sobre el lienzo 360° -->
+          <g class="virola-texts-layer">${textsHtml}</g>
+          <g class="virola-icons-layer">${iconsHtml}</g>
+        `;
+        return;
+      }
+
+      // Vista Estándar del Termo: Rectángulo finito en vertical (sin sombreado alguno)
+      const tWidth = 90;
+      const tHeight = 410;
+      const tX = cx - tWidth / 2; // 205
+      const tY = 45;
 
       let textsHtml = '';
       const textItems = studio.items.filter(i => i.type === 'text');
       textItems.forEach((t, idx) => {
         const isActive = t.id === studio.activeItemId;
-        if (t.x === undefined || t.y < 85 || t.y > 435) {
+        if (t.x === undefined || t.y < tY || t.y > tY + tHeight) {
           t.x = cx;
-          t.y = 175 + idx * 42;
+          t.y = 135 + idx * 42;
         }
-        const x = Math.max(tX + 20, Math.min(tX + tWidth - 20, t.x));
-        const y = Math.max(tY + 28, Math.min(tY + tHeight - 28, t.y));
+        const x = Math.max(tX + 14, Math.min(tX + tWidth - 14, t.x));
+        const y = Math.max(tY + 24, Math.min(tY + tHeight - 24, t.y));
         t.x = x;
         t.y = y;
         const rot = t.rotation || 0;
-        const fSize = Math.round((t.fontSize || 22) * (t.scale || 1));
-        const approxHalfW = Math.max(36, ((t.text || '').length * fSize * 0.34));
-        const approxHalfH = Math.max(14, fSize * 0.65);
+        const fSize = Math.round((t.fontSize || 18) * (t.scale || 1));
+        const approxHalfW = Math.max(26, ((t.text || '').length * fSize * 0.3));
+        const approxHalfH = Math.max(12, fSize * 0.6);
 
         textsHtml += `
           <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
@@ -4791,14 +4879,14 @@ function escapeHtml(str) {
             <text font-family="'${t.font || 'Cinzel'}', serif" 
                   font-size="${fSize}" 
                   font-weight="800" 
-                  letter-spacing="1.5px" 
+                  letter-spacing="1.2px" 
                   fill="#111111" 
                   text-anchor="middle" 
                   dominant-baseline="central" 
                   style="cursor: grab; fill: #111111 !important;" 
                   class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
                   data-item-id="${t.id}">
-              ${escapeHtml(t.text)}
+                ${escapeHtml(t.text)}
             </text>
             ${build2DItemHandlesHtml(t, approxHalfW, approxHalfH, false)}
           </g>
@@ -4806,21 +4894,21 @@ function escapeHtml(str) {
       });
 
       let iconsHtml = '';
-      const iconItems = studio.items.filter(i => i.type === 'icon');
+      const iconItems = studio.items.filter(i => i.type === 'icon' || i.type === 'image');
       iconItems.forEach((item, idx) => {
         if (item.fileBlack) item.file = item.fileBlack;
         const scale = item.scale || 1.0;
         const rot = item.rotation || 0;
         const isActive = item.id === studio.activeItemId;
-        if (item.x === undefined || item.y < 85 || item.y > 435) {
+        if (item.x === undefined || item.y < tY || item.y > tY + tHeight) {
           item.x = cx;
-          item.y = 285 + idx * 58;
+          item.y = 230 + idx * 50;
         }
-        const x = Math.max(tX + 22, Math.min(tX + tWidth - 22, item.x));
-        const y = Math.max(tY + 28, Math.min(tY + tHeight - 28, item.y));
+        const x = Math.max(tX + 16, Math.min(tX + tWidth - 16, item.x));
+        const y = Math.max(tY + 24, Math.min(tY + tHeight - 24, item.y));
         item.x = x;
         item.y = y;
-        const baseSize = 44;
+        const baseSize = 36;
         const wRatio = item.wRatio || 1.0;
         const hRatio = item.hRatio || 1.0;
         const itemW = baseSize * scale * wRatio;
@@ -4828,7 +4916,7 @@ function escapeHtml(str) {
         const halfW = itemW / 2;
         const halfH = itemH / 2;
 
-        const contentHtml = `<image href="${item.file}" x="${-halfW}" y="${-halfH}" width="${itemW}" height="${itemH}" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(115%) drop-shadow(0 0.8px 1px rgba(0,0,0,0.35));" />`;
+        const contentHtml = `<image href="${item.file}" x="${-halfW}" y="${-halfH}" width="${itemW}" height="${itemH}" preserveAspectRatio="xMidYMid meet" style="filter: grayscale(100%) contrast(115%);" />`;
 
         iconsHtml += `
           <g class="virola-sticker-group ${isActive ? 'active-sticker' : ''}" 
@@ -4844,33 +4932,13 @@ function escapeHtml(str) {
       });
 
       svg.innerHTML = `
-        <defs>
-          <linearGradient id="termo-real-2d-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#1f1f1f" />
-            <stop offset="22%" stop-color="#525252" />
-            <stop offset="50%" stop-color="#f8f8f8" />
-            <stop offset="78%" stop-color="#404040" />
-            <stop offset="100%" stop-color="#141414" />
-          </linearGradient>
-        </defs>
+        <!-- Termo: Rectángulo Finito en Vertical (Sin sombreado alguno) -->
+        <rect x="${tX}" y="${tY}" width="${tWidth}" height="${tHeight}" rx="6" fill="#FAF8F5" stroke="#111111" stroke-width="2.2" />
+        <line x1="${tX + 10}" y1="${tY + 22}" x2="${tX + tWidth - 10}" y2="${tY + 22}" stroke="rgba(0,0,0,0.12)" stroke-width="1" />
+        <line x1="${tX + 10}" y1="${tY + tHeight - 22}" x2="${tX + tWidth - 10}" y2="${tY + tHeight - 22}" stroke="rgba(0,0,0,0.12)" stroke-width="1" />
+        <rect x="${tX + 6}" y="${tY + 28}" width="${tWidth - 12}" height="${tHeight - 56}" rx="4" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1" stroke-dasharray="4,4" />
 
-        <!-- Sombra inferior del termo -->
-        <ellipse cx="${cx}" cy="${tY + tHeight + 12}" rx="84" ry="16" fill="rgba(0,0,0,0.45)" />
-
-        <!-- Pico vertedor y tapón cebador superior -->
-        <rect x="${cx - 21}" y="${tY - 36}" width="42" height="12" rx="3" fill="#262626" stroke="#404040" stroke-width="1" />
-        <rect x="${cx - 40}" y="${tY - 26}" width="80" height="28" rx="6" fill="#111111" stroke="#2b2b2b" stroke-width="1.5" />
-
-        <!-- Cuerpo cilíndrico real del Termo 1L -->
-        <rect x="${tX}" y="${tY}" width="${tWidth}" height="${tHeight}" rx="16" fill="url(#termo-real-2d-grad)" stroke="#2b2b2b" stroke-width="2.2" />
-
-        <!-- Banda de base inferior reforzada -->
-        <rect x="${tX + 3}" y="${tY + tHeight - 18}" width="${tWidth - 6}" height="18" rx="8" fill="#141414" />
-
-        <!-- Guía sutil del área de grabado láser vertical -->
-        <rect x="${tX + 14}" y="${tY + 24}" width="${tWidth - 28}" height="${tHeight - 52}" rx="8" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.1" stroke-dasharray="5,5" />
-
-        <!-- Grabados en color negro sobre el acero del termo -->
+        <!-- Grabados en color negro sobre el termo -->
         <g class="virola-texts-layer">${textsHtml}</g>
         <g class="virola-icons-layer">${iconsHtml}</g>
       `;
@@ -4878,7 +4946,7 @@ function escapeHtml(str) {
     }
 
     // -------------------------------------------------------------------------
-    // VISTA 2D DE LA CAJA DE PRESENTACIÓN VERTICAL (Grabado en BLANCO)
+    // VISTA 2D DE LA CAJA DE PRESENTACIÓN VERTICAL (Grabado en BLANCO, sin sombreados)
     // -------------------------------------------------------------------------
     const boxW = 270;
     const boxH = 400;
@@ -4914,34 +4982,27 @@ function escapeHtml(str) {
                 fill="#ffffff" 
                 text-anchor="middle" 
                 dominant-baseline="central" 
-                style="cursor: grab; fill: #ffffff !important; color: #ffffff !important; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.75));" 
+                style="cursor: grab; fill: #ffffff !important; color: #ffffff !important;" 
                 class="virola-curved-text box-white-text ${isActive ? 'active-text-element' : ''}" 
                 data-item-id="${t.id}">
             ${escapeHtml(t.text)}
           </text>
         </g>
       `;
-
       if (isActive) {
-        handlesHtml += `
-          <g class="box-active-handle-wrap" transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})">
-            ${build2DItemHandlesHtml(t, approxHalfW, approxHalfH, true)}
-          </g>
-        `;
+        handlesHtml = buildBoxHandlesHtml(t, approxHalfW, approxHalfH);
       }
     });
 
     let iconsHtml = '';
-    const iconItems = studio.items.filter(i => i.type === 'icon');
+    const iconItems = studio.items.filter(i => i.type === 'icon' || i.type === 'image');
     iconItems.forEach((item, idx) => {
-      if (item.fileWhite) item.file = item.fileWhite;
-      const imgSrc = item.fileWhite || item.file;
       const scale = item.scale || 1.0;
       const rot = item.rotation || 0;
       const isActive = item.id === studio.activeItemId;
       if (item.x === undefined) {
         item.x = cx;
-        item.y = 275 + idx * 58;
+        item.y = 265 + idx * 55;
       }
       const x = item.x;
       const y = item.y;
@@ -4953,15 +5014,15 @@ function escapeHtml(str) {
       const halfW = itemW / 2;
       const halfH = itemH / 2;
 
-      // Si es imagen subida (ya procesada en blanco en fileWhite), no invertir de nuevo; para SVGs/escudos/emojis invertir en escala de grises para preservar todos los trazos internos en blanco
-      const boxImgFilter = item.fileWhite
-        ? 'drop-shadow(0 1px 2px rgba(0,0,0,0.75))'
-        : 'grayscale(100%) invert(1) contrast(115%) drop-shadow(0 1px 2px rgba(0,0,0,0.75))';
+      const isFootballShield = item.category === 'deportes' || /boca|river|racing|independiente|velez|sanlorenzo|talleres|belgrano|afa|estrellas/i.test(item.id || item.graphicId || '');
+      const filterStyle = isFootballShield
+        ? 'none'
+        : 'grayscale(100%) invert(1) contrast(115%)';
 
-      const contentHtml = `<image href="${imgSrc}" x="${-halfW}" y="${-halfH}" width="${itemW}" height="${itemH}" preserveAspectRatio="xMidYMid meet" style="filter: ${boxImgFilter} !important;" />`;
+      const contentHtml = `<image href="${item.file}" x="${-halfW}" y="${-halfH}" width="${itemW}" height="${itemH}" preserveAspectRatio="xMidYMid meet" style="filter: ${filterStyle};" />`;
 
       iconsHtml += `
-        <g class="virola-sticker-group box-white-sticker ${item.fileWhite ? 'custom-white-upload' : ''} ${isActive ? 'active-sticker' : ''}" 
+        <g class="virola-sticker-group box-white-icon ${isActive ? 'active-sticker' : ''}" 
            data-item-id="${item.id}" 
            transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
            onmousedown="startFreeItemDrag('${item.id}', event)"
@@ -4970,49 +5031,72 @@ function escapeHtml(str) {
           ${contentHtml}
         </g>
       `;
-
       if (isActive) {
-        handlesHtml += `
-          <g class="box-active-handle-wrap" transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})">
-            ${build2DItemHandlesHtml(item, halfW, halfH, true)}
-          </g>
-        `;
+        handlesHtml = buildBoxHandlesHtml(item, halfW, halfH);
       }
     });
 
-    // Formato rectangular VERTICAL de la Caja de presentación negra con grabado en blanco recortado en bordes
     svg.innerHTML = `
       <defs>
-        <linearGradient id="box-dark-finish" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#1c1c1c" />
-          <stop offset="50%" stop-color="#121212" />
-          <stop offset="100%" stop-color="#0a0a0a" />
-        </linearGradient>
         <clipPath id="box-face-clip">
           <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" rx="10" />
         </clipPath>
       </defs>
 
-      <!-- Sombra exterior vertical -->
-      <rect x="${boxX + 4}" y="${boxY + 4}" width="${boxW}" height="${boxH}" rx="12" fill="rgba(0,0,0,0.45)" />
+      <!-- Cuerpo Rectangular VERTICAL de la Caja de Presentación (Sin sombras exteriores ni textos) -->
+      <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" rx="10" fill="#18181b" stroke="#333333" stroke-width="3" />
 
-      <!-- Cuerpo Rectangular VERTICAL de la Caja de Presentación -->
-      <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" rx="10" fill="url(#box-dark-finish)" stroke="#333333" stroke-width="3" />
-
-      <text x="250" y="38" text-anchor="middle" fill="#ffffff" opacity="0.75" font-size="10.5" font-weight="700" letter-spacing="1.4">CAJA DE PRESENTACIÓN VERTICAL (GRABADO EN BLANCO)</text>
-
-      <!-- Grabados invertidos en color blanco recortados con los bordes de la caja (misma lógica que virola) -->
+      <!-- Grabados invertidos en color blanco recortados con los bordes de la caja -->
       <g class="virola-engravings-container" clip-path="url(#box-face-clip)">
         <g class="virola-texts-layer">${textsHtml}</g>
         <g class="virola-icons-layer">${iconsHtml}</g>
       </g>
 
-      <!-- Controles del elemento activo (sin recorte para que las manijas siempre sean accesibles) -->
+      <!-- Controles del elemento activo -->
       <g class="virola-active-handles-layer">${handlesHtml}</g>
     `;
   };
 
-  // 8. Sobrescribir render360Canvas: mismo tamaño real del termo (170x390) y proyección sincronizada 1:1 con 2D
+  // -------------------------------------------------------------------------
+  // CONTROLADOR DE VISTA 360° PARA TERMO (OPUESTO A FINALIZAR PEDIDO)
+  // -------------------------------------------------------------------------
+  studio.termo360Active = false;
+
+  window.toggleTermo360View = function() {
+    studio.termo360Active = !studio.termo360Active;
+    const btn = document.getElementById('btn-termo-360-toggle');
+    const txt = document.getElementById('termo-360-btn-text');
+    if (btn && txt) {
+      if (studio.termo360Active) {
+        btn.classList.add('active');
+        btn.style.background = '#000000';
+        btn.style.color = '#ffffff';
+        txt.textContent = 'Vertical';
+        if (typeof showNotificationToast === 'function') {
+          showNotificationToast('Vista 360° extendida horizontal activada', 'fa-arrows-rotate');
+        }
+      } else {
+        btn.classList.remove('active');
+        btn.style.background = '#ffffff';
+        btn.style.color = '#000000';
+        txt.textContent = '360°';
+        if (typeof showNotificationToast === 'function') {
+          showNotificationToast('Vista vertical estándar del termo', 'fa-arrows-rotate');
+        }
+      }
+    }
+    renderVirolaCanvas();
+  };
+
+  const _origUpdateStageBadge = window.updateStageBadge;
+  window.updateStageBadge = function() {
+    if (typeof _origUpdateStageBadge === 'function') _origUpdateStageBadge();
+    const btn360 = document.getElementById('btn-termo-360-toggle');
+    if (btn360) {
+      btn360.style.display = studio.activeProduct === 'termo' ? 'inline-flex' : 'none';
+    }
+  };
+
   window.render360Canvas = function() {
     const canvas = document.getElementById('studio-360-canvas');
     if (!canvas) return;

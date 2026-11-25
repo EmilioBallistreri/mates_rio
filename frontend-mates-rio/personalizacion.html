@@ -437,27 +437,6 @@
               <span class="ribbon-group-label">Formato & Curvatura</span>
             </div>
 
-            <!-- Grupo 6: Capas de Texto Activas -->
-            <div class="ribbon-group">
-              <div class="ribbon-group-content" id="text-layers-container">
-                <!-- Capas en pills dinámicos -->
-              </div>
-              <span class="ribbon-group-label">Capas Activas</span>
-            </div>
-
-            <!-- Grupo 7: Operaciones -->
-            <div class="ribbon-group">
-              <div class="ribbon-group-content">
-                <button type="button" class="ribbon-btn" onclick="duplicateActiveItem()" title="Duplicar texto">
-                  <i class="fas fa-clone"></i>
-                </button>
-                <button type="button" class="ribbon-btn" onclick="deleteActiveVirolaItem()" title="Eliminar texto">
-                  <i class="fas fa-trash-can"></i>
-                </button>
-              </div>
-              <span class="ribbon-group-label">Editar</span>
-            </div>
-
           </div>
 
           <!-- PESTAÑA 2: DISEÑOS, ESCUDOS, EMOJIS Y PLANTILLAS -->
@@ -649,8 +628,12 @@
       <!-- 4. LIENZO CENTRAL EXPANDIDO (VISTA ESTÁNDAR 2D ÚNICAMENTE) -->
       <section class="studio-main-stage-full" id="studio-main-stage" aria-label="Lienzo de Grabado">
 
-        <!-- Barra de Control Superior en el Lienzo (con botón Finalizar Pedido arriba a la derecha) -->
+        <!-- Barra de Control Superior en el Lienzo (con botón 360° opuesto a Finalizar Pedido) -->
         <div class="stage-topbar-controls">
+          <button type="button" class="btn btn-outline-dark stage-top-left-360-btn" id="btn-termo-360-toggle" onclick="toggleTermo360View()" style="display: none;" title="Alternar Vista 360° Horizontal">
+            <i class="fas fa-arrows-rotate"></i> <span id="termo-360-btn-text">360°</span>
+          </button>
+
           <div class="stage-badge-status" id="stage-badge-status">
             <i class="fas fa-circle live-pulse-dot"></i> <span id="stage-status-text">CORONA DE ALPACA MACIZA (ANCHO 70MM) • ESCALA 1:1 CNC</span>
           </div>
