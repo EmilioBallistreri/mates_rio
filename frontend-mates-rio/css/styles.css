@@ -490,14 +490,17 @@ textarea {
 .dropdown-cat-info {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  flex: 1;
 }
 
 .dropdown-cat-name {
   font-family: var(--font-heading);
-  font-size: 0.84rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: var(--text-main);
   letter-spacing: 0.3px;
+  line-height: 1.2;
 }
 
 .dropdown-cat-desc {
@@ -11953,10 +11956,11 @@ body.theme-light .ribbon-font-item {
   margin-bottom: 40px;
 }
 
-body.theme-light .studio-main-stage-full {
-  background: radial-gradient(circle at center, #ffffff 0%, #f4f4f5 60%, #e4e4e7 100%);
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+body.theme-light .studio-main-stage-full,
+html.theme-light .studio-main-stage-full {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: none !important;
 }
 
 /* Barra superior del Lienzo con alternancia de modos */
@@ -12162,7 +12166,7 @@ html.theme-light .drop-overlay-content p {
   max-width: 520px;
   max-height: 520px;
   touch-action: none;
-  filter: drop-shadow(0 20px 42px rgba(0, 0, 0, 0.7));
+  filter: none !important;
   user-select: none;
 }
 
@@ -18650,25 +18654,79 @@ body.theme-inverted .prod-select-card.active .prod-card-check {
   filter: none !important;
 }
 
-/* Todo en una sola línea en la barra Ribbon superior (sin scrollbar horizontal en pantallas medianas y grandes) */
+/* Todo en una sola línea en la barra Ribbon superior (sin scrollbar ni cortes) */
 @media (min-width: 992px) {
   .ribbon-toolbar-content {
-    overflow-x: hidden !important;
-    padding: 10px 14px !important;
+    overflow-x: auto !important;
+    padding: 8px 12px !important;
   }
   .ribbon-tab-panel.active {
     display: flex !important;
     flex-wrap: nowrap !important;
-    gap: 8px !important;
+    gap: 6px !important;
     justify-content: flex-start !important;
     align-items: center !important;
   }
-  .ribbon-group {
-    padding: 4px 8px !important;
+  #ribbon-panel-text .ribbon-group {
+    padding: 2px 5px !important;
     margin-right: 0 !important;
     flex-shrink: 0 !important;
   }
-  .ribbon-group-label {
-    font-size: 0.65rem !important;
+  #ribbon-panel-text .ribbon-group-content {
+    gap: 4px !important;
+  }
+  #ribbon-panel-text #active-text-input {
+    width: 135px !important;
+    min-width: 110px !important;
+    max-width: 155px !important;
+    height: 28px !important;
+    font-size: 0.74rem !important;
+    padding: 2px 24px 2px 8px !important;
+  }
+  #ribbon-panel-text .ribbon-btn-lg {
+    font-size: 0.72rem !important;
+    padding: 3px 6px !important;
+    height: 28px !important;
+    white-space: nowrap !important;
+  }
+  #ribbon-panel-text #ribbon-font-select-btn {
+    min-width: 85px !important;
+    max-width: 105px !important;
+    padding: 3px 6px !important;
+    height: 28px !important;
+    font-size: 0.74rem !important;
+  }
+  #ribbon-panel-text #active-text-size-input {
+    width: 40px !important;
+    height: 28px !important;
+    font-size: 0.74rem !important;
+    padding: 0 2px !important;
+  }
+  #ribbon-panel-text #active-text-size-slider {
+    display: none !important;
+  }
+  #ribbon-panel-text .ribbon-btn-icon-only {
+    width: 24px !important;
+    height: 28px !important;
+    padding: 0 !important;
+  }
+  #ribbon-panel-text .lines-pill-btn {
+    padding: 3px 6px !important;
+    font-size: 0.7rem !important;
+    height: 28px !important;
+  }
+  #ribbon-panel-text .active-text-curve-btn {
+    padding: 3px 7px !important;
+    font-size: 0.72rem !important;
+    height: 28px !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+  }
+  #ribbon-panel-text .ribbon-group-label {
+    font-size: 0.62rem !important;
+    margin-top: 1px !important;
+    line-height: 1 !important;
   }
 }
