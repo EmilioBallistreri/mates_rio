@@ -1113,15 +1113,17 @@
     function getWholesaleTierPrice(prod, qty) {
       const base = getWholesaleBasePrice(prod);
       const q = Number(qty) || 5;
-      if (q >= 20) return Math.round(base * 0.82); // 18% descuento adicional por volumen
-      if (q >= 10) return Math.round(base * 0.90); // 10% descuento adicional por volumen
-      return base; // 5 a 9 unidades (Precio base mayorista)
+      if (q > 300) return Math.round(base * 0.78); // 300 para arriba (-22% adicional)
+      if (q >= 100) return Math.round(base * 0.85); // 100 a 300 u. (-15% adicional)
+      if (q >= 50) return Math.round(base * 0.92);  // 50 a 100 u. (-8% adicional)
+      return base; // 5 a 49 unidades (Precio base mayorista)
     }
 
     function getWholesaleTierDiscountPct(qty) {
       const q = Number(qty) || 5;
-      if (q >= 20) return 18;
-      if (q >= 10) return 10;
+      if (q > 300) return 22;
+      if (q >= 100) return 15;
+      if (q >= 50) return 8;
       return 0;
     }
 
@@ -1151,26 +1153,26 @@
           (discountPct > 0 ? ` <span style="background: #111111; color: #ffffff; padding: 1px 6px; border-radius: 4px; font-size: 0.68rem; margin-left: 4px; font-weight: 800;">¡${discountPct}% OFF EXTRA!</span>` : '');
       }
 
-      // Resaltar escala activa
-      const chip5 = document.getElementById(`tier-chip-5-${prodId}`);
-      const chip10 = document.getElementById(`tier-chip-10-${prodId}`);
-      const chip20 = document.getElementById(`tier-chip-20-${prodId}`);
+      // Resaltar escala activa (50 a 100, 100 a 300, +300 u.)
+      const chip50 = document.getElementById(`tier-chip-50-${prodId}`);
+      const chip100 = document.getElementById(`tier-chip-100-${prodId}`);
+      const chip300 = document.getElementById(`tier-chip-300-${prodId}`);
 
-      if (chip5) {
-        chip5.style.background = (qty < 10) ? '#111111' : '#f4f4f5';
-        chip5.style.color = (qty < 10) ? '#ffffff' : '#52525b';
-        chip5.style.fontWeight = (qty < 10) ? '800' : '500';
-      }
-      if (chip10) {
-        chip10.style.background = (qty >= 10 && qty < 20) ? '#111111' : '#f4f4f5';
-        chip10.style.color = (qty >= 10 && qty < 20) ? '#ffffff' : '#52525b';
-        chip10.style.fontWeight = (qty >= 10 && qty < 20) ? '800' : '500';
-      }
-      if (chip20) {
-        chip20.style.background = (qty >= 20) ? '#111111' : '#f4f4f5';
-        chip20.style.color = (qty >= 20) ? '#ffffff' : '#52525b';
-        chip20.style.fontWeight = (qty >= 20) ? '800' : '500';
-      }
+      const setChipStyle = (chip, isAct) => {
+        if (!chip) return;
+        chip.style.background = isAct ? '#111111' : '#f8fafc';
+        chip.style.color = isAct ? '#ffffff' : '#475569';
+        chip.style.borderColor = isAct ? '#111111' : '#e2e8f0';
+        chip.style.boxShadow = isAct ? '0 2px 8px rgba(0,0,0,0.18)' : 'none';
+        const titleEl = chip.querySelector('.tier-title');
+        const priceEl = chip.querySelector('.tier-price');
+        if (titleEl) titleEl.style.color = isAct ? '#ffffff' : '#0f172a';
+        if (priceEl) priceEl.style.color = isAct ? '#4ade80' : '#15803d';
+      };
+
+      setChipStyle(chip50, qty >= 50 && qty <= 100);
+      setChipStyle(chip100, qty > 100 && qty <= 300);
+      setChipStyle(chip300, qty > 300);
     }
 
     function addToB2BCart(prodId) {
@@ -1458,8 +1460,9 @@
 
       grid.innerHTML = list.map(p => {
         const basePrice = getWholesaleBasePrice(p);
-        const tier10Price = getWholesaleTierPrice(p, 10);
-        const tier20Price = getWholesaleTierPrice(p, 20);
+        const tier50Price = getWholesaleTierPrice(p, 50);
+        const tier100Price = getWholesaleTierPrice(p, 100);
+        const tier300Price = getWholesaleTierPrice(p, 301);
 
         return `
           <article class="ws-product-card" id="ws-card-${p.id}">
@@ -1469,21 +1472,30 @@
             <div class="ws-product-body">
               <h3 class="ws-product-title">${p.name}</h3>
 
-              <!-- Escala de Precios por Volumen -->
-              <div class="ws-tier-pills-bar" style="background: #f8f9fa; border: 1px solid #e4e4e7; border-radius: 8px; padding: 6px 8px; margin-bottom: 10px;">
-                <div style="font-size: 0.7rem; font-weight: 800; color: #52525b; text-transform: uppercase; margin-bottom: 4px;">
-                  <i class="fas fa-layer-group"></i> Escala por Cantidad:
+              <!-- Escala Mayorista por Cantidad (Diseño limpio, prolijo y ordenado) -->
+              <div class="ws-tier-pills-bar" style="background: #ffffff; border: 1.5px solid #e4e4e7; border-radius: 10px; padding: 10px 8px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid #f4f4f5;">
+                  <span style="font-size: 0.72rem; font-weight: 800; color: #18181b; text-transform: uppercase; letter-spacing: 0.4px;">
+                    <i class="fas fa-layer-group" style="color: #c5a059; margin-right: 4px;"></i> Escala por Cantidad
+                  </span>
+                  <span style="font-size: 0.68rem; color: #71717a; font-weight: 600;">Mín. 5 u.</span>
                 </div>
-                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                  <span id="tier-chip-5-${p.id}" style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: #111111; color: #ffffff; font-weight: 800;">
-                    5-9 u: <b>${formatB2BARS(basePrice)}</b>
-                  </span>
-                  <span id="tier-chip-10-${p.id}" style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: #f4f4f5; color: #52525b; font-weight: 500;">
-                    10-19 u: <b>${formatB2BARS(tier10Price)}</b> (-10%)
-                  </span>
-                  <span id="tier-chip-20-${p.id}" style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: #f4f4f5; color: #52525b; font-weight: 500;">
-                    +20 u: <b>${formatB2BARS(tier20Price)}</b> (-18%)
-                  </span>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center;">
+                  <div id="tier-chip-50-${p.id}" style="font-size: 0.7rem; padding: 6px 3px; border-radius: 8px; background: #f8fafc; border: 1.5px solid #e2e8f0; color: #475569; transition: all 0.2s ease;">
+                    <div class="tier-title" style="font-weight: 800; font-size: 0.68rem; color: #0f172a; margin-bottom: 2px;">50 a 100 u.</div>
+                    <div class="tier-price" style="font-weight: 900; color: #15803d; font-size: 0.78rem;">${formatB2BARS(tier50Price)}</div>
+                    <div style="font-size: 0.6rem; color: #64748b; font-weight: 700; margin-top: 1px;">-8% OFF</div>
+                  </div>
+                  <div id="tier-chip-100-${p.id}" style="font-size: 0.7rem; padding: 6px 3px; border-radius: 8px; background: #f8fafc; border: 1.5px solid #e2e8f0; color: #475569; transition: all 0.2s ease;">
+                    <div class="tier-title" style="font-weight: 800; font-size: 0.68rem; color: #0f172a; margin-bottom: 2px;">100 a 300 u.</div>
+                    <div class="tier-price" style="font-weight: 900; color: #15803d; font-size: 0.78rem;">${formatB2BARS(tier100Price)}</div>
+                    <div style="font-size: 0.6rem; color: #64748b; font-weight: 700; margin-top: 1px;">-15% OFF</div>
+                  </div>
+                  <div id="tier-chip-300-${p.id}" style="font-size: 0.7rem; padding: 6px 3px; border-radius: 8px; background: #f8fafc; border: 1.5px solid #e2e8f0; color: #475569; transition: all 0.2s ease;">
+                    <div class="tier-title" style="font-weight: 800; font-size: 0.68rem; color: #0f172a; margin-bottom: 2px;">+300 u.</div>
+                    <div class="tier-price" style="font-weight: 900; color: #15803d; font-size: 0.78rem;">${formatB2BARS(tier300Price)}</div>
+                    <div style="font-size: 0.6rem; color: #64748b; font-weight: 700; margin-top: 1px;">-22% OFF</div>
+                  </div>
                 </div>
               </div>
 

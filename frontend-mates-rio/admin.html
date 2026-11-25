@@ -1262,7 +1262,7 @@
 
             <div class="admin-form-group">
               <label class="admin-form-label" for="edit-prod-wholesale-price">
-                Precio Mayorista Base (5 a 9 u.) <span style="color: var(--admin-danger);">*</span>
+                Precio Mayorista Base (5 a 49 u.) <span style="color: var(--admin-danger);">*</span>
               </label>
               <input type="number" id="edit-prod-wholesale-price" class="admin-input modal-input" min="100" step="100" oninput="updateWholesaleTiersPreview('edit')" placeholder="Ej: 34000" />
             </div>
@@ -1270,7 +1270,18 @@
             <div class="admin-form-group">
               <label class="admin-form-label">Escala Automática por Cantidad</label>
               <div id="edit-prod-ws-tiers-info" style="font-size: 0.8rem; background: var(--admin-bg-darker); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 8px 12px; color: var(--admin-text-muted); line-height: 1.4;">
-                5 a 9 u: Base • 10 a 19 u: -10% • +20 u: -18%
+                5-49 u: Base • 50-100 u: -8% • 100-300 u: -15% • +300 u: -22%
+              </div>
+            </div>
+
+            <!-- Producto Destacado en Inicio -->
+            <div class="admin-form-group" style="grid-column: span 2; background: rgba(197, 160, 89, 0.08); border: 1.5px dashed var(--admin-gold); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 4px;">
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 700; color: var(--admin-text-main); margin-bottom: 0;">
+                <input type="checkbox" id="edit-prod-featured" style="width: 18px; height: 18px; accent-color: var(--admin-gold); cursor: pointer;" />
+                <span><i class="fas fa-star" style="color: var(--admin-gold); margin-right: 4px;"></i> Mostrar en Sección "Productos Destacados" de la Página de Inicio</span>
+              </label>
+              <div style="font-size: 0.75rem; color: var(--admin-text-muted); margin-top: 4px; padding-left: 28px;">
+                Si se activa, el producto se exhibirá en la sección destacada principal de la web.
               </div>
             </div>
 
@@ -1455,7 +1466,7 @@
 
             <div class="admin-form-group">
               <label class="admin-form-label" for="new-prod-wholesale-price">
-                Precio Mayorista Base (5 a 9 u.) <span style="color: var(--admin-danger);">*</span>
+                Precio Mayorista Base (5 a 49 u.) <span style="color: var(--admin-danger);">*</span>
               </label>
               <input type="number" id="new-prod-wholesale-price" class="admin-input modal-input" min="100" step="100" oninput="updateWholesaleTiersPreview('new')" placeholder="Ej: 34000" />
             </div>
@@ -1463,7 +1474,18 @@
             <div class="admin-form-group">
               <label class="admin-form-label">Escala Automática por Cantidad</label>
               <div id="new-prod-ws-tiers-info" style="font-size: 0.8rem; background: var(--admin-bg-darker); border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 8px 12px; color: var(--admin-text-muted); line-height: 1.4;">
-                5 a 9 u: Base • 10 a 19 u: -10% • +20 u: -18%
+                5-49 u: Base • 50-100 u: -8% • 100-300 u: -15% • +300 u: -22%
+              </div>
+            </div>
+
+            <!-- Producto Destacado en Inicio -->
+            <div class="admin-form-group" style="grid-column: span 2; background: rgba(197, 160, 89, 0.08); border: 1.5px dashed var(--admin-gold); border-radius: var(--radius-sm); padding: 10px 14px; margin-top: 4px;">
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 700; color: var(--admin-text-main); margin-bottom: 0;">
+                <input type="checkbox" id="new-prod-featured" style="width: 18px; height: 18px; accent-color: var(--admin-gold); cursor: pointer;" />
+                <span><i class="fas fa-star" style="color: var(--admin-gold); margin-right: 4px;"></i> Mostrar en Sección "Productos Destacados" de la Página de Inicio</span>
+              </label>
+              <div style="font-size: 0.75rem; color: var(--admin-text-muted); margin-top: 4px; padding-left: 28px;">
+                Si se activa, el producto se exhibirá en la sección destacada principal de la web.
               </div>
             </div>
 

@@ -737,7 +737,81 @@ function renderProducts() {
       </div>
     `;
   }).join('');
+
+  if (typeof renderFeaturedProducts === 'function') {
+    renderFeaturedProducts();
+  }
 }
+
+function renderFeaturedProducts() {
+  const container = document.getElementById('featured-products-grid');
+  if (!container) return;
+
+  const allProds = (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA : []);
+  // Filtrar productos destacados marcados en admin
+  let featured = allProds.filter(p => p.featured === true || p.isFeatured === true);
+
+  // Si no hay productos marcados, tomar 3 productos representativos como fallback
+  if (featured.length === 0) {
+    featured = allProds.filter(p => ['mate-1', 'termo-1', 'mate-2', 'promo-1'].includes(p.id));
+  }
+
+  // Exactamente 2 o 3 productos destacados como solicitó el usuario
+  const displayProds = featured.slice(0, 3);
+
+  container.innerHTML = displayProds.map(prod => {
+    const installmentPrice = Math.round(prod.price / 3);
+    const transferPrice = Math.round(prod.price * (1 - (CONFIG.transferDiscountRate || 0.10)));
+    const subcatDisplay = prod.subcategory ? ` • <span style="color: var(--accent-gold);">${prod.subcategory}</span>` : '';
+
+    return `
+      <div class="product-card featured-product-card" data-id="${prod.id}" style="border: 1.5px solid rgba(197, 160, 89, 0.35); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06); border-radius: 14px; overflow: hidden; background: #ffffff;">
+        <div class="product-image-wrap" onclick="openQuickView('${prod.id}')" style="cursor: pointer; position: relative;">
+          <img src="${prod.image}" alt="${prod.name}" class="product-img" loading="lazy" />
+          <div class="product-badges">
+            <span class="badge-tag featured" style="background: #10b981; color: #ffffff; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
+              <i class="fas fa-star" style="font-size: 0.7rem;"></i> DESTACADO
+            </span>
+            ${prod.badge ? `<span class="badge-tag ${prod.badgeType || 'promo'}">${prod.badge}</span>` : ''}
+          </div>
+          <button class="quick-view-btn" onclick="event.stopPropagation(); openQuickView('${prod.id}')">
+            <i class="far fa-eye"></i> Vista Rápida
+          </button>
+        </div>
+
+        <div class="product-info" style="padding: 16px;">
+          <span class="product-category-meta" style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #71717a;">${prod.categoryName || (prod.category ? prod.category.toUpperCase() : 'GENERAL')}${subcatDisplay}</span>
+          <h4 class="product-title" onclick="openQuickView('${prod.id}')" title="${prod.name}" style="font-size: 1.05rem; font-weight: 800; margin: 4px 0 8px; cursor: pointer; color: #18181b;">${prod.name}</h4>
+
+          <div class="product-pricing" style="margin-bottom: 12px;">
+            <div class="product-price-row" style="display: flex; align-items: baseline; gap: 8px;">
+              <span class="product-price" style="font-size: 1.25rem; font-weight: 900; color: #111111;">${formatARS(prod.price)}</span>
+              ${prod.originalPrice ? `<span class="product-original-price" style="font-size: 0.85rem; text-decoration: line-through; color: #a1a1aa;">${formatARS(prod.originalPrice)}</span>` : ''}
+            </div>
+            <div class="installments-text" style="font-size: 0.78rem; color: #52525b; margin-top: 2px;">
+              <i class="far fa-credit-card"></i> 3 cuotas sin interés de ${formatARS(installmentPrice)}
+            </div>
+            <div class="transfer-discount-text" style="font-size: 0.78rem; color: #16a34a; font-weight: 600; margin-top: 2px;">
+              <strong>${formatARS(transferPrice)}</strong> con transferencia (10% OFF)
+            </div>
+          </div>
+
+          <div class="product-actions" style="display: flex; gap: 8px;">
+            <button class="add-to-cart-btn" id="btn-featured-add-${prod.id}" onclick="addToCart('${prod.id}', 1)" style="flex: 1; height: 42px; font-weight: 700; font-size: 0.85rem;">
+              <i class="fas fa-shopping-bag"></i> Agregar al Carrito
+            </button>
+            ${(prod.category === 'mates' || prod.category === 'termos') ? `
+              <a href="personaliza-tu-mate.html?producto=${prod.category === 'termos' ? 'termo' : 'mate'}" class="btn btn-secondary" style="height: 42px; padding: 0 12px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap;" title="Personalizar con grabado láser">
+                <i class="fas fa-wand-magic-sparkles" style="color: var(--accent-gold);"></i> Grabar
+              </a>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+window.renderFeaturedProducts = renderFeaturedProducts;
 
 function getStarRatingHtml(rating) {
   let stars = '';
@@ -2790,8 +2864,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSubcategoriesFilterBar(state.activeCategory);
   }
 
-  // 3. Render Catalog
+  // 3. Render Catalog & Featured Products
   renderProducts();
+  renderFeaturedProducts();
 
   // Apply search query into search input & highlight active category pill if URL set state
   const searchInputInit = document.getElementById('catalog-search-input');

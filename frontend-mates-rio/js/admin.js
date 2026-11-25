@@ -706,6 +706,9 @@ function renderInventoryTable() {
         </td>
         <td>
           <div class="action-btn-cell">
+            <button type="button" class="btn-table-action" onclick="toggleProductFeatured('${item.id}')" title="${item.featured ? 'Quitar de Destacados' : 'Marcar como Destacado en Inicio'}" style="${item.featured ? 'color: #f59e0b; background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4);' : 'color: var(--admin-text-muted);'}">
+              <i class="${item.featured ? 'fas' : 'far'} fa-star"></i>
+            </button>
             <button type="button" class="btn-table-action btn-action-edit" onclick="openEditProductModal('${item.id}')" title="Editar Producto">
               <i class="fas fa-pen"></i>
             </button>
@@ -721,6 +724,25 @@ function renderInventoryTable() {
     `;
   }).join('');
 }
+
+function toggleProductFeatured(id) {
+  const inv = getInventory();
+  if (!inv[id]) return;
+  inv[id].featured = !inv[id].featured;
+  saveInventory(inv);
+
+  try {
+    let edited = JSON.parse(localStorage.getItem('mates_rio_edited_products') || '{}');
+    edited[id] = Object.assign(edited[id] || {}, { featured: inv[id].featured });
+    localStorage.setItem('mates_rio_edited_products', JSON.stringify(edited));
+  } catch (e) {}
+
+  if (typeof syncProductsFromStorage === 'function') syncProductsFromStorage();
+  if (typeof broadcastStoreStateChange === 'function') broadcastStoreStateChange('inventory');
+  renderInventoryTable();
+  showNotificationToast(inv[id].featured ? 'Producto marcado como Destacado en Inicio' : 'Producto quitado de Destacados', 'fa-star');
+}
+window.toggleProductFeatured = toggleProductFeatured;
 
 function filterInventoryTable() {
   renderInventoryTable();
@@ -856,18 +878,21 @@ function updateWholesaleTiersPreview(prefix) {
     wsPrice = Math.round(retailPrice * 0.70);
     if (wsInput && !wsInput.value && wsPrice > 0) wsInput.value = wsPrice;
   }
-  const tier10 = Math.round(wsPrice * 0.90);
-  const tier20 = Math.round(wsPrice * 0.82);
+  const tier50 = Math.round(wsPrice * 0.92);
+  const tier100 = Math.round(wsPrice * 0.85);
+  const tier300 = Math.round(wsPrice * 0.78);
 
   const infoEl = document.getElementById(`${prefix}-prod-ws-tiers-info`);
   if (infoEl) {
     infoEl.innerHTML = `
       <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-        <span>5-9 u: <b style="color: var(--admin-text-main);">${formatARS(wsPrice)}</b> (Base)</span>
+        <span>5-49 u: <b style="color: var(--admin-text-main);">${formatARS(wsPrice)}</b> (Base)</span>
         <span>•</span>
-        <span>10-19 u: <b style="color: #27ae60;">${formatARS(tier10)}</b> (-10%)</span>
+        <span>50-100 u: <b style="color: #27ae60;">${formatARS(tier50)}</b> (-8%)</span>
         <span>•</span>
-        <span>+20 u: <b style="color: #27ae60;">${formatARS(tier20)}</b> (-18%)</span>
+        <span>100-300 u: <b style="color: #27ae60;">${formatARS(tier100)}</b> (-15%)</span>
+        <span>•</span>
+        <span>+300 u: <b style="color: #27ae60;">${formatARS(tier300)}</b> (-22%)</span>
       </div>
     `;
   }
@@ -991,6 +1016,9 @@ function openEditProductModal(productId) {
   if (wsPriceEl) wsPriceEl.value = wsPriceVal;
   updateWholesaleTiersPreview('edit');
 
+  const featEl = document.getElementById('edit-prod-featured');
+  if (featEl) featEl.checked = Boolean(fullProd.featured || prod.featured);
+
   const modal = document.getElementById('edit-product-modal');
   if (modal) modal.classList.add('active');
 }
@@ -1065,6 +1093,8 @@ function saveProductEdits() {
   inv[id].badge = badge;
   inv[id].badgeType = badgeType;
   inv[id].description = desc;
+  const isFeatured = Boolean(document.getElementById('edit-prod-featured')?.checked);
+  inv[id].featured = isFeatured;
 
   saveInventory(inv);
 
@@ -1086,6 +1116,7 @@ function saveProductEdits() {
       images: allImages,
       badge,
       badgeType,
+      featured: isFeatured,
       description: desc,
       specs: {
         material: specMaterial || 'Material artesanal de primera calidad',
@@ -4074,6 +4105,7 @@ handleCreateProduct = function() {
     inStock: stock > 0,
     cost: Math.round(price * 0.55),
     wholesalePrice: wsPrice,
+    featured: Boolean(document.getElementById('new-prod-featured')?.checked),
     isCustom: true
   };
 

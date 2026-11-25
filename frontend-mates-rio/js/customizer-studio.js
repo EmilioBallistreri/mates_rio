@@ -2120,26 +2120,84 @@ function renderVirolaCanvas() {
 
     if (isStraight) {
       const rot = t.rotation !== undefined ? t.rotation : 0;
+      const fSize = t.fontSize || 22;
+      const textLen = (t.text || '').length;
+      const estWidth = Math.max(50, textLen * fSize * 0.65 + 24);
+      const estHeight = Math.max(34, fSize + 22);
+      const halfW = estWidth / 2;
+      const halfH = estHeight / 2;
+
       textsHtml += `
         <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
            data-item-id="${t.id}"
            transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
            onmousedown="startFreeItemDrag('${t.id}', event)"
-           ontouchstart="startFreeItemDrag('${t.id}', event)">
+           ontouchstart="startFreeItemDrag('${t.id}', event)"
+           style="cursor: grab;">
+          <!-- Hit area invisible generosa para que el toque en celular nunca falle -->
+          <rect x="${(-halfW).toFixed(2)}" y="${(-halfH).toFixed(2)}" width="${estWidth.toFixed(2)}" height="${estHeight.toFixed(2)}" fill="transparent" pointer-events="all" />
           <text font-family="'${t.font || 'Cinzel'}', serif" 
-                font-size="${t.fontSize || 22}" 
+                font-size="${fSize}" 
                 font-weight="${fWeight}" 
                 letter-spacing="${lSpacing}" 
                 fill="#120e0a" 
                 text-anchor="middle" 
                 dominant-baseline="central" 
-                style="cursor: grab;" 
+                style="cursor: grab; pointer-events: none;" 
                 class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
                 data-item-id="${t.id}">
             ${escapeHtml(t.text)}
           </text>
         </g>
       `;
+
+      if (isActive) {
+        const delX = halfW + 10;
+        const delY = -halfH - 10;
+        const rotX = -halfW - 10;
+        const rotY = -halfH - 10;
+        const scX = halfW + 10;
+        const scY = halfH + 10;
+
+        activeHandlesHtml += `
+          <g class="virola-text-handles-group active-text-handles" data-item-id="${t.id}"
+             transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
+             onmousedown="startFreeItemDrag('${t.id}', event)"
+             ontouchstart="startFreeItemDrag('${t.id}', event)">
+            <rect x="${(-halfW).toFixed(2)}" y="${(-halfH).toFixed(2)}" 
+                  width="${estWidth.toFixed(2)}" height="${estHeight.toFixed(2)}" 
+                  fill="none" stroke="#111111" stroke-width="1.8" stroke-dasharray="4,4" 
+                  rx="6" ry="6" opacity="0.9" pointer-events="none" />
+            <g class="virola-handle handle-delete" data-handle="delete" data-item-id="${t.id}"
+               transform="translate(${delX.toFixed(2)}, ${delY.toFixed(2)})"
+               onmousedown="startFreeItemDrag('${t.id}', event)"
+               ontouchstart="startFreeItemDrag('${t.id}', event)"
+               style="cursor: pointer; touch-action: none !important;">
+              <circle r="22" fill="transparent" pointer-events="all" />
+              <circle r="12" fill="#111111" stroke="#ffffff" stroke-width="1.8" />
+              <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">✕</text>
+            </g>
+            <g class="virola-handle handle-rotate" data-handle="rotate" data-item-id="${t.id}"
+               transform="translate(${rotX.toFixed(2)}, ${rotY.toFixed(2)})"
+               onmousedown="startFreeItemDrag('${t.id}', event)"
+               ontouchstart="startFreeItemDrag('${t.id}', event)"
+               style="cursor: grab; touch-action: none !important;">
+              <circle r="22" fill="transparent" pointer-events="all" />
+              <circle r="12" fill="#18181b" stroke="#ffffff" stroke-width="1.8" />
+              <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">↻</text>
+            </g>
+            <g class="virola-handle handle-scale" data-handle="scale" data-item-id="${t.id}"
+               transform="translate(${scX.toFixed(2)}, ${scY.toFixed(2)})"
+               onmousedown="startFreeItemDrag('${t.id}', event)"
+               ontouchstart="startFreeItemDrag('${t.id}', event)"
+               style="cursor: nwse-resize; touch-action: none !important;">
+              <circle r="22" fill="transparent" pointer-events="all" />
+              <circle r="12" fill="#18181b" stroke="#ffffff" stroke-width="1.8" />
+              <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">⤡</text>
+            </g>
+          </g>
+        `;
+      }
     } else {
       const pathId = `text-path-${t.id}`;
       let pathD = '';
@@ -2168,13 +2226,23 @@ function renderVirolaCanvas() {
 
       defsTextPathsHtml += `<path id="${pathId}" d="${pathD}" fill="none" />`;
 
+      const fSize = t.fontSize || 22;
+      const textLen = (t.text || '').length;
+      const estWidth = Math.max(64, textLen * fSize * 0.65 + 24);
+      const estHeight = Math.max(36, fSize + 22);
+      const halfW = estWidth / 2;
+      const halfH = estHeight / 2;
+
       textsHtml += `
         <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
            data-item-id="${t.id}" 
            onmousedown="startFreeItemDrag('${t.id}', event)" 
-           ontouchstart="startFreeItemDrag('${t.id}', event)">
+           ontouchstart="startFreeItemDrag('${t.id}', event)"
+           style="cursor: grab;">
+          <!-- Trazo amplio transparente para hit táctil instantáneo en celular -->
+          <path d="${pathD}" fill="none" stroke="transparent" stroke-width="${(fSize + 24).toFixed(2)}" pointer-events="stroke" style="cursor: grab;" />
           <text font-family="'${t.font || 'Cinzel'}', serif" 
-                font-size="${t.fontSize || 22}" 
+                font-size="${fSize}" 
                 font-weight="${fWeight}" 
                 letter-spacing="${lSpacing}" 
                 fill="#120e0a" 
@@ -2187,6 +2255,43 @@ function renderVirolaCanvas() {
           </text>
         </g>
       `;
+
+      if (isActive) {
+        const delX = halfW + 10;
+        const delY = -halfH - 10;
+        const scX = halfW + 10;
+        const scY = halfH + 10;
+
+        activeHandlesHtml += `
+          <g class="virola-text-handles-group active-text-handles" data-item-id="${t.id}"
+             transform="translate(${x.toFixed(2)}, ${y.toFixed(2)})"
+             onmousedown="startFreeItemDrag('${t.id}', event)"
+             ontouchstart="startFreeItemDrag('${t.id}', event)">
+            <rect x="${(-halfW).toFixed(2)}" y="${(-halfH).toFixed(2)}" 
+                  width="${estWidth.toFixed(2)}" height="${estHeight.toFixed(2)}" 
+                  fill="none" stroke="#111111" stroke-width="1.8" stroke-dasharray="4,4" 
+                  rx="8" ry="8" opacity="0.9" pointer-events="none" />
+            <g class="virola-handle handle-delete" data-handle="delete" data-item-id="${t.id}"
+               transform="translate(${delX.toFixed(2)}, ${delY.toFixed(2)})"
+               onmousedown="startFreeItemDrag('${t.id}', event)"
+               ontouchstart="startFreeItemDrag('${t.id}', event)"
+               style="cursor: pointer; touch-action: none !important;">
+              <circle r="22" fill="transparent" pointer-events="all" />
+              <circle r="12" fill="#111111" stroke="#ffffff" stroke-width="1.8" />
+              <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">✕</text>
+            </g>
+            <g class="virola-handle handle-scale" data-handle="scale" data-item-id="${t.id}"
+               transform="translate(${scX.toFixed(2)}, ${scY.toFixed(2)})"
+               onmousedown="startFreeItemDrag('${t.id}', event)"
+               ontouchstart="startFreeItemDrag('${t.id}', event)"
+               style="cursor: nwse-resize; touch-action: none !important;">
+              <circle r="22" fill="transparent" pointer-events="all" />
+              <circle r="12" fill="#18181b" stroke="#ffffff" stroke-width="1.8" />
+              <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">⤡</text>
+            </g>
+          </g>
+        `;
+      }
     }
   });
 
@@ -3213,7 +3318,9 @@ function startFreeItemDrag(itemId, e) {
   const coords = getPointerCoords(e);
   const { cx, cy, rRing } = STUDIO_CONFIG;
 
-  const currentRad = ((item.angle || 0) * Math.PI) / 180;
+  const defAngle = item.type === 'text' ? (item.arcPosition === 'bottom' ? 90 : 270) : 270;
+  const currentAngle = item.angle !== undefined ? item.angle : defAngle;
+  const currentRad = (currentAngle * Math.PI) / 180;
   const curX = item.x !== undefined ? item.x : cx + (item.radius || rRing) * Math.cos(currentRad);
   const curY = item.y !== undefined ? item.y : cy + (item.radius || rRing) * Math.sin(currentRad);
 
@@ -3231,11 +3338,12 @@ function startFreeItemDrag(itemId, e) {
     y: coords.y,
     itemX: curX,
     itemY: curY,
-    itemAngle: item.angle || 0,
+    itemAngle: currentAngle,
     itemRadius: item.radius || rRing,
     itemRotation: item.rotation || 0,
     itemScale: item.scale || 1.0,
-    initialDist: Math.max(12, Math.hypot(coords.x - curX, coords.y - curY)),
+    itemFontSize: item.fontSize || 22,
+    initialDist: Math.max(16, Math.hypot(coords.x - curX, coords.y - curY)),
     initialAngle: (Math.atan2(coords.y - curY, coords.x - curX) * 180) / Math.PI,
     pointerAngle: (Math.atan2(coords.y - cy, coords.x - cx) * 180) / Math.PI
   };
@@ -3245,10 +3353,7 @@ function startFreeItemDrag(itemId, e) {
     updateActiveTextControls(item);
   }
 
-  const isTouchEvent = Boolean(e && (e.touches || e.changedTouches || e.type === 'touchstart'));
-  if (!isTouchEvent) {
-    renderVirolaCanvas();
-  }
+  renderVirolaCanvas();
   updateActiveItemFloatingBar();
 }
 
@@ -3272,7 +3377,7 @@ function initCanvasInteraction() {
 
     // 2. Detección directa de elemento seleccionado o grupo de handles
     const groupTarget = e.target && e.target.closest
-      ? e.target.closest('.virola-sticker-group, .virola-text-group, .virola-active-handle-group')
+      ? e.target.closest('.virola-sticker-group, .virola-text-group, .virola-active-handle-group, .virola-text-handles-group')
       : null;
     if (groupTarget) {
       const targetId = groupTarget.getAttribute('data-item-id');
@@ -3282,21 +3387,41 @@ function initCanvasInteraction() {
       return;
     }
 
-    // 3. Tolerancia táctil por proximidad en celular
+    // 3. Tolerancia táctil por proximidad en celular (dentro y fuera de la virola)
     const coords = getPointerCoords(e);
     const { cx, cy, rRing } = STUDIO_CONFIG;
+
+    // Si ya hay un item activo y se toca cerca (dentro de 110px), permitir moverlo directamente
+    if (studio.activeItemId) {
+      const activeItem = studio.items.find(i => i.id === studio.activeItemId);
+      if (activeItem) {
+        const defAngle = activeItem.type === 'text' ? (activeItem.arcPosition === 'bottom' ? 90 : 270) : 270;
+        const curAngle = activeItem.angle !== undefined ? activeItem.angle : defAngle;
+        const rad = (curAngle * Math.PI) / 180;
+        const ax = activeItem.x !== undefined ? activeItem.x : cx + (activeItem.radius || rRing) * Math.cos(rad);
+        const ay = activeItem.y !== undefined ? activeItem.y : cy + (activeItem.radius || rRing) * Math.sin(rad);
+        const d = Math.hypot(coords.x - ax, coords.y - ay);
+        if (d < 110) {
+          startFreeItemDrag(activeItem.id, e);
+          return;
+        }
+      }
+    }
+
     let closestItem = null;
-    let minDistance = 44;
+    let minDistance = 75; // Radio generoso para detección táctil en celular
 
     studio.items.forEach(it => {
       let ix, iy;
       if (studio.activeProduct === 'mate') {
-        const rad = ((it.angle || 0) * Math.PI) / 180;
+        const defAngle = it.type === 'text' ? (it.arcPosition === 'bottom' ? 90 : 270) : 270;
+        const effAngle = it.angle !== undefined ? it.angle : defAngle;
+        const rad = (effAngle * Math.PI) / 180;
         ix = it.x !== undefined ? it.x : cx + (it.radius || rRing) * Math.cos(rad);
         iy = it.y !== undefined ? it.y : cy + (it.radius || rRing) * Math.sin(rad);
       } else {
         ix = it.x !== undefined ? it.x : cx;
-        iy = it.y !== undefined ? it.y : 250;
+        iy = it.y !== undefined ? it.y : 230;
       }
       const d = Math.hypot(coords.x - ix, coords.y - iy);
       if (d < minDistance) {
@@ -3313,6 +3438,8 @@ function initCanvasInteraction() {
   svg.addEventListener('click', (e) => {
     if (!e.target.closest('.virola-sticker-group') && 
         !e.target.closest('.virola-text-group') && 
+        !e.target.closest('.virola-active-handle-group') &&
+        !e.target.closest('.virola-text-handles-group') &&
         !e.target.closest('.virola-handle')) {
       studio.activeItemId = null;
       renderVirolaCanvas();
@@ -3336,7 +3463,6 @@ function onCanvasPointerMove(e) {
 
   const coords = getPointerCoords(e);
   const { cx, cy, rRing } = STUDIO_CONFIG;
-  const isTouchEvent = Boolean(e && (e.touches || e.changedTouches));
 
   if (studio.dragMode === 'move') {
     const deltaX = coords.x - studio.dragStart.x;
@@ -3376,8 +3502,8 @@ function onCanvasPointerMove(e) {
 
     renderVirolaCanvas();
   } else if (studio.dragMode === 'rotate') {
-    const itemX = item.x !== undefined ? item.x : cx;
-    const itemY = item.y !== undefined ? item.y : cy;
+    const itemX = studio.dragStart.itemX !== undefined ? studio.dragStart.itemX : (item.x !== undefined ? item.x : cx);
+    const itemY = studio.dragStart.itemY !== undefined ? studio.dragStart.itemY : (item.y !== undefined ? item.y : cy);
     const curAngle = (Math.atan2(coords.y - itemY, coords.x - itemX) * 180) / Math.PI;
     const deltaAngle = curAngle - (studio.dragStart.initialAngle || 0);
     let newRot = (studio.dragStart.itemRotation || 0) + deltaAngle;
@@ -3389,15 +3515,19 @@ function onCanvasPointerMove(e) {
     item.rotation = Math.round(newRot);
     renderVirolaCanvas();
   } else if (studio.dragMode === 'scale') {
-    const itemX = item.x !== undefined ? item.x : cx;
-    const itemY = item.y !== undefined ? item.y : cy;
+    const itemX = studio.dragStart.itemX !== undefined ? studio.dragStart.itemX : (item.x !== undefined ? item.x : cx);
+    const itemY = studio.dragStart.itemY !== undefined ? studio.dragStart.itemY : (item.y !== undefined ? item.y : cy);
     const currentDist = Math.hypot(coords.x - itemX, coords.y - itemY);
-    const startDist = studio.dragStart.initialDist || 24;
-    const ratio = currentDist / Math.max(10, startDist);
+    const startDist = studio.dragStart.initialDist || 28;
+    const ratio = Math.max(0.15, currentDist / Math.max(12, startDist));
     let newScale = (studio.dragStart.itemScale || 1.0) * ratio;
-    newScale = Math.max(STUDIO_CONFIG.minScale || 0.4, Math.min(STUDIO_CONFIG.maxScale || 3.0, newScale));
+    newScale = Math.max(STUDIO_CONFIG.minScale || 0.25, Math.min(STUDIO_CONFIG.maxScale || 3.5, newScale));
 
     item.scale = parseFloat(newScale.toFixed(2));
+    if (item.type === 'text') {
+      const baseFs = studio.dragStart.itemFontSize || item.fontSize || 22;
+      item.fontSize = Math.max(12, Math.min(65, Math.round(baseFs * ratio)));
+    }
     renderVirolaCanvas();
   }
 }
