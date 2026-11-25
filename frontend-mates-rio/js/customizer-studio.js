@@ -2282,17 +2282,32 @@ function renderVirolaCanvas() {
                 width="${(itemW + 10).toFixed(2)}" height="${(itemH + 10).toFixed(2)}" 
                 fill="none" stroke="#111111" stroke-width="1.8" stroke-dasharray="4,4" 
                 rx="6" ry="6" opacity="0.9" pointer-events="none" />
-          <g class="virola-handle handle-delete" data-handle="delete" transform="translate(${delX.toFixed(2)}, ${delY.toFixed(2)})" style="cursor: pointer;">
-            <circle r="10" fill="#111111" stroke="#ffffff" stroke-width="1.5" />
-            <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">✕</text>
+          <g class="virola-handle handle-delete" data-handle="delete" data-item-id="${item.id}"
+             transform="translate(${delX.toFixed(2)}, ${delY.toFixed(2)})"
+             onmousedown="startFreeItemDrag('${item.id}', event)"
+             ontouchstart="startFreeItemDrag('${item.id}', event)"
+             style="cursor: pointer; touch-action: none !important;">
+            <circle r="20" fill="transparent" pointer-events="all" />
+            <circle r="12" fill="#111111" stroke="#ffffff" stroke-width="1.8" />
+            <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">✕</text>
           </g>
-          <g class="virola-handle handle-rotate" data-handle="rotate" transform="translate(${rotX.toFixed(2)}, ${rotY.toFixed(2)})" style="cursor: grab;">
-            <circle r="10" fill="#18181b" stroke="#ffffff" stroke-width="1.5" />
-            <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">↻</text>
+          <g class="virola-handle handle-rotate" data-handle="rotate" data-item-id="${item.id}"
+             transform="translate(${rotX.toFixed(2)}, ${rotY.toFixed(2)})"
+             onmousedown="startFreeItemDrag('${item.id}', event)"
+             ontouchstart="startFreeItemDrag('${item.id}', event)"
+             style="cursor: grab; touch-action: none !important;">
+            <circle r="20" fill="transparent" pointer-events="all" />
+            <circle r="12" fill="#18181b" stroke="#ffffff" stroke-width="1.8" />
+            <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">↻</text>
           </g>
-          <g class="virola-handle handle-scale" data-handle="scale" transform="translate(${scX.toFixed(2)}, ${scY.toFixed(2)})" style="cursor: nwse-resize;">
-            <circle r="10" fill="#18181b" stroke="#ffffff" stroke-width="1.5" />
-            <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">⤡</text>
+          <g class="virola-handle handle-scale" data-handle="scale" data-item-id="${item.id}"
+             transform="translate(${scX.toFixed(2)}, ${scY.toFixed(2)})"
+             onmousedown="startFreeItemDrag('${item.id}', event)"
+             ontouchstart="startFreeItemDrag('${item.id}', event)"
+             style="cursor: nwse-resize; touch-action: none !important;">
+            <circle r="20" fill="transparent" pointer-events="all" />
+            <circle r="12" fill="#18181b" stroke="#ffffff" stroke-width="1.8" />
+            <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">⤡</text>
           </g>
         </g>
       `;
@@ -3220,6 +3235,8 @@ function startFreeItemDrag(itemId, e) {
     itemRadius: item.radius || rRing,
     itemRotation: item.rotation || 0,
     itemScale: item.scale || 1.0,
+    initialDist: Math.max(12, Math.hypot(coords.x - curX, coords.y - curY)),
+    initialAngle: (Math.atan2(coords.y - curY, coords.x - curX) * 180) / Math.PI,
     pointerAngle: (Math.atan2(coords.y - cy, coords.x - cx) * 180) / Math.PI
   };
 
@@ -3241,8 +3258,21 @@ function initCanvasInteraction() {
 
   // Soporte táctil directo en el lienzo SVG para celulares (permite agarrar o ubicar elementos con precisión)
   svg.addEventListener('touchstart', (e) => {
+    // 1. Detección directa de botón handle (eliminar, rotar, escalar)
+    const handleTarget = e.target && e.target.closest ? e.target.closest('.virola-handle') : null;
+    if (handleTarget) {
+      const targetId = handleTarget.getAttribute('data-item-id') || 
+                       handleTarget.closest('[data-item-id]')?.getAttribute('data-item-id') || 
+                       studio.activeItemId;
+      if (targetId) {
+        startFreeItemDrag(targetId, e);
+        return;
+      }
+    }
+
+    // 2. Detección directa de elemento seleccionado o grupo de handles
     const groupTarget = e.target && e.target.closest
-      ? e.target.closest('.virola-sticker-group, .virola-text-group')
+      ? e.target.closest('.virola-sticker-group, .virola-text-group, .virola-active-handle-group')
       : null;
     if (groupTarget) {
       const targetId = groupTarget.getAttribute('data-item-id');
@@ -3252,16 +3282,22 @@ function initCanvasInteraction() {
       return;
     }
 
-    // Si tocó cerca de algún elemento (radio de tolerancia táctil en celular), seleccionarlo y arrastrarlo
+    // 3. Tolerancia táctil por proximidad en celular
     const coords = getPointerCoords(e);
     const { cx, cy, rRing } = STUDIO_CONFIG;
     let closestItem = null;
-    let minDistance = 48;
+    let minDistance = 44;
 
     studio.items.forEach(it => {
-      const rad = ((it.angle || 0) * Math.PI) / 180;
-      const ix = it.x !== undefined ? it.x : cx + (it.radius || rRing) * Math.cos(rad);
-      const iy = it.y !== undefined ? it.y : cy + (it.radius || rRing) * Math.sin(rad);
+      let ix, iy;
+      if (studio.activeProduct === 'mate') {
+        const rad = ((it.angle || 0) * Math.PI) / 180;
+        ix = it.x !== undefined ? it.x : cx + (it.radius || rRing) * Math.cos(rad);
+        iy = it.y !== undefined ? it.y : cy + (it.radius || rRing) * Math.sin(rad);
+      } else {
+        ix = it.x !== undefined ? it.x : cx;
+        iy = it.y !== undefined ? it.y : 250;
+      }
       const d = Math.hypot(coords.x - ix, coords.y - iy);
       if (d < minDistance) {
         minDistance = d;
@@ -3342,22 +3378,24 @@ function onCanvasPointerMove(e) {
   } else if (studio.dragMode === 'rotate') {
     const itemX = item.x !== undefined ? item.x : cx;
     const itemY = item.y !== undefined ? item.y : cy;
-    const dx = coords.x - itemX;
-    const dy = coords.y - itemY;
-    let angleDeg = (Math.atan2(dy, dx) * 180) / Math.PI;
+    const curAngle = (Math.atan2(coords.y - itemY, coords.x - itemX) * 180) / Math.PI;
+    const deltaAngle = curAngle - (studio.dragStart.initialAngle || 0);
+    let newRot = (studio.dragStart.itemRotation || 0) + deltaAngle;
 
-    if (studio.snappingEnabled && Math.abs(angleDeg % 45) < 3) {
-      angleDeg = Math.round(angleDeg / 45) * 45;
+    if (studio.snappingEnabled && Math.abs(newRot % 45) < 3) {
+      newRot = Math.round(newRot / 45) * 45;
     }
 
-    item.rotation = Math.round(angleDeg + 90);
+    item.rotation = Math.round(newRot);
     renderVirolaCanvas();
   } else if (studio.dragMode === 'scale') {
     const itemX = item.x !== undefined ? item.x : cx;
     const itemY = item.y !== undefined ? item.y : cy;
-    const dist = Math.hypot(coords.x - itemX, coords.y - itemY);
-    let newScale = dist / 24;
-    newScale = Math.max(STUDIO_CONFIG.minScale, Math.min(STUDIO_CONFIG.maxScale, newScale));
+    const currentDist = Math.hypot(coords.x - itemX, coords.y - itemY);
+    const startDist = studio.dragStart.initialDist || 24;
+    const ratio = currentDist / Math.max(10, startDist);
+    let newScale = (studio.dragStart.itemScale || 1.0) * ratio;
+    newScale = Math.max(STUDIO_CONFIG.minScale || 0.4, Math.min(STUDIO_CONFIG.maxScale || 3.0, newScale));
 
     item.scale = parseFloat(newScale.toFixed(2));
     renderVirolaCanvas();
@@ -4705,29 +4743,44 @@ function escapeHtml(str) {
   function build2DItemHandlesHtml(item, halfW, halfH, isWhiteTheme) {
     if (item.id !== studio.activeItemId) return '';
     const strokeCol = isWhiteTheme ? '#ffffff' : '#111111';
-    const scaleX = halfW + 8;
-    const scaleY = halfH + 8;
-    const rotX = -halfW - 8;
-    const rotY = -halfH - 8;
-    const delX = halfW + 8;
-    const delY = -halfH - 8;
+    const scaleX = halfW + 10;
+    const scaleY = halfH + 10;
+    const rotX = -halfW - 10;
+    const rotY = -halfH - 10;
+    const delX = halfW + 10;
+    const delY = -halfH - 10;
 
     return `
       <rect x="${(-halfW - 6).toFixed(2)}" y="${(-halfH - 6).toFixed(2)}"
             width="${(halfW * 2 + 12).toFixed(2)}" height="${(halfH * 2 + 12).toFixed(2)}"
-            fill="none" stroke="${strokeCol}" stroke-width="1.5" stroke-dasharray="4,4"
-            rx="6" ry="6" opacity="0.88" pointer-events="none" />
-      <g class="virola-handle handle-delete" data-handle="delete" transform="translate(${delX.toFixed(2)}, ${delY.toFixed(2)})">
-        <circle r="10" fill="#111111" stroke="#ffffff" stroke-width="1.5" />
-        <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">✕</text>
+            fill="none" stroke="${strokeCol}" stroke-width="1.8" stroke-dasharray="4,4"
+            rx="6" ry="6" opacity="0.9" pointer-events="none" />
+      <g class="virola-handle handle-delete" data-handle="delete" data-item-id="${item.id}"
+         transform="translate(${delX.toFixed(2)}, ${delY.toFixed(2)})"
+         onmousedown="startFreeItemDrag('${item.id}', event)"
+         ontouchstart="startFreeItemDrag('${item.id}', event)"
+         style="cursor: pointer; touch-action: none !important;">
+        <circle r="22" fill="transparent" pointer-events="all" />
+        <circle r="12" fill="#111111" stroke="#ffffff" stroke-width="1.8" />
+        <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">✕</text>
       </g>
-      <g class="virola-handle handle-rotate" data-handle="rotate" transform="translate(${rotX.toFixed(2)}, ${rotY.toFixed(2)})">
-        <circle r="10" fill="#18181b" stroke="#ffffff" stroke-width="1.5" />
-        <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">↻</text>
+      <g class="virola-handle handle-rotate" data-handle="rotate" data-item-id="${item.id}"
+         transform="translate(${rotX.toFixed(2)}, ${rotY.toFixed(2)})"
+         onmousedown="startFreeItemDrag('${item.id}', event)"
+         ontouchstart="startFreeItemDrag('${item.id}', event)"
+         style="cursor: grab; touch-action: none !important;">
+        <circle r="22" fill="transparent" pointer-events="all" />
+        <circle r="12" fill="#18181b" stroke="#ffffff" stroke-width="1.8" />
+        <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">↻</text>
       </g>
-      <g class="virola-handle handle-scale" data-handle="scale" transform="translate(${scaleX.toFixed(2)}, ${scaleY.toFixed(2)})">
-        <circle r="10" fill="#18181b" stroke="#ffffff" stroke-width="1.5" />
-        <text x="0" y="3.5" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="900" pointer-events="none">⤡</text>
+      <g class="virola-handle handle-scale" data-handle="scale" data-item-id="${item.id}"
+         transform="translate(${scaleX.toFixed(2)}, ${scaleY.toFixed(2)})"
+         onmousedown="startFreeItemDrag('${item.id}', event)"
+         ontouchstart="startFreeItemDrag('${item.id}', event)"
+         style="cursor: nwse-resize; touch-action: none !important;">
+        <circle r="22" fill="transparent" pointer-events="all" />
+        <circle r="12" fill="#18181b" stroke="#ffffff" stroke-width="1.8" />
+        <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" pointer-events="none">⤡</text>
       </g>
     `;
   }
@@ -4738,7 +4791,7 @@ function escapeHtml(str) {
     const y = item.y !== undefined ? item.y : 250;
     const rot = item.rotation || 0;
     return `
-      <g class="virola-active-handle-group" transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})">
+      <g class="virola-active-handle-group" data-item-id="${item.id}" transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})">
         ${build2DItemHandlesHtml(item, halfW, halfH, true)}
       </g>
     `;
@@ -4750,7 +4803,7 @@ function escapeHtml(str) {
     const y = item.y !== undefined ? item.y : 250;
     const rot = item.rotation || 0;
     return `
-      <g class="virola-active-handle-group" transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})">
+      <g class="virola-active-handle-group" data-item-id="${item.id}" transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})">
         ${build2DItemHandlesHtml(item, halfW, halfH, false)}
       </g>
     `;

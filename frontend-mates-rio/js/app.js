@@ -2538,6 +2538,8 @@ function openMobileDrawer() {
 
   drawer?.classList.add('active');
   overlay?.classList.add('active');
+  document.documentElement.classList.add('mobile-drawer-open');
+  document.body.classList.add('mobile-drawer-open');
   document.body.style.overflow = 'hidden';
   if (btn && typeof btn.blur === 'function') btn.blur();
 }
@@ -2549,6 +2551,8 @@ function closeMobileDrawer() {
 
   drawer?.classList.remove('active');
   overlay?.classList.remove('active');
+  document.documentElement.classList.remove('mobile-drawer-open');
+  document.body.classList.remove('mobile-drawer-open');
   document.body.style.overflow = '';
   if (btn && typeof btn.blur === 'function') btn.blur();
 }
