@@ -1696,6 +1696,16 @@ function processWebCheckout(e) {
     }
   }
 
+  const isMercadoPago = paymentMethod === 'mercadopago';
+  const cartSnapshot = state.cart.map(i => ({
+    id: i.id,
+    name: i.name,
+    title: i.name,
+    quantity: i.quantity,
+    price: i.price,
+    unit_price: i.price
+  }));
+
   const newOrder = {
     id: orderId,
     date: new Date().toLocaleDateString('es-AR'),
@@ -1705,13 +1715,13 @@ function processWebCheckout(e) {
     customerEmail: email || (state.currentUser?.email || ''),
     items: state.cart.map(i => `${i.quantity}x ${i.name}`).join(', '),
     total: total,
-    status: "Confirmado - En preparación artesanal",
+    status: isMercadoPago ? "Pendiente de pago (Mercado Pago)" : "Confirmado - En preparación artesanal",
     address: `${address}, ${city}, ${province} (CP ${zip})`,
     shippingZone: shippingName,
     shippingMethod: shippingMethod,
     andreaniTrackingCode: trackingCode,
     shippingCost: shippingAmount,
-    paymentMethod: paymentMethod === 'transferencia' ? 'Transferencia Bancaria (10% OFF)' : 'Mercado Pago (Tarjetas/Dinero)',
+    paymentMethod: isMercadoPago ? 'Mercado Pago (Tarjetas/Dinero)' : 'Transferencia Bancaria (10% OFF)',
     hasCustomEngraving: hasCustomization,
     engravingDetails: firstCustomItem ? {
       text: firstCustomItem.customization.text || 'Sin texto',
@@ -1767,6 +1777,70 @@ function processWebCheckout(e) {
   }
 
   if (successModal) {
+    // Configurar si muestra Transferencia Bancaria o Pasarela Mercado Pago
+    let transferSection = document.getElementById('success-bank-info') || document.getElementById('success-transfer-section');
+    if (!transferSection) {
+      const dashedDividers = successModal.querySelectorAll('[style*="border-top: 1px dashed"]');
+      if (dashedDividers && dashedDividers.length > 0) {
+        transferSection = dashedDividers[dashedDividers.length - 1];
+      }
+    }
+    let mpSection = document.getElementById('success-mp-section');
+
+    if (isMercadoPago) {
+      if (transferSection) transferSection.style.display = 'none';
+
+      if (!mpSection) {
+        const boxContainer = successModal.querySelector('.success-order-box') || successModal.querySelector('[style*="border-radius: var(--radius-md)"]') || successModal.querySelector('[style*="border-radius: 8px"]');
+        if (boxContainer) {
+          mpSection = document.createElement('div');
+          mpSection.id = 'success-mp-section';
+          mpSection.style.cssText = 'border-top: 1px dashed #d4d4d8; margin-top: 10px; padding-top: 10px; text-align: center;';
+          mpSection.innerHTML = `
+            <div style="background: #e8f4fd; border: 1.5px solid #009ee3; border-radius: 8px; padding: 12px; margin-bottom: 8px;">
+              <p style="color: #0074a8; font-weight: 800; font-size: 0.92rem; margin: 0 0 4px;">
+                <i class="fas fa-credit-card"></i> Pasarela Mercado Pago Oficial
+              </p>
+              <p style="font-size: 0.78rem; color: #52525b; margin: 0 0 10px;">
+                Aboná con tarjeta de crédito, débito o dinero en cuenta con acreditación inmediata:
+              </p>
+              <a id="success-mp-button" href="#" class="btn" style="background: #009ee3; color: #ffffff; font-weight: 800; font-size: 0.9rem; padding: 10px 16px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; box-sizing: border-box;">
+                <i class="fas fa-external-link-alt"></i> Pagar con Mercado Pago Oficial
+              </a>
+            </div>
+          `;
+          boxContainer.appendChild(mpSection);
+        }
+      } else {
+        mpSection.style.display = 'block';
+      }
+
+      // Iniciar conexión y redirección con Mercado Pago
+      if (window.MatesRioMP && typeof window.MatesRioMP.initiatePayment === 'function') {
+        window.MatesRioMP.initiatePayment({
+          orderId: orderId,
+          items: cartSnapshot,
+          shippingCost: shippingAmount,
+          customerName: name,
+          customerEmail: email,
+          customerPhone: phone,
+          customerDni: dni,
+          address: `${address}, ${city}, ${province}`,
+          zip: zip
+        }).then(pref => {
+          const mpBtn = document.getElementById('success-mp-button');
+          if (pref && pref.initPoint && mpBtn) {
+            mpBtn.href = pref.initPoint;
+          }
+        }).catch(err => {
+          console.warn('Error iniciando Mercado Pago:', err);
+        });
+      }
+    } else {
+      if (transferSection) transferSection.style.display = 'block';
+      if (mpSection) mpSection.style.display = 'none';
+    }
+
     successModal.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
