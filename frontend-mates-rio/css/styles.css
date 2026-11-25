@@ -251,6 +251,7 @@ textarea {
   align-items: center;
   gap: 14px;
   flex-shrink: 0;
+  margin-right: clamp(24px, 3.5vw, 60px);
 }
 
 .brand-logo-wrap,
@@ -260,6 +261,7 @@ textarea {
   gap: 12px;
   text-decoration: none;
   flex-shrink: 0;
+  padding-right: 12px;
 }
 
 .brand-logo-img {
@@ -311,7 +313,7 @@ textarea {
   justify-content: flex-end;
   flex: 1;
   min-width: 0;
-  margin-left: clamp(14px, 3vw, 44px);
+  margin-left: clamp(20px, 3vw, 48px);
 }
 
 .main-nav {
@@ -18606,7 +18608,7 @@ body.theme-inverted .prod-select-card.active .prod-card-check {
 }
 
 /* ==========================================================================
-   PERSONALIZACIÓN: AJUSTES DE LÍNEA ÚNICA Y VISTA 360° SIN SOMBRAS
+   PERSONALIZACIÓN: BOTÓN 360° EXCLUSIVO PARA TERMO Y RIBBON TEXT REDISEÑADO
    ========================================================================== */
 .stage-top-left-360-btn {
   position: relative !important;
@@ -18617,10 +18619,10 @@ body.theme-inverted .prod-select-card.active .prod-card-check {
   font-weight: 800 !important;
   padding: 8px 16px !important;
   border-radius: 999px !important;
-  font-size: 0.78rem !important;
+  font-size: 0.8rem !important;
   letter-spacing: 0.6px !important;
   text-transform: uppercase !important;
-  display: inline-flex !important;
+  display: none !important; /* Exclusivo de Termo: solo visible cuando data-active-product="termo" */
   align-items: center !important;
   gap: 7px !important;
   cursor: pointer !important;
@@ -18628,6 +18630,10 @@ body.theme-inverted .prod-select-card.active .prod-card-check {
   box-shadow: none !important;
   filter: none !important;
   transition: transform 0.2s ease, opacity 0.2s ease !important;
+}
+
+body[data-active-product="termo"] .stage-top-left-360-btn {
+  display: inline-flex !important;
 }
 
 .stage-top-left-360-btn i {
@@ -18654,79 +18660,118 @@ body.theme-inverted .prod-select-card.active .prod-card-check {
   filter: none !important;
 }
 
-/* Todo en una sola línea en la barra Ribbon superior (sin scrollbar ni cortes) */
+/* Ribbon Superior: Estilos nítidos, más grandes, prolijos y sin scroll lateral */
 @media (min-width: 992px) {
   .ribbon-toolbar-content {
     overflow-x: auto !important;
-    padding: 8px 12px !important;
+    padding: 8px 14px !important;
   }
   .ribbon-tab-panel.active {
     display: flex !important;
     flex-wrap: nowrap !important;
-    gap: 6px !important;
+    gap: 8px !important;
     justify-content: flex-start !important;
     align-items: center !important;
+    width: 100% !important;
   }
   #ribbon-panel-text .ribbon-group {
-    padding: 2px 5px !important;
+    padding: 4px 8px !important;
     margin-right: 0 !important;
     flex-shrink: 0 !important;
   }
   #ribbon-panel-text .ribbon-group-content {
-    gap: 4px !important;
+    gap: 6px !important;
   }
   #ribbon-panel-text #active-text-input {
-    width: 135px !important;
-    min-width: 110px !important;
-    max-width: 155px !important;
-    height: 28px !important;
-    font-size: 0.74rem !important;
-    padding: 2px 24px 2px 8px !important;
+    width: 180px !important;
+    min-width: 150px !important;
+    max-width: 240px !important;
+    height: 34px !important;
+    font-size: 0.82rem !important;
+    padding: 4px 26px 4px 10px !important;
   }
   #ribbon-panel-text .ribbon-btn-lg {
-    font-size: 0.72rem !important;
-    padding: 3px 6px !important;
-    height: 28px !important;
+    font-size: 0.8rem !important;
+    padding: 5px 12px !important;
+    height: 34px !important;
     white-space: nowrap !important;
   }
   #ribbon-panel-text #ribbon-font-select-btn {
-    min-width: 85px !important;
-    max-width: 105px !important;
-    padding: 3px 6px !important;
-    height: 28px !important;
-    font-size: 0.74rem !important;
+    min-width: 120px !important;
+    max-width: 150px !important;
+    padding: 5px 10px !important;
+    height: 34px !important;
+    font-size: 0.82rem !important;
   }
   #ribbon-panel-text #active-text-size-input {
-    width: 40px !important;
-    height: 28px !important;
-    font-size: 0.74rem !important;
-    padding: 0 2px !important;
+    width: 46px !important;
+    height: 34px !important;
+    font-size: 0.82rem !important;
+    padding: 0 4px !important;
   }
   #ribbon-panel-text #active-text-size-slider {
     display: none !important;
   }
   #ribbon-panel-text .ribbon-btn-icon-only {
-    width: 24px !important;
-    height: 28px !important;
+    width: 30px !important;
+    height: 34px !important;
     padding: 0 !important;
   }
   #ribbon-panel-text .lines-pill-btn {
-    padding: 3px 6px !important;
-    font-size: 0.7rem !important;
-    height: 28px !important;
+    padding: 5px 10px !important;
+    font-size: 0.78rem !important;
+    height: 34px !important;
   }
   #ribbon-panel-text .active-text-curve-btn {
-    padding: 3px 7px !important;
-    font-size: 0.72rem !important;
-    height: 28px !important;
+    padding: 5px 11px !important;
+    font-size: 0.8rem !important;
+    height: 34px !important;
     white-space: nowrap !important;
     display: inline-flex !important;
     align-items: center !important;
-    gap: 4px !important;
+    gap: 5px !important;
   }
   #ribbon-panel-text .ribbon-group-label {
-    font-size: 0.62rem !important;
-    margin-top: 1px !important;
+    font-size: 0.68rem !important;
+    margin-top: 3px !important;
     line-height: 1 !important;
+    font-weight: 700 !important;
+  }
+
+  /* Para Termo y Caja: Al no tener curvatura ni líneas de virola, expandir los 3 grupos para abarcar la mayor parte del panel */
+  body[data-active-product="termo"] #ribbon-panel-text,
+  body[data-active-product="caja"] #ribbon-panel-text {
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+  body[data-active-product="termo"] #ribbon-panel-text #active-text-input,
+  body[data-active-product="caja"] #ribbon-panel-text #active-text-input {
+    width: 290px !important;
+    max-width: 360px !important;
+    height: 36px !important;
+    font-size: 0.88rem !important;
+  }
+  body[data-active-product="termo"] #ribbon-panel-text #ribbon-font-select-btn,
+  body[data-active-product="caja"] #ribbon-panel-text #ribbon-font-select-btn {
+    min-width: 160px !important;
+    height: 36px !important;
+    font-size: 0.86rem !important;
+  }
+  body[data-active-product="termo"] #ribbon-panel-text .ribbon-btn-lg,
+  body[data-active-product="caja"] #ribbon-panel-text .ribbon-btn-lg {
+    height: 36px !important;
+    font-size: 0.84rem !important;
+    padding: 6px 14px !important;
+  }
+  body[data-active-product="termo"] #ribbon-panel-text #active-text-size-input,
+  body[data-active-product="caja"] #ribbon-panel-text #active-text-size-input {
+    width: 52px !important;
+    height: 36px !important;
+    font-size: 0.86rem !important;
+  }
+  body[data-active-product="termo"] #ribbon-panel-text .ribbon-btn-icon-only,
+  body[data-active-product="caja"] #ribbon-panel-text .ribbon-btn-icon-only {
+    width: 34px !important;
+    height: 36px !important;
   }
 }

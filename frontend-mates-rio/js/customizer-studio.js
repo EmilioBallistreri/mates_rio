@@ -4594,7 +4594,25 @@ function escapeHtml(str) {
   }
   window.initCanvasDragDrop = initCanvasDragDrop;
 
+  function syncTermo360ButtonVisibility() {
+    const btn360 = document.getElementById('btn-termo-360-toggle');
+    if (btn360) {
+      if (studio.activeProduct === 'termo') {
+        btn360.style.setProperty('display', 'inline-flex', 'important');
+      } else {
+        btn360.style.setProperty('display', 'none', 'important');
+        studio.termo360Active = false;
+        const txt = document.getElementById('termo-360-btn-text');
+        if (txt) txt.textContent = '360°';
+        btn360.classList.remove('active');
+      }
+    }
+  }
+  window.syncTermo360ButtonVisibility = syncTermo360ButtonVisibility;
+
   function syncCurvatureControlsVisibility() {
+    document.body.setAttribute('data-active-product', studio.activeProduct || 'mate');
+    syncTermo360ButtonVisibility();
     const curveBtn = document.querySelector('.active-text-curve-btn');
     const curveGroup = curveBtn ? curveBtn.closest('.ribbon-group') : null;
     if (curveGroup) {
@@ -4762,11 +4780,11 @@ function escapeHtml(str) {
     // -------------------------------------------------------------------------
     if (studio.activeProduct === 'termo') {
       if (studio.termo360Active) {
-        // Vista Horizontal 360°: Rectángulo extendido sin sombras ni degradados
-        const rectW = 440;
-        const rectH = 260;
-        const rectX = cx - rectW / 2; // 30
-        const rectY = 120;
+        // Vista Horizontal 360°: Rectángulo extendido más grande y más largo
+        const rectW = 470;
+        const rectH = 300;
+        const rectX = cx - rectW / 2; // 15
+        const rectY = 100;
 
         let textsHtml = '';
         let handlesHtml = '';
@@ -4870,11 +4888,11 @@ function escapeHtml(str) {
         return;
       }
 
-      // Vista Estándar del Termo: Rectángulo vertical más grande y proporcionado (ancho 160, alto 430, blanco puro)
-      const tWidth = 160;
-      const tHeight = 430;
-      const tX = cx - tWidth / 2; // 170
-      const tY = 35;
+      // Vista Estándar del Termo: Rectángulo vertical más grande y largo (ancho 180, alto 455, blanco puro)
+      const tWidth = 180;
+      const tHeight = 455;
+      const tX = cx - tWidth / 2; // 160
+      const tY = 22;
 
       let textsHtml = '';
       let handlesHtml = '';
@@ -5139,9 +5157,8 @@ function escapeHtml(str) {
   const _origUpdateStageBadge = window.updateStageBadge;
   window.updateStageBadge = function() {
     if (typeof _origUpdateStageBadge === 'function') _origUpdateStageBadge();
-    const btn360 = document.getElementById('btn-termo-360-toggle');
-    if (btn360) {
-      btn360.style.display = studio.activeProduct === 'termo' ? 'inline-flex' : 'none';
+    if (typeof syncTermo360ButtonVisibility === 'function') {
+      syncTermo360ButtonVisibility();
     }
   };
 
