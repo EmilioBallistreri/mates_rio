@@ -4019,8 +4019,26 @@ function escapeHtml(str) {
       };
     }
 
-    // Caso 2: Termo cilíndrico (Cuerpo vertical: x entre 170..330, y entre 130..380)
+    // Caso 2: Termo cilíndrico (Cuerpo vertical o vista 360° horizontal)
     if (studio.activeProduct === 'termo') {
+      if (studio.termo360Active) {
+        const termo360Slots = [
+          { x: 250, y: 250, angle: 0 },
+          { x: 170, y: 250, angle: 0 },
+          { x: 330, y: 250, angle: 0 },
+          { x: 95, y: 250, angle: 0 },
+          { x: 405, y: 250, angle: 0 },
+          { x: 250, y: 170, angle: 0 },
+          { x: 250, y: 330, angle: 0 },
+          { x: 170, y: 170, angle: 0 },
+          { x: 330, y: 170, angle: 0 }
+        ];
+        for (const slot of termo360Slots) {
+          if (!isOccupied(slot.x, slot.y)) {
+            return { x: slot.x, y: slot.y, angle: slot.angle, radius: rRing };
+          }
+        }
+      }
       const termoSlots = [
         { x: 250, y: 180, angle: 270 },
         { x: 250, y: 260, angle: 90 },
@@ -4844,12 +4862,13 @@ function escapeHtml(str) {
         const textItems = studio.items.filter(i => i.type === 'text');
         textItems.forEach((t, idx) => {
           const isActive = t.id === studio.activeItemId;
-          if (t.x === undefined || t.y < rectY || t.y > rectY + rectH) {
+          if (t.x === undefined || t.y < rectY - 30 || t.y > rectY + rectH + 30) {
             t.x = cx;
             t.y = rectY + 60 + idx * 45;
           }
-          const x = Math.max(rectX + 24, Math.min(rectX + rectW - 24, t.x));
-          const y = Math.max(rectY + 24, Math.min(rectY + rectH - 24, t.y));
+          // Permitir movimiento libre hasta los bordes y esquinas para grabado CNC
+          const x = Math.max(rectX - 15, Math.min(rectX + rectW + 15, t.x));
+          const y = Math.max(rectY - 15, Math.min(rectY + rectH + 15, t.y));
           t.x = x;
           t.y = y;
           const rot = t.rotation || 0;
@@ -4889,12 +4908,13 @@ function escapeHtml(str) {
           const scale = item.scale || 1.0;
           const rot = item.rotation || 0;
           const isActive = item.id === studio.activeItemId;
-          if (item.x === undefined || item.y < rectY || item.y > rectY + rectH) {
+          if (item.x === undefined || item.y < rectY - 30 || item.y > rectY + rectH + 30) {
             item.x = cx;
             item.y = rectY + 110 + idx * 45;
           }
-          const x = Math.max(rectX + 24, Math.min(rectX + rectW - 24, item.x));
-          const y = Math.max(rectY + 24, Math.min(rectY + rectH - 24, item.y));
+          // Permitir movimiento libre hasta los bordes y esquinas para grabado CNC
+          const x = Math.max(rectX - 15, Math.min(rectX + rectW + 15, item.x));
+          const y = Math.max(rectY - 15, Math.min(rectY + rectH + 15, item.y));
           item.x = x;
           item.y = y;
           const baseSize = 44;
@@ -4923,6 +4943,12 @@ function escapeHtml(str) {
         });
 
         svg.innerHTML = `
+          <defs>
+            <clipPath id="termo-360-clip">
+              <rect x="${rectX}" y="${rectY}" width="${rectW}" height="${rectH}" rx="8" />
+            </clipPath>
+          </defs>
+
           <!-- Fondo blanco puro -->
           <rect width="500" height="500" fill="#ffffff" />
 
@@ -4931,11 +4957,13 @@ function escapeHtml(str) {
           <line x1="${rectX + rectW / 3}" y1="${rectY}" x2="${rectX + rectW / 3}" y2="${rectY + rectH}" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="4,4" />
           <line x1="${rectX + (rectW / 3) * 2}" y1="${rectY}" x2="${rectX + (rectW / 3) * 2}" y2="${rectY + rectH}" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="4,4" />
 
-          <!-- Grabados en color negro sobre el lienzo 360° -->
-          <g class="virola-texts-layer">${textsHtml}</g>
-          <g class="virola-icons-layer">${iconsHtml}</g>
+          <!-- Grabados en color negro sobre el lienzo 360° (recortados estrictamente en los bordes y esquinas redondeadas del termo) -->
+          <g class="virola-engravings-container" clip-path="url(#termo-360-clip)">
+            <g class="virola-texts-layer">${textsHtml}</g>
+            <g class="virola-icons-layer">${iconsHtml}</g>
+          </g>
 
-          <!-- Controles interactivos -->
+          <!-- Controles interactivos fuera del clipPath para garantizar accesibilidad total de los manejadores -->
           <g class="virola-active-handles-layer">${handlesHtml}</g>
         `;
         return;
