@@ -347,9 +347,9 @@
                   <input type="text" id="active-text-input" class="ribbon-input-text"
                     placeholder="Escribí nombres, fechas, frases o dedicatorias..."
                     oninput="onActiveTextInput(this.value)"
-                    style="padding-right: 36px; width: 100%; box-sizing: border-box;" />
-                  <button type="button" class="ribbon-btn ribbon-btn-icon-only" onclick="clearActiveText()"
-                    title="Borrar texto" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; border: none; background: transparent; color: #71717a; cursor: pointer; z-index: 2;">
+                    style="padding-right: 30px; width: 100%; box-sizing: border-box;" />
+                  <button type="button" class="clear-input-inline-btn" onclick="clearActiveText()"
+                    title="Borrar texto" aria-label="Borrar texto">
                     <i class="fas fa-times"></i>
                   </button>
                 </div>
@@ -442,30 +442,20 @@
           <!-- PESTAÑA 2: DISEÑOS, ESCUDOS, EMOJIS Y PLANTILLAS -->
           <div class="ribbon-tab-panel" data-panel="icons" id="ribbon-panel-icons">
 
-            <!-- Grupo 1: Filtro de Categoría -->
-            <div class="ribbon-group">
+            <!-- Grupo 1: Carpeta Desplegable de Categorías (Todo en una sola línea horizontal) -->
+            <div class="ribbon-group" style="position: relative;">
               <div class="ribbon-group-content">
-                <button type="button" class="ribbon-btn active" data-cat-filter="deportes"
-                  onclick="filterRibbonDesigns('deportes')">
-                  <i class="fas fa-futbol"></i> Deportes
+                <button type="button" class="ribbon-btn ribbon-category-folder-btn" id="ribbon-category-folder-btn"
+                  onclick="toggleRibbonCategoryDropdown()" title="Elegir categoría de diseños">
+                  <i class="fas fa-folder-open" style="color: var(--accent-gold); font-size: 0.95rem;"></i>
+                  <span id="active-category-folder-label" style="font-weight: 700;">Deportes</span>
+                  <i class="fas fa-chevron-down" style="font-size: 0.7rem; margin-left: 6px; opacity: 0.7;"></i>
                 </button>
-                <button type="button" class="ribbon-btn" data-cat-filter="criollo"
-                  onclick="filterRibbonDesigns('criollo')">
-                  <i class="fas fa-sun"></i> Criollos
-                </button>
-                <button type="button" class="ribbon-btn" data-cat-filter="fauna" onclick="filterRibbonDesigns('fauna')">
-                  <i class="fas fa-feather"></i> Fauna
-                </button>
-                <button type="button" class="ribbon-btn" data-cat-filter="simbolos"
-                  onclick="filterRibbonDesigns('simbolos')">
-                  <i class="fas fa-star"></i> Símbolos
-                </button>
-                <button type="button" class="ribbon-btn" data-cat-filter="emojis"
-                  onclick="filterRibbonDesigns('emojis')">
-                  <i class="far fa-face-smile"></i> Emojis
-                </button>
+                <div class="ribbon-category-dropdown" id="ribbon-category-dropdown" style="display: none;">
+                  <!-- Generado dinámicamente -->
+                </div>
               </div>
-              <span class="ribbon-group-label">Diseños & Escudos</span>
+              <span class="ribbon-group-label">Categorías</span>
             </div>
 
             <!-- Grupo 2: Diseños Rápidos (Carrusel interactivo con flechas y scroll fluido) -->

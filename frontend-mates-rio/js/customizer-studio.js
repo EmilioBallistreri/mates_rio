@@ -720,12 +720,67 @@ function onActiveTextSizeChange(val) {
 function filterRibbonDesigns(catKey) {
   studio.activeCategory = catKey;
 
+  const labelEl = document.getElementById('active-category-folder-label');
+  if (labelEl && VECTOR_CATEGORIES[catKey]) {
+    labelEl.textContent = VECTOR_CATEGORIES[catKey].name;
+  }
+
   document.querySelectorAll('[data-cat-filter]').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-cat-filter') === catKey);
   });
 
+  renderRibbonCategoryDropdown();
   renderRibbonQuickDesigns(catKey);
 }
+
+function toggleRibbonCategoryDropdown() {
+  const dropdown = document.getElementById('ribbon-category-dropdown');
+  if (!dropdown) return;
+  const isHidden = dropdown.style.display === 'none' || !dropdown.style.display;
+  dropdown.style.display = isHidden ? 'block' : 'none';
+  if (isHidden) {
+    renderRibbonCategoryDropdown();
+  }
+}
+window.toggleRibbonCategoryDropdown = toggleRibbonCategoryDropdown;
+
+function selectRibbonCategory(catKey) {
+  filterRibbonDesigns(catKey);
+  const dropdown = document.getElementById('ribbon-category-dropdown');
+  if (dropdown) dropdown.style.display = 'none';
+}
+window.selectRibbonCategory = selectRibbonCategory;
+
+function renderRibbonCategoryDropdown() {
+  const dropdown = document.getElementById('ribbon-category-dropdown');
+  const labelEl = document.getElementById('active-category-folder-label');
+  if (!dropdown) return;
+
+  const currentCat = studio.activeCategory || 'deportes';
+  const currentCatObj = VECTOR_CATEGORIES[currentCat];
+  if (labelEl) {
+    labelEl.textContent = currentCatObj ? currentCatObj.name : 'Categorías';
+  }
+
+  const categoryKeys = Object.keys(VECTOR_CATEGORIES).filter(k => k !== 'plantillas');
+  dropdown.innerHTML = categoryKeys.map(catKey => {
+    const cat = VECTOR_CATEGORIES[catKey];
+    const iconClass = catKey === 'deportes' ? 'fa-futbol' :
+                      catKey === 'criollo' ? 'fa-sun' :
+                      catKey === 'fauna' ? 'fa-feather' :
+                      catKey === 'simbolos' ? 'fa-star' :
+                      catKey === 'emojis' ? 'fa-face-smile' : 'fa-shapes';
+    const isActive = catKey === currentCat;
+    return `
+      <div class="ribbon-cat-dropdown-item ${isActive ? 'active' : ''}" onclick="selectRibbonCategory('${catKey}')">
+        <i class="fas ${iconClass}" style="width: 18px; text-align: center; color: ${isActive ? '#09090b' : 'var(--accent-gold)'};"></i>
+        <span>${cat.name || catKey}</span>
+        ${isActive ? '<i class="fas fa-check" style="margin-left: auto; font-size: 0.75rem;"></i>' : ''}
+      </div>
+    `;
+  }).join('');
+}
+window.renderRibbonCategoryDropdown = renderRibbonCategoryDropdown;
 
 
 // ==========================================================================
@@ -876,6 +931,13 @@ const PRODUCT_TEMPLATES = {
       subtitle: 'Grabado Láser en Madera',
       file: 'assets/images/designs/criollos/escudo_nacional.svg',
       apply: () => applyCajaDedicatoriaTemplate()
+    },
+    {
+      id: 'tpl_caja_aniversario',
+      name: 'Edición Especial',
+      subtitle: 'Tapa Regalo Conmemorativa',
+      file: 'assets/images/designs/criollos/sol_mayo.svg',
+      apply: () => applyCajaAniversarioTemplate()
     }
   ],
   termo: [
@@ -892,6 +954,13 @@ const PRODUCT_TEMPLATES = {
       subtitle: 'Grabado sobre Acero Inox',
       file: 'assets/images/designs/criollos/escudo_nacional.svg',
       apply: () => applyTermoEscudoTemplate()
+    },
+    {
+      id: 'tpl_termo_afa',
+      name: '3 Estrellas Campeón',
+      subtitle: 'Termo Selección Argentina',
+      file: 'assets/images/designs/deportes/escudo_afa.svg',
+      apply: () => applyTermoAfaTemplate()
     }
   ]
 };
@@ -997,29 +1066,7 @@ function applyGenericCustomTemplate(tpl) {
 }
 
 function renderDynamicRibbonCategoryButtons() {
-  const panel = document.getElementById('ribbon-panel-icons');
-  if (!panel) return;
-  const groupContent = panel.querySelector('.ribbon-group:first-child .ribbon-group-content');
-  if (!groupContent) return;
-
-  Object.keys(VECTOR_CATEGORIES).forEach(catKey => {
-    if (catKey === 'plantillas') return;
-    let existingBtn = groupContent.querySelector(`[data-cat-filter="${catKey}"]`);
-    if (!existingBtn) {
-      const newBtn = document.createElement('button');
-      newBtn.type = 'button';
-      newBtn.className = `ribbon-btn ${studio.activeCategory === catKey ? 'active' : ''}`;
-      newBtn.setAttribute('data-cat-filter', catKey);
-      newBtn.onclick = () => filterRibbonDesigns(catKey);
-      const iconClass = catKey === 'deportes' ? 'fa-futbol' :
-                        catKey === 'criollo' ? 'fa-sun' :
-                        catKey === 'fauna' ? 'fa-feather' :
-                        catKey === 'simbolos' ? 'fa-star' :
-                        catKey === 'emojis' ? 'fa-face-smile' : 'fa-shapes';
-      newBtn.innerHTML = `<i class="fas ${iconClass}"></i> ${VECTOR_CATEGORIES[catKey].name || catKey}`;
-      groupContent.appendChild(newBtn);
-    }
-  });
+  renderRibbonCategoryDropdown();
 }
 
 function loadDynamicCustomizerAssets() {
@@ -1428,6 +1475,104 @@ function applyTermoEscudoTemplate() {
   studio.activeItemId = studio.items[0].id;
   renderVirolaCanvas();
   showNotificationToast('Plantilla Escudo Nacional aplicada al Termo', 'fa-mug-hot');
+}
+
+function applyTermoAfaTemplate() {
+  if (studio.activeProduct !== 'termo') {
+    switchActiveProduct('termo');
+  }
+  saveStudioHistoryState();
+  const { cx } = STUDIO_CONFIG;
+  studio.items = [
+    {
+      id: `tpl_termo_afa_ic_${Date.now()}`,
+      type: 'icon',
+      graphicId: 'escudo_afa',
+      name: 'Escudo AFA 3 Estrellas',
+      file: 'assets/images/designs/deportes/escudo_afa.svg',
+      fileBlack: 'assets/images/designs/deportes/escudo_afa.svg',
+      scale: 1.45,
+      x: cx,
+      y: 200,
+      rotation: 0
+    },
+    {
+      id: `tpl_termo_afa_txt1_${Date.now()}`,
+      type: 'text',
+      text: 'CAMPEONES DEL MUNDO',
+      font: 'Cinzel',
+      fontSize: 16,
+      scale: 1.0,
+      x: cx,
+      y: 285,
+      rotation: 0,
+      arcPosition: 'straight'
+    },
+    {
+      id: `tpl_termo_afa_txt2_${Date.now()}`,
+      type: 'text',
+      text: '★★★ QATAR 2022 ★★★',
+      font: 'Montserrat',
+      fontSize: 13,
+      scale: 1.0,
+      x: cx,
+      y: 335,
+      rotation: 0,
+      arcPosition: 'straight'
+    }
+  ];
+  studio.activeItemId = studio.items[0].id;
+  renderVirolaCanvas();
+  showNotificationToast('Plantilla 3 Estrellas AFA aplicada al Termo', 'fa-trophy');
+}
+
+function applyCajaAniversarioTemplate() {
+  if (studio.activeProduct !== 'caja') {
+    switchActiveProduct('caja');
+  }
+  saveStudioHistoryState();
+  const { cx } = STUDIO_CONFIG;
+  studio.items = [
+    {
+      id: `tpl_caja_aniv_txt1_${Date.now()}`,
+      type: 'text',
+      text: 'EDICIÓN ESPECIAL',
+      font: 'Cinzel',
+      fontSize: 22,
+      scale: 1.05,
+      x: cx,
+      y: 135,
+      rotation: 0,
+      arcPosition: 'straight'
+    },
+    {
+      id: `tpl_caja_aniv_ic_${Date.now()}`,
+      type: 'icon',
+      graphicId: 'sol_mayo',
+      name: 'Sol de Mayo',
+      file: 'assets/images/designs/criollos/sol_mayo.svg',
+      fileWhite: 'assets/images/designs/criollos/sol_mayo.svg',
+      scale: 1.4,
+      x: cx,
+      y: 245,
+      rotation: 0
+    },
+    {
+      id: `tpl_caja_aniv_txt2_${Date.now()}`,
+      type: 'text',
+      text: 'GRABADO ARTESANAL • 2026',
+      font: 'Montserrat',
+      fontSize: 13,
+      scale: 1.0,
+      x: cx,
+      y: 350,
+      rotation: 0,
+      arcPosition: 'straight'
+    }
+  ];
+  studio.activeItemId = studio.items[0].id;
+  renderVirolaCanvas();
+  showNotificationToast('Plantilla Edición Especial aplicada a la Caja', 'fa-box');
 }
 
 // ==========================================================================
@@ -2452,8 +2597,8 @@ function renderVirolaCanvas() {
       <!-- Ranuras concéntricas opcionales -->
       ${circularLinesHtml}
 
-      <!-- Grabados Láser sin recorte restrictivo para permitir ubicación libre en toda la pieza -->
-      <g class="virola-engravings-container">
+      <!-- Grabados Láser recortados exactamente en los bordes de la virola (como en cajas y termos) -->
+      <g class="virola-engravings-container" clip-path="url(#metal-ring-clip)">
         <g class="virola-icons-layer">${iconsHtml}</g>
         <g class="virola-texts-layer">${textsHtml}</g>
       </g>
@@ -3430,27 +3575,49 @@ function initCanvasInteraction() {
     }
   }, { passive: false });
 
-  svg.addEventListener('click', (e) => {
-    if (studio.dragMoved) return;
-    if (!e.target.closest('.virola-sticker-group') && 
-        !e.target.closest('.virola-text-group') && 
-        !e.target.closest('.virola-active-handle-group') &&
-        !e.target.closest('.virola-text-handles-group') &&
-        !e.target.closest('.virola-handle')) {
-      const coords = getPointerCoords(e);
-      const { cx, cy, rOuter } = STUDIO_CONFIG;
-      const d = Math.hypot(coords.x - cx, coords.y - cy);
-      // Solo deseleccionar si se hace clic fuera del margen del producto
-      if (studio.activeProduct === 'mate' && d > rOuter + 35) {
-        studio.activeItemId = null;
-        renderVirolaCanvas();
-        updateActiveItemFloatingBar();
-      } else if (studio.activeProduct !== 'mate' && (coords.y < 20 || coords.y > 480)) {
-        studio.activeItemId = null;
-        renderVirolaCanvas();
-        updateActiveItemFloatingBar();
-      }
+  // Deseleccionar el elemento activo al hacer clic o tocar en cualquier otra parte de la web (computadora y celular)
+  document.addEventListener('pointerdown', (e) => {
+    // Si el menú de categorías está abierto y se toca fuera, cerrarlo
+    const catDropdown = document.getElementById('ribbon-category-dropdown');
+    if (catDropdown && catDropdown.style.display !== 'none' && !e.target.closest('#ribbon-category-dropdown') && !e.target.closest('#ribbon-category-folder-btn')) {
+      catDropdown.style.display = 'none';
     }
+
+    if (!studio.activeItemId || studio.dragMode) return;
+
+    // Si el toque/clic es sobre el elemento activo o sus manejadores de control
+    if (e.target.closest && (
+        e.target.closest('.virola-handle') ||
+        e.target.closest('.virola-sticker-group') ||
+        e.target.closest('.virola-text-group') ||
+        e.target.closest('.virola-active-handle-group') ||
+        e.target.closest('.virola-text-handles-group')
+    )) {
+      return;
+    }
+
+    // Si se interactúa con controles del ribbon de edición, inputs, dropdowns o modales
+    if (e.target.closest && (
+        e.target.closest('#ribbon-panel-text') ||
+        e.target.closest('#ribbon-font-dropdown') ||
+        e.target.closest('#ribbon-category-dropdown') ||
+        e.target.closest('#ribbon-category-folder-btn') ||
+        e.target.closest('#virola-active-item-controls') ||
+        e.target.closest('.active-item-floating-bar') ||
+        e.target.closest('.modal') ||
+        e.target.closest('.design-catalog-modal')
+    )) {
+      return;
+    }
+
+    // Clic en cualquier otra parte de la web o fondo: deseleccionar inmediatamente
+    studio.activeItemId = null;
+    studio.dragMode = null;
+    studio.dragItemId = null;
+    renderVirolaCanvas();
+    renderTextLayersUI();
+    updateActiveItemFloatingBar();
+    if (studio.viewMode === '360') render360Canvas();
   });
 
   window.addEventListener('mousemove', onCanvasPointerMove);
@@ -4245,21 +4412,13 @@ function escapeHtml(str) {
       btn.classList.toggle('active', btn.getAttribute('data-prod-btn') === prodKey);
     });
 
-    if (prodKey === 'caja') {
-      // En caja los textos se muestran rectos en el frente vertical para máxima legibilidad
-      studio.items.forEach(it => {
-        if (it.type === 'text') {
-          it.arcPosition = 'straight';
-        }
-      });
-    }
-
     renderModelsDropdown();
     updateStageBadge();
     updatePriceDisplay();
 
     autoCenterAndBalanceVirola();
     renderVirolaCanvas();
+    renderRibbonTemplatesForActiveProduct();
 
     showNotificationToast(`Personalizando: ${prodDef.name}`, 'fa-cube');
   };
@@ -4277,10 +4436,7 @@ function escapeHtml(str) {
     const count = textItems.length + 1;
     const defaultText = initialText || (count === 1 ? 'MATES RÍO' : (count === 2 ? 'TRADICIÓN & PASIÓN' : `TEXTO ${count}`));
 
-    let pos = preferredPos || (studio.activeProduct === 'caja' ? 'straight' : (count === 1 ? 'top' : (count === 2 ? 'bottom' : 'straight')));
-    if (studio.activeProduct === 'caja') {
-      pos = 'straight';
-    }
+    let pos = preferredPos || (studio.activeProduct === 'mate' ? (count === 1 ? 'top' : (count === 2 ? 'bottom' : 'straight')) : 'straight');
 
     const placement = findNonOverlappingPosition('text', pos);
 
@@ -4434,7 +4590,7 @@ function escapeHtml(str) {
         if (file.type !== 'image/svg+xml') {
           const cvs = document.createElement('canvas');
           const ctx = cvs.getContext('2d');
-          const maxDim = 700;
+          const maxDim = 600;
           let w = img.width, h = img.height;
           if (w > maxDim || h > maxDim) {
             if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
@@ -4446,71 +4602,163 @@ function escapeHtml(str) {
 
           const imgData = ctx.getImageData(0, 0, w, h);
           const d = imgData.data;
-          const whiteImgData = ctx.createImageData(w, h);
-          const dw = whiteImgData.data;
+          const totalPixels = w * h;
 
-          // Muestreo de todo el borde perimetral para eliminar cualquier marco o fondo blanco/claro
-          let rSum = 0, gSum = 0, bSum = 0, sampleCount = 0;
-          const borderStep = Math.max(1, Math.floor(Math.min(w, h) / 20));
-          for (let bx = 0; bx < w; bx += borderStep) {
-            const topIdx = bx * 4;
-            const botIdx = ((h - 1) * w + bx) * 4;
-            rSum += d[topIdx] + d[botIdx];
-            gSum += d[topIdx + 1] + d[botIdx + 1];
-            bSum += d[topIdx + 2] + d[botIdx + 2];
-            sampleCount += 2;
+          // 1. Detección Inteligente y Remoción de Fondo Contiguo (Flood-Fill BFS desde Bordes)
+          const isBg = new Uint8Array(totalPixels);
+          const queue = new Int32Array(totalPixels);
+          let qHead = 0, qTail = 0;
+
+          // Muestreo perimetral para identificar color base del fondo
+          let bgR = 255, bgG = 255, bgB = 255;
+          let sampleCount = 0, rSum = 0, gSum = 0, bSum = 0;
+          const cornerIndices = [0, (w - 1) * 4, ((h - 1) * w) * 4, ((h - 1) * w + w - 1) * 4];
+          cornerIndices.forEach(idx => {
+            if (d[idx + 3] > 30) {
+              rSum += d[idx]; gSum += d[idx + 1]; bSum += d[idx + 2];
+              sampleCount++;
+            }
+          });
+          if (sampleCount > 0) {
+            bgR = Math.round(rSum / sampleCount);
+            bgG = Math.round(gSum / sampleCount);
+            bgB = Math.round(bSum / sampleCount);
           }
-          for (let by = 0; by < h; by += borderStep) {
-            const leftIdx = (by * w) * 4;
-            const rightIdx = (by * w + (w - 1)) * 4;
-            rSum += d[leftIdx] + d[rightIdx];
-            gSum += d[leftIdx + 1] + d[rightIdx + 1];
-            bSum += d[leftIdx + 2] + d[rightIdx + 2];
-            sampleCount += 2;
+
+          // Encolar todos los píxeles perimetrales exteriores que sean fondo (transparentes, claros o similares al color de esquina)
+          function isBgSeed(px, py) {
+            const idx = (py * w + px) * 4;
+            const a = d[idx + 3];
+            if (a < 50) return true;
+            const r = d[idx], g = d[idx + 1], b = d[idx + 2];
+            const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+            const dist = Math.hypot(r - bgR, g - bgG, b - bgB);
+            return lum > 195 || dist < 55;
           }
 
-          const bgR = Math.round(rSum / sampleCount);
-          const bgG = Math.round(gSum / sampleCount);
-          const bgB = Math.round(bSum / sampleCount);
-          const colorTolerance = 62;
+          for (let x = 0; x < w; x++) {
+            if (isBgSeed(x, 0)) { const p = x; isBg[p] = 1; queue[qTail++] = p; }
+            if (isBgSeed(x, h - 1)) { const p = (h - 1) * w + x; isBg[p] = 1; queue[qTail++] = p; }
+          }
+          for (let y = 1; y < h - 1; y++) {
+            if (isBgSeed(0, y)) { const p = y * w; isBg[p] = 1; queue[qTail++] = p; }
+            if (isBgSeed(w - 1, y)) { const p = y * w + (w - 1); isBg[p] = 1; queue[qTail++] = p; }
+          }
 
-          for (let py = 0; py < h; py++) {
-            for (let px = 0; px < w; px++) {
-              const i = (py * w + px) * 4;
-              const r = d[i], g = d[i + 1], b = d[i + 2], a = d[i + 3];
+          // Propagar flood-fill desde los bordes para eliminar el fondo exterior sin tocar el contenido interior
+          while (qHead < qTail) {
+            const curr = queue[qHead++];
+            const cx = curr % w;
+            const cy = Math.floor(curr / w);
 
-              // Recortar 2px del borde exterior para evitar líneas residuales blancas en el marco
-              if (px < 2 || px >= w - 2 || py < 2 || py >= h - 2 || a < 40) {
-                d[i + 3] = 0;
-                dw[i + 3] = 0;
-                continue;
-              }
+            const neighbors = [
+              cx > 0 ? curr - 1 : -1,
+              cx < w - 1 ? curr + 1 : -1,
+              cy > 0 ? curr - w : -1,
+              cy < h - 1 ? curr + w : -1
+            ];
 
-              const colorDist = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
-              const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-
-              // Eliminar píxeles blancos/claros (> 195 lum) o similares al fondo
-              if (lum > 195 || colorDist < colorTolerance) {
-                d[i + 3] = 0;
-                dw[i + 3] = 0;
-              } else {
-                const contrastAlpha = Math.min(1, (205 - lum) / 85);
-                const finalAlpha = Math.round(255 * Math.max(0.25, contrastAlpha));
-                // Versión grabada en negro (para Mate y Termo)
-                d[i] = 16;
-                d[i + 1] = 16;
-                d[i + 2] = 16;
-                d[i + 3] = finalAlpha;
-                // Versión grabada en blanco puro (para Caja de presentación)
-                dw[i] = 255;
-                dw[i + 1] = 255;
-                dw[i + 2] = 255;
-                dw[i + 3] = finalAlpha;
+            for (let k = 0; k < 4; k++) {
+              const nIdx = neighbors[k];
+              if (nIdx !== -1 && isBg[nIdx] === 0) {
+                const p4 = nIdx * 4;
+                const na = d[p4 + 3];
+                if (na < 50) {
+                  isBg[nIdx] = 1;
+                  queue[qTail++] = nIdx;
+                } else {
+                  const nr = d[p4], ng = d[p4 + 1], nb = d[p4 + 2];
+                  const nLum = 0.299 * nr + 0.587 * ng + 0.114 * nb;
+                  const nDist = Math.hypot(nr - bgR, ng - bgG, nb - bgB);
+                  if (nLum > 200 || (nDist < 48 && nLum > 120)) {
+                    isBg[nIdx] = 1;
+                    queue[qTail++] = nIdx;
+                  }
+                }
               }
             }
           }
 
-          ctx.putImageData(imgData, 0, 0);
+          // 2. Vectorización y Grabado Láser CNC de Alta Definición
+          const lumArray = new Float32Array(totalPixels);
+          let minLum = 255, maxLum = 0;
+
+          for (let i = 0; i < totalPixels; i++) {
+            if (isBg[i]) continue;
+            const p4 = i * 4;
+            const r = d[p4], g = d[p4 + 1], b = d[p4 + 2];
+            const l = 0.299 * r + 0.587 * g + 0.114 * b;
+            lumArray[i] = l;
+            if (l < minLum) minLum = l;
+            if (l > maxLum) maxLum = l;
+          }
+
+          const lumRange = Math.max(1, maxLum - minLum);
+
+          // Crear lienzos separados para Negro (Mate/Termo) y Blanco (Caja)
+          const blackImgData = ctx.createImageData(w, h);
+          const bd = blackImgData.data;
+          const whiteImgData = ctx.createImageData(w, h);
+          const wd = whiteImgData.data;
+
+          // Detección de bordes Sobel para reforzar nitidez de rasgos, siluetas y tipografías
+          for (let py = 0; py < h; py++) {
+            for (let px = 0; px < w; px++) {
+              const i = py * w + px;
+              const p4 = i * 4;
+
+              // Si es fondo exterior o margen de 2px, dejar transparente
+              if (isBg[i] || px < 2 || px >= w - 2 || py < 2 || py >= h - 2) {
+                bd[p4 + 3] = 0;
+                wd[p4 + 3] = 0;
+                continue;
+              }
+
+              // Normalizar luminancia dentro del rango del motivo
+              const rawLum = lumArray[i];
+              const normLum = ((rawLum - minLum) / lumRange) * 255;
+
+              // Sobel 3x3 local para preservar nitidez de líneas finas
+              let gx = 0, gy = 0;
+              if (px > 0 && px < w - 1 && py > 0 && py < h - 1) {
+                const l_left = lumArray[i - 1];
+                const l_right = lumArray[i + 1];
+                const l_top = lumArray[i - w];
+                const l_bottom = lumArray[i + w];
+                gx = l_right - l_left;
+                gy = l_bottom - l_top;
+              }
+              const edgeMag = Math.hypot(gx, gy);
+
+              // Quemado láser de grabado: contraste profundo con realce de bordes
+              let burnIntensity;
+              if (normLum < 128 || edgeMag > 28) {
+                burnIntensity = Math.min(255, Math.round(255 * (1 - (normLum / 180)) + (edgeMag * 1.2)));
+              } else {
+                burnIntensity = Math.round(Math.max(0, (200 - normLum) * 0.7));
+              }
+
+              if (burnIntensity > 25) {
+                const finalAlpha = Math.min(255, Math.max(80, burnIntensity));
+                // Grabado Láser Negro Sólido CNC (Mate y Termo)
+                bd[p4] = 17;
+                bd[p4 + 1] = 17;
+                bd[p4 + 2] = 17;
+                bd[p4 + 3] = finalAlpha;
+
+                // Pirograbado Blanco Puro CNC (Caja de Madera/Negra)
+                wd[p4] = 255;
+                wd[p4 + 1] = 255;
+                wd[p4 + 2] = 255;
+                wd[p4 + 3] = finalAlpha;
+              } else {
+                bd[p4 + 3] = 0;
+                wd[p4 + 3] = 0;
+              }
+            }
+          }
+
+          ctx.putImageData(blackImgData, 0, 0);
           processedBlackDataUrl = cvs.toDataURL('image/png');
 
           ctx.putImageData(whiteImgData, 0, 0);
@@ -4808,7 +5056,7 @@ function escapeHtml(str) {
     const curveBtn = document.querySelector('.active-text-curve-btn');
     const curveGroup = curveBtn ? curveBtn.closest('.ribbon-group') : null;
     if (curveGroup) {
-      curveGroup.style.display = studio.activeProduct === 'mate' ? '' : 'none';
+      curveGroup.style.display = '';
     }
     const virolaLinesGroup = document.getElementById('virola-lines-ribbon-group');
     if (virolaLinesGroup) {
@@ -4822,6 +5070,7 @@ function escapeHtml(str) {
     const prevProduct = studio.activeProduct;
     _origSwitchActiveProduct(prodType);
     syncCurvatureControlsVisibility();
+    renderRibbonTemplatesForActiveProduct();
 
     const svg = document.getElementById('virola-studio-svg');
     if (svg) svg.setAttribute('data-product', studio.activeProduct);
@@ -4939,6 +5188,94 @@ function escapeHtml(str) {
     `;
   }
 
+  // Helper para renderizar texto plano o con curvatura en Termo (2D y 360°) y Caja (2D)
+  function buildPlanarTextSvg(t, options = {}) {
+    const isWhite = options.isWhite || false;
+    const textColor = isWhite ? '#ffffff' : '#111111';
+    const isActive = t.id === studio.activeItemId;
+    const fSize = Math.round((t.fontSize || 22) * (t.scale || 1));
+    const rot = t.rotation || 0;
+    const x = t.x;
+    const y = t.y;
+    const textStr = t.text || '';
+    const textLen = textStr.length;
+    const isCurved = t.arcPosition === 'top' || t.arcPosition === 'bottom';
+    const isBottom = t.arcPosition === 'bottom';
+    const pathId = `planar-arc-${t.id}-${options.suffix || '2d'}`;
+
+    let innerHtml = '';
+    let defPathHtml = '';
+    let approxHalfW = Math.max(36, textLen * fSize * 0.34);
+    let approxHalfH = Math.max(14, fSize * 0.65);
+
+    if (isCurved) {
+      const hw = Math.max(40, textLen * fSize * 0.35 + 20);
+      const R = Math.max(hw * 1.35, 120);
+      const dip = R - Math.sqrt(Math.max(1, R * R - hw * hw));
+      let pathD = '';
+      if (isBottom) {
+        // Curva Abajo: arco cóncavo (sonrisa)
+        pathD = `M ${(-hw).toFixed(2)} ${(-dip).toFixed(2)} A ${R.toFixed(2)} ${R.toFixed(2)} 0 0 0 ${(hw).toFixed(2)} ${(-dip).toFixed(2)}`;
+      } else {
+        // Curva Arriba: arco convexo (arco superior)
+        pathD = `M ${(-hw).toFixed(2)} ${dip.toFixed(2)} A ${R.toFixed(2)} ${R.toFixed(2)} 0 0 1 ${(hw).toFixed(2)} ${dip.toFixed(2)}`;
+      }
+      defPathHtml = `<path id="${pathId}" d="${pathD}" fill="none" />`;
+
+      approxHalfW = hw + 10;
+      approxHalfH = Math.max(18, fSize * 0.7 + dip / 2);
+
+      innerHtml = `
+        <path d="${pathD}" fill="none" stroke="transparent" stroke-width="${fSize + 22}" pointer-events="stroke" style="cursor: grab;" />
+        <text font-family="'${t.font || 'Cinzel'}', serif" 
+              font-size="${fSize}" 
+              font-weight="800" 
+              letter-spacing="1.5px" 
+              fill="${textColor}" 
+              style="cursor: grab; fill: ${textColor} !important;" 
+              class="virola-curved-text ${isWhite ? 'box-white-text' : ''} ${isActive ? 'active-text-element' : ''}" 
+              data-item-id="${t.id}">
+          <textPath href="#${pathId}" xlink:href="#${pathId}" startOffset="50%" text-anchor="middle">
+            ${escapeHtml(textStr)}
+          </textPath>
+        </text>
+      `;
+    } else {
+      // Texto Recto tradicional
+      innerHtml = `
+        <text font-family="'${t.font || 'Cinzel'}', serif" 
+              font-size="${fSize}" 
+              font-weight="800" 
+              letter-spacing="1.5px" 
+              fill="${textColor}" 
+              text-anchor="middle" 
+              dominant-baseline="central" 
+              style="cursor: grab; fill: ${textColor} !important;" 
+              class="virola-curved-text ${isWhite ? 'box-white-text' : ''} ${isActive ? 'active-text-element' : ''}" 
+              data-item-id="${t.id}">
+          ${escapeHtml(textStr)}
+        </text>
+      `;
+    }
+
+    const textGroupHtml = `
+      <g class="virola-text-group ${isWhite ? 'box-white-text' : ''} ${isActive ? 'active-text-item' : ''}" 
+         data-item-id="${t.id}"
+         transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
+         onmousedown="startFreeItemDrag('${t.id}', event)"
+         ontouchstart="startFreeItemDrag('${t.id}', event)">
+        ${innerHtml}
+      </g>
+    `;
+
+    return {
+      defPathHtml,
+      textGroupHtml,
+      approxHalfW,
+      approxHalfH
+    };
+  }
+
   // 7. Sobrescribir renderVirolaCanvas:
   //    - Mate: fondo blanco puro, círculo exterior negro y círculo interior negro (sin sombras ni degradados)
   //    - Termo: rectángulo vertical proporcionado (más grande de ancho y alto, blanco con trazo negro), botón 360° funcional
@@ -4970,6 +5307,7 @@ function escapeHtml(str) {
         const rectY = 100;
 
         let textsHtml = '';
+        let defsPathsHtml = '';
         let handlesHtml = '';
         const textItems = studio.items.filter(i => i.type === 'text');
         textItems.forEach((t, idx) => {
@@ -4983,33 +5321,12 @@ function escapeHtml(str) {
           const y = Math.max(rectY - 15, Math.min(rectY + rectH + 15, t.y));
           t.x = x;
           t.y = y;
-          const rot = t.rotation || 0;
-          const fSize = Math.round((t.fontSize || 22) * (t.scale || 1));
-          const approxHalfW = Math.max(36, ((t.text || '').length * fSize * 0.34));
-          const approxHalfH = Math.max(14, fSize * 0.65);
 
-          textsHtml += `
-            <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
-               data-item-id="${t.id}"
-               transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
-               onmousedown="startFreeItemDrag('${t.id}', event)"
-               ontouchstart="startFreeItemDrag('${t.id}', event)">
-              <text font-family="'${t.font || 'Cinzel'}', serif" 
-                    font-size="${fSize}" 
-                    font-weight="800" 
-                    letter-spacing="1.5px" 
-                    fill="#111111" 
-                    text-anchor="middle" 
-                    dominant-baseline="central" 
-                    style="cursor: grab; fill: #111111 !important;" 
-                    class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
-                    data-item-id="${t.id}">
-                ${escapeHtml(t.text)}
-              </text>
-            </g>
-          `;
+          const rendered = buildPlanarTextSvg(t, { isWhite: false, suffix: 'termo360' });
+          textsHtml += rendered.textGroupHtml;
+          if (rendered.defPathHtml) defsPathsHtml += rendered.defPathHtml;
           if (isActive) {
-            handlesHtml = buildTermoHandlesHtml(t, approxHalfW, approxHalfH);
+            handlesHtml = buildTermoHandlesHtml(t, rendered.approxHalfW, rendered.approxHalfH);
           }
         });
 
@@ -5059,6 +5376,7 @@ function escapeHtml(str) {
             <clipPath id="termo-360-clip">
               <rect x="${rectX}" y="${rectY}" width="${rectW}" height="${rectH}" rx="8" />
             </clipPath>
+            ${defsPathsHtml}
           </defs>
 
           <!-- Fondo blanco puro -->
@@ -5088,6 +5406,7 @@ function escapeHtml(str) {
       const tY = 22;
 
       let textsHtml = '';
+      let defsPathsHtml = '';
       let handlesHtml = '';
       const textItems = studio.items.filter(i => i.type === 'text');
       textItems.forEach((t, idx) => {
@@ -5100,33 +5419,12 @@ function escapeHtml(str) {
         const y = Math.max(tY + 24, Math.min(tY + tHeight - 24, t.y));
         t.x = x;
         t.y = y;
-        const rot = t.rotation || 0;
-        const fSize = Math.round((t.fontSize || 20) * (t.scale || 1));
-        const approxHalfW = Math.max(30, ((t.text || '').length * fSize * 0.32));
-        const approxHalfH = Math.max(14, fSize * 0.65);
 
-        textsHtml += `
-          <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
-             data-item-id="${t.id}"
-             transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
-             onmousedown="startFreeItemDrag('${t.id}', event)"
-             ontouchstart="startFreeItemDrag('${t.id}', event)">
-            <text font-family="'${t.font || 'Cinzel'}', serif" 
-                  font-size="${fSize}" 
-                  font-weight="800" 
-                  letter-spacing="1.2px" 
-                  fill="#111111" 
-                  text-anchor="middle" 
-                  dominant-baseline="central" 
-                  style="cursor: grab; fill: #111111 !important;" 
-                  class="virola-curved-text ${isActive ? 'active-text-element' : ''}" 
-                  data-item-id="${t.id}">
-                ${escapeHtml(t.text)}
-            </text>
-          </g>
-        `;
+        const rendered = buildPlanarTextSvg(t, { isWhite: false, suffix: 'termo2d' });
+        textsHtml += rendered.textGroupHtml;
+        if (rendered.defPathHtml) defsPathsHtml += rendered.defPathHtml;
         if (isActive) {
-          handlesHtml = buildTermoHandlesHtml(t, approxHalfW, approxHalfH);
+          handlesHtml = buildTermoHandlesHtml(t, rendered.approxHalfW, rendered.approxHalfH);
         }
       });
 
@@ -5175,6 +5473,7 @@ function escapeHtml(str) {
           <clipPath id="termo-face-clip">
             <rect x="${tX}" y="${tY}" width="${tWidth}" height="${tHeight}" rx="12" />
           </clipPath>
+          ${defsPathsHtml}
         </defs>
 
         <!-- Fondo blanco puro -->
@@ -5210,6 +5509,7 @@ function escapeHtml(str) {
     const boxY = 45;            // 45..455
 
     let textsHtml = '';
+    let defsPathsHtml = '';
     let handlesHtml = '';
     const textItems = studio.items.filter(i => i.type === 'text');
     textItems.forEach((t, idx) => {
@@ -5220,33 +5520,12 @@ function escapeHtml(str) {
       }
       const x = t.x;
       const y = t.y;
-      const rot = t.rotation !== undefined ? t.rotation : 0;
-      const fSize = Math.round((t.fontSize || 22) * (t.scale || 1));
-      const approxHalfW = Math.max(38, ((t.text || '').length * fSize * 0.34));
-      const approxHalfH = Math.max(14, fSize * 0.65);
 
-      textsHtml += `
-        <g class="virola-text-group ${isActive ? 'active-text-item' : ''}" 
-           data-item-id="${t.id}"
-           transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) rotate(${rot})"
-           onmousedown="startFreeItemDrag('${t.id}', event)"
-           ontouchstart="startFreeItemDrag('${t.id}', event)">
-          <text font-family="'${t.font || 'Cinzel'}', serif" 
-                font-size="${fSize}" 
-                font-weight="800" 
-                letter-spacing="2px" 
-                fill="#ffffff" 
-                text-anchor="middle" 
-                dominant-baseline="central" 
-                style="cursor: grab; fill: #ffffff !important; color: #ffffff !important;" 
-                class="virola-curved-text box-white-text ${isActive ? 'active-text-element' : ''}" 
-                data-item-id="${t.id}">
-            ${escapeHtml(t.text)}
-          </text>
-        </g>
-      `;
+      const rendered = buildPlanarTextSvg(t, { isWhite: true, suffix: 'caja' });
+      textsHtml += rendered.textGroupHtml;
+      if (rendered.defPathHtml) defsPathsHtml += rendered.defPathHtml;
       if (isActive) {
-        handlesHtml = buildBoxHandlesHtml(t, approxHalfW, approxHalfH);
+        handlesHtml = buildBoxHandlesHtml(t, rendered.approxHalfW, rendered.approxHalfH);
       }
     });
 
@@ -5297,6 +5576,7 @@ function escapeHtml(str) {
         <clipPath id="box-face-clip">
           <rect x="${boxX}" y="${boxY}" width="${boxW}" height="${boxH}" rx="10" />
         </clipPath>
+        ${defsPathsHtml}
       </defs>
 
       <!-- Fondo blanco puro del lienzo -->
@@ -5572,7 +5852,29 @@ function escapeHtml(str) {
             ctx.lineWidth = 0;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(item.text || '', 0, 0);
+            const str = item.text || '';
+            if (item.arcPosition === 'top' || item.arcPosition === 'bottom') {
+              const isTop = item.arcPosition === 'top';
+              const R = Math.max(str.length * fSize * 0.45, 95);
+              const angleSpan = (str.length * fSize * 0.58) / R;
+              const startAng = (isTop ? -Math.PI / 2 : Math.PI / 2) - angleSpan / 2;
+              for (let ci = 0; ci < str.length; ci++) {
+                const char = str[ci];
+                const charAng = startAng + ((ci + 0.5) / str.length) * angleSpan;
+                ctx.save();
+                if (isTop) {
+                  ctx.translate(Math.cos(charAng) * R, Math.sin(charAng) * R + R);
+                  ctx.rotate(charAng + Math.PI / 2);
+                } else {
+                  ctx.translate(Math.cos(charAng) * R, Math.sin(charAng) * R - R);
+                  ctx.rotate(charAng - Math.PI / 2);
+                }
+                ctx.fillText(char, 0, 0);
+                ctx.restore();
+              }
+            } else {
+              ctx.fillText(str, 0, 0);
+            }
           } else if (item.type === 'icon') {
             const imgEl = getCachedImage(item.fileBlack || item.file);
             if (imgEl && imgEl.complete) {

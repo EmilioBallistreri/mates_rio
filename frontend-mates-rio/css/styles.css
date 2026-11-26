@@ -18862,3 +18862,93 @@ body[data-active-product="termo"] .stage-top-left-360-btn {
     height: 36px !important;
   }
 }
+
+/* Botón X directo y limpio en el input de redacción libre (sin cuadrado ni bordes) */
+.clear-input-inline-btn {
+  position: absolute !important;
+  right: 9px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  color: #71717a !important;
+  font-size: 0.95rem !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  z-index: 5 !important;
+  transition: color 0.15s ease, transform 0.15s ease !important;
+}
+
+.clear-input-inline-btn:hover {
+  color: #ffffff !important;
+  transform: translateY(-50%) scale(1.15) !important;
+}
+
+/* Carpeta Desplegable de Categorías de Íconos (Línea horizontal compacta) */
+.ribbon-category-folder-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  height: 38px !important;
+  padding: 0 14px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 8px !important;
+  color: #ffffff !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: all 0.18s ease !important;
+}
+
+.ribbon-category-folder-btn:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: var(--accent-gold) !important;
+  color: var(--accent-gold) !important;
+}
+
+.ribbon-category-dropdown {
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  left: 0 !important;
+  z-index: 999999 !important;
+  width: 220px !important;
+  background: #18181b !important;
+  border: 1.5px solid var(--accent-gold) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.85), 0 0 15px rgba(212, 175, 55, 0.2) !important;
+  padding: 6px !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+.ribbon-cat-dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 9px 12px !important;
+  border-radius: 6px !important;
+  color: #ede8df !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.ribbon-cat-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: var(--accent-gold) !important;
+  transform: translateX(3px) !important;
+}
+
+.ribbon-cat-dropdown-item.active {
+  background: var(--accent-gold) !important;
+  color: #09090b !important;
+  font-weight: 800 !important;
+}
